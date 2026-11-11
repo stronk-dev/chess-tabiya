@@ -84,7 +84,7 @@
     { "id": "branch.decidedness", "version": { "kind": "integer", "value": 1 } },
     { "id": "claim.earning", "version": { "kind": "integer", "value": 1 } },
     { "id": "feedbackPolicy.delayed_checkpoint", "version": { "kind": "integer", "value": 1 } },
-    { "id": "grade.move_quality", "version": { "kind": "integer", "value": 1 } },
+    { "id": "grade.move_quality", "version": { "kind": "integer", "value": 2 } },
     { "id": "graduationEntry.accepted", "version": { "kind": "integer", "value": 1 } },
     { "id": "graduationEntry.accepted.kind.out_of_scope", "version": { "kind": "integer", "value": 1 } },
     { "id": "graduationEntry.state.accepted", "version": { "kind": "integer", "value": 1 } },

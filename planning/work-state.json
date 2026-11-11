@@ -31519,12 +31519,11 @@
     },
     {
       "id": "D3791",
-      "state": "blocked",
+      "state": "todo",
       "sourceGlyph": "💡",
-      "sourceDigest": "sha256:e571b8bba131688006f6b2ae63776a6198152f9de17f54f8d5ca7f1e9685b059",
+      "sourceDigest": "sha256:7d9827b8d8d635ea786cc368314dd98a023f1ceeed7c9e5a51a382bb06465bb7",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "blocker": "item:D3928"
+      "owner": "assistance-and-presentation"
     },
     {
       "id": "D3792",
@@ -32762,13 +32761,12 @@
     },
     {
       "id": "D3928",
-      "state": "blocked",
-      "sourceGlyph": "⚖️",
-      "sourceDigest": "sha256:4eb8ba2566300532fc860f024ac017d1cd2039e1a9b31f49615efb921aebb65d",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:06c04816646386db2bd8cf813a4889087d0d79d3fdecbf4ab09ba80baca802b3",
       "uxItems": [],
-      "owner": "OWNER",
-      "blocker": "owner-ruling",
-      "question": "Apply the approved unified grader to all92 packs through requirements and linked-digest updates only, without authored chess-content edits?"
+      "evidence": "planning/provider-exchange-and-execution/unified-grade-migration-2026-11-11.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3929",
@@ -35619,6 +35617,22 @@
       "uxItems": [],
       "evidence": "tools/content-scheduling.test.mjs",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D4246",
+      "state": "todo",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:c8108226f95474e3b37c177116a6a9a36c65c8c7c38ab651d02389a4ee3ca9f6",
+      "uxItems": [],
+      "owner": "coordinator"
+    },
+    {
+      "id": "D4247",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:62fba002119fe211d477cc7d5114fbac1374cad9386a70ba2f8c249eb8dcf087",
+      "uxItems": [],
+      "owner": "evidence-foundation"
     }
   ]
 }

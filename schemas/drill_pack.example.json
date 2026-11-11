@@ -171,7 +171,7 @@
     { "id": "feedbackClaim.evidenceTypes.engine_validated", "version": { "kind": "integer", "value": 1 } },
     { "id": "feedbackPolicy.delayed_checkpoint", "version": { "kind": "integer", "value": 1 } },
     { "id": "fenPredicate.pieceOnSquare", "version": { "kind": "integer", "value": 1 } },
-    { "id": "grade.move_quality", "version": { "kind": "integer", "value": 1 } },
+    { "id": "grade.move_quality", "version": { "kind": "integer", "value": 2 } },
     { "id": "guard.defaults", "version": { "kind": "integer", "value": 1 } },
     { "id": "guard.immediate", "version": { "kind": "integer", "value": 1 } },
     { "id": "line.membership", "version": { "kind": "integer", "value": 1 } },

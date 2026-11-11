@@ -41838,3 +41838,28 @@ omission/skip/extended-timeout negatives. Actual guard now passes64/15 in7.77s a
 command proceeds to real content failures. Independent bounded review accepts the guard only.
 D4245 closes with test evidence; no production, content, schema or timeout change. The subsequent
 real-content baseline and exact unified-grade migration remain D3928, not content-green claims.
+
+
+## 2026-11-11 — D3928 exact unified-grade requirement migration
+
+Re-read actual D1422, accepted grade §§2a/4a, D3851 and standing pre-launch metadata instructions.
+This resolves the stale pending-owner interpretation for the narrowly chosen grade change,
+without a new ruling, altered planner/readiness or standing permission for future semantics.
+Fresh352-document plan has92 root-pointer gradei1→i2 rows only; existing corpus checker adds
+12 schema example/fixtures with the same old requirement. Canonical stamp rehearsal on104
+temporary copies precedes104 actual requirement edits and68 linked digest updates. Independent
+review checks365 retained images/all authored-prefix bytes and recomputes every linked digest.
+172 content/schema files each change one line; no authored chess claim or source evidence changes.
+
+Normal migration-plan-check/apply-ready/pack-capability-check/schema-check pass with zero plan
+rows and104 exact declarations. Complete content moves from262pass/60fail/18skipped/all44 to
+331pass/9fail/no skips/all44 (301.84s); all9 failures expose the same missing actual base-strike
+source in direct default registry loads. D4247 owns that source/loader/caller repair, preserving
+the required-source refusal and complete corpus. D4246 records the long module-import census
+for measured attribution, without changing its population/deadlines. No whole content-green claim.
+
+The normal build/real-Stockfish Hint smoke now exits0 and its unchanged checker accepts44cells,
+one sample/cell:11 available,24 honest-empty,8 policy-refused,1 source-off; three independent voice
+baselines retained. Actual original compiler8 packets/advances are observed. Raw output remains
+ignored cache, not a progress dependency. No p95/browser/memory/Hint-D7/release clearance.
+D3928 closes finite requirements scope; D4247 and the parent1.0 obligations remain active.

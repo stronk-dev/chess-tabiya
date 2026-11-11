@@ -22,7 +22,7 @@
     { "id": "claim.earning", "version": { "kind": "integer", "value": 1 } },
     { "id": "deviationLocation.fen", "version": { "kind": "integer", "value": 1 } },
     { "id": "feedbackPolicy.segment_end", "version": { "kind": "integer", "value": 1 } },
-    { "id": "grade.move_quality", "version": { "kind": "integer", "value": 1 } },
+    { "id": "grade.move_quality", "version": { "kind": "integer", "value": 2 } },
     { "id": "guard.defaults", "version": { "kind": "integer", "value": 1 } },
     { "id": "guard.immediate", "version": { "kind": "integer", "value": 1 } },
     { "id": "line.membership", "version": { "kind": "integer", "value": 1 } },

@@ -3960,3 +3960,14 @@ until a second pass measured the pack start positions the sentence actually name
 ## 2026-10-06 — Human-model attribution compatibility maintenance
 
 - Independent comparison against 2d665ecc retains all 970 declarations, 278 factory outcomes, authored fields in 104 documents, 192 other source documents and all validation observations/statuses. Seven transitive source-image successors append; only 104 requirement stamps and 68 ledger digests refresh. Evaluator roots remain byte-identical. Normal complete content verification passes 225 tests/23 files, zero clearance errors and 104 exact requirements; complete software and browser replacement gates pass. No authored content wave, graduation, publication or user-document migration is claimed. Routine metadata maintenance is automatic. Receipt: planning/platform-alignment/evidence-presentation/human-model-attribution-2026-10-06.md.
+
+
+## 2026-11-11 — D3928 unified-grade requirement compatibility
+
+Canonical writer updates104 requirements solely grade.move_quality integer1→2;68 existing linked
+packDigest fields follow. All authored bytes outside requires, all non-digest ledger bytes and
+historical declarations remain unchanged, independently checked. Migration/readiness zero rows;
+104 exact corpus requirements and schemas pass. Complete content331pass/9fail/no skips exposes
+D4247 actual plan-source wiring; production build/44-cell real-engine Hint smoke passes without
+latency clearance. No authored content wave, publication or graduation. Scope, authorizations
+and verification: planning/provider-exchange-and-execution/unified-grade-migration-2026-11-11.md.

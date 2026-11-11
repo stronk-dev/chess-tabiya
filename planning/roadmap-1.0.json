@@ -973,10 +973,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Verify and apply only the already-chosen unified-grade requirements/digest migration for the exact92-pack population, then rerun real-content/startup and actual Hint measurements. D4241 Review clock/interim transport precision and D4242 current-source retention remain active; D4224 cost,D4225 memory,D4228 Review,ordinary26/D4167 and full1.0 remain open.",
+        "nextAction": "Repair D4247 installed-corpus callers to inject the actual ShapeRegistry/PrincipleRegistry used by production, preserving captured-source authority and strict missing-source refusal. Re-run complete content and continue accepted bounded Review jobs/current retention measurements/remaining consumer adoption; D3791 native Inspector journey is executable. No full1.0 milestone is complete.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D4233–35 finite Hint source handoff verified: current original action authority at each stage, distinct actual provider generations/cold identity, bounded async actions, original absolute source cap and cooperative complete packet acquisition. Independently reviewed D4238/D4239 fault fixes and D4240 observers/preflight; D4243 unchanged-population scan repair and D4244 doc reconciliation. Final20588software/all585873.97s+7performance/four69.23s/types/Svelte/build/governance pass. Canonical1928/1928 and24/89 qualification unchanged. Native smoke stops at D3928 before Hint: no p95/memory/native clearance. Parent RFCs/capabilities/milestones remain open.",
+          "summary": "D3928 exact unified-grade requirements migration verified:104 gradei1→i2 stamps/68 digest-only ledgers, all authored bytes unchanged and independent365-image/68-digest audit. Normal migration/readiness zero rows,104 exact requirements and schemas pass. Complete content331pass/9fail/no skips44files301.84s versus262/60/18skipped; all9 failures are distinct D4247 actual plan-source wiring in direct default registry callers. Production build/real-Stockfish Hint smoke passes44cells/one sample with11available/24honest-empty/8policy-refused/1source-off; source identity/deadline/acquisition checkpoint remains verified. D3791 unblocked, not discharged. D4246 long import attribution remains todo. No p95/browser/memory/content-green/parent or release closure.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1262,7 +1262,10 @@
             "apps/server/src/hint-campaign.test.ts",
             "apps/server/src/hint-acquisition.test.ts",
             "tools/d3497-hint-latency/acquisition-observer.ts",
-            "packages/runtime/src/review-map.test.ts"
+            "packages/runtime/src/review-map.test.ts",
+            "planning/provider-exchange-and-execution/unified-grade-migration-2026-11-11.md",
+            "apps/server/src/capability/pack-capability-corpus.test.ts",
+            "tools/content-scheduling.test.mjs"
           ],
           "anchors": [
             {
@@ -2004,6 +2007,26 @@
               "kind": "work_state",
               "id": "D4244",
               "digest": "sha256:62b436675009a088add227a094b23d5aa6092d7e81a1533ce86d7db154374afb"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3928",
+              "digest": "sha256:06c04816646386db2bd8cf813a4889087d0d79d3fdecbf4ab09ba80baca802b3"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3791",
+              "digest": "sha256:7d9827b8d8d635ea786cc368314dd98a023f1ceeed7c9e5a51a382bb06465bb7"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4246",
+              "digest": "sha256:c8108226f95474e3b37c177116a6a9a36c65c8c7c38ab651d02389a4ee3ca9f6"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4247",
+              "digest": "sha256:62fba002119fe211d477cc7d5114fbac1374cad9386a70ba2f8c249eb8dcf087"
             }
           ]
         },
@@ -2024,10 +2047,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Verify and apply only the already-chosen unified-grade requirements/digest migration for the exact92-pack population, then rerun real-content/startup and actual Hint measurements. D4241 Review clock/interim transport precision and D4242 current-source retention remain active; D4224 cost,D4225 memory,D4228 Review,ordinary26/D4167 and full1.0 remain open.",
+        "nextAction": "Repair D4247 installed-corpus callers to inject the actual ShapeRegistry/PrincipleRegistry used by production, preserving captured-source authority and strict missing-source refusal. Re-run complete content and continue accepted bounded Review jobs/current retention measurements/remaining consumer adoption; D3791 native Inspector journey is executable. No full1.0 milestone is complete.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D4233–35 finite Hint source handoff verified: current original action authority at each stage, distinct actual provider generations/cold identity, bounded async actions, original absolute source cap and cooperative complete packet acquisition. Independently reviewed D4238/D4239 fault fixes and D4240 observers/preflight; D4243 unchanged-population scan repair and D4244 doc reconciliation. Final20588software/all585873.97s+7performance/four69.23s/types/Svelte/build/governance pass. Canonical1928/1928 and24/89 qualification unchanged. Native smoke stops at D3928 before Hint: no p95/memory/native clearance. Parent RFCs/capabilities/milestones remain open.",
+          "summary": "D3928 exact unified-grade requirements migration verified:104 gradei1→i2 stamps/68 digest-only ledgers, all authored bytes unchanged and independent365-image/68-digest audit. Normal migration/readiness zero rows,104 exact requirements and schemas pass. Complete content331pass/9fail/no skips44files301.84s versus262/60/18skipped; all9 failures are distinct D4247 actual plan-source wiring in direct default registry callers. Production build/real-Stockfish Hint smoke passes44cells/one sample with11available/24honest-empty/8policy-refused/1source-off; source identity/deadline/acquisition checkpoint remains verified. D3791 unblocked, not discharged. D4246 long import attribution remains todo. No p95/browser/memory/content-green/parent or release closure.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2647,7 +2670,10 @@
             "apps/server/src/hint-campaign.test.ts",
             "apps/server/src/hint-acquisition.test.ts",
             "tools/d3497-hint-latency/acquisition-observer.ts",
-            "packages/runtime/src/review-map.test.ts"
+            "packages/runtime/src/review-map.test.ts",
+            "planning/provider-exchange-and-execution/unified-grade-migration-2026-11-11.md",
+            "apps/server/src/capability/pack-capability-corpus.test.ts",
+            "tools/content-scheduling.test.mjs"
           ],
           "anchors": [
             {
@@ -2698,7 +2724,7 @@
             {
               "kind": "work_state",
               "id": "D3791",
-              "digest": "sha256:e571b8bba131688006f6b2ae63776a6198152f9de17f54f8d5ca7f1e9685b059"
+              "digest": "sha256:7d9827b8d8d635ea786cc368314dd98a023f1ceeed7c9e5a51a382bb06465bb7"
             },
             {
               "kind": "rfc",
@@ -2948,7 +2974,7 @@
             {
               "kind": "rfc",
               "id": "move-quality-grades.md",
-              "digest": "sha256:bdc3f13eb5250f258cebc6616c96abf3fc961c2947a409a7b85b95d4b58943b1"
+              "digest": "sha256:08a5e29585121df4ecc241dcdbb2ff23de36767f06152ea24579823608c5241a"
             },
             {
               "kind": "rfc",
@@ -3749,6 +3775,21 @@
               "kind": "work_state",
               "id": "D4244",
               "digest": "sha256:62b436675009a088add227a094b23d5aa6092d7e81a1533ce86d7db154374afb"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3928",
+              "digest": "sha256:06c04816646386db2bd8cf813a4889087d0d79d3fdecbf4ab09ba80baca802b3"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4246",
+              "digest": "sha256:c8108226f95474e3b37c177116a6a9a36c65c8c7c38ab651d02389a4ee3ca9f6"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4247",
+              "digest": "sha256:62fba002119fe211d477cc7d5114fbac1374cad9386a70ba2f8c249eb8dcf087"
             }
           ]
         },
@@ -4580,7 +4621,7 @@
             {
               "kind": "work_state",
               "id": "D3791",
-              "digest": "sha256:e571b8bba131688006f6b2ae63776a6198152f9de17f54f8d5ca7f1e9685b059"
+              "digest": "sha256:7d9827b8d8d635ea786cc368314dd98a023f1ceeed7c9e5a51a382bb06465bb7"
             },
             {
               "kind": "work_state",

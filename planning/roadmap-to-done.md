@@ -2,6 +2,20 @@
 
 ## Current continuation — 2026-11-11
 
+D3928’s exact unified-grade requirement migration is verified:104 requirement stamps and68
+linked digest fields, with all authored content unchanged. Migration/readiness report zero rows;
+schema/corpus checks pass. Complete content improves262pass/60fail/18skipped to331pass/9fail/no
+skips/all44 files. D4247 owns all9 remaining failures: installed-corpus callers omit the actual
+authored plan registry source. Production already injects those registries; preserve that source
+authority and the strict missing-source refusal while repairing the callers.
+Production build and the real-Stockfish Hint smoke now pass44 cells (one sample/cell), including
+11 available and the deliberate empty/refused/source-off cases. This clears the old startup
+requirement blocker, without p95/browser/memory/full-Hint/release clearance. D3791’s native
+Inspector journey is executable again, not completed. D4246 records import-cost attribution.
+[Migration scope and evidence](provider-exchange-and-execution/unified-grade-migration-2026-11-11.md).
+Next: repair D4247 source wiring, then continue bounded Review jobs, measured retention
+and the remaining foundation-to-consumer adoption work.
+
 D4233–35's finite Hint caller handoff is verified: original live action authority at every
 actual source stage, distinct real registry/engine generations, cold handshake identity,
 one absolute source-work cap, independent shared subscribers and cooperative full-packet
@@ -12,9 +26,8 @@ Independent reviews accept the bounded changes. Final normal gates pass20588 sof
 files873.97s,7 isolated performance/four69.23s, types/Svelte0errors0warnings, build and governance.
 Canonical1928/1928 and24/89 qualification remain current without regenerated metadata.
 The first full run’s two verification failures and the fixes remain recorded in the source plan.
-Real-engine smoke still stops at the existing D3928 grade requirement refusal before Hint:
-there is no fresh native/p95/memory clearance. Next: apply the narrowly authorized unified-grade
-requirements migration after exact scope verification, then rerun content/startup and measurement.
+That checkpoint’s real-engine smoke stopped at D3928 before Hint; the migration and successful
+current smoke above supersede that startup hold. Fresh p95/browser/memory clearance is still owed.
 D4241 Review job contract precision and D4242 current retention measurements remain active.
 No whole caller RFC, capability or1.0 milestone completes from this checkpoint.
 

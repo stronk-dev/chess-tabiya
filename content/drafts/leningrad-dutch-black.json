@@ -485,7 +485,7 @@
       "id": "grade.move_quality",
       "version": {
         "kind": "integer",
-        "value": 1
+        "value": 2
       }
     },
     {
