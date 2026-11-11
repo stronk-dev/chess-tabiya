@@ -3522,3 +3522,27 @@ not that implementation. The prospective32-source workload must not be cited as 
 paged-job regression or a completed job. D4228 is owned review-and-return, blocked on D4224,
 with full runtime/service/REST/receiver/selected Review, mutation/cancellation/merge proof owed.
 No accepted feature, subject, default or content/release obligation is dropped.
+
+
+### 2026-11-11 — D4224 acquisition amendment independently accepted after D4229 repair
+
+The initial draft is checkpointed in f38da9c3; both independent reviewers returned concrete
+execution seams. The source/buildability reviewer required full advancement, actual new-arm
+canonical operation/census adoption and partial-owner capacity; the meaning/lifetime reviewer
+independently required the first two and confirmed externally retained complete receipts remain
+valid in their own context after eviction. D4229 now records the repaired contract class.
+
+Both reviewers re-read and independently ACCEPT the current §6.4 for bounded implementation.
+Full foundation/events/readings/wide stages and once-retained tactical dependencies are explicit;
+final-read performs no hidden acquisition. subjectOutcomesOperation/FromReceipt and all13 actual
+population censuses must use genuine foundation8, with directwide8 equivalence and both-arm
+refusal/quiet/unavailable proofs. Partial/completed owners share the same64LRU frombegin;
+evicted tokens retire before work, completed old facts remain valid without mixed-owner joins.
+
+Record acceptance before implementation. Next refactor the existing compiler into that single
+owned construction, preserving all current full outputs and real source identity, then deliver
+the distinct foundation receipt/actual operation/census and service advancement with construction8
+and fresh qualification. No copied @2 certificate, dormant test-only supplier, fake wide receipt,
+missing full collector feature or increased deadline. Run relevant actual boundary/source/cancel/
+eviction tests and full normal gates before closing a production slice. D4224/D4225/D4228,
+D4175ordinary26/D4167 and D3928 content/native/release remain live; parent status stays implementing.

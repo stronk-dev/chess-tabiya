@@ -20,6 +20,13 @@ full-on-demand/failure contract **and bounded execution**: rawcore32 still excee
 budget before outcome mint/admission. Full production and D4225/D4175/D4167/D3928 holds remain.
 [Method and limits](../design/research/module-evidence-assembly.md#scoped-required-core-feasibility--d4227-2026-11-11).
 
+The scoped-acquisition amendment, [subject-safe §6.4](../rfc/subject-safe-semantic-selection.md),
+is now independently accepted after D4229's full-stage/real-operation/partial-capacity repairs.
+Implementation must coordinate construction8, actual foundation receipt use and fresh source
+qualification. D4228 separately owns accepted whole-prefix Review jobs; the current single-node
+module query is not that implementation. No ordinary-binding or whole-product gate moves from
+this contract acceptance.
+
 The coordinated source/storage cutover in `03b584b4` previously passed
 **20,488 software tests in 580 files** (742.34 seconds) and **seven performance tests in
 four files** (57.73 seconds), with the complete normal gate exiting zero. All 1,928

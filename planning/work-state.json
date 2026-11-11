@@ -35426,7 +35426,7 @@
       "id": "D4224",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:304c1ce11d8c87d9796b4f432fd1712b8e4497d0b95883b763fd7db682181dfe",
+      "sourceDigest": "sha256:f000ccd46326e9589b1e2b21c8e4f87dab08b4ee38b53d4ddce50dcc52922108",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-11-11"
@@ -35466,6 +35466,15 @@
       "uxItems": [],
       "owner": "review-and-return",
       "blocker": "item:D4224"
+    },
+    {
+      "id": "D4229",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:88f2ff0f63f1b29fa63a6e05b2a8894d026bec0c6c91136af37203628ef30ac4",
+      "uxItems": [],
+      "evidence": "rfc/subject-safe-semantic-selection.md",
+      "evidenceKind": "path"
     }
   ]
 }

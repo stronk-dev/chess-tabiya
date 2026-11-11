@@ -1,7 +1,7 @@
 # RFC: subject-safe semantic selection
 
 - **Status:** implementing — current2026-11-11 source checkpoint: all13 outcome families qualify with1928/1928 cases and24/89 validated subjects; all1524 predecessor case receipts and other84 verdicts are preserved. D4220 lossless storage2 passes focused/Git proofs and complete normal verification:20488 software tests/580files and7 performance tests/fourfiles. D4175 ordinary26, broader D4167 consumers, native journeys and release remain separate.
-- **Draft amendment:** §6.4 D4224 scoped acquisition, authored2026-11-11; independent review pending, not implementation authority.
+- **Scoped acquisition amendment:** §6.4 D4224 independently accepted2026-11-11 after source/buildability and meaning/lifetime review; construction8 implementation and fresh qualification remain owed.
 - **Author:** codex, on the owner's full-foundation/zero-legacy ruling.
 - **Created:** 2026-11-09
 - **Parent:** `archive/semantic-evidence-selection.md` (immutable historical contract).
@@ -900,13 +900,15 @@ Required proof before closure:
 |---|---|---|---|
 | [[D4175]] | [[D1716]] | `evidence-foundation` | 2026-11-10 |
 
-### 6.4 D4224 — owned scoped foundation acquisition (DRAFT, not accepted)
+### 6.4 D4224 — owned scoped foundation acquisition (independently accepted)
 
-**2026-11-11 author proposal.** Parent implementing status does not authorize this amendment.
-D4224/D4227 measured the need and feasibility; no production source changes are included in the
-research commits. This section changes only acquisition/authority plumbing for the existing
-thirteen exact outcome families. D4175 ordinary bindings remain held; D4228 owns the accepted
-whole-prefix Review job rather than pretending that job already ships.
+**2026-11-11 independent acceptance.** Separate source/buildability and meaning/lifetime
+reviewers accept this repaired bounded contract. D4229 records the three resolved returns:
+explicit full stages, actual canonical operation/census adoption, and bounded partial owners.
+D4224/D4227 measured the need and feasibility; production construction8, fresh qualification,
+actual cost and gates remain implementation duties. This section changes acquisition/authority
+plumbing for the existing thirteen exact outcome families. D4175 ordinary bindings remain held;
+D4228 owns the accepted whole-prefix Review job rather than pretending that job already ships.
 
 #### Research and intended behavior
 
@@ -975,6 +977,27 @@ absent. Preserve all historical cases and unaffected payloads/verdicts, with an 
 of every changed receipt/hash. No copied certificate, newest-version resolver or automatic
 qualification follows from raw equality.
 
+#### Actual source-operation adoption, not a test-only receipt
+
+Migrate the existing `runtime.semantic.subject_outcomes` implementation in
+`semantic-validation-operations.ts`: subjectOutcomesOperation acquires the genuine foundation
+receipt through the production compiler, and subjectOutcomesFromReceipt accepts the original
+foundation/wide union through its actual nominal reader. Retain complete fixture validation,
+legalSetDigest, exact played/ALL alternative edge membership, counters and after-FEN checks;
+read those fields from the original core slots rather than inventing a thin public packet.
+
+Migrate tools/semantic-validation-build.ts#runSubjectCensuses to acquire ONE genuine foundation
+root per sampled edge, invoke all13 families on that same owner and then release it. The actual
+canonical positive/negative/orientation/counterfactual and all-family population runs must use
+this new real input arm. Independent direct-wide8 controls must equal the foundation8 payloads,
+complete populations and literal input receipts; wrong/missing/quiet/unavailable checks exercise
+BOTH original receipt kinds. A wide-only rerun cannot qualify foundation acquisition.
+
+Do NOT retarget completeAlternativesOperation, selector54, Profile54 or other whole-source
+prevalence/native consumers to the core: they require different source populations and keep
+full acquisition. Register the actual new implementation entry in the existing operation
+metadata; use the existing qualification machinery, not a new registry or copied certificates.
+
 #### Coverage and failure cannot be invented
 
 Foundation requests collect ALL six common cells, complete ray/risk/total inputs for the root
@@ -1000,14 +1023,50 @@ foundation-required availability reader rather than weakening the full reader.
 
 The application-lifetime CandidatePopulationService owns this graph at its current64-entry
 capacity. Repeated core/full requests share its entry and original sources, not one service per
-HTTP request, a bot-only graph or a second global FEN cache. Existing stats keep counting service
-hits/misses/retained roots, not a fictitious hit for uncomputed full collection. Test eviction,
-reacquisition and externally retained old valid receipts explicitly.
+HTTP request, a bot-only graph or a second global FEN cache. Insert an owner entry BEFORE its
+first acquisition step. Partial and completed owners both count toward the SAME capacity/LRU;
+no separate unbounded pending-owner or promise map. A hit means an actual retained owner lookup,
+not a claim that its full group was computed. Misses count new owner insertion; retained counts
+all current partial/completed roots. Test small capacities as well as the normal64.
 
-Expose a fixed internal begin/advance/final-read path: one step acquires the root foundation or
-one original legal child's foundation, and final read seals only the complete validated set.
-The synchronous existing compiler drains this SAME construction path. The service-driven path
-can yield between steps without changing the graph, output order or identity. No configurable
+Eviction retires that service entry immediately. Every begin token identifies its exact entry;
+advance/final-read first check the entry is still the service's current owner. An evicted token
+returns an internal `retired` outcome with NO more collection; the run-facing service maps this
+to EVIDENCE_UNAVAILABLE rather than empty success. Reacquisition starts a new owner and cannot
+substitute its sources into the retired owner's receipts. Already completed genuine receipts
+remain valid in their own original contexts while externally retained; eviction does not revoke
+mathematical facts or authorize mixed-owner assembly.
+
+Cancellation stops that caller's loop and publication, not another authorized caller. No work
+runs in the background outside a requested advance. Already computed pure cells may remain in
+the bounded entry for a later independently authorized caller; no caller permissions or expired
+request continuation are cached. Incomplete source groups expose no successful receipt. Release
+cancelled/retired request references and test that they do not leave an unbounded pending owner.
+
+Expose one fixed begin/advance/final-read construction path with these finite stages:
+
+| Requested scope | Required stages, in original legal-candidate order |
+|---|---|
+| foundation | original root legal/common/ray/risk/totals, then each child's complete foundation |
+| events | original root common, then each child's existing local event closure and exact collector outcomes |
+| readings | each child's existing retained reading bundle plus its actual private tactical dependencies; no unrelated root foundation or event group |
+| wide | foundation stages plus each child's complete events and readings, retaining the existing dependency/output order |
+
+Each root/child foundation, child event closure and child retained-reading bundle is an explicit
+advance boundary; reuse a stage already completed by that owner. Within a stage preserve the
+actual existing callable order and code-derived projection image. Retain actual private tactical
+results used by readings/fork survival so a later full event closure consumes the SAME results,
+rather than re-running equal-byte tactical evidence. Root/child common inputs and total sources
+are the SAME retained cells in all stages. Request scope still controls retained output, never
+removes its private dependencies or widens a narrow public receipt.
+
+Final-read validates and seals an already COMPLETE requested set; it performs no hidden
+remaining collector acquisition or synchronous all-child drain. The existing synchronous
+compiler explicitly drains these SAME steps for its existing callers. The service-driven path
+can yield between all foundation AND full-group stages. Actual full-step duration and heartbeat/
+abort tests must cover a core-first→wide upgrade as well as direct wide/events/readings paths.
+No mid-function preemption is promised; an overlong atomic stage must be reported/repaired before
+that boundary is certified, never excused by a passed foundation-only test. No configurable
 collector scheduler, generic callback DAG or second legal enumerator is introduced.
 
 A run-facing caller completes whole-consumer/role/help/rated preflight BEFORE begin and checks
@@ -1038,10 +1097,13 @@ real selected source→service→REST→UI/voice and budget/cancellation proof p
    oracles, including all promotions, castling, EP, captures, forced/terminal states, zero, false,
    removed/promoted and all known unavailable cases. Prove actual required failure versus
    unrelated not-requested and full-group failure without suppressing any full feature.
-4. Actual service steps/yields prove cancellation, deadline, run mutation, disclosure/role/grant
+4. Actual service steps/yields for direct and foundation-first FULL upgrades prove partial-owner
+   capacity/eviction/retired-token accounting and cancellation, deadline, run mutation, disclosure/role/grant
    revocation and source changes before acquisition and mid-work. Permanent controls fail on
    a no-yield loop, stale publication, post-cancel advance and per-request source recollection.
-5. Re-run canonical affected source proofs and complete normal software/performance/types/build/
+5. Actual subject_outcomes operation and all13 population censuses use genuine foundation8
+   receipts, with independent direct-wide8 equivalence and both-arm refusals/quiet/unavailable
+   cases. Re-run canonical affected source proofs and complete normal software/performance/types/build/
    governance gates with frozen production bytes. Compact actual application cost/retention
    measurements use current capacity and all required sources; do not infer them from raw data.
    Preserve/report content/native holds. No @2 admission survives merely from an old certificate.

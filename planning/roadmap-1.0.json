@@ -973,10 +973,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Independently review draft subject-safe-semantic-selection \u00a76.4 D4224 scoped acquisition before implementation: one owner, original full-on-demand inputs, honest failure scope and cooperative currentness/deadlines. D4228 owns accepted whole-prefix paged Review execution (current query is single-node), blocked on D4224. Rawcore32 still exceeds5s before outcome mint/admission. Preserve D4225/D4175ordinary26/D4167/D3928 holds; no fake wide receipt, missing full feature or raised budget.",
+        "nextAction": "Implement independently accepted subject-safe-semantic-selection \u00a76.4 D4224: one original owner, distinct foundation receipt, full-scope staged collection and seal-only final reads, actual subject_outcomes operation/census adoption, bounded partial-owner LRU and live permission/deadline/cancellation. Coordinate construction8 with fresh qualification; retain full-only selector/Profile/native paths. D4228 actual paged Review and D4175ordinary26 remain held until full delivery/budget proof; D4225/D4167/D3928 stay open.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D4227 finite research closes:48 complete required-core graphs/value receipts and all13 raw/actual-factory payload/input/population comparisons,286quiet310positive2unavailable results and26terminal-family refusals. Four alternating local32-source pairs fullraw15.54\u201316.92s versus rawcore5.62\u20136.26s; forcedGC held881\u2013882 versus395MiB, released317\u2013318 versus188MiB. Both stopbeforeoutcomemint/admission. Append-only/source-restoration guards and dedicated types pass;42214B compact report. Raw frames/results have no original candidate/factory authority;23legacy collector-failure groups are unclaimed. No production mutation or scope/budget/ordinary/release completion. D4224/D4225/D4175/D4167/D3928 remain.",
+          "summary": "D4227 finite research closes:48 complete required-core graphs/value receipts and all13 raw/actual-factory payload/input/population comparisons,286quiet310positive2unavailable results and26terminal-family refusals. Four alternating local32-source pairs fullraw15.54\u201316.92s versus rawcore5.62\u20136.26s; forcedGC held881\u2013882 versus395MiB, released317\u2013318 versus188MiB. Both stopbeforeoutcomemint/admission. Append-only/source-restoration guards and dedicated types pass;42214B compact report. Raw frames/results have no original candidate/factory authority;23legacy collector-failure groups are unclaimed. No production mutation or scope/budget/ordinary/release completion. D4224/D4225/D4175/D4167/D3928 remain. Independently repaired/accepted \u00a76.4 acquisition contract is now ready for implementation; D4229 closes only that draft defect, not source delivery.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1722,7 +1722,7 @@
             {
               "kind": "rfc",
               "id": "subject-safe-semantic-selection.md",
-              "digest": "sha256:159fe1b355115b4f6047444fac80be965a77b5fc64a82772d290c27658f502d3"
+              "digest": "sha256:02a9d639a061649db1c14abee3f7678095eff9ea227fddfb89eb62b68548c5d7"
             },
             {
               "kind": "work_state",
@@ -1892,7 +1892,7 @@
             {
               "kind": "work_state",
               "id": "D4224",
-              "digest": "sha256:304c1ce11d8c87d9796b4f432fd1712b8e4497d0b95883b763fd7db682181dfe"
+              "digest": "sha256:f000ccd46326e9589b1e2b21c8e4f87dab08b4ee38b53d4ddce50dcc52922108"
             },
             {
               "kind": "work_state",
@@ -1913,6 +1913,11 @@
               "kind": "work_state",
               "id": "D4228",
               "digest": "sha256:fc52ef8689f28f218ec64d9cf586cd646f813d56f3c107f45bc99c797b1e062c"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4229",
+              "digest": "sha256:88f2ff0f63f1b29fa63a6e05b2a8894d026bec0c6c91136af37203628ef30ac4"
             }
           ]
         },
@@ -1933,10 +1938,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Independently review draft subject-safe-semantic-selection \u00a76.4 D4224 scoped acquisition before implementation: one owner, original full-on-demand inputs, honest failure scope and cooperative currentness/deadlines. D4228 owns accepted whole-prefix paged Review execution (current query is single-node), blocked on D4224. Rawcore32 still exceeds5s before outcome mint/admission. Preserve D4225/D4175ordinary26/D4167/D3928 holds; no fake wide receipt, missing full feature or raised budget.",
+        "nextAction": "Implement independently accepted subject-safe-semantic-selection \u00a76.4 D4224: one original owner, distinct foundation receipt, full-scope staged collection and seal-only final reads, actual subject_outcomes operation/census adoption, bounded partial-owner LRU and live permission/deadline/cancellation. Coordinate construction8 with fresh qualification; retain full-only selector/Profile/native paths. D4228 actual paged Review and D4175ordinary26 remain held until full delivery/budget proof; D4225/D4167/D3928 stay open.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D4227 finite research closes:48 complete required-core graphs/value receipts and all13 raw/actual-factory payload/input/population comparisons,286quiet310positive2unavailable results and26terminal-family refusals. Four alternating local32-source pairs fullraw15.54\u201316.92s versus rawcore5.62\u20136.26s; forcedGC held881\u2013882 versus395MiB, released317\u2013318 versus188MiB. Both stopbeforeoutcomemint/admission. Append-only/source-restoration guards and dedicated types pass;42214B compact report. Raw frames/results have no original candidate/factory authority;23legacy collector-failure groups are unclaimed. No production mutation or scope/budget/ordinary/release completion. D4224/D4225/D4175/D4167/D3928 remain.",
+          "summary": "D4227 finite research closes:48 complete required-core graphs/value receipts and all13 raw/actual-factory payload/input/population comparisons,286quiet310positive2unavailable results and26terminal-family refusals. Four alternating local32-source pairs fullraw15.54\u201316.92s versus rawcore5.62\u20136.26s; forcedGC held881\u2013882 versus395MiB, released317\u2013318 versus188MiB. Both stopbeforeoutcomemint/admission. Append-only/source-restoration guards and dedicated types pass;42214B compact report. Raw frames/results have no original candidate/factory authority;23legacy collector-failure groups are unclaimed. No production mutation or scope/budget/ordinary/release completion. D4224/D4225/D4175/D4167/D3928 remain. Independently repaired/accepted \u00a76.4 acquisition contract is now ready for implementation; D4229 closes only that draft defect, not source delivery.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -3424,7 +3429,7 @@
             {
               "kind": "rfc",
               "id": "subject-safe-semantic-selection.md",
-              "digest": "sha256:159fe1b355115b4f6047444fac80be965a77b5fc64a82772d290c27658f502d3"
+              "digest": "sha256:02a9d639a061649db1c14abee3f7678095eff9ea227fddfb89eb62b68548c5d7"
             },
             {
               "kind": "work_state",
@@ -3554,7 +3559,7 @@
             {
               "kind": "work_state",
               "id": "D4224",
-              "digest": "sha256:304c1ce11d8c87d9796b4f432fd1712b8e4497d0b95883b763fd7db682181dfe"
+              "digest": "sha256:f000ccd46326e9589b1e2b21c8e4f87dab08b4ee38b53d4ddce50dcc52922108"
             },
             {
               "kind": "work_state",
@@ -3575,6 +3580,11 @@
               "kind": "work_state",
               "id": "D4228",
               "digest": "sha256:fc52ef8689f28f218ec64d9cf586cd646f813d56f3c107f45bc99c797b1e062c"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4229",
+              "digest": "sha256:88f2ff0f63f1b29fa63a6e05b2a8894d026bec0c6c91136af37203628ef30ac4"
             }
           ]
         },
