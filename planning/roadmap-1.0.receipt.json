@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:761d480c442d61f9d595b35f03649f50da3198ee4d7e64c4db696c296f4186dc",
+    "roadmap": "sha256:b7796c71a7f5082a95f1a78947a859921d0ee11c99fa5aaa0df16c89fb6593c5",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:0ad708d2495e76bbc3c556adf3611d9942165a2d9cb5762cadd620d754320599",
-    "rfcRegister": "sha256:b4da266d47add25ffd2ddac7aa483252c9d2726d9ef1817910680605c1b022b2",
+    "workState": "sha256:d77271e8abee969f1b3a5d20e58b725a967e056e8930e0e11292fd14890ff067",
+    "rfcRegister": "sha256:cce34b88622e2e3c3750e59fa60f4a1bd44a34ae4fc8ec60f6c1c1d9ef02972f",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:007f0b61b9fa874ea968fbbf915e26d05899b42b7143b6f22fed85464e018345",
@@ -18,10 +18,10 @@
       "breadth": 2,
       "post_1_0": 0
     },
-    "assignedRfcs": 79,
+    "assignedRfcs": 80,
     "activeRfcLifecycle": {
       "draft": 20,
-      "accepted": 0,
+      "accepted": 1,
       "implementing": 50,
       "awaiting": 9,
       "implemented": 0,
@@ -30,8 +30,8 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 634,
-      "doing": 174,
+      "todo": 633,
+      "doing": 175,
       "blocked": 1063,
       "done": 1941,
       "refused": 163
@@ -357,7 +357,7 @@
       "nextAction": "Implement and measure D4226 bounded verification memo after independent contract acceptance; resolve remaining D4225 memory and D4224 acquisition before D4175 ordinary bindings. D4167 reverse consumers and D3928 content/native remain.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "Source03b584b4 retains all13 outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. D4225 caller/reset research isolates frozen-data verifier metadata: actual post-work heap334.63→78.63MiB after verifier-only replacement; extra-GC/insertion controls unchanged. Real14-position all13-family payload/input/receipt/admission controls,9 instrument/4 builder guards/types/smoke/full pass. Compact58251B report; marginal diagnostic effect only. D4226 owns a bounded pure-verifier repair; D4225 production memory and D4224 acquisition remain open, as do D4175 ordinary26, D4167 reverse consumers and D3928 content/native. No production/capability/release promotion.",
+        "summary": "Source03b584b4 retains all13 outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. D4225 caller/reset research isolates frozen-data verifier metadata: actual post-work heap334.63→78.63MiB after verifier-only replacement; extra-GC/insertion controls unchanged. Real14-position all13-family payload/input/receipt/admission controls,9 instrument/4 builder guards/types/smoke/full pass. Compact58251B report; marginal diagnostic effect only. D4226 owns a bounded pure-verifier repair; D4225 production memory and D4224 acquisition remain open, as do D4175 ordinary26, D4167 reverse consumers and D3928 content/native. No production/capability/release promotion. Both independent reviews now accept the finite bounded-verifier contract; implementation/measurement still required.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -618,7 +618,9 @@
           "planning/foundation-source-identity/outcome-global-memos-2026-11-11.json",
           "tools/d4175-outcome-delivery/build-memo-probe.mjs",
           "planning/foundation-source-identity/outcome-live-allocations-2026-11-11.json",
-          "planning/foundation-source-identity/outcome-immutable-reset-2026-11-11.json"
+          "planning/foundation-source-identity/outcome-immutable-reset-2026-11-11.json",
+          "rfc/bounded-evidence-verification.md",
+          "planning/foundation-source-identity/bounded-verifier-independent-review-2026-11-11.md"
         ],
         "anchors": [
           {
@@ -1274,7 +1276,12 @@
           {
             "kind": "work_state",
             "id": "D4226",
-            "digest": "sha256:e6668cb17c3eceacab42c854ed5242cb6d688df6f785864ac51a72f695d0a6a6"
+            "digest": "sha256:4e56929b5c17b025ac4196b6a5fe96605710c3c25501a5e48b87fa6b9dcd5e6c"
+          },
+          {
+            "kind": "rfc",
+            "id": "bounded-evidence-verification.md",
+            "digest": "sha256:98559bb7595241e3e73782117c6d2cdefd98938b2c2f0bf68a1e9cc2ef18de25"
           }
         ]
       },
@@ -1298,7 +1305,7 @@
       "nextAction": "Implement and measure D4226 bounded verification memo after independent contract acceptance; resolve remaining D4225 memory and D4224 acquisition before D4175 ordinary bindings. D4167 reverse consumers and D3928 content/native remain.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "Source03b584b4 retains all13 outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. D4225 caller/reset research isolates frozen-data verifier metadata: actual post-work heap334.63→78.63MiB after verifier-only replacement; extra-GC/insertion controls unchanged. Real14-position all13-family payload/input/receipt/admission controls,9 instrument/4 builder guards/types/smoke/full pass. Compact58251B report; marginal diagnostic effect only. D4226 owns a bounded pure-verifier repair; D4225 production memory and D4224 acquisition remain open, as do D4175 ordinary26, D4167 reverse consumers and D3928 content/native. No production/capability/release promotion.",
+        "summary": "Source03b584b4 retains all13 outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. D4225 caller/reset research isolates frozen-data verifier metadata: actual post-work heap334.63→78.63MiB after verifier-only replacement; extra-GC/insertion controls unchanged. Real14-position all13-family payload/input/receipt/admission controls,9 instrument/4 builder guards/types/smoke/full pass. Compact58251B report; marginal diagnostic effect only. D4226 owns a bounded pure-verifier repair; D4225 production memory and D4224 acquisition remain open, as do D4175 ordinary26, D4167 reverse consumers and D3928 content/native. No production/capability/release promotion. Both independent reviews now accept the finite bounded-verifier contract; implementation/measurement still required.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1896,7 +1903,9 @@
           "planning/foundation-source-identity/outcome-global-memos-2026-11-11.json",
           "tools/d4175-outcome-delivery/build-memo-probe.mjs",
           "planning/foundation-source-identity/outcome-live-allocations-2026-11-11.json",
-          "planning/foundation-source-identity/outcome-immutable-reset-2026-11-11.json"
+          "planning/foundation-source-identity/outcome-immutable-reset-2026-11-11.json",
+          "rfc/bounded-evidence-verification.md",
+          "planning/foundation-source-identity/bounded-verifier-independent-review-2026-11-11.md"
         ],
         "anchors": [
           {
@@ -2917,7 +2926,12 @@
           {
             "kind": "work_state",
             "id": "D4226",
-            "digest": "sha256:e6668cb17c3eceacab42c854ed5242cb6d688df6f785864ac51a72f695d0a6a6"
+            "digest": "sha256:4e56929b5c17b025ac4196b6a5fe96605710c3c25501a5e48b87fa6b9dcd5e6c"
+          },
+          {
+            "kind": "rfc",
+            "id": "bounded-evidence-verification.md",
+            "digest": "sha256:98559bb7595241e3e73782117c6d2cdefd98938b2c2f0bf68a1e9cc2ef18de25"
           }
         ]
       },
@@ -5359,7 +5373,7 @@
       "name": "Evidence collection, semantic events, selection, and grounding",
       "release": "core",
       "owner": "evidence-foundation",
-      "rfcCount": 28,
+      "rfcCount": 29,
       "workItems": {
         "queued": 0,
         "blocked_owner": 0,

@@ -89,7 +89,8 @@
         "recorded-semantic-path.md",
         "evidence-value-authority.md",
         "phase-source-composition.md",
-        "subject-safe-semantic-selection.md"
+        "subject-safe-semantic-selection.md",
+        "bounded-evidence-verification.md"
       ],
       "completion": {
         "evidence": [
@@ -976,7 +977,7 @@
         "nextAction": "Implement and measure D4226 bounded verification memo after independent contract acceptance; resolve remaining D4225 memory and D4224 acquisition before D4175 ordinary bindings. D4167 reverse consumers and D3928 content/native remain.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "Source03b584b4 retains all13 outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. D4225 caller/reset research isolates frozen-data verifier metadata: actual post-work heap334.63\u219278.63MiB after verifier-only replacement; extra-GC/insertion controls unchanged. Real14-position all13-family payload/input/receipt/admission controls,9 instrument/4 builder guards/types/smoke/full pass. Compact58251B report; marginal diagnostic effect only. D4226 owns a bounded pure-verifier repair; D4225 production memory and D4224 acquisition remain open, as do D4175 ordinary26, D4167 reverse consumers and D3928 content/native. No production/capability/release promotion.",
+          "summary": "Source03b584b4 retains all13 outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. D4225 caller/reset research isolates frozen-data verifier metadata: actual post-work heap334.63\u219278.63MiB after verifier-only replacement; extra-GC/insertion controls unchanged. Real14-position all13-family payload/input/receipt/admission controls,9 instrument/4 builder guards/types/smoke/full pass. Compact58251B report; marginal diagnostic effect only. D4226 owns a bounded pure-verifier repair; D4225 production memory and D4224 acquisition remain open, as do D4175 ordinary26, D4167 reverse consumers and D3928 content/native. No production/capability/release promotion. Both independent reviews now accept the finite bounded-verifier contract; implementation/measurement still required.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1237,7 +1238,9 @@
             "planning/foundation-source-identity/outcome-global-memos-2026-11-11.json",
             "tools/d4175-outcome-delivery/build-memo-probe.mjs",
             "planning/foundation-source-identity/outcome-live-allocations-2026-11-11.json",
-            "planning/foundation-source-identity/outcome-immutable-reset-2026-11-11.json"
+            "planning/foundation-source-identity/outcome-immutable-reset-2026-11-11.json",
+            "rfc/bounded-evidence-verification.md",
+            "planning/foundation-source-identity/bounded-verifier-independent-review-2026-11-11.md"
           ],
           "anchors": [
             {
@@ -1893,7 +1896,12 @@
             {
               "kind": "work_state",
               "id": "D4226",
-              "digest": "sha256:e6668cb17c3eceacab42c854ed5242cb6d688df6f785864ac51a72f695d0a6a6"
+              "digest": "sha256:4e56929b5c17b025ac4196b6a5fe96605710c3c25501a5e48b87fa6b9dcd5e6c"
+            },
+            {
+              "kind": "rfc",
+              "id": "bounded-evidence-verification.md",
+              "digest": "sha256:98559bb7595241e3e73782117c6d2cdefd98938b2c2f0bf68a1e9cc2ef18de25"
             }
           ]
         },
@@ -1917,7 +1925,7 @@
         "nextAction": "Implement and measure D4226 bounded verification memo after independent contract acceptance; resolve remaining D4225 memory and D4224 acquisition before D4175 ordinary bindings. D4167 reverse consumers and D3928 content/native remain.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "Source03b584b4 retains all13 outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. D4225 caller/reset research isolates frozen-data verifier metadata: actual post-work heap334.63\u219278.63MiB after verifier-only replacement; extra-GC/insertion controls unchanged. Real14-position all13-family payload/input/receipt/admission controls,9 instrument/4 builder guards/types/smoke/full pass. Compact58251B report; marginal diagnostic effect only. D4226 owns a bounded pure-verifier repair; D4225 production memory and D4224 acquisition remain open, as do D4175 ordinary26, D4167 reverse consumers and D3928 content/native. No production/capability/release promotion.",
+          "summary": "Source03b584b4 retains all13 outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. D4225 caller/reset research isolates frozen-data verifier metadata: actual post-work heap334.63\u219278.63MiB after verifier-only replacement; extra-GC/insertion controls unchanged. Real14-position all13-family payload/input/receipt/admission controls,9 instrument/4 builder guards/types/smoke/full pass. Compact58251B report; marginal diagnostic effect only. D4226 owns a bounded pure-verifier repair; D4225 production memory and D4224 acquisition remain open, as do D4175 ordinary26, D4167 reverse consumers and D3928 content/native. No production/capability/release promotion. Both independent reviews now accept the finite bounded-verifier contract; implementation/measurement still required.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2515,7 +2523,9 @@
             "planning/foundation-source-identity/outcome-global-memos-2026-11-11.json",
             "tools/d4175-outcome-delivery/build-memo-probe.mjs",
             "planning/foundation-source-identity/outcome-live-allocations-2026-11-11.json",
-            "planning/foundation-source-identity/outcome-immutable-reset-2026-11-11.json"
+            "planning/foundation-source-identity/outcome-immutable-reset-2026-11-11.json",
+            "rfc/bounded-evidence-verification.md",
+            "planning/foundation-source-identity/bounded-verifier-independent-review-2026-11-11.md"
           ],
           "anchors": [
             {
@@ -3536,7 +3546,12 @@
             {
               "kind": "work_state",
               "id": "D4226",
-              "digest": "sha256:e6668cb17c3eceacab42c854ed5242cb6d688df6f785864ac51a72f695d0a6a6"
+              "digest": "sha256:4e56929b5c17b025ac4196b6a5fe96605710c3c25501a5e48b87fa6b9dcd5e6c"
+            },
+            {
+              "kind": "rfc",
+              "id": "bounded-evidence-verification.md",
+              "digest": "sha256:98559bb7595241e3e73782117c6d2cdefd98938b2c2f0bf68a1e9cc2ef18de25"
             }
           ]
         },
