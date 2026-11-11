@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { CANDIDATE_EVENTS_SCOPE, CANDIDATE_READINGS_SCOPE, CANDIDATE_WIDE_SCOPE,
-  compileCandidatePopulation, readCandidateFoundationSources, type CandidateFoundationSources } from "./candidate-population.js";
+  compileCandidatePopulation, compileCandidateFoundation, readCandidateFoundationSources, type CandidateFoundationSources } from "./candidate-population.js";
 import { assertCandidateTotalInputs, type CandidateTotalInputs } from "./candidate-total-inputs.js";
 import type { DeclaredEvidence } from "./evidence-contract.js";
 import type { StructuralObservation } from "./structure.js";
@@ -150,7 +150,7 @@ describe("complete original candidate total inputs", () => {
     expect(() => assertCandidateTotalInputs({ ...total, kingZones: [changed, total.kingZones[1], total.kingZones[2], total.kingZones[3]] }, root.risk)).toThrow(/original position/);
   });
 
-  it("actual wide acquisition refuses a trimmed genuine producer collection", () => {
+  it.each(["foundation", "wide"] as const)("actual %s acquisition refuses a trimmed genuine producer collection", scope => {
     const invoke = routes.invokeEvidenceValueRoute;
     const observed: { original: readonly DeclaredEvidence<StructuralObservation>[]; trimmed: readonly DeclaredEvidence<StructuralObservation>[] }[] = [];
     vi.spyOn(routes, "invokeEvidenceValueRoute").mockImplementation(((route: string, input: never) => {
@@ -159,10 +159,13 @@ describe("complete original candidate total inputs", () => {
       const original = result as readonly DeclaredEvidence<StructuralObservation>[], trimmed = Object.freeze(original.slice(1));
       observed.push({ original, trimmed }); return trimmed;
     }) as typeof invoke);
-    expect(() => frame(quiet)).toThrow(/complete exact factory invocation/);
+    const result = scope === "foundation" ? compileCandidateFoundation({ beforeFen: quiet, ruleset: "standard" })
+      : compileCandidatePopulation({ beforeFen: quiet, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
+    expect(result).toEqual({ kind: "failed", error: { code: "invariant_failed", invariant: "receipt" } });
     expect(observed).toHaveLength(1);
     expect(observed[0]!.original).toHaveLength(12); expect(observed[0]!.trimmed).toHaveLength(11);
     expect(observed[0]!.trimmed[0]).toBe(observed[0]!.original[1]);
+    expect(() => routes.readStructuralPopulationInvocation(observed[0]!.trimmed, "rules.structural.reading.piece_count@1", quiet)).toThrow(/complete exact factory invocation/);
     expect(() => routes.readStructuralPopulationInvocation(observed[0]!.original, "rules.structural.reading.piece_count@1", quiet)).not.toThrow();
   });
 

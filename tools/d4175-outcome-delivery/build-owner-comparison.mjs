@@ -1,10 +1,13 @@
 // DISPOSABLE controlled compiler-file comparison. Production files stay untouched.
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { build } from "esbuild";
 
 const path = "packages/runtime/src/candidate-population.ts";
+assert(readFileSync(path, "utf8").includes("CANDIDATE_PACKET_COMPILER_VERSION = 7 as const"),
+  "This historical construction7 equality experiment applies at 4dc4dbcd; it cannot compare construction8 against a mixed old compiler/new dependency image.");
 const baseline = execFileSync("git", ["show", `0e5057d0:${path}`], { encoding: "utf8" });
 assert(baseline.includes("CANDIDATE_PACKET_COMPILER_VERSION = 7 as const"));
 const common = { entryPoints: ["tools/d4175-outcome-delivery/compare-owner.ts"], bundle: true,

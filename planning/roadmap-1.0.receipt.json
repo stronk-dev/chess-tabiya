@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:04a3ae45eb4165d0f8ea9182ae20365a84eba04729756b82f12bf0d868f5be55",
+    "roadmap": "sha256:beb0eba71648949c0383fba61465ae20e7ee6c8ee0e62d803295da737a1b6ea6",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:17acdbd1ab266b7aac2cfe605295f5f7d9e7a179f13d535bfeed8a075f477911",
+    "workState": "sha256:80a18012d7b432d681d7631d34004dd9ac26d6eaeb161f04fe0e1f48f465d29a",
     "rfcRegister": "sha256:fdcf85be04c51a844591c68b26099dec7fcb50241d0db5c706fe461b7ae2a303",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 632,
       "doing": 175,
       "blocked": 1064,
-      "done": 1944,
+      "done": 1947,
       "refused": 163
     },
     "workItems": {
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Private compiler-state dependency is verified. Continue accepted §6.4 construction8: distinct genuine foundation receipt, retained tactical/full stages, actual subject_outcomes operation/census adoption and fresh qualification, then bounded partial-owner LRU/service advancement and live caller permission/deadline/cancellation. Existing full-only selector/Profile/native paths and D4224/D4225/D4228/D4175ordinary26/D4167/D3928 remain open; no budget or ordinary activation claim.",
+      "nextAction": "Confirm the complete software suite on committed construction8 bytes, then implement actual run-facing cooperative acquisition with live authorization/currentness, coalesced cancellation and deadlines, and measure actual cost/budgets. Existing full selector/Profile/native paths and D4224/D4225/D4228/D4175ordinary26/D4167/D3928 remain open; no ordinary activation or release closure.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4224 first private compiler-state dependency is verified/independently accepted: actual synchronous compiler uses private root/child cells with construction7/publicscopes unchanged.141 focused/six and48scope+32complete all13 graph/value-receipt/original-input comparisons pass before/after canonical refresh. Full frozen-production20502software/581815.14s+7performance/four61.11s/types/build/governanceR1-R10 pass. Canonical1928/1928/24of89/461vectors/8externals unchanged except11 operation/63 joined predicate hashes;4341526B. Compact16765B proof. Construction8/scopedreceipt/actualmachineoperation/service/freshqualification, memory/budget/ordinary/native/content/release remain owed. No capability or parent completes.",
+        "summary": "D4224 construction8 source/service checkpoint implements genuine complete foundation receipts, original core/full source reuse, retained readings-first tactical inputs, fixed acquisition steps and one bounded pending/completed owner LRU. Actual subject_outcomes operation/census use foundation; fresh canonical1928/1928 retains24/89 qualified and all13 outcomes. Payloads, operands, source vectors, case/population results and verdicts are unchanged; authority changes independently recomputed. Source/lifetime reviews accept finite implementation and D4230-32 repairs. Fresh normal types,7performance/four90.62s,build/governance pass. Complete software20545pass/four test-side failures were repaired without production changes;43 affected checks pass afterward. Clean committed full-suite confirmation is next; no whole-software green command claimed. Run-facing live-permission/coalesced-cancel integration and measured cost/budget proof remain D4224; memory/ordinary/Review/native/content/release remain open.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -629,7 +629,11 @@
           "tools/d4227-core-acquisition/README.md",
           "planning/foundation-source-identity/core-acquisition-2026-11-11.json",
           "tools/d4175-outcome-delivery/compare-owner.ts",
-          "planning/foundation-source-identity/owner-refactor-equality-2026-11-11.json"
+          "planning/foundation-source-identity/owner-refactor-equality-2026-11-11.json",
+          "planning/foundation-source-identity/scoped-acquisition-review-2026-11-11.md",
+          "packages/runtime/src/candidate-construction.test.ts",
+          "apps/server/src/candidate-population-service.test.ts",
+          "apps/server/src/testing/candidate-retirement.test-support.ts"
         ],
         "anchors": [
           {
@@ -1275,7 +1279,7 @@
           {
             "kind": "work_state",
             "id": "D4224",
-            "digest": "sha256:2dad4bd0331ec9c2b896cc0e20e387ce2b0a05133d6920c6f5871ae223ad69cc"
+            "digest": "sha256:d7b76338b8fdff319c704d5a39b5d482a0cccda6541813ad27e2bd013a9213fa"
           },
           {
             "kind": "work_state",
@@ -1301,6 +1305,21 @@
             "kind": "work_state",
             "id": "D4229",
             "digest": "sha256:88f2ff0f63f1b29fa63a6e05b2a8894d026bec0c6c91136af37203628ef30ac4"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4230",
+            "digest": "sha256:a89fb9dcd2c03640c7570b680c340e65c9c103278e51933f8cd226580c595254"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4231",
+            "digest": "sha256:d900997e7ec0484348b253b814dbd355845da23b4d776f880acb8af6e295f674"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4232",
+            "digest": "sha256:fa5a3050bdfcb8337866e410443d14f2e257e0738b149a68f859356cd5fdb46f"
           }
         ]
       },
@@ -1321,10 +1340,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Private compiler-state dependency is verified. Continue accepted §6.4 construction8: distinct genuine foundation receipt, retained tactical/full stages, actual subject_outcomes operation/census adoption and fresh qualification, then bounded partial-owner LRU/service advancement and live caller permission/deadline/cancellation. Existing full-only selector/Profile/native paths and D4224/D4225/D4228/D4175ordinary26/D4167/D3928 remain open; no budget or ordinary activation claim.",
+      "nextAction": "Confirm the complete software suite on committed construction8 bytes, then implement actual run-facing cooperative acquisition with live authorization/currentness, coalesced cancellation and deadlines, and measure actual cost/budgets. Existing full selector/Profile/native paths and D4224/D4225/D4228/D4175ordinary26/D4167/D3928 remain open; no ordinary activation or release closure.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4224 first private compiler-state dependency is verified/independently accepted: actual synchronous compiler uses private root/child cells with construction7/publicscopes unchanged.141 focused/six and48scope+32complete all13 graph/value-receipt/original-input comparisons pass before/after canonical refresh. Full frozen-production20502software/581815.14s+7performance/four61.11s/types/build/governanceR1-R10 pass. Canonical1928/1928/24of89/461vectors/8externals unchanged except11 operation/63 joined predicate hashes;4341526B. Compact16765B proof. Construction8/scopedreceipt/actualmachineoperation/service/freshqualification, memory/budget/ordinary/native/content/release remain owed. No capability or parent completes.",
+        "summary": "D4224 construction8 source/service checkpoint implements genuine complete foundation receipts, original core/full source reuse, retained readings-first tactical inputs, fixed acquisition steps and one bounded pending/completed owner LRU. Actual subject_outcomes operation/census use foundation; fresh canonical1928/1928 retains24/89 qualified and all13 outcomes. Payloads, operands, source vectors, case/population results and verdicts are unchanged; authority changes independently recomputed. Source/lifetime reviews accept finite implementation and D4230-32 repairs. Fresh normal types,7performance/four90.62s,build/governance pass. Complete software20545pass/four test-side failures were repaired without production changes;43 affected checks pass afterward. Clean committed full-suite confirmation is next; no whole-software green command claimed. Run-facing live-permission/coalesced-cancel integration and measured cost/budget proof remain D4224; memory/ordinary/Review/native/content/release remain open.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1933,7 +1952,11 @@
           "tools/d4227-core-acquisition/README.md",
           "planning/foundation-source-identity/core-acquisition-2026-11-11.json",
           "tools/d4175-outcome-delivery/compare-owner.ts",
-          "planning/foundation-source-identity/owner-refactor-equality-2026-11-11.json"
+          "planning/foundation-source-identity/owner-refactor-equality-2026-11-11.json",
+          "planning/foundation-source-identity/scoped-acquisition-review-2026-11-11.md",
+          "packages/runtime/src/candidate-construction.test.ts",
+          "apps/server/src/candidate-population-service.test.ts",
+          "apps/server/src/testing/candidate-retirement.test-support.ts"
         ],
         "anchors": [
           {
@@ -2944,7 +2967,7 @@
           {
             "kind": "work_state",
             "id": "D4224",
-            "digest": "sha256:2dad4bd0331ec9c2b896cc0e20e387ce2b0a05133d6920c6f5871ae223ad69cc"
+            "digest": "sha256:d7b76338b8fdff319c704d5a39b5d482a0cccda6541813ad27e2bd013a9213fa"
           },
           {
             "kind": "work_state",
@@ -2970,6 +2993,21 @@
             "kind": "work_state",
             "id": "D4229",
             "digest": "sha256:88f2ff0f63f1b29fa63a6e05b2a8894d026bec0c6c91136af37203628ef30ac4"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4230",
+            "digest": "sha256:a89fb9dcd2c03640c7570b680c340e65c9c103278e51933f8cd226580c595254"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4231",
+            "digest": "sha256:d900997e7ec0484348b253b814dbd355845da23b4d776f880acb8af6e295f674"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4232",
+            "digest": "sha256:fa5a3050bdfcb8337866e410443d14f2e257e0738b149a68f859356cd5fdb46f"
           }
         ]
       },

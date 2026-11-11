@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { CANDIDATE_WIDE_SCOPE, compileCandidatePopulation, type CandidatePopulationReceipt, type CandidateWideScope } from "./candidate-population.js";
+import { CANDIDATE_WIDE_SCOPE, compileCandidatePopulation, compileCandidateFoundation, type CandidatePopulationReceipt, type CandidateWideScope } from "./candidate-population.js";
 import { invokeEvidenceValueRoute, readSubjectOutcomePopulation } from "./internal/evidence-value-routes.js";
 import { SUBJECT_OUTCOME_FAMILIES, type SubjectOutcomeFamily } from "./semantic-subject-types.js";
 
@@ -20,14 +20,17 @@ function mutablePaths(value: unknown, path = "table"): string[] {
 }
 
 describe("internal source-owned complete subject population", () => {
-  it.each(SUBJECT_OUTCOME_FAMILIES)("%s retains the complete domain when the public event population is empty", family => {
-    const receipt = owner("8/8/8/8/8/1r6/2k5/K7 w - - 0 1");
+  it.each(SUBJECT_OUTCOME_FAMILIES.flatMap(family => (["foundation", "wide"] as const).map(scope => ({ family, scope }))))("$scope $family retains the complete domain when the public event population is empty", ({ family, scope }) => {
+    const fen = "8/8/8/8/8/1r6/2k5/K7 w - - 0 1";
+    const core = scope === "foundation" ? compileCandidateFoundation({ beforeFen: fen, ruleset: "standard" }) : undefined;
+    if (core !== undefined && core.kind !== "ready") throw Error(JSON.stringify(core));
+    const receipt = core?.receipt ?? owner(fen);
     const result = invokeEvidenceValueRoute(`derived.semantic_avoidance.${family}@2`, { receipt, moveUci: "a1a2" });
     expect(result).toEqual({ kind: "available", values: [] });
     expect(Object.keys(result)).toEqual(["kind", "values"]); // Public result ABI stays closed.
     const read = readSubjectOutcomePopulation(family, result);
     expect(read.kind).toBe("available"); if (read.kind !== "available") throw Error(read.reason);
-    expect(read.population).toMatchObject({ family, beforeFen: receipt.packet.beforeFen, moveUci: "a1a2", actor: "white" });
+    expect(read.population).toMatchObject({ family, beforeFen: receipt.legalMovesInput.payload.fen, moveUci: "a1a2", actor: "white" });
     expect(read.population.subjects).toHaveLength(counts[family]);
     expect(read.population.subjects.every(subject => subject.alternatives.length === 0)).toBe(true);
     expect(mutablePaths(read)).toEqual([]);

@@ -402,12 +402,12 @@ describe("value authority: registry equality", () => {
     // A sealed value of another projection is a crossed input.
     expect(() => invoke("derived.tactic.fork_survives_reply@1", { doubleAttack: reading, breadth: reading })).toThrow(/is sealed rules\.castling\.reading\.rights@1/u);
     // No factory accepts caller output or ancestry. The thirteen exact subject routes accept
-    // only an ORIGINAL complete candidate receipt; their copied-receipt falsifiers run below.
+    // only an ORIGINAL complete foundation or wide receipt; copied-receipt falsifiers run below.
     const subjectRoutes = new Set(SUBJECT_OUTCOME_FAMILIES.map(family => `derived.semantic_avoidance.${family}@2`));
     for (const meta of REGISTRY) for (const arm of meta.arms) for (const key of Object.keys(arm)) {
       if (key === "receipt" && subjectRoutes.has(meta.route)) {
         expect(Object.keys(arm).sort()).toEqual(["moveUci", "receipt"]);
-        expect(arm.receipt).toMatchObject({ kind: "value", label: "an original wide candidate receipt" });
+        expect(arm.receipt).toMatchObject({ kind: "value", label: "an original foundation or wide candidate receipt" });
       } else expect(["payload", "output", "receipt", "factory", "ancestry", "matched", "cause"], `${meta.route}.${key}`).not.toContain(key);
     }
   });

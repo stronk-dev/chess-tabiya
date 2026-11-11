@@ -1,6 +1,6 @@
 // Accepted source-local-evidence-availability §§1–2. Read ORIGINAL owned failures and vectors;
 // this helper neither collects positions nor mints evidence, receipts or selection authority.
-import { readCandidateFoundationSources, type CandidatePopulationReceipt, type CandidateWideScope } from "./candidate-population.js";
+import { readCandidateFoundationSources, readCandidateOutcomeSources, type CandidateOutcomeReceipt, type CandidatePopulationReceipt, type CandidateWideScope } from "./candidate-population.js";
 import type { LegacyUnavailableKey, SourceAvailabilityMember, UnavailableSemanticSource } from "./semantic-source-availability-types.js";
 
 export function readCandidateUnavailableSources(receipt: CandidatePopulationReceipt<CandidateWideScope>): readonly UnavailableSemanticSource[] {
@@ -34,6 +34,15 @@ export function readCandidateUnavailableSources(receipt: CandidatePopulationRece
       unavailable.push(Object.freeze({ projection, cause: Object.freeze({ kind: "candidate_collector", projection } as const), reason: "invalid_turn_clone", members }));
     }
   }
+  unavailable.push(...readCandidateRequiredUnavailableSources(receipt));
+  return Object.freeze(unavailable.sort((a, b) => a.projection.id.localeCompare(b.projection.id) || a.projection.version - b.projection.version));
+}
+
+
+/** Required foundation failure image only; unrelated event/reading groups are not requested. */
+export function readCandidateRequiredUnavailableSources(receipt: CandidateOutcomeReceipt): readonly UnavailableSemanticSource[] {
+  const frame = readCandidateOutcomeSources(receipt);
+  const unavailable: UnavailableSemanticSource[] = [];
   const riskMembers: SourceAvailabilityMember[] = [];
   const positions = [{ member: Object.freeze({ kind: "root" } as const), position: frame.root },
     ...frame.candidates.map(({ row, position }) => ({ member: Object.freeze({ kind: "child", moveUci: row.moveUci } as const), position }))];
@@ -46,5 +55,5 @@ export function readCandidateUnavailableSources(receipt: CandidatePopulationRece
     cause: Object.freeze({ kind: "required_total", projection: Object.freeze({ id: "rules.tactic.reading.mover_piece_risk", version: 1 } as const) } as const),
     reason: "invalid_turn_clone", members: Object.freeze(riskMembers),
   }));
-  return Object.freeze(unavailable.sort((a, b) => a.projection.id.localeCompare(b.projection.id) || a.projection.version - b.projection.version));
+  return Object.freeze(unavailable);
 }

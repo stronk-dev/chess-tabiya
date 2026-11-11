@@ -119,7 +119,7 @@ describe("foundation child source bindings", () => {
       }
       const quiet = result.receipt.packet.candidates.find(child => child.moveUci === "a8a7")!;
       expect(quiet.readings.find(value => keyOf(value) === "rules.structural.reading.king_opposition@3")!.payload).toMatchObject({ opposition: { color: "black" } });
-      expect(result.receipt.packet.compilerVersion).toBe(7);
+      expect(result.receipt.packet.compilerVersion).toBe(8);
     } finally { calls.mockRestore(); }
   });
 

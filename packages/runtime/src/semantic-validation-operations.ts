@@ -15,7 +15,7 @@ import { normalizeMove } from "chessops/chess";
 
 import { collectFoundationEdgeEvents, type FoundationEdgeSourceRef } from "./foundation-edge-source.js";
 import { createBoundedTargetBackgroundService } from "./bounded-target.js";
-import { compileCandidatePopulation, CANDIDATE_WIDE_SCOPE, readCandidateFoundationSources, type CandidatePopulationReceipt, type CandidateWideScope } from "./candidate-population.js";
+import { compileCandidatePopulation, compileCandidateFoundation, CANDIDATE_WIDE_SCOPE, readCandidateOutcomeSources, type CandidateOutcomeReceipt } from "./candidate-population.js";
 import { exactLegalMoves } from "./legal-moves.js";
 import { SUBJECT_OUTCOME_FAMILIES } from "./semantic-subject-types.js";
 import { boundedTargetSourceEvidence } from "./evidence-operations.js";
@@ -222,15 +222,15 @@ function completeAlternativesOperation(raw: SemanticCompleteAlternativesInput): 
 }
 
 /** Internal census reuse of an ORIGINAL compiled root; never a serialized input or authority issuer. */
-export function subjectOutcomesFromReceipt(raw: SemanticSubjectOutcomesInput, receipt: CandidatePopulationReceipt<CandidateWideScope>): SemanticValidationOperationResult {
+export function subjectOutcomesFromReceipt(raw: SemanticSubjectOutcomesInput, receipt: CandidateOutcomeReceipt): SemanticValidationOperationResult {
   const input = parseSemanticValidationOperationInput("runtime.semantic.subject_outcomes", raw);
-  readCandidateFoundationSources(receipt);
-  const population = input.population, packet = receipt.packet;
-  if (population.rootFen !== packet.beforeFen || population.legalSetDigest !== semanticLegalSetDigest(packet.beforeFen, packet.candidates.map(row => row.moveUci))
-    || population.alternatives.length !== packet.candidates.length) throw new SemanticValidationError("SEMANTIC_VALIDATION_FIXTURE_INVALID", "subject outcomes population differs from its original complete root");
+  const frame = readCandidateOutcomeSources(receipt);
+  const population = input.population, beforeFen = receipt.legalMovesInput.payload.fen;
+  if (population.rootFen !== beforeFen || population.legalSetDigest !== semanticLegalSetDigest(beforeFen, frame.candidates.map(row => row.move.uci))
+    || population.alternatives.length !== frame.candidates.length) throw new SemanticValidationError("SEMANTIC_VALIDATION_FIXTURE_INVALID", "subject outcomes population differs from its original complete root");
   for (const edge of [population.played, ...population.alternatives]) {
-    const row = packet.candidates.find(candidate => candidate.moveUci === edge.moveUci);
-    if (edge.beforeFen !== packet.beforeFen || row === undefined || row.afterFen !== edge.afterFen) throw new SemanticValidationError("SEMANTIC_VALIDATION_FIXTURE_INVALID", "subject outcomes edge differs from its original candidate");
+    const row = frame.candidates.find(candidate => candidate.move.uci === edge.moveUci)?.row;
+    if (edge.beforeFen !== beforeFen || row === undefined || row.afterFen !== edge.afterFen) throw new SemanticValidationError("SEMANTIC_VALIDATION_FIXTURE_INVALID", "subject outcomes edge differs from its original candidate");
   }
   const result = subjectOutcomeSemanticEvents(PRIMARY_EVIDENCE_MANIFEST, input.family, receipt, population.played.moveUci);
   return result.kind === "available" ? completed(result.events) : unavailable("complete_alternative_population_unavailable");
@@ -239,7 +239,7 @@ export function subjectOutcomesFromReceipt(raw: SemanticSubjectOutcomesInput, re
 function subjectOutcomesOperation(raw: SemanticSubjectOutcomesInput): SemanticValidationOperationResult {
   const input = parseSemanticValidationOperationInput("runtime.semantic.subject_outcomes", raw);
   assertCompleteAlternativesFixture(input.population);
-  const compiled = compileCandidatePopulation({ beforeFen: input.population.rootFen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
+  const compiled = compileCandidateFoundation({ beforeFen: input.population.rootFen, ruleset: "standard" });
   return compiled.kind === "ready" ? subjectOutcomesFromReceipt(input, compiled.receipt) : unavailable("complete_alternative_population_unavailable");
 }
 
@@ -291,7 +291,9 @@ export const SEMANTIC_VALIDATION_OPERATIONS: Registry = Object.freeze({
   }),
   "runtime.semantic.local_edge": Object.freeze({
     ref: LOCAL, productionSymbol: "localSemanticEventClosure", resultAdapter: "localEdge", implementationEntries: Object.freeze([SEMANTIC_ENTRY]),
-    reach: Object.freeze({ kind: "direct" as const, callers: Object.freeze(["packages/runtime/src/candidate-population.ts", "packages/runtime/src/postcommit-nudge.ts"]) }),
+    // Candidate construction uses the retained LocalSemanticCollection instance. These remain
+    // direct production callers of the standalone closure, rather than stale candidate anchors.
+    reach: Object.freeze({ kind: "direct" as const, callers: Object.freeze(["apps/server/src/longitudinal-projector.ts", "packages/runtime/src/postcommit-nudge.ts"]) }),
     population: "sampled_edges" as const, invoke: localEdge,
   }),
   "runtime.semantic.structural_edge": Object.freeze({

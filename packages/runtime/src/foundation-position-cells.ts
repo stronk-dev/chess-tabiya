@@ -14,9 +14,16 @@ export type FoundationPositionTuple = readonly [
   DeclaredEvidence<PawnFileGroupSnapshot>, DeclaredEvidence<FileStateSnapshot>,
 ];
 
-function once<T>(build: () => T): () => T {
-  let ready = false, value: T;
-  return () => { if (!ready) { value = build(); ready = true; } return value; };
+function once<T>(build: () => T) {
+  let ready = false, value: T, failed: Readonly<{ error: unknown }> | undefined;
+  return Object.freeze(Object.assign((): T => {
+    if (failed !== undefined) throw failed.error;
+    if (!ready) {
+      try { value = build(); ready = true; }
+      catch (error) { failed = Object.freeze({ error }); throw error; }
+    }
+    return value;
+  }, { failure: () => failed }));
 }
 
 function available<T>(result: { readonly kind: "available"; readonly value: T } | { readonly kind: "unavailable"; readonly reason: string }): T {
@@ -48,5 +55,8 @@ export function foundationPositionCells(fen: string, originalLegal?: DeclaredEvi
   const control = once(() => invokeEvidenceValueRoute("rules.square.reading.control@1", { fen: canonical }));
   const values = once((): FoundationPositionTuple => readFoundationPositionTuple(
     Object.freeze([legal(), connectivity(), opposition(), backward(), groups(), files()] as const)));
-  return Object.freeze({ fen: canonical, legal, connectivity, opposition, backward, groups, files, control, values });
+  return Object.freeze({ fen: canonical, legal, connectivity, opposition, backward, groups, files, control, values,
+    commonFailure: () => legal.failure() ?? connectivity.failure() ?? opposition.failure() ?? backward.failure() ?? groups.failure() ?? files.failure() ?? values.failure(),
+    controlFailure: control.failure,
+  });
 }

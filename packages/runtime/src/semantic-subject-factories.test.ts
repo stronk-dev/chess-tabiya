@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { CANDIDATE_EVENTS_SCOPE, CANDIDATE_WIDE_SCOPE, compileCandidatePopulation, readCandidateFoundationSources,
+import { CANDIDATE_EVENTS_SCOPE, CANDIDATE_WIDE_SCOPE, candidateOutcomeFoundationId, compileCandidateFoundation, readCandidateOutcomeSources, compileCandidatePopulation, readCandidateFoundationSources,
   type CandidatePopulationReceipt, type CandidateWideScope } from "./candidate-population.js";
 import { evidenceDigest, evidenceValueReceipt, type DeclaredEvidence } from "./evidence-contract.js";
 import { invokeEvidenceValueRoute, readSubjectOutcomeInvocation } from "./internal/evidence-value-routes.js";
@@ -23,8 +23,11 @@ function owner(fen: string) {
 }
 
 describe("source-owned subject outcome factory boundary", () => {
-  it.each(SUBJECT_OUTCOME_FAMILIES)("%s seals the complete original legal and family vector", family => {
-    const [fen, moveUci] = fixtures[family], receipt = owner(fen), frame = readCandidateFoundationSources(receipt);
+  it.each(SUBJECT_OUTCOME_FAMILIES.flatMap(family => (["foundation", "wide"] as const).map(scope => ({ family, scope }))))("$scope $family seals the complete original legal and family vector", ({ family, scope }) => {
+    const [fen, moveUci] = fixtures[family];
+    const core = scope === "foundation" ? compileCandidateFoundation({ beforeFen: fen, ruleset: "standard" }) : undefined;
+    if (core !== undefined && core.kind !== "ready") throw Error(JSON.stringify(core));
+    const receipt = core?.receipt ?? owner(fen), frame = readCandidateOutcomeSources(receipt);
     const result = invokeEvidenceValueRoute(`derived.semantic_avoidance.${family}@2`, { receipt, moveUci });
     expect(result.kind).toBe("available"); if (result.kind !== "available") throw Error(result.reason);
     expect(Object.keys(result)).toEqual(["kind", "values"]); expect(result.values.length).toBeGreaterThan(0);
@@ -54,7 +57,7 @@ describe("source-owned subject outcome factory boundary", () => {
       expect(readSubjectOutcomeInvocation(value)).toBe(invocation);
       expect(value.projection).toEqual({ id: `derived.semantic_avoidance.${family}`, version: 2 });
       expect(evidenceValueReceipt(value).sourceDigests).toEqual(expected.map(source => evidenceValueReceipt(source).payloadDigest));
-      expect(evidenceValueReceipt(value).inputDigest).toBe(evidenceDigest({ packetId: receipt.packet.id, compilerVersion: 7, moveUci, family }));
+      expect(evidenceValueReceipt(value).inputDigest).toBe(evidenceDigest({ foundationId: candidateOutcomeFoundationId(receipt), compilerVersion: 8, moveUci, family }));
       expect(() => readSubjectOutcomeInvocation({ ...value })).toThrow(/original/);
     }
     expect(() => readSubjectOutcomeInvocation({ ...result })).toThrow(/original/);

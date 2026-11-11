@@ -11,7 +11,7 @@ import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 import { PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_EVENT_DECLARATIONS } from "../packages/runtime/src/evidence-catalog.js";
-import { compileCandidatePopulation, CANDIDATE_WIDE_SCOPE } from "../packages/runtime/src/candidate-population.js";
+import { compileCandidateFoundation, readCandidateOutcomeSources } from "../packages/runtime/src/candidate-population.js";
 import { SUBJECT_OUTCOME_FAMILIES, type SubjectOutcomeFamily } from "../packages/runtime/src/semantic-subject-types.js";
 import { evidenceDigest, evidenceValueReceipt, type VersionedEvidenceId } from "../packages/runtime/src/evidence-contract.js";
 import { SEMANTIC_VALIDATION_REPOSITORY_ROOT, SEMANTIC_VALIDATION_RESOLVERS, semanticValidationImportClosure } from "../packages/runtime/src/semantic-validation-authorities.js";
@@ -125,13 +125,13 @@ export function runSubjectCensuses(population: SemanticValidationPopulation): Re
     inputSha: evidenceDigest({ projection: "subject_outcomes", family, sampledEdges: population.projectionDigests.sampled_edges }),
     invocations: 0, observations: new Map<string, string[]>(), unavailable: [], abstained: new Map<string, string[]>() } satisfies CensusResult]));
   for (const row of population.sampledEdges) {
-    const compiled = compileCandidatePopulation({ beforeFen: row.edge.beforeFen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
+    const compiled = compileCandidateFoundation({ beforeFen: row.edge.beforeFen, ruleset: "standard" });
     if (compiled.kind !== "ready") throw new Error(`Subject census root failed: ${compiled.error.code}`);
-    const receipt = compiled.receipt, alternatives = receipt.packet.candidates.map(candidate => ({ kind: "edge" as const,
-      beforeFen: receipt.packet.beforeFen, moveUci: candidate.moveUci, afterFen: candidate.afterFen }));
+    const receipt = compiled.receipt, frame = readCandidateOutcomeSources(receipt), alternatives = frame.candidates.map(candidate => ({ kind: "edge" as const,
+      beforeFen: receipt.beforeFen, moveUci: candidate.move.uci, afterFen: candidate.row.afterFen }));
     for (const family of SUBJECT_OUTCOME_FAMILIES) {
-      const input: SemanticSubjectOutcomesInput = { kind: "subject_outcomes", family, population: { kind: "complete_alternatives", rootFen: receipt.packet.beforeFen,
-        played: row.edge, alternatives, legalSetDigest: semanticLegalSetDigest(receipt.packet.beforeFen, alternatives.map(edge => edge.moveUci)) } };
+      const input: SemanticSubjectOutcomesInput = { kind: "subject_outcomes", family, population: { kind: "complete_alternatives", rootFen: receipt.beforeFen,
+        played: row.edge, alternatives, legalSetDigest: semanticLegalSetDigest(receipt.beforeFen, alternatives.map(edge => edge.moveUci)) } };
       addCensusResult(runs.get(family)!, `${row.site}#${row.ply}`, subjectOutcomesFromReceipt(input, receipt));
     }
   }

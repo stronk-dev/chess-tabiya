@@ -49,7 +49,10 @@ export function collectOwnedFoundationEdgeEvents(candidate: FoundationEdge, orig
   return collect(edge, SOURCE_ORDER, retained(before), retained(after));
 }
 
-type SourceCells = Pick<ReturnType<typeof foundationPositionCells>, "opposition" | "backward" | "groups" | "files" | "connectivity" | "values">;
+type SourceCells = {
+  [K in "opposition" | "backward" | "groups" | "files" | "connectivity" | "values"]:
+    () => ReturnType<ReturnType<typeof foundationPositionCells>[K]>;
+};
 
 function collect(edge: FoundationEdge, selected: readonly FoundationEdgeSourceRef[], before: SourceCells, after: SourceCells): readonly SemanticEvidenceEvent[] {
   const once = <T>(build: () => T): (() => T) => {

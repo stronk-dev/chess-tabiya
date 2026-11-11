@@ -26,7 +26,7 @@ import {
 } from "./evidence-contract.js";
 import { evidenceValueReceipt } from "./evidence-contract.js";
 import { SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS } from "./semantic-validation.js";
-import { invokeEvidenceValueRoute, readFoundationEventInvocation, readSubjectOutcomeInvocation, type EvidenceValueRoute, type EvidenceValueRouteResults } from "./internal/evidence-value-routes.js";
+import { readFoundationPositionTuple, invokeEvidenceValueRoute, readFoundationEventInvocation, readSubjectOutcomeInvocation, type EvidenceValueRoute, type EvidenceValueRouteResults } from "./internal/evidence-value-routes.js";
 import { SUBJECT_OUTCOME_FAMILIES, type AnySubjectOutcomePayload, type SubjectOutcomeFamily } from "./semantic-subject-types.js";
 import { semanticPlayedOccurrenceKey, semanticPlayedSubjectOrdinal } from "./semantic-played-occurrence.js";
 import { SEMANTIC_PLAYED_RANKING_MODES } from "./semantic-played-types.js";
@@ -52,6 +52,7 @@ import {
   compileCandidatePopulation,
   type CandidatePopulationReceipt,
   type CandidateWideScope,
+  type CandidateOutcomeReceipt,
 } from "./candidate-population.js";
 
 const SEMANTIC_EVENT: unique symbol = Symbol("tabiya.evidence.semantic_event");
@@ -1298,30 +1299,80 @@ export function localDefenderExposure(closure: LocalSemanticEventClosure): Colle
  * this one composition, so no second, narrower enumerator can exist. The loose-piece collector's
  * `invalid_turn_clone` abstention is returned as a typed value rather than silently dropped.
  */
+/** Internal fixed collection state. Only actual collectors fill its private cells; callers
+ * cannot supply a tactical array or a collector callback. Readings and later full collection
+ * can therefore retain the same genuine private tactical prerequisites. */
+export class LocalSemanticCollection {
+  #tactical: ReturnType<typeof tacticalSemanticEvents> | undefined;
+  #closure: LocalSemanticEventClosure | undefined;
+  #sources: readonly [FoundationPositionTuple, FoundationPositionTuple] | undefined;
+  #tacticalFailure: Readonly<{ error: unknown }> | undefined;
+  #collectionFailure: Readonly<{ error: unknown }> | undefined;
+  get tacticalFailure() { return this.#tacticalFailure; }
+  get collectionFailure() { return this.#collectionFailure; }
+  readonly #edge: Readonly<{ beforeFen: string; moveUci: string; afterFen: string }>;
+  constructor(beforeFen: string, moveUci: string, afterFen: string) {
+    this.#edge = Object.freeze({ beforeFen, moveUci, afterFen });
+    Object.freeze(this);
+  }
+  #tacticalValues(): ReturnType<typeof tacticalSemanticEvents> {
+    if (this.#tacticalFailure !== undefined) throw this.#tacticalFailure.error;
+    try { return this.#tactical ??= tacticalSemanticEvents(this.#edge.beforeFen, this.#edge.moveUci, this.#edge.afterFen); }
+    catch (error) { this.#tacticalFailure = Object.freeze({ error }); throw error; }
+  }
+  tactical(): ReturnType<typeof tacticalSemanticEvents> { return this.#tacticalValues(); }
+  collect(originalSources?: readonly [FoundationPositionTuple, FoundationPositionTuple]): LocalSemanticEventClosure {
+    let captured: readonly [FoundationPositionTuple, FoundationPositionTuple] | undefined;
+    if (originalSources !== undefined) {
+      const length = Object.getOwnPropertyDescriptor(originalSources, "length"), root = Object.getOwnPropertyDescriptor(originalSources, "0"), child = Object.getOwnPropertyDescriptor(originalSources, "1");
+      if (!Array.isArray(originalSources) || length?.value !== 2
+        || Reflect.ownKeys(originalSources).some(key => key !== "0" && key !== "1" && key !== "length")
+        || root === undefined || child === undefined || !("value" in root) || !("value" in child))
+        throw new TypeError("Local collection requires a data-only original source pair");
+      captured = Object.freeze([readFoundationPositionTuple(root.value as FoundationPositionTuple),
+        readFoundationPositionTuple(child.value as FoundationPositionTuple)]);
+    }
+    if (this.#closure !== undefined) {
+      if (this.#sources?.[0] !== captured?.[0] || this.#sources?.[1] !== captured?.[1])
+        throw new TypeError("Local collection cannot replace its original source tuples");
+      return this.#closure;
+    }
+    if (this.#collectionFailure !== undefined) throw this.#collectionFailure.error;
+    try {
+      const { beforeFen, moveUci, afterFen } = this.#edge;
+      const transitionEvents = transitionSemanticEvents(beforeFen, moveUci, afterFen);
+      const loose = loosePieceSemanticEvents(beforeFen, moveUci, afterFen);
+      const breadth = breadthSemanticEventClosure(beforeFen, moveUci, afterFen);
+      const events = Object.freeze([
+        ...structuralSemanticEventsCached(beforeFen, moveUci, afterFen),
+        ...collectOwnedFoundationEdgeEvents({ beforeFen, moveUci, afterFen },
+          captured?.[0] ?? foundationPositionCells(beforeFen).values(),
+          captured?.[1] ?? foundationPositionCells(afterFen).values()),
+        ...transitionEvents,
+        ...this.#tacticalValues(),
+        ...(loose ?? []),
+        ...castlingSemanticEvents(beforeFen, moveUci, afterFen),
+        ...derivedExchangeSemanticEvents(beforeFen, moveUci, afterFen, transitionEvents),
+        ...discoveredExecutedSemanticEvents(beforeFen, moveUci, afterFen),
+        ...breadth.events,
+        ...semanticDutyEvents(beforeFen, moveUci, afterFen, transitionEvents),
+      ]);
+      const outcomes: readonly LocalSemanticCollectorOutcome[] = [
+        ...(loose === undefined ? [Object.freeze({ projection: "rules.tactic.event.loose_piece@1" as const, result: Object.freeze({ kind: "unavailable" as const, reason: "invalid_turn_clone" as const }) })] : []),
+        ...localSemanticCollectorOutcomes(breadth),
+      ];
+      this.#sources = captured;
+      return this.#closure = collectedSemanticEvents(events, outcomes, localDefenderExposure(breadth));
+    } catch (error) { this.#collectionFailure = Object.freeze({ error }); throw error; }
+  }
+}
+
+Object.freeze(LocalSemanticCollection.prototype);
+Object.freeze(LocalSemanticCollection);
+
 export function localSemanticEventClosure(beforeFen: string, moveUci: string, afterFen: string,
   originalSources?: readonly [FoundationPositionTuple, FoundationPositionTuple]): LocalSemanticEventClosure {
-  const transitionEvents = transitionSemanticEvents(beforeFen, moveUci, afterFen);
-  const loose = loosePieceSemanticEvents(beforeFen, moveUci, afterFen);
-  const breadth = breadthSemanticEventClosure(beforeFen, moveUci, afterFen);
-  const events = Object.freeze([
-    ...structuralSemanticEventsCached(beforeFen, moveUci, afterFen),
-    ...collectOwnedFoundationEdgeEvents({ beforeFen, moveUci, afterFen },
-      originalSources?.[0] ?? foundationPositionCells(beforeFen).values(),
-      originalSources?.[1] ?? foundationPositionCells(afterFen).values()),
-    ...transitionEvents,
-    ...tacticalSemanticEvents(beforeFen, moveUci, afterFen),
-    ...(loose ?? []),
-    ...castlingSemanticEvents(beforeFen, moveUci, afterFen),
-    ...derivedExchangeSemanticEvents(beforeFen, moveUci, afterFen, transitionEvents),
-    ...discoveredExecutedSemanticEvents(beforeFen, moveUci, afterFen),
-    ...breadth.events,
-    ...semanticDutyEvents(beforeFen, moveUci, afterFen, transitionEvents),
-  ]);
-  const outcomes: readonly LocalSemanticCollectorOutcome[] = [
-    ...(loose === undefined ? [Object.freeze({ projection: "rules.tactic.event.loose_piece@1" as const, result: Object.freeze({ kind: "unavailable" as const, reason: "invalid_turn_clone" as const }) })] : []),
-    ...localSemanticCollectorOutcomes(breadth),
-  ];
-  return collectedSemanticEvents(events, outcomes, localDefenderExposure(breadth));
+  return new LocalSemanticCollection(beforeFen, moveUci, afterFen).collect(originalSources);
 }
 
 export function localSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent[] {
@@ -1466,7 +1517,7 @@ export type SubjectOutcomeSemanticResult =
 /** The same complete factory population serves selection AND source-validation operations.
  * An available empty still authenticates the original complete source invocation. */
 export function subjectOutcomeSemanticEvents(manifest: CompiledEvidenceManifest, family: SubjectOutcomeFamily,
-  receipt: CandidatePopulationReceipt<CandidateWideScope>, moveUci: string): SubjectOutcomeSemanticResult {
+  receipt: CandidateOutcomeReceipt, moveUci: string): SubjectOutcomeSemanticResult {
   const result = invokeEvidenceValueRoute(`derived.semantic_avoidance.${family}@2`, { receipt, moveUci });
   readSubjectOutcomeInvocation(result);
   if (result.kind === "unavailable") return result;

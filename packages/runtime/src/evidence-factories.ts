@@ -17,7 +17,7 @@ import { castlingSide, normalizeMove } from "chessops/chess";
 import { kingCastlesTo, parseSquare, parseUci } from "chessops/util";
 import type { SquareName } from "chessops/types";
 import type { FoundationPositionTuple } from "./foundation-position-cells.js";
-import { candidatePlayedRow, readCandidateFoundationSources, type CandidatePopulationReceipt, type CandidateWideScope } from "./candidate-population.js";
+import { candidateOutcomePlayedRow, candidateOutcomeFoundationId, readCandidateOutcomeSources, type CandidateOutcomeReceipt } from "./candidate-population.js";
 import { computeSubjectOutcomes } from "./semantic-subject-outcomes.js";
 import { SUBJECT_OUTCOME_FAMILIES, type SubjectOutcomeFamily, type SubjectOutcomePayload, type SubjectOutcomePopulationResult } from "./semantic-subject-types.js";
 
@@ -528,7 +528,7 @@ export type MoverPieceRiskFactoryResult =
 type TotalRayInvocation = Readonly<{ kind: "total_ray"; position: DeclaredEvidence<ExactLegalMoveMap> }>;
 type TotalRiskInvocation = Readonly<MoverPieceRiskInput & { kind: "total_risk"; result: MoverPieceRiskFactoryResult }>;
 export interface SubjectOutcomeFactoryInput {
-  readonly receipt: CandidatePopulationReceipt<CandidateWideScope>;
+  readonly receipt: CandidateOutcomeReceipt;
   readonly moveUci: string;
 }
 export type SubjectOutcomeFactoryResult<F extends SubjectOutcomeFamily> =
@@ -547,9 +547,9 @@ export function readSubjectOutcomeInvocation(value: DeclaredEvidence<unknown> | 
   if (original?.kind !== "subject_outcomes" || !(original.result === value || original.result.kind === "available" && original.result.values.some(item => item === value))) {
     throw new TypeError("Subject outcome requires its original factory value or complete result");
   }
-  readCandidateFoundationSources(original.receipt);
-  const played = candidatePlayedRow(original.receipt, original.moveUci);
-  if (original.receipt.packet.compilerVersion !== 7 || played.afterFen !== original.edge.afterFen) throw new TypeError("Subject outcome lost its original compiler/played member");
+  readCandidateOutcomeSources(original.receipt);
+  const played = candidateOutcomePlayedRow(original.receipt, original.moveUci);
+  if (played.afterFen !== original.edge.afterFen) throw new TypeError("Subject outcome lost its original compiler/played member");
   if (original.result !== value) {
     assertDeclaredEvidence(value);
     const route = `derived.semantic_avoidance.${original.family}@2`, receipt = evidenceValueReceipt(value);
@@ -557,7 +557,7 @@ export function readSubjectOutcomeInvocation(value: DeclaredEvidence<unknown> | 
     if (sealedRoute(value) !== route || receipt.factory !== evidenceFactorySymbol(route)
       || saved?.length !== original.inputs.length || saved.some((item, index) => item !== original.inputs[index])
       || receipt.sourceDigests.length !== saved.length || receipt.sourceDigests.some((digest, index) => digest !== evidenceValueReceipt(saved[index]!).payloadDigest)
-      || receipt.inputDigest !== authorityDigest({ packetId: original.receipt.packet.id, compilerVersion: 7, moveUci: original.moveUci, family: original.family })) {
+      || receipt.inputDigest !== authorityDigest({ foundationId: candidateOutcomeFoundationId(original.receipt), compilerVersion: 8, moveUci: original.moveUci, family: original.family })) {
       throw new TypeError("Subject outcome lost its complete original ordered inputs");
     }
   }
@@ -1677,21 +1677,20 @@ export const createDerivedTacticOverloadExploitationObservedV1Evidence = sequenc
 function subjectOutcomeFactory<F extends SubjectOutcomeFamily>(family: F): EvidenceValueFactory<SubjectOutcomeFactoryInput, SubjectOutcomeFactoryResult<F>> {
   const route = `derived.semantic_avoidance.${family}@2`, symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "derived", arms: [{
-    receipt: value("an original wide candidate receipt", candidate => {
-      try { readCandidateFoundationSources(candidate as CandidatePopulationReceipt<CandidateWideScope>); return true; } catch { return false; }
+    receipt: value("an original foundation or wide candidate receipt", candidate => {
+      try { readCandidateOutcomeSources(candidate as CandidateOutcomeReceipt); return true; } catch { return false; }
     }), moveUci: value("an exact played member of the original receipt", isText),
   }], result: "availability" }, input => {
     if (!hasExactOwnDataKeys(input, ["receipt", "moveUci"])) throw new TypeError("Subject outcome factory requires exactly receipt and moveUci data fields");
-    readCandidateFoundationSources(input.receipt);
-    const played = candidatePlayedRow(input.receipt, input.moveUci);
-    if (input.receipt.packet.compilerVersion !== 7) throw new TypeError("Subject outcomes require compiler7 original sources");
+    readCandidateOutcomeSources(input.receipt);
+    const played = candidateOutcomePlayedRow(input.receipt, input.moveUci);
     const computed = computeSubjectOutcomes(family, input.receipt, input.moveUci);
     const inputs = computed.kind === "available" ? computed.inputs : Object.freeze([]);
-    const authority = { packetId: input.receipt.packet.id, compilerVersion: 7, moveUci: input.moveUci, family };
+    const authority = { foundationId: candidateOutcomeFoundationId(input.receipt), compilerVersion: 8, moveUci: input.moveUci, family };
     const result: SubjectOutcomeFactoryResult<F> = computed.kind === "unavailable" ? computed
       : Object.freeze({ kind: "available", values: Object.freeze(computed.payloads.map(payload => mintFoundationValue(route, symbol, payload, authority, inputs))) });
     const invocation: SubjectOutcomeInvocation = Object.freeze({ kind: "subject_outcomes", receipt: input.receipt, moveUci: input.moveUci, family,
-      edge: Object.freeze({ beforeFen: input.receipt.packet.beforeFen, moveUci: played.moveUci, afterFen: played.afterFen }), inputs, result,
+      edge: Object.freeze({ beforeFen: input.receipt.legalMovesInput.payload.fen, moveUci: played.moveUci, afterFen: played.afterFen }), inputs, result,
       population: computed.kind === "available" ? Object.freeze({ kind: "available", population: computed.population })
         : Object.freeze({ kind: "unavailable", family, reason: computed.reason }) });
     LOCAL_READING_INVOCATIONS.set(result, invocation);

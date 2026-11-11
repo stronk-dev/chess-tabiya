@@ -12,7 +12,7 @@ import { renderEvidenceItems } from "./evidence-contract.js";
 import { voiceCheck } from "./voice.js";
 
 const ROOT = fileURLToPath(new URL("../../../", import.meta.url));
-const PACKET_SYMBOLS = /\b(compileCandidatePopulation|CandidatePopulationReceipt|CandidateEventPopulation|candidatePlayedRow|candidateAlternatives|projectCandidatePopulationReceipt|assertCandidatePopulationReceipt|assertCandidatePacketEvent)\b/u;
+const PACKET_SYMBOLS = /\b(compileCandidatePopulation|CandidatePopulationReceipt|CandidateEventPopulation|candidatePlayedRow|candidateAlternatives|projectCandidatePopulationReceipt|assertCandidatePopulationReceipt|assertCandidatePacketEvent|compileCandidateFoundation|CandidateFoundationReceipt|CandidateOutcomeReceipt|CandidateConstruction|CandidateAcquisitionScope|CandidateAcquisitionReceipt|CandidateAcquisitionResult|beginCandidateConstruction|advanceCandidateConstruction|readCandidateConstruction|readCandidateOutcomeSources|candidateOutcomeFoundationId|candidateOutcomePlayedRow|isCandidateFoundationReceipt)\b/u;
 
 function productionSources(): readonly string[] {
   const files: string[] = [];
@@ -40,6 +40,8 @@ describe("candidate packet repository census", () => {
     // longitudinal-store A.2 uses one original WIDE per scoped worker decision; its native/
     // condition reducers only read that same owner. These are distinct declared product paths,
     // not permission for bots, voices, REST or the browser to acquire arbitrary packets.
+    // Construction8's foundation-only validation path and receipt readers remain in the same
+    // census; changing their input type must not make existing source consumers invisible.
     expect(readers).toEqual([
       "apps/server/src/candidate-population-service.ts",
       "apps/server/src/semantic-evidence-check.ts",
@@ -58,7 +60,7 @@ describe("candidate packet repository census", () => {
       "packages/runtime/src/testing/hint-fixture.ts",
     ]);
     for (const rel of ["packages/runtime/src/evidence-factories.ts", "packages/runtime/src/internal/longitudinal-native-incidence.ts", "packages/runtime/src/semantic-source-availability.ts", "packages/runtime/src/semantic-subject-outcomes.ts"]) {
-      expect(read(rel)).not.toMatch(/\bcompileCandidatePopulation\s*\(/u);
+      expect(read(rel)).not.toMatch(/\bcompileCandidate(?:Population|Foundation)\s*\(/u);
     }
     const worker = read("packages/runtime/src/internal/profile-subject-facts.ts");
     expect(worker.match(/\bcompileCandidatePopulation\s*\(/gu)).toHaveLength(1);

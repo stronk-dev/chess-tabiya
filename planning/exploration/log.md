@@ -41658,3 +41658,31 @@ readings-first tactical inputs, all staged full collection, actual operation/cen
 partial-owner64LRU and cooperative service/currentness/cancel proof with fresh qualification.
 D4225 remaining memory, D4228 actual paged Review, D4175ordinary26/D4167 and D3928 content/native/
 release remain live. No parent, learner capability or full1.0 milestone is marked complete.
+
+
+### 2026-11-11 — D4224 construction8 source/service checkpoint
+
+Implements accepted subject-safe-semantic-selection §6.4's distinct complete foundation receipt,
+original core/full source sharing, fixed root/child acquisition steps, seal-only reads and retained
+readings-first tactical inputs. The actual subject_outcomes operation/census uses foundation;
+complete-alternatives/native/Profile remain full. Partial/completed service owners share one LRU;
+retired tokens release owners while genuinely held completed receipts stay valid.
+
+Independent source/lifetime reviewers accept the finite implementation and D4230–32 repairs.
+Actual predecessor-red controls cover context replacement, shared failure retries and retained
+retired-token references. Fresh canonical1928/1928 retains24/89 qualified and all13 outcomes;
+all truth/result/vector/verdict data stay exact. The reviewer independently recomputes all4616
+old/new authority identities. Artifact remains4341526B; no raw research payload is added.
+
+The complete software run reports20545 passed/four failed out of20549/583 files,1379.42s.
+Those four census/old-exception assertions are repaired without production changes: census now
+recognizes the new ABI, the GC child follows existing test-support naming, and malformed totals
+must return exact typed failures through both foundation/full while the raw guard still refuses.
+All43 tests/four affected files pass afterward. Fresh normal types/Svelte,7performance/four
+(90.62s), build and governance R1–R10/C1–C8 pass. A clean full-suite confirmation of the committed
+checkpoint is next; the failed broad command is not recorded as green.
+
+D4230–32 close, D4224 remains doing. Actual live run-facing authorization/currentness/coalesced
+cancellation and cost/budget proof, D4225 memory, D4228 paged Review, D4175 ordinary26/D4167 and
+D3928 content/native/release remain open. No parent RFC or whole-product milestone closes.
+Details: planning/foundation-source-identity/scoped-acquisition-review-2026-11-11.md.

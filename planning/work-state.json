@@ -35426,7 +35426,7 @@
       "id": "D4224",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:2dad4bd0331ec9c2b896cc0e20e387ce2b0a05133d6920c6f5871ae223ad69cc",
+      "sourceDigest": "sha256:d7b76338b8fdff319c704d5a39b5d482a0cccda6541813ad27e2bd013a9213fa",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-11-11"
@@ -35474,6 +35474,33 @@
       "sourceDigest": "sha256:88f2ff0f63f1b29fa63a6e05b2a8894d026bec0c6c91136af37203628ef30ac4",
       "uxItems": [],
       "evidence": "rfc/subject-safe-semantic-selection.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4230",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a89fb9dcd2c03640c7570b680c340e65c9c103278e51933f8cd226580c595254",
+      "uxItems": [],
+      "evidence": "planning/foundation-source-identity/scoped-acquisition-review-2026-11-11.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4231",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d900997e7ec0484348b253b814dbd355845da23b4d776f880acb8af6e295f674",
+      "uxItems": [],
+      "evidence": "planning/foundation-source-identity/scoped-acquisition-review-2026-11-11.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4232",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fa5a3050bdfcb8337866e410443d14f2e257e0738b149a68f859356cd5fdb46f",
+      "uxItems": [],
+      "evidence": "planning/foundation-source-identity/scoped-acquisition-review-2026-11-11.md",
       "evidenceKind": "path"
     }
   ]

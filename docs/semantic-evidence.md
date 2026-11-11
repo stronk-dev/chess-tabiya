@@ -526,32 +526,38 @@ if the own non-king domain is empty. It is never an available empty or false ris
 
 Finite nonminting readers retain original source vectors and actual result membership through
 the existing factory stores, including repeated root inputs and unavailable results. Copied or
-resealed values do not acquire that invocation authority. Both routes currently have explicit
-private-prerequisite disposition. The existing wide candidate receipt owner retains their
-original root/child results privately. Its internal nonminting source reader accepts only a
-compiler-minted wide receipt. Narrowing preserves original references without granting wide
-outcome authority, and direct narrow compilation does not acquire the two private totals.
-In-flight compiler7 canonical events now consume those same original common sources; events-only
-receipts retain quiet prerequisites privately without acquiring wide-only total readings.
-Thirteen registered subject-outcome@2 factories consume complete original wide states, keeping
-all legal alternatives and exact ordered source vectors. Copied values/results cannot supply
-original invocation membership. These thirteen source families qualify through their actual
-wide-source operations; broader consumer qualification, ordinary adoption and the accepted
-construction8 scoped-source path remain under `rfc/subject-safe-semantic-selection.md`. These routes add neither public child-reading slots nor
+resealed values do not acquire that invocation authority. Both routes have explicit private-
+prerequisite disposition. Construction8 retains their original root/child results privately.
+The thirteen subject-outcome@2 factories accept either an original complete foundation receipt
+or an original wide receipt, keeping every legal alternative and exact ordered source vector.
+Both paths use the same foundation identity and original source objects. Narrow packets and
+copied values cannot acquire that authority. The actual subject-outcomes validation operation
+and census use the foundation path; complete-alternatives selection and native/Profile callers
+still acquire full packets. Broader consumer qualification and ordinary adoption remain under
+`rfc/subject-safe-semantic-selection.md`. These routes add neither public child-reading slots nor
 direct learner bindings. Complete local exchange-model facts do not grade a move or assert a
 forced win.
 
 ### Candidate compilation state
 
-The synchronous compiler uses one private `CandidateCompilation` for its original root legal
-source and per-move `CandidateRowCompilation` cells. Each row retains its own common snapshots,
-event closure, reading bundle and wide-only totals during construction. Scope selection and
-collector order remain unchanged; readers and receipt minting still validate the original full
-packet. These classes introduce no new public input or evidence authority.
+The synchronous compiler and service advancement share one private `CandidateCompilation` for
+the original legal root and one `CandidateRowCompilation` per legal move. Fixed root/child steps
+retain common snapshots, foundation totals, event closure and readings. Readings-first collection
+retains the actual tactical evidence for later events. Shared producer failures stay failed for
+every scope requiring that stage; an unrelated event failure does not erase valid foundation data.
 
-The accepted scoped-acquisition follow-up is `subject-safe-semantic-selection.md` §6.4. Its
-construction8 foundation receipt, service advancement, readings-first tactical reuse and fresh
-source qualification remain separate implementation duties.
+`beginCandidateConstruction` returns a process-local token without acquiring sources.
+`advanceCandidateConstruction` executes one fixed acquisition step. `readCandidateConstruction`
+only validates/seals completed data; it never drains an unrequested full packet. The distinct
+foundation receipt exposes only kind, FEN, compiler version, identity and original legal input.
+It cannot masquerade as a full packet, an empty event result or an abstention.
+
+The application service counts partial and completed owners in the same bounded LRU. Eviction
+retires its token and severs its owner reference before further work; separately held completed
+receipts remain valid. Its existing synchronous `wide` API drains the same stages. Actual
+run-facing cooperative execution, live authorization, cancellation/coalescing and response-budget
+proof remain open under `subject-safe-semantic-selection.md` §6.4; exposing steps alone does not
+complete those obligations.
 
 ## Adding a product module
 

@@ -18,9 +18,9 @@ function compile(fen: string, scope = CANDIDATE_WIDE_SCOPE) {
 
 describe("current candidate source adoption", () => {
   it("uses the sole current construction identity and does not convert an old receipt", () => {
-    expect(CANDIDATE_PACKET_COMPILER_VERSION).toBe(7);
+    expect(CANDIDATE_PACKET_COMPILER_VERSION).toBe(8);
     const receipt = compile("4k3/8/8/8/8/8/8/4K3 w - - 0 1");
-    expect(receipt.packet.compilerVersion).toBe(7);
+    expect(receipt.packet.compilerVersion).toBe(8);
     for (const compilerVersion of [1, 2, 3, 4, 5, 6]) {
       expect(() => assertCandidatePopulationReceipt({ ...receipt, packet: { ...receipt.packet, compilerVersion } })).toThrow();
     }

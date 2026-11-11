@@ -58,7 +58,7 @@ declare const packet: CandidateEventPopulation;
 const convention: CandidateEventPopulation["moveIdentityConvention"] = packet.moveIdentityConvention;
 // @ts-expect-error a packet built under another move convention is a different type.
 const foreignConvention: CandidateEventPopulation["moveIdentityConvention"] = "standard-uci-king-destination@1";
-const version: CandidateEventPopulation["compilerVersion"] = 7;
+const version: CandidateEventPopulation["compilerVersion"] = 8;
 // @ts-expect-error source construction changed; the previous compiler literal is no longer current.
 const previousVersion: CandidateEventPopulation["compilerVersion"] = 6;
 // @ts-expect-error the compiler version is the literal CANDIDATE_PACKET_COMPILER_VERSION.

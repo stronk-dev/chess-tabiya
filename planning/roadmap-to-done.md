@@ -2,14 +2,28 @@
 
 ## Current continuation — 2026-11-11
 
-The full 1.0 goal remains active. D4224's first production dependency is verified: the existing
+The full 1.0 goal remains active. D4224's construction8 source/service checkpoint implements the
+accepted distinct foundation receipt, shared original foundation/full inputs, retained tactical
+evidence, fixed acquisition steps and bounded partial/completed owners. Actual subject-outcomes
+qualification now uses the genuine foundation path:1928/1928 canonical cases retain24/89 qualified,
+including all13 migrated outcomes. D4230–32 repair context replacement, cross-scope failure retries
+and retired-token retention; both independent reviewers accept this finite implementation.
+[Review and verification](foundation-source-identity/scoped-acquisition-review-2026-11-11.md).
+Types, seven performance checks, build/governance and all43 affected repair tests pass. The
+broad software run had20545 passes/four repaired test-side failures; clean full-suite confirmation
+on the committed checkpoint is next. This is not cooperative delivery completion: actual run-facing live-permission/coalesced-cancel
+integration and measured cost/budget proof are next. D4224/D4225/D4228 and the ordinary consumer,
+content/native and release holds remain open.
+
+The preceding D4224 private compiler-state dependency is verified: the existing
 synchronous compiler uses one private root/child compilation graph. All48 literal scope graphs
 and32 complete same-game graphs/all13 families retain exact values, receipts and original
 inputs. Full normal gates pass20,502 software tests/581files, seven performance tests/fourfiles,
 types/build/governance; canonical1928/1928 and24/89 qualification remain unchanged except the
 expected11 operation/63 joined predicate hashes. [Equality result](foundation-source-identity/owner-refactor-equality-2026-11-11.json).
-Construction7 stays current; scoped receipt, cooperative service and construction8/fresh source
-qualification are next. D4224 and the broader consumer/memory/release obligations remain open.
+That checkpoint retained construction7; the scoped receipt/service API and construction8 source
+qualification are the coordinated follow-up above. Cooperative run-facing execution and the
+broader D4224 consumer/memory/release obligations remain open.
 
 Earlier D4226 closed the independently reviewed bounded verifier
 repair: two weak generations preserve complete evidence while reducing post-GC heap by roughly

@@ -3,13 +3,13 @@
 import { normalizeMove } from "chessops/chess";
 import type { NormalMove } from "chessops/types";
 import { makeSquare, parseUci } from "chessops/util";
-import { candidatePlayedRow, readCandidateFoundationSources, type CandidateFoundationPosition,
-  type CandidatePopulationReceipt, type CandidateWideScope } from "./candidate-population.js";
+import { candidateOutcomePlayedRow, readCandidateOutcomeSources, isCandidateFoundationReceipt, type CandidateFoundationPosition,
+  type CandidateOutcomeReceipt } from "./candidate-population.js";
 import type { DeclaredEvidence } from "./evidence-contract.js";
 import { originalPiecePositions } from "./foundation-piece-lineage.js";
 import { physicalRayDirectionAllowed } from "./foundation-slider-sources.js";
 import { positionFromFen } from "./position-cache.js";
-import { readCandidateUnavailableSources } from "./semantic-source-availability.js";
+import { readCandidateUnavailableSources, readCandidateRequiredUnavailableSources } from "./semantic-source-availability.js";
 import { BOOLEAN_SUBJECT_RELATIONS, INTEGER_SUBJECT_RELATIONS, SUBJECT_OUTCOME_FAMILIES, type ParametersByFamily,
   type RelationByFamily, type StateByFamily, type SubjectByFamily, type SubjectOutcomeFamily,
   type SubjectOutcomePayload, type SubjectOutcomePopulation } from "./semantic-subject-types.js";
@@ -158,18 +158,19 @@ export type ComputedSubjectOutcomes<F extends SubjectOutcomeFamily> =
   | { readonly kind: "available"; readonly payloads: readonly SubjectOutcomePayload<F>[]; readonly inputs: readonly DeclaredEvidence<unknown>[]; readonly population: SubjectOutcomePopulation<F> }
   | { readonly kind: "unavailable"; readonly reason: "counterfactual_population_incomplete" };
 
-/** The only input is an original wide receipt and its exact played member. All alternatives,
+/** The only input is an original complete foundation or wide receipt and its exact played member. All alternatives,
  * subjects, parameters, support, states and denominators come from that owner. */
-export function computeSubjectOutcomes<F extends SubjectOutcomeFamily>(family: F, receipt: CandidatePopulationReceipt<CandidateWideScope>, moveUci: string): ComputedSubjectOutcomes<F> {
+export function computeSubjectOutcomes<F extends SubjectOutcomeFamily>(family: F, receipt: CandidateOutcomeReceipt, moveUci: string): ComputedSubjectOutcomes<F> {
   if (!SUBJECT_OUTCOME_FAMILIES.includes(family)) throw new TypeError("Unknown exact subject-outcome family");
-  const frame = readCandidateFoundationSources(receipt), played = candidatePlayedRow(receipt, moveUci);
+  const frame = readCandidateOutcomeSources(receipt), played = candidateOutcomePlayedRow(receipt, moveUci);
   const playedIndex = frame.candidates.findIndex(row => row.row === played);
   if (playedIndex < 0) throw new TypeError("Subject outcomes lost the original played row");
   const positions = [frame.root, ...frame.candidates.map(row => row.position)];
   const vectors = positions.map(position => familyInputs(family, position));
   // Authenticate the exact failure image as well as the required total vectors. Known legacy
   // event failures do not erase independent totals; unaccounted or unknown outcomes refuse.
-  readCandidateUnavailableSources(receipt);
+  if (isCandidateFoundationReceipt(receipt)) readCandidateRequiredUnavailableSources(receipt);
+  else readCandidateUnavailableSources(receipt);
   if (vectors.some(vector => vector === null)) {
     return Object.freeze({ kind: "unavailable", reason: "counterfactual_population_incomplete" });
   }
@@ -203,14 +204,14 @@ export function computeSubjectOutcomes<F extends SubjectOutcomeFamily>(family: F
       if (alternativeRelation === playedRelation) continue;
       const supportingMoves = Object.freeze(alternatives.filter(row => row.relation === alternativeRelation).map(row => row.moveUci));
       if (supportingMoves.length === 0) continue;
-      payloads.push(Object.freeze({ beforeFen: receipt.packet.beforeFen, moveUci: played.moveUci, afterFen: played.afterFen,
+      payloads.push(Object.freeze({ beforeFen: receipt.legalMovesInput.payload.fen, moveUci: played.moveUci, afterFen: played.afterFen,
         actor: receipt.legalMovesInput.payload.turn, family, subject: origin.subject, parameters: origin.parameters,
         root: origin.state, played: playedState, alternativeRelation: alternativeRelation as RelationByFamily[F], alternatives,
         supportingMoves, legalAlternatives: alternatives.length, alternativesWithOutcome: supportingMoves.length,
       }));
     }
   }
-  const population: SubjectOutcomePopulation<F> = Object.freeze({ family, beforeFen: receipt.packet.beforeFen,
+  const population: SubjectOutcomePopulation<F> = Object.freeze({ family, beforeFen: receipt.legalMovesInput.payload.fen,
     moveUci: played.moveUci, afterFen: played.afterFen, actor: receipt.legalMovesInput.payload.turn, subjects: Object.freeze(subjects) });
   return Object.freeze({ kind: "available", payloads: Object.freeze(payloads), inputs, population });
 }
