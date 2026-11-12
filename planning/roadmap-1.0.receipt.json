@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:79bf35406f9aa9a2e39610fb4834244e617acfe29e6ae87fb22dbd4023a00bef",
+    "roadmap": "sha256:904c35055630b0296956869a20022325b036110cbaabbc15d2968dd9bd609e2c",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:c61e73b4592d41e8193191af90df8ae5ad9aa9be8149faa36398c509753e3ed1",
+    "workState": "sha256:54bd9193981e849be9fed2607c0cbccd84b38b80c8089b43b45fbdea0e66d4b8",
     "rfcRegister": "sha256:49e46c03e8cf65e0983bcbd7a00a465007dbd3b6aeaa05915b5988fcd462b071",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 636,
+      "todo": 634,
       "doing": 178,
       "blocked": 1061,
-      "done": 1973,
+      "done": 1975,
       "refused": 163
     },
     "workItems": {
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Separate original workflow-first permission from complete endpoint population; stage all actual original per-node acquisition, including rich engine observation and windows, against the page cap. Measure D4261 coordinator admission and D4262 retry observation. Then bind actual sessions and deliver literal plan/cursors/source receipts, strict ordinary/rich Review transport and selected progress/cancel/retry UI. D4250/D4228 and native D4224/D4225 remain open.",
+      "nextAction": "Continue D4260: separate original workflow-first permission from complete endpoint population; stage all actual original per-node acquisition, including rich engine observation and windows, against the page cap. Preserve measured pending/stale/retry/shared-analysis behavior when implementing initial public admission, real sessions, literal plan/cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI. Native D4224/D4225 remain open.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "D4260 endpoint dependency: original server endpoint selection now advances the genuine runtime attachment collection one actual original node at a time, with unchanged modern/pending/offline precedence and complete candidate normalization. Begin invokes no factories; finish issues only genuine complete aggregates after exact retained-row identity checks. Cancel/failure/finish retire nested runtime work. Synchronous original order remains.249 affected tests/six files16.29s,types/Svelte0errors0warnings and independent source review pass. Prior bd1353ab runtime dependency preserved full expanded grade authority/receipts with canonical1928/1928; prior c608d1df full21471software/593 files,7performance/four,340content/44,types/build/governance remains the latest full-suite baseline. The rich collector still completes whole grade context first; full-branch engine observation in prepare/live guards and whole-window preparation also need page accounting. Actual public pages, workflow-first permission, D4261/D4262, session binding, literal plans/cursors/receipts, strict transport/selected UI and native/default/full1.0 gates remain open. No capability or milestone closes.",
+        "summary": "D4261 private coordinator/job research closes with actual pending/delivery/cancel cases: complete honest-pending Map passes strict receiver/full byte oracle; late durable attachment safely stales the frozen job before serialization; cancel/completion preserve shared analysis; fresh snapshot matches full Map bytes without additional evaluation or PV requests. ensureBranch.pump does not await an already-active reservation. D4262 held real second-attempt test reproduces observe retrying0 versus ensure retrying1; one readonly helper now preserves original store/reservation/retry semantics.220 affected tests/five files16.44s,types/Svelte0errors0warnings and independent source review pass. b62b39f4 previously installed genuine per-node attachment/endpoint acquisition; original aggregate/context issuance stays complete-only. Workflow-first ordering, engine observation/window source accounting, initial public POST/session binding, literal plan/cursors/receipts, strict transport and selected progress/cancel/retry UI remain D4250/D4260. Full suite baseline remains c608d1df; these scoped closeouts prove no public journey, native/default or full1.0 capability/milestone.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -680,7 +680,8 @@
           "packages/runtime/src/review-durable-engine-memo.test.ts",
           "packages/runtime/src/internal/recorded-engine-attachments.ts",
           "packages/runtime/src/recorded-engine-attachments.test.ts",
-          "packages/runtime/src/recorded-grade-source.test.ts"
+          "packages/runtime/src/recorded-grade-source.test.ts",
+          "apps/server/src/review-evidence.test.ts"
         ],
         "anchors": [
           {
@@ -1461,7 +1462,7 @@
           {
             "kind": "work_state",
             "id": "D4250",
-            "digest": "sha256:e96fb184aee4ce328e7f375da56f40540f290394adf85bad8324426b657bc991"
+            "digest": "sha256:7a2bf2a79c33bdd0c8281b8ded3d7a3683423ee5f0c13751ea3b346e8462c3ef"
           },
           {
             "kind": "rfc",
@@ -1526,12 +1527,12 @@
           {
             "kind": "work_state",
             "id": "D4261",
-            "digest": "sha256:b6102fa13b56a0dde50c7f7aee3d566fe6f01bda51a833757a63212693d18758"
+            "digest": "sha256:722ef2853b19c88aa52f186d60e132a3a506d5860e698f133d5c888a3f425898"
           },
           {
             "kind": "work_state",
             "id": "D4262",
-            "digest": "sha256:fd77b3b8c46da7eea1bad052e3852414596dc9424160285e2ea96a03412546c1"
+            "digest": "sha256:ce16bf0c8bfcf5f9af635a4a9f7283e6d05222f38c854ad9a64deef70b86a523"
           }
         ]
       },
@@ -1552,10 +1553,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Separate original workflow-first permission from complete endpoint population; stage all actual original per-node acquisition, including rich engine observation and windows, against the page cap. Measure D4261 coordinator admission and D4262 retry observation. Then bind actual sessions and deliver literal plan/cursors/source receipts, strict ordinary/rich Review transport and selected progress/cancel/retry UI. D4250/D4228 and native D4224/D4225 remain open.",
+      "nextAction": "Continue D4260: separate original workflow-first permission from complete endpoint population; stage all actual original per-node acquisition, including rich engine observation and windows, against the page cap. Preserve measured pending/stale/retry/shared-analysis behavior when implementing initial public admission, real sessions, literal plan/cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI. Native D4224/D4225 remain open.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "D4260 endpoint dependency: original server endpoint selection now advances the genuine runtime attachment collection one actual original node at a time, with unchanged modern/pending/offline precedence and complete candidate normalization. Begin invokes no factories; finish issues only genuine complete aggregates after exact retained-row identity checks. Cancel/failure/finish retire nested runtime work. Synchronous original order remains.249 affected tests/six files16.29s,types/Svelte0errors0warnings and independent source review pass. Prior bd1353ab runtime dependency preserved full expanded grade authority/receipts with canonical1928/1928; prior c608d1df full21471software/593 files,7performance/four,340content/44,types/build/governance remains the latest full-suite baseline. The rich collector still completes whole grade context first; full-branch engine observation in prepare/live guards and whole-window preparation also need page accounting. Actual public pages, workflow-first permission, D4261/D4262, session binding, literal plans/cursors/receipts, strict transport/selected UI and native/default/full1.0 gates remain open. No capability or milestone closes.",
+        "summary": "D4261 private coordinator/job research closes with actual pending/delivery/cancel cases: complete honest-pending Map passes strict receiver/full byte oracle; late durable attachment safely stales the frozen job before serialization; cancel/completion preserve shared analysis; fresh snapshot matches full Map bytes without additional evaluation or PV requests. ensureBranch.pump does not await an already-active reservation. D4262 held real second-attempt test reproduces observe retrying0 versus ensure retrying1; one readonly helper now preserves original store/reservation/retry semantics.220 affected tests/five files16.44s,types/Svelte0errors0warnings and independent source review pass. b62b39f4 previously installed genuine per-node attachment/endpoint acquisition; original aggregate/context issuance stays complete-only. Workflow-first ordering, engine observation/window source accounting, initial public POST/session binding, literal plan/cursors/receipts, strict transport and selected progress/cancel/retry UI remain D4250/D4260. Full suite baseline remains c608d1df; these scoped closeouts prove no public journey, native/default or full1.0 capability/milestone.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2198,7 +2199,8 @@
           "apps/server/src/review-job-owner.test.ts",
           "apps/server/src/rich-review-collection.test.ts",
           "apps/server/src/application.ts",
-          "packages/runtime/src/review-durable-engine-memo.test.ts"
+          "packages/runtime/src/review-durable-engine-memo.test.ts",
+          "apps/server/src/review-evidence.test.ts"
         ],
         "anchors": [
           {
@@ -3334,7 +3336,7 @@
           {
             "kind": "work_state",
             "id": "D4250",
-            "digest": "sha256:e96fb184aee4ce328e7f375da56f40540f290394adf85bad8324426b657bc991"
+            "digest": "sha256:7a2bf2a79c33bdd0c8281b8ded3d7a3683423ee5f0c13751ea3b346e8462c3ef"
           },
           {
             "kind": "work_state",
@@ -3389,12 +3391,12 @@
           {
             "kind": "work_state",
             "id": "D4261",
-            "digest": "sha256:b6102fa13b56a0dde50c7f7aee3d566fe6f01bda51a833757a63212693d18758"
+            "digest": "sha256:722ef2853b19c88aa52f186d60e132a3a506d5860e698f133d5c888a3f425898"
           },
           {
             "kind": "work_state",
             "id": "D4262",
-            "digest": "sha256:fd77b3b8c46da7eea1bad052e3852414596dc9424160285e2ea96a03412546c1"
+            "digest": "sha256:ce16bf0c8bfcf5f9af635a4a9f7283e6d05222f38c854ad9a64deef70b86a523"
           }
         ]
       },

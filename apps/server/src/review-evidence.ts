@@ -373,7 +373,8 @@ export class ReviewEvidenceCoordinator {
       if (this.#options.scheduler === null) { states.set(node.id, Object.freeze({ kind: "unavailable" as const, reason: "provider_off" as const })); continue; }
       const terminal = tracker?.terminal.get(node.id);
       if (terminal?.fen === node.fen) { states.set(node.id, terminal.state); continue; }
-      if (tracker?.active.has(node.id) === true) { states.set(node.id, Object.freeze({ kind: "pending" as const, jobCount: 1, retrying: 0 })); continue; }
+      const active = tracker?.active.get(node.id);
+      if (active !== undefined) { states.set(node.id, this.#pendingState(active)); continue; }
       if (tracker?.identityUnavailable === true) { states.set(node.id, Object.freeze({ kind: "unavailable" as const, reason: "provider_failed" as const })); continue; }
       states.set(node.id, tracker === undefined ? Object.freeze({ kind: "not_requested" as const }) : Object.freeze({ kind: "not_yet_scheduled" as const }));
     }
@@ -413,8 +414,7 @@ export class ReviewEvidenceCoordinator {
       if (terminal !== undefined && terminal.state.kind === "unavailable") { states.set(node.id, terminal.state); continue; }
       const active = tracker.active.get(node.id);
       if (active !== undefined) {
-        const outcome = active.requestKey === undefined ? undefined : this.#options.attempts.outcome(active.requestKey);
-        states.set(node.id, Object.freeze({ kind: "pending" as const, jobCount: 1, retrying: outcome?.kind === "retryable_failure" ? 1 : 0 }));
+        states.set(node.id, this.#pendingState(active));
         admitted += 1;
         continue;
       }
@@ -434,6 +434,11 @@ export class ReviewEvidenceCoordinator {
     this.#inflight.add(pump);
     void pump.finally(() => this.#inflight.delete(pump));
     return Object.freeze({ states, pump });
+  }
+
+  #pendingState(job: NodeReservation): ReviewProviderNodeState {
+    const outcome = job.requestKey === undefined ? undefined : this.#options.attempts.outcome(job.requestKey);
+    return Object.freeze({ kind: "pending" as const, jobCount: 1, retrying: outcome?.kind === "retryable_failure" ? 1 : 0 });
   }
 
   #owns(tracker: BranchTracker, nodeId: string, job: NodeReservation): boolean {

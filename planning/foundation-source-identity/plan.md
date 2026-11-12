@@ -4328,3 +4328,29 @@ remain next, alongside D4261/D4262. No milestone or learner journey closes.
 Normal roadmap-receipt/verify-governance and server/web builds pass for this endpoint checkpoint.
 All4011 ledger rows remain tracked with zero untriaged. Runtime semantic inputs are unchanged
 from bd1353ab; no full-suite, public journey or remote-CI completion is inferred.
+
+
+### 2026-11-12 — D4261 private coordinator measurement and D4262 retry-state repair
+
+A genuine held second provider attempt reproduces D4262 red: ensureBranch reports retrying1
+from the original retained attempt outcome while observe reports0. One private read-only helper
+now reads the same reservation/request key/outcome in both paths. Full/prefix observation makes
+no new evaluation/PV request or event; retry limits, store ownership and scheduling are unchanged.
+
+D4261 has three actual SQLite/scheduler/coordinator/RunService job cases. Repeated ensure.pump
+returns while an existing reservation remains held. A complete original pending Map can finish
+with ready=false and pendingEvidence>0, byte-equal to synchronous Review and admitted by the
+strict receiver, without cancelling the shared request. A delivery attached between real job
+yields instead makes the frozen job stale before serialization. Cancel likewise leaves analysis
+running. After the real branch settles, a fresh job matches every full Map byte without another
+evaluation OR PV request. These are private integration results, not the new POST/session/UI.
+
+Initial fixtures correctly failed disclosure/cancel assertions: they now use actual reveal before
+freezing and assert the existing exact cancel response; no production gate/return type changed.
+Normal affected verification passes220 tests/five files16.44s and workspace types/Svelte0errors/
+0warnings. D4261 closes as measured research and D4262 as repaired behavior. Initial public
+admission, page/session/source accounting and progress/cancel/retry UI stay D4250/D4260; no
+native performance/default, learner capability or whole1.0 milestone closes.
+
+Independent final source/test review accepts the scoped D4261 measurement and D4262 repair.
+Normal roadmap-receipt/verify-governance passes;4011 rows remain tracked, zero untriaged.

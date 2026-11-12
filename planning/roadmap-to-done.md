@@ -9,6 +9,13 @@ ordering, full-branch engine observation/window preparation and public page acco
 open. These are dependency checkpoints, not a completed Review journey. See the latest source
 plan entry for verification.
 
+D4261's private coordinator/job research is now measured: complete pending Maps are honest;
+late durable deliveries stale old snapshots safely; cancel/completion preserve shared analysis;
+fresh collection matches full Map bytes without extra evaluation/PV requests. D4262's genuinely
+held second-attempt regression repairs read-only retry counts using the original store.220
+affected tests/five files and full types pass. Initial public admission/session/progress/retry
+journeys remain D4250; neither closeout completes that feature.
+
 D4250 now composes the complete original rich Review sources through its bounded RunService
 owner: grade context/endpoints, full packet, recorded population, independent historical reports/
 objectives, PhaseArc/path, Map windows/relations/opening and each original move grade. Final
@@ -28,7 +35,7 @@ files819.38s,7 isolated performance/four61.32s,340content/all44 files235.83s,typ
 clearance audit has zero errors and104 capability declarations match. Nothing is pushed.
 
 The selected HTTP/UI path still uses synchronous reads. Next implement D4260 subject-ordered original attachment/endpoint acquisition for actual page
-accounting, and measure D4261/D4262 original analysis admission/retry observation against cooperative snapshots;
+accounting and preserve the measured D4261/D4262 admission/retry semantics;
 then actual session binding, literal source plan/cursors/receipts, strict ordinary/rich transport
 and selected progress/cancel/retry UI. D4250/D4228 and native D4224/D4225 cost/memory/default gates
 remain open; no whole-product milestone closes.

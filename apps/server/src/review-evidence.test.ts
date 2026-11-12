@@ -4,10 +4,10 @@
 import { readFileSync } from "node:fs";
 
 import { assertReviewEvidencePacket, commitMove, compileReviewPacketForSubject, createReviewPrefixAuthority, parseReviewStoryReceipt, presentedSentence, renderReviewStoryReceipt, serverAvailabilityFromProviders } from "@chess-tabiya/runtime";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
-import type { EngineExchangeRequest } from "./engine-supervisor.js";
+import type { EngineExchangeCapture, EngineExchangeRequest } from "./engine-supervisor.js";
 import { MockProviderEngineClient } from "./mock-provider-engine.js";
 import { composeProviderTraversalApplication } from "./provider-traversal.js";
 import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator, type ReviewEvidenceCoordinatorOptions } from "./review-evidence.js";
@@ -28,7 +28,7 @@ const PGN = `[Event "Review evidence"]
 const policyConfig = { seedMode: "fixed" as const, locus: { executedAt: "server" as const, engineIds: [], modelIds: [] } };
 const principal = { learnerId: "__legacy", handle: "__legacy" } as const;
 const stores: SQLiteRunStorage[] = [];
-afterEach(() => { for (const store of stores.splice(0)) store.close(); });
+afterEach(() => { vi.restoreAllMocks(); for (const store of stores.splice(0)) store.close(); });
 
 function deferred<T>() {
   let resolve!: (value: T) => void;
@@ -95,6 +95,92 @@ function actualAnalyzeLine(result: ReviewAnalyzeResult) {
 }
 
 describe("Review coordinator application lifetime (D3561)", () => {
+  it.each(["pending", "delivery", "cancel"] as const)("D4261 keeps original shared analysis ownership across a real Review job %s", async action => {
+    const h = harness({ holdOperation: "stockfish.position_evaluation@1", windowNodes: 1, maxOutstandingPerRun: 1 });
+    const access = { principal, sessionId: "coordinator-rich-review-session", assertCurrent: () => {} };
+    try {
+      const imported = await h.service.importGame({ id: `review-job-admission-${action}`, side: "white", opponentPolicy: { mode: "human_common" },
+        policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+      await h.entered;
+      h.service.reveal(imported.run.id, "writer");
+      const branch = imported.run.branches[0]!.id, before = h.storage.read(imported.run.id)!.run.events;
+      const ensured = h.coordinator.ensureBranch(imported.run.id, branch);
+      await ensured.pump;
+      expect(h.coordinator.outstanding(imported.run.id, branch)).toBe(1);
+      expect(h.gets()).toBe(1); // Admission shares the import's actual existing reservation.
+      const job = h.service.beginRichReviewCollection(imported.run.id, access, branch);
+      const serialize = vi.fn((map: Awaited<ReturnType<RunService["review"]>>) => JSON.stringify(map));
+      const collect = async (lease: typeof job.lease) => {
+        for (let i = 0; i < 300; i++) {
+          const step = await h.service.advanceRichReviewCollection(lease, serialize);
+          if (step.kind === "complete") return step.value;
+        }
+        throw new Error("Original Review collection did not finish");
+      };
+      expect(await h.service.advanceRichReviewCollection(job.lease, serialize)).toMatchObject({ kind: "progress", progress: { stage: "grade_begin" } });
+      if (action === "pending") {
+        const pending = await collect(job.lease);
+        expect(pending).toBe(JSON.stringify(await h.service.review(imported.run.id, principal, branch)));
+        const map = JSON.parse(pending);
+        assertReviewMapResponse(map, { runId: imported.run.id, branchId: branch });
+        expect(map.ready).toBe(false); expect(map.pendingEvidence).toBeGreaterThan(0);
+        expect(h.coordinator.outstanding(imported.run.id, branch)).toBe(1);
+        expect(h.gets()).toBe(1); expect(h.lineGets()).toBe(0);
+      }
+      if (action === "cancel") {
+        expect(h.service.cancelReviewCollection(imported.run.id, access, job.jobId)).toEqual({ jobId: job.jobId, state: "cancelled" });
+        expect(h.coordinator.outstanding(imported.run.id, branch)).toBe(1);
+      }
+      h.release(); await h.coordinator.whenIdle();
+      const current = h.storage.read(imported.run.id)!.run;
+      expect(current.events.length).toBeGreaterThan(before.length);
+      expect(h.gets()).toBe(imported.run.nodes.length);
+      expect(h.lineGets()).toBe(imported.run.nodes.length);
+      expect([...h.coordinator.observe(imported.run.id, branch).states.values()].every(state => state.kind === "delivered")).toBe(true);
+      await expect(h.service.advanceRichReviewCollection(job.lease, serialize)).rejects.toMatchObject({ reason: action === "delivery" ? "stale" : "not_found" });
+      expect(serialize).toHaveBeenCalledTimes(action === "pending" ? 1 : 0);
+      // A fresh original snapshot over the now-recorded evidence completes without new searches.
+      const expected = JSON.stringify(await h.service.review(imported.run.id, principal, branch));
+      const retry = h.service.beginRichReviewCollection(imported.run.id, access, branch);
+      const result = await collect(retry.lease);
+      expect(result).toBe(expected); expect(serialize).toHaveBeenCalledTimes(action === "pending" ? 2 : 1);
+      expect(h.gets()).toBe(imported.run.nodes.length);
+      expect(h.lineGets()).toBe(imported.run.nodes.length);
+      expect(h.storage.read(imported.run.id)!.run.events).toEqual(current.events);
+    } finally { h.release(); h.service.closeReviewCollections(); await h.coordinator.close(); await h.coordinator.whenIdle(); }
+  });
+
+  it("D4262 observes a genuinely held second attempt with the original retry state without scheduling", async () => {
+    const entered = deferred<void>(), release = deferred<void>();
+    let exchanges = 0;
+    class HeldRetry extends MockProviderEngineClient {
+      override async exchange(engineId: string, request: EngineExchangeRequest): Promise<EngineExchangeCapture> {
+        exchanges++;
+        if (exchanges === 1) throw new Error("Synthetic first-attempt provider failure");
+        if (exchanges === 2) { entered.resolve(); await release.promise; }
+        return super.exchange(engineId, request);
+      }
+    }
+    const h = harness({ engine: new HeldRetry(), windowNodes: 1, maxOutstandingPerRun: 1 });
+    try {
+      const imported = await h.service.importGame({ id: "review-held-original-retry", side: "white", opponentPolicy: { mode: "human_common" },
+        policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+      await entered.promise;
+      const branch = imported.run.branches[0]!.id, root = imported.run.nodes[0]!, before = h.storage.read(imported.run.id)!.run.events;
+      const outcomes = vi.spyOn(h.attempts, "outcome"), calls = h.gets(), lineCalls = h.lineGets();
+      expect(calls).toBe(2); expect(exchanges).toBe(2);
+      const ensured = h.coordinator.ensureBranch(imported.run.id, branch);
+      expect(ensured.states.get(root.id)).toEqual({ kind: "pending", jobCount: 1, retrying: 1 });
+      expect(outcomes.mock.results.some(result => result.type === "return" && result.value?.kind === "retryable_failure" && result.value.attempts === 1)).toBe(true);
+      await ensured.pump; // No new reservation: this promise does not wait for the already-held retry.
+      expect(h.coordinator.outstanding(imported.run.id, branch)).toBe(1);
+      expect(h.coordinator.observe(imported.run.id, branch).states.get(root.id)).toEqual(ensured.states.get(root.id));
+      expect(h.coordinator.observe(imported.run.id, branch, root.id).states.get(root.id)).toEqual(ensured.states.get(root.id));
+      expect(h.gets()).toBe(calls); expect(h.lineGets()).toBe(lineCalls); expect(exchanges).toBe(2);
+      expect(h.storage.read(imported.run.id)!.run.events).toEqual(before);
+    } finally { release.resolve(); await h.coordinator.close(); await h.coordinator.whenIdle(); }
+  });
+
   it("stops pending discovery without starting attempts or resurrecting work", async () => {
     const identity = deferred<{ id: string; version: string } | null>();
     const { service, coordinator, storage, attempts, gets } = harness({ requestedEngine: () => identity.promise, windowNodes: 1, maxOutstandingPerRun: 1 });

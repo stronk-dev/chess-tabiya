@@ -35657,7 +35657,7 @@
       "id": "D4250",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e96fb184aee4ce328e7f375da56f40540f290394adf85bad8324426b657bc991",
+      "sourceDigest": "sha256:7a2bf2a79c33bdd0c8281b8ded3d7a3683423ee5f0c13751ea3b346e8462c3ef",
       "uxItems": [],
       "owner": "review-and-return",
       "since": "2026-11-12"
@@ -35754,19 +35754,21 @@
     },
     {
       "id": "D4261",
-      "state": "todo",
-      "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:b6102fa13b56a0dde50c7f7aee3d566fe6f01bda51a833757a63212693d18758",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:722ef2853b19c88aa52f186d60e132a3a506d5860e698f133d5c888a3f425898",
       "uxItems": [],
-      "owner": "review-and-return"
+      "evidence": "apps/server/src/review-evidence.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D4262",
-      "state": "todo",
-      "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:fd77b3b8c46da7eea1bad052e3852414596dc9424160285e2ea96a03412546c1",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ce16bf0c8bfcf5f9af635a4a9f7283e6d05222f38c854ad9a64deef70b86a523",
       "uxItems": [],
-      "owner": "review-and-return"
+      "evidence": "apps/server/src/review-evidence.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

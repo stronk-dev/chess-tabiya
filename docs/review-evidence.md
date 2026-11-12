@@ -134,8 +134,13 @@ maxJobs1 explicitly and drains collections before shutdown; this is an engineeri
 
 Selected HTTP routes have not migrated. Literal invocation receipts/cursors, actual session
 integration, both strict delivery scopes and selected progress/cancel/retry UI remain open.
-D4260 owns page accounting during original grade preparation; D4261 owns measuring initial
-analysis admission against cooperative snapshots. Grouped source tests prove complete Map bytes,
+D4260 owns page accounting during original grade preparation. D4261's actual private coordinator/
+job cases verify complete honest-pending Maps, safe staleness on late durable deliveries, and
+shared analysis surviving collection cancellation/completion. A fresh snapshot then preserves
+full Map bytes without extra evaluation/PV work. ensureBranch.pump does not wait for an already
+active reservation. Read-only and scheduling observations now share the original retry-state
+reader (D4262), without changing retry bounds or scheduling. Initial public admission and selected
+progress/retry UI remain D4250 work. Grouped source tests prove complete Map bytes,
 not public paging or native latency, memory and safe default capacity.
 
 ## One engine source, five Review projections
