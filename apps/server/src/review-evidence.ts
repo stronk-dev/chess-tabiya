@@ -248,6 +248,13 @@ export function observedReviewPath(run: DrillRun, branchId: string, throughNodeI
   return path.slice(0, end + 1);
 }
 
+/** Exact recorded occurrence, including inherited nodes; matching a FEN alone is insufficient. */
+export function observedReviewNode(run: DrillRun, branchId: string, nodeId: string) {
+  const node = branchPath(run, branchId).find(node => node.id === nodeId);
+  if (node === undefined) throw new TypeError("Review observation node is not on its recorded branch");
+  return node;
+}
+
 /**
  * Bounded, progressive and idempotent enrichment of one authorized branch. Returns the current
  * per-node engine states (durable deliveries first; then pending, retrying, not-yet-scheduled and
@@ -363,7 +370,21 @@ export class ReviewEvidenceCoordinator {
     const stored = this.#options.storage.read(runId);
     if (stored === undefined) throw new TypeError(`Review coordinator: unknown run ${runId}`);
     const path = observedReviewPath(stored.run, branchId, throughNodeId);
-    const durable = reviewDurableEngineStates(stored.run, path, memo);
+    return this.#observeNodes(stored.run, branchId, path, memo);
+  }
+
+  /** Read-only input for one admitted subject. Never observes the rest of its prefix or queues. */
+  observeNode(runId: string, branchId: string, nodeId: string,
+    memo?: import("../../../packages/runtime/src/review-evidence.js").ReviewDurableEngineMemo): ReviewProviderNodeState {
+    const stored = this.#options.storage.read(runId);
+    if (stored === undefined) throw new TypeError(`Review coordinator: unknown run ${runId}`);
+    const node = observedReviewNode(stored.run, branchId, nodeId);
+    return this.#observeNodes(stored.run, branchId, [node], memo).states.get(node.id)!;
+  }
+
+  #observeNodes(run: DrillRun, branchId: string, path: readonly DrillRun["nodes"][number][],
+    memo?: import("../../../packages/runtime/src/review-evidence.js").ReviewDurableEngineMemo) {
+    const durable = reviewDurableEngineStates(run, path, memo), runId = run.id;
     const tracker = this.#trackers.get(`${runId}\u0000${branchId}`);
     const states = new Map<string, ReviewProviderNodeState>();
     for (const node of path) {

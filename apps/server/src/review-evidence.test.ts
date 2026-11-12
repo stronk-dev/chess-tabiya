@@ -17,6 +17,10 @@ import { SQLiteRunStorage } from "./storage.js";
 import { DrillApi } from "../../web/src/lib/api.js";
 import { requestReviewAnalyze, reviewAnalyzeTarget, type ReviewAnalyzeResult } from "../../web/src/lib/review-analyze.js";
 import { assertReviewMapResponse } from "../../web/src/lib/review-response.js";
+import { reviewFixtureRun } from "../../../packages/runtime/src/testing/review-map-fixture.js";
+import { createReviewDurableEngineMemo } from "../../../packages/runtime/src/review-evidence.js";
+import { fork, rewind } from "../../../packages/runtime/src/runtime.js";
+import * as valueRoutes from "../../../packages/runtime/src/internal/evidence-value-routes.js";
 import { parseRecordedAnalyzeLineOperands } from "../../../packages/runtime/src/recorded-analyze-presentation.js";
 
 const PGN = `[Event "Review evidence"]
@@ -95,6 +99,65 @@ function actualAnalyzeLine(result: ReviewAnalyzeResult) {
 }
 
 describe("Review coordinator application lifetime (D3561)", () => {
+  it.each(["delivered", "not_requested", "provider_off"] as const)("observes only one original node with the same %s input as full observation", async kind => {
+    const h = harness({ providerOff: kind === "provider_off", requestedEngine: async () => { throw new Error("Read-only observation must not discover an engine"); } });
+    try {
+      const run = reviewFixtureRun({ id: `subject-observation-${kind}`, kind: "position", plies: 3, evaluated: () => kind === "delivered" });
+      h.storage.createLearner({ id: principal.learnerId, handle: principal.handle, passwordHash: "!", createdAt: "2026-11-12T00:00:00.000Z" });
+      h.storage.create(run, { ...principal, writerId: "writer" });
+      const branch = run.activeCursor.branchId, whole = h.coordinator.observe(run.id, branch), memo = createReviewDurableEngineMemo();
+      const dispatch = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute"), before = JSON.stringify(h.storage.read(run.id)!.run);
+      for (const node of [run.nodes[2]!, run.nodes[0]!, run.nodes[3]!, run.nodes[1]!]) {
+        dispatch.mockClear();
+        const actual = h.coordinator.observeNode(run.id, branch, node.id, memo);
+        expect(JSON.stringify(actual)).toBe(JSON.stringify(whole.states.get(node.id)));
+        expect(actual.kind).toBe(kind === "provider_off" ? "unavailable" : kind);
+        const evaluations = dispatch.mock.calls.filter(([projection]) => projection === "live.stockfish.position_eval@1");
+        expect(evaluations.map(([, input]) => (input as { delivery: { payload: { fen: string } } }).delivery.payload.fen))
+          .toEqual(kind === "delivered" ? [node.fen] : []);
+      }
+      dispatch.mockClear();
+      expect(() => h.coordinator.observeNode(run.id, branch, "foreign-node", memo)).toThrow(/not on its recorded branch/);
+      expect(() => h.coordinator.observeNode("missing-run", branch, run.nodes[0]!.id, memo)).toThrow(/unknown run/);
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(h.gets()).toBe(0); expect(h.lineGets()).toBe(0); expect(h.attempts.size).toBe(0);
+      expect(JSON.stringify(h.storage.read(run.id)!.run)).toBe(before);
+    } finally { await h.coordinator.close(); }
+  });
+
+  it("binds observation to the inherited or distinct same-FEN occurrence on its actual branch", async () => {
+    const h = harness();
+    try {
+      let run = reviewFixtureRun({ id: "subject-observation-branch", kind: "position", plies: 3 });
+      const inherited = run.nodes[1]!, old = run.nodes[2]!, at = "2026-11-12T00:00:00.000Z";
+      run = rewind(run, inherited.id, at).run; run = fork(run, inherited.id, { at }).run;
+      run = commitMove(run, old.moveUci!, { at }).run;
+      h.storage.createLearner({ id: principal.learnerId, handle: principal.handle, passwordHash: "!", createdAt: "2026-11-12T00:00:00.000Z" });
+      h.storage.create(run, { ...principal, writerId: "writer" });
+      const branch = run.activeCursor.branchId, duplicate = run.nodes.at(-1)!;
+      expect(duplicate.fen).toBe(old.fen); expect(duplicate.id).not.toBe(old.id);
+      expect(h.coordinator.observeNode(run.id, branch, inherited.id).kind).toBe("delivered");
+      expect(h.coordinator.observeNode(run.id, branch, duplicate.id)).toEqual({ kind: "not_requested" });
+      expect(() => h.coordinator.observeNode(run.id, branch, old.id)).toThrow(/not on its recorded branch/);
+      expect(h.gets()).toBe(0); expect(h.lineGets()).toBe(0);
+    } finally { await h.coordinator.close(); }
+  });
+
+  it("preserves exact terminal-domain precedence before provider-off without requesting work", async () => {
+    const h = harness({ providerOff: true });
+    try {
+      let run = reviewFixtureRun({ id: "subject-observation-mate", kind: "position", plies: 0, evaluated: () => false });
+      const at = "2026-11-12T00:00:00.000Z";
+      for (const move of ["f2f3", "e7e5", "g2g4", "d8h4"]) run = commitMove(run, move, { at }).run;
+      h.storage.createLearner({ id: principal.learnerId, handle: principal.handle, passwordHash: "!", createdAt: at });
+      h.storage.create(run, { ...principal, writerId: "writer" });
+      const branch = run.activeCursor.branchId, nodeId = run.activeCursor.nodeId;
+      expect(h.coordinator.observeNode(run.id, branch, nodeId)).toEqual({ kind: "honest_empty", reason: "outside_domain" });
+      expect(h.coordinator.observeNode(run.id, branch, nodeId)).toEqual(h.coordinator.observe(run.id, branch).states.get(nodeId));
+      expect(h.gets()).toBe(0); expect(h.lineGets()).toBe(0); expect(h.attempts.size).toBe(0);
+    } finally { await h.coordinator.close(); }
+  });
+
   it.each(["pending", "delivery", "cancel"] as const)("D4261 keeps original shared analysis ownership across a real Review job %s", async action => {
     const h = harness({ holdOperation: "stockfish.position_evaluation@1", windowNodes: 1, maxOutstandingPerRun: 1 });
     const access = { principal, sessionId: "coordinator-rich-review-session", assertCurrent: () => {} };
@@ -176,6 +239,7 @@ describe("Review coordinator application lifetime (D3561)", () => {
       expect(h.coordinator.outstanding(imported.run.id, branch)).toBe(1);
       expect(h.coordinator.observe(imported.run.id, branch).states.get(root.id)).toEqual(ensured.states.get(root.id));
       expect(h.coordinator.observe(imported.run.id, branch, root.id).states.get(root.id)).toEqual(ensured.states.get(root.id));
+      expect(h.coordinator.observeNode(imported.run.id, branch, root.id)).toEqual(ensured.states.get(root.id));
       expect(h.gets()).toBe(calls); expect(h.lineGets()).toBe(lineCalls); expect(exchanges).toBe(2);
       expect(h.storage.read(imported.run.id)!.run.events).toEqual(before);
     } finally { release.resolve(); await h.coordinator.close(); await h.coordinator.whenIdle(); }

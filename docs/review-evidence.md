@@ -276,6 +276,11 @@ still invalidates early grades. Unacquired nodes refuse rather than becoming mis
 and complete-context readers continue to reject preparation handles. This is an internal D4260
 dependency; rich Review still finishes the full context before collecting its other sources.
 
+The coordinator's internal `observeNode` selects one exact node on the actual recorded branch
+before durable parsing. It uses the same observer as full/prefix reads, preserving delivered,
+terminal-domain, provider-off, settled, pending/retrying and unscheduled states. It neither
+observes other prefix subjects nor starts discovery, attempts, evaluation or line requests.
+
 Compare's separately issued engine-point source has the same lifetime guarantee through its
 own service context. Role downgrade/revocation refuses direct trajectory-factory reads even
 when no point is recorded; it does not inherit Review's broader viewer roles.

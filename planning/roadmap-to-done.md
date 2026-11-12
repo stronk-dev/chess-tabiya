@@ -2,6 +2,12 @@
 
 ## Current continuation — 2026-11-12
 
+D4260's coordinator can now observe one exact recorded node before durable parsing, reusing the
+original full/prefix state rules without scheduling.158 focused cases/three files and full types
+pass, including actual node-only source dispatch, inherited/same-FEN scope, terminal precedence
+and held retry. This input dependency is not yet used by rich composition; per-subject runtime
+input capture and workflow-first source ordering remain next.
+
 The next D4260 dependency separates current workflow permission from complete engine-context
 issuance. Already-acquired endpoint pairs can issue their original grade, retaining the same
 permission, source, pair and edge through completion; unacquired nodes still refuse and complete

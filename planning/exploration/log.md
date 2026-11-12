@@ -42413,3 +42413,26 @@ source change; this checkpoint claims its own focused/types checks, not a fresh 
 Normal server/web builds and verify-governance pass for this checkpoint. The updated D4260
 ledger state and its two roadmap anchors agree;4013 ledger rows retain zero untriaged.
 No full software/content rerun or remote CI success is claimed for this new source diff.
+
+
+### 2026-11-12 — D4260 exact-node provider observation dependency
+
+ReviewEvidenceCoordinator.observeNode validates the actual stored branch occurrence before
+passing only that node to the same original durable/state observer used by full/prefix reads.
+Original precedence, pending retry counts and actual reservations remain; no identity discovery,
+attempt, evaluation or line request is started. Same-FEN nodes are not interchangeable.
+
+158 focused cases/three files and workspace types/Svelte0errors0warnings pass. Actual SQLite,
+original live-evaluation dispatch and held-second-attempt controls establish exact-node scope,
+full-state parity, inherited/foreign-node refusal, terminal precedence and zero provider effects.
+The initial new fixture used a nonexistent run.createdAt; its learner timestamp now uses the
+explicit fixture date. No production behavior or assertion was weakened to fix that setup error.
+
+This is an input dependency, not completed public paging or workflow-first composition. Runtime
+collectors still capture full input maps; next factor their original input capture by subject,
+then compose it with the stable workflow and original grade/ledger/phase/Map owners. D4260 and
+D4250 remain doing; native/default/full1.0 gates and prior whole-prefix accounting remain open.
+
+Independent read-only review finds no blocker. Normal verify-governance and server/web builds
+pass;4013 tracked rows retain zero untriaged. This source change has not had a full software/
+content rerun, and no remote-CI or native/default clearance is claimed.
