@@ -4387,3 +4387,63 @@ authority, shortened run or partial-as-complete context is authorized by this re
 
 Final normal verify-governance exits0 after the current roadmap receipt update. All4011 ledger
 rows remain tracked with zero untriaged; D4260/D4250 and full1.0 remain open.
+
+
+### 2026-11-12 — D4260 window acquisition follows admitted endpoints; D4263 lifetime repair
+
+The original recorded-window owner now separates full-run replay/graph/FEN/edge validation and
+demand metadata from actual evidence acquisition. Its staged handle advances one complete
+requested endpoint, with every demanded family/horizon and original omitted-horizon distinction.
+Original edge/capture/check cells, including genuine empty populations, are shared across those
+endpoints. Lazy duty/exchange operands remain conditional and per-window. Older operands belong
+to the current window endpoint subject; no future endpoint window is collected. The original
+synchronous path still acquires sorted demanded edges before endpoint/route/horizon first use.
+
+Review Map's initial windows unit now starts that metadata-only owner. Each nonroot relation
+unit advances exactly its original endpoint and consumes the complete subject population. Full
+prepared frames still issue only after all original sources; finish runs no evidence factory.
+Cancellation, errors and successful finish retire nested work. No runtime handle enters a wire.
+
+Independent review found D4263 before checkpoint. The actual constructor experiment returned
+progress and an active nested handle after Map cancellation. The repair checks exact owner
+identity before adopting returned work, immediately cancels a late handle, and requires owner
+lifetime plus storage currentness before progress/final publication. Runtime subject progress
+also refuses cancellation inside actual source acquisition. No source or permission is widened.
+
+Normal focused checks pass347 tests/five files18.42s with workspace types/Svelte0errors0warnings.
+All eleven families' actual positive/hard-negative fixtures in both colours preserve full source,
+output and receipt bytes. Original acquisition multisets/order, overlapping object sharing,
+mutable run/demand snapshots, future-subject refusal, cross-progress, genuine source failures,
+actual storage changes and constructor/relation/opening/nested-finish cancellation are covered.
+Full rich Maps, long/inherited source groups, current grade and Inspector window regressions pass.
+Independent final read-only source/test review finds no finite blocker. Canonical/build and
+real-content checks are next; D4263 stays doing until that checkpoint passes.
+
+D4260 remains doing: original engine-context capture still snapshots every supplied on-path
+state upfront, and rich collection still completes the whole grade context before other sources.
+Those original owners need explicit row acquisition/workflow-first permission before public
+page/cursor/source-receipt/session/transport/progress/retry UI integration. This does not close
+D4250, native/default cost/memory or a whole1.0 milestone. Last full normal suite is9011b36e;
+this finite dependency has not repeated the whole software suite.
+
+
+Normal canonical writer/build pass1928/1928 (24/89 qualified,63 population,8 external receipts),
+server/web builds, and only74 implementation-marker changes; every other generated JSON value
+is unchanged. Normal verify-content passes340/all44 tests225.20s,92-document clearance audit
+errors[] and104 capability declarations. Its first restricted run failed only with listen EPERM
+127.0.0.1; the same unmodified Make target was rerun with local HTTP permission, without assertion,
+timeout or scope changes. D4263 closes with test-path evidence after these checks.
+
+Additional D4260 readback keeps the original whole-prefix semantic path visible: PhaseArc's first
+path unit and the packet's lazy path acquisition run real original branch-wide F1 work. Their
+whole-branch source authority is intentional; do not relabel those calls as node-local or metadata,
+count prerequisite FENs as page subjects, or infer a paging exemption from nodeId:null progress.
+The literal owned job plan must account for the genuine invocation and its per-subject outputs/
+receipts before public32-subject proof. If internal staging is needed, retain the same full compiler
+and issue its original complete path/digest only at completion. This is an accounting constraint,
+not a new shipped-defect claim or permission to shorten paths. [V: phase-source-composition.ts
+advanceRecordedPhaseArcCollection; recorded-semantic-path.ts recordedSemanticPathExecution;
+review-evidence.ts original path adapter; D4241/review-map§1a; independent source readback.]
+
+Normal roadmap-receipt/verify-governance exits0 for the window checkpoint.4012 rows remain
+tracked with zero untriaged; D4263 is done, D4260/D4250 and whole1.0 remain open.

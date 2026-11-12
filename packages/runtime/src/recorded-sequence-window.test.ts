@@ -9,7 +9,10 @@ import { projectRun } from "./events.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import * as routes from "./internal/evidence-value-routes.js";
 import { recordedSemanticPath } from "./recorded-semantic-path.js";
-import { createRecordedSequenceWindows, prepareRecordedSemanticWindowPopulation, prepareRecordedSemanticBranchWindows, readRecordedSequenceWindow, recordedSequenceWindowInputs, RECORDED_SEQUENCE_HORIZONS, type RecordedSequenceRoute } from "./recorded-sequence-window.js";
+import { createRecordedSequenceWindows, prepareRecordedSemanticWindowPopulation, prepareRecordedSemanticBranchWindows, readRecordedSequenceWindow, recordedSequenceWindowInputs, RECORDED_SEQUENCE_HORIZONS, type RecordedSequenceRoute,
+  beginRecordedSemanticBranchWindows, advanceRecordedSemanticBranchWindows, readRecordedSemanticWindowSubject,
+  finishRecordedSemanticBranchWindows, cancelRecordedSemanticBranchWindows, collectRecordedSequenceWindow,
+  type RecordedSemanticWindowPopulation, type RecordedWindowRoute } from "./recorded-sequence-window.js";
 import * as semantics from "./semantic-evidence.js";
 import { fork, rewind } from "./runtime.js";
 import { recordedSequenceRouteFixture, recordedSequenceWindowFixture, RECORDED_SEQUENCE_AT as at } from "./testing/recorded-sequence-window-fixture.js";
@@ -20,6 +23,98 @@ const ref = (value: DeclaredEvidence<unknown>) => `${value.projection.id}@${valu
 const prepare = (run: ReturnType<typeof recordedSequenceRouteFixture>, route: RecordedSequenceRoute, throughNodeId = run.activeCursor.nodeId, branchId = run.activeCursor.branchId) => createRecordedSequenceWindows({ run, branchId, throughNodeId, route });
 const invoke = (route: string, input: unknown) => routes.invokeEvidenceValueRoute(route as never, input as never) as unknown as readonly DeclaredEvidence<unknown>[];
 const ordered = (values: readonly unknown[]) => values.map(value => JSON.stringify(value)).sort();
+const WINDOW_ROUTES: readonly RecordedWindowRoute[] = ["derived.exchange.trade_completed@2", ...ALL];
+const expanded = (value: DeclaredEvidence<unknown>) => ({ value, receipt: evidenceValueReceipt(value) });
+function subjectImage(population: RecordedSemanticWindowPopulation) {
+  return [...population].map(([route, result]) => ({ route, run: result.run, eventHeadDigest: result.eventHeadDigest,
+    availableEdges: result.availableEdges, omittedHorizons: result.omittedHorizons,
+    windows: result.windows.map(window => {
+      const data = readRecordedSequenceWindow(window);
+      return { authority: data.authority, anchors: data.anchors, edges: data.edges.map(expanded),
+        captures: data.captures.map(row => row.map(expanded)), checks: data.checks.map(row => row.map(expanded)),
+        outputs: collectRecordedSequenceWindow(window).map(expanded) };
+    }) }));
+}
+
+describe("subject-staged original recorded windows", () => {
+  for (const black of [false, true]) for (const [label, fixtures] of [["positive", RECORDED_SEQUENCE_POSITIVES], ["hard negative", RECORDED_SEQUENCE_HARD_NEGATIVES]] as const) {
+    const cases: readonly { projection: string; fen: string; moves: readonly string[] }[] = fixtures;
+    it.each(cases)(`stages every family with unchanged complete ${label} sources/receipts, mirror=${black}: $projection`, async setup => {
+      const run = recordedSequenceWindowFixture(setup, black), path = branchPath(run, run.activeCursor.branchId);
+      const input = { run, branchId: run.activeCursor.branchId, throughNodeIds: path.map(node => node.id), routes: WINDOW_ROUTES };
+      const calls = vi.spyOn(routes, "invokeEvidenceValueRoute");
+      const acquisitions = () => calls.mock.calls.filter(([route]) => ["run.record.edge@1", "rules.transition.event.capture@1", "rules.tactic.event.check@1"].includes(route));
+      try {
+        const expected = prepareRecordedSemanticBranchWindows(input);
+        const images = new Map([...expected].map(([id, value]) => [id, JSON.stringify(subjectImage(value))]));
+        const originalCalls = acquisitions(), originalSources = ordered(originalCalls);
+        const firstPopulation = originalCalls.findIndex(([route]) => route !== "run.record.edge@1");
+        if (firstPopulation >= 0) expect(originalCalls.slice(firstPopulation).every(([route]) => route !== "run.record.edge@1")).toBe(true);
+        calls.mockClear();
+        const work = beginRecordedSemanticBranchWindows(input), shared = new Map<string, DeclaredEvidence<unknown>>();
+        expect(calls).not.toHaveBeenCalled();
+        expect(() => readRecordedSemanticWindowSubject(work, path[0]!.id)).toThrow(/not been acquired/);
+        expect(() => finishRecordedSemanticBranchWindows(work)).toThrow(/incomplete/);
+        for (const [index, node] of path.entries()) {
+          const before = calls.mock.calls.length;
+          expect(advanceRecordedSemanticBranchWindows(work)).toEqual({ nodeId: node.id, completedSubjects: index + 1,
+            totalSubjects: path.length, complete: index === path.length - 1 });
+          for (const [route, input] of calls.mock.calls.slice(before)) if (route === "run.record.edge@1") {
+            const child = (input as { child: { id: string } }).child.id;
+            expect(path.findIndex(entry => entry.id === child)).toBeLessThanOrEqual(index);
+          }
+          const population = readRecordedSemanticWindowSubject(work, node.id);
+          expect(JSON.stringify(subjectImage(population))).toBe(images.get(node.id));
+          for (const result of population.values()) for (const window of result.windows) for (const edge of readRecordedSequenceWindow(window).edges) {
+            const previous = shared.get(edge.payload.afterNodeId); if (previous !== undefined) expect(edge).toBe(previous);
+            shared.set(edge.payload.afterNodeId, edge);
+          }
+          (population as Map<RecordedWindowRoute, unknown>).clear();
+          expect(readRecordedSemanticWindowSubject(work, node.id).size).toBe(WINDOW_ROUTES.length);
+          if (index < path.length - 1) {
+            expect(() => readRecordedSemanticWindowSubject(work, path[index + 1]!.id)).toThrow(/not been acquired/);
+            expect(() => finishRecordedSemanticBranchWindows(work)).toThrow(/incomplete/);
+          }
+          await new Promise<void>(resolve => setImmediate(resolve));
+        }
+        expect(ordered(acquisitions())).toEqual(originalSources);
+        const beforeFinish = calls.mock.calls.length, result = finishRecordedSemanticBranchWindows(work);
+        expect([...result.keys()]).toEqual(path.map(node => node.id)); expect(calls).toHaveBeenCalledTimes(beforeFinish);
+        expect(cancelRecordedSemanticBranchWindows(work)).toBe(false);
+        expect(() => readRecordedSemanticWindowSubject(work, path[0]!.id)).toThrow(/retired/);
+      } finally { calls.mockRestore(); }
+    });
+  }
+
+  it("captures mutable original run/demand inputs once and retires cancelled/forged/failed work", () => {
+    const run = structuredClone(recordedSequenceRouteFixture("derived.tactic.deflection_observed@3")), path = branchPath(run, run.activeCursor.branchId);
+    const throughNodeIds = path.map(node => node.id), ownRoutes: RecordedWindowRoute[] = [...WINDOW_ROUTES];
+    const input = { run, branchId: run.activeCursor.branchId, throughNodeIds, routes: ownRoutes };
+    const expected = prepareRecordedSemanticBranchWindows(input), work = beginRecordedSemanticBranchWindows(input);
+    throughNodeIds.splice(0); ownRoutes.splice(0); (run.nodes[0]! as { fen: string }).fen = "mutated caller";
+    for (const node of path) { advanceRecordedSemanticBranchWindows(work); expect(subjectImage(readRecordedSemanticWindowSubject(work, node.id))).toEqual(subjectImage(expected.get(node.id)!)); }
+    expect(cancelRecordedSemanticBranchWindows(work)).toBe(true);
+    for (const invalid of [work, { ...work }]) expect(() => advanceRecordedSemanticBranchWindows(invalid as never)).toThrow(/foreign or retired/);
+    const original = recordedSequenceRouteFixture("derived.tactic.deflection_observed@3"), failed = beginRecordedSemanticBranchWindows({ run: original,
+      branchId: original.activeCursor.branchId, throughNodeIds: [original.activeCursor.nodeId], routes: WINDOW_ROUTES });
+    const calls = vi.spyOn(routes, "invokeEvidenceValueRoute").mockImplementation(() => { throw new Error("actual source failure"); });
+    try { expect(() => advanceRecordedSemanticBranchWindows(failed)).toThrow(/acquisition refused/); }
+    finally { calls.mockRestore(); }
+    expect(cancelRecordedSemanticBranchWindows(failed)).toBe(false); expect(() => finishRecordedSemanticBranchWindows(failed)).toThrow(/retired/);
+  });
+
+  it("D4263 refuses progress when an original source cancels its window collection", () => {
+    const run = recordedSequenceRouteFixture("derived.tactic.deflection_observed@3");
+    const work = beginRecordedSemanticBranchWindows({ run, branchId: run.activeCursor.branchId, throughNodeIds: [run.activeCursor.nodeId], routes: WINDOW_ROUTES });
+    const original = routes.invokeEvidenceValueRoute, calls = vi.spyOn(routes, "invokeEvidenceValueRoute").mockImplementation(((...args: Parameters<typeof original>) => {
+      const result = original(...args); cancelRecordedSemanticBranchWindows(work); return result;
+    }) as typeof original);
+    try { expect(() => advanceRecordedSemanticBranchWindows(work)).toThrow(/retired during acquisition/); }
+    finally { calls.mockRestore(); }
+    expect(cancelRecordedSemanticBranchWindows(work)).toBe(false);
+    expect(() => finishRecordedSemanticBranchWindows(work)).toThrow(/retired/);
+  });
+});
 
 describe("one trailing recorded source population", () => {
   it("shares overlapping actual endpoints without borrowing any later edge into an earlier window", () => {
@@ -182,7 +277,11 @@ describe("source-owned recorded sequence windows", () => {
     for (const fen of ["not-a-fen", "8/8/8/8/8/8/8/8 w - - 0 1", INITIAL_FEN]) {
       const events = original.events.map(event => event.type === "move.committed" && event.data.node.id === last ? { ...event, data: { ...event.data, node: { ...event.data.node, fen } } } : event);
       const run = projectRun(events), calls = vi.spyOn(routes, "invokeEvidenceValueRoute");
-      try { expect(() => prepare(run, route, root)).toThrow(); expect(calls).not.toHaveBeenCalled(); } finally { calls.mockRestore(); }
+      try {
+        expect(() => prepare(run, route, root)).toThrow();
+        expect(() => beginRecordedSemanticBranchWindows({ run, branchId: run.activeCursor.branchId, throughNodeIds: [root], routes: [route] })).toThrow();
+        expect(calls).not.toHaveBeenCalled();
+      } finally { calls.mockRestore(); }
     }
     const duplicated = { ...original, nodes: [...original.nodes, original.nodes.at(-1)!] };
     expect(() => prepare(duplicated, route, root)).toThrow();

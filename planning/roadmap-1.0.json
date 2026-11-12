@@ -973,10 +973,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Continue D4260 original-owner source staging: complete endpoint windows with retained edge/capture/check sharing and existing lazy operands, full engine row acquisition, and workflow-first permission. Then implement actual initial public admission, real sessions, literal plan/cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI, preserving measured pending/stale/shared-analysis behavior. Native D4224/D4225 remain open.",
+        "nextAction": "Continue D4260: original engine row/context acquisition and workflow-first permission; explicitly account original PhaseArc/full-packet whole-prefix source invocations and per-subject outputs in the literal job plan. Then implement actual public admission, real sessions, cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI. Preserve measured pending/stale/shared-analysis behavior and native D4224/D4225 gates.",
         "latestCheckpoint": {
           "at": "2026-11-12",
-          "summary": "Current9011b36e full normal make verify-software/build/verify-content exits0:21487software/all593 files811.43s;7 isolated performance/four61.29s;340content/all44 files231.32s;workspace types/Svelte0errors0warnings and server/web builds. Canonical1928/1928/24of89/63population/8external is current;92-document clearance audit errors[] and104 capability declarations match. b62b39f4 installed genuine per-node attachment/endpoint acquisition with complete-only issuance and nested retirement. D4261 private coordinator/job research covers complete pending Maps, safe staleness on late durable delivery, shared-analysis survival and full-byte fresh snapshots without extra evaluation/PV. D4262 fixes retry-state observation via original reservation/outcome store, with held second-attempt red→green proof. Independent source reviews and focused gates pass. D4260 next-source readback confirms registered windows belong to endpoint subjects, not each older operand FEN; preserve sharing/lazy matching without speculative duty facts. Engine-context capture, workflow-first ordering, actual public admission/session/page/transport/progress/retry and native/default/full1.0 gates remain open. No learner capability/milestone closes; no push or remote-CI claim.",
+          "summary": "D4260 rich Map window acquisition now follows actual endpoints. The original owner validates the full immutable scope/demand without factories, then acquires complete eleven-family/horizon populations with retained edge/capture/check sharing and unchanged lazy per-window duty/exchange. Original synchronous sorted-edge then endpoint/route/horizon order remains. Complete-only frames and no-factory finish remain. D4263 genuine constructor test first reproduces progress+active nested work after owner retirement; adoption/post-step/final lifetime guards repair it, with real source/relation/opening/finish cancellation controls.347/five affected tests18.42s,types/Svelte0errors0warnings,canonical1928/1928 and server/web builds pass;74 implementation markers only, all other generated JSON unchanged. Authorized normal verify-content passes340/all44 tests225.20s,92-document audit errors[],104 exact capability declarations; restricted first run failed listen EPERM only. Independent source review accepts the finite dependency/repair. Latest full software baseline remains9011b36e21487/593; it has not yet been repeated for this dependency. Workflow-first ordering, full engine-context acquisition, explicit original PhaseArc/full-packet whole-prefix invocation accounting and public admission/session/page/transport/progress/retry remain D4260/D4250. No paging exemption follows from nodeId:null progress; preserve original logical window anchors/full-prefix authorities. No native/default/full1.0 capability or milestone closes.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1300,7 +1300,9 @@
             "packages/runtime/src/internal/recorded-engine-attachments.ts",
             "packages/runtime/src/recorded-engine-attachments.test.ts",
             "packages/runtime/src/recorded-grade-source.test.ts",
-            "apps/server/src/review-evidence.test.ts"
+            "apps/server/src/review-evidence.test.ts",
+            "packages/runtime/src/recorded-sequence-window.ts",
+            "packages/runtime/src/recorded-sequence-window.test.ts"
           ],
           "anchors": [
             {
@@ -2141,7 +2143,7 @@
             {
               "kind": "work_state",
               "id": "D4260",
-              "digest": "sha256:a045050787d1c435ce5398ea91ff6b870da6bfbc9021b550253d66af10b607e9"
+              "digest": "sha256:5caf76d122120583e8c6bb0dd5cb1c0ef4207b04c593089dcdb926b960f0ef73"
             },
             {
               "kind": "work_state",
@@ -2152,6 +2154,11 @@
               "kind": "work_state",
               "id": "D4262",
               "digest": "sha256:ce16bf0c8bfcf5f9af635a4a9f7283e6d05222f38c854ad9a64deef70b86a523"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4263",
+              "digest": "sha256:be32d7e977f91cf5e0d8f01986e01da1d8131fb5903e53c0f7e505e0ef34aded"
             }
           ]
         },
@@ -2172,10 +2179,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Continue D4260 original-owner source staging: complete endpoint windows with retained edge/capture/check sharing and existing lazy operands, full engine row acquisition, and workflow-first permission. Then implement actual initial public admission, real sessions, literal plan/cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI, preserving measured pending/stale/shared-analysis behavior. Native D4224/D4225 remain open.",
+        "nextAction": "Continue D4260: original engine row/context acquisition and workflow-first permission; explicitly account original PhaseArc/full-packet whole-prefix source invocations and per-subject outputs in the literal job plan. Then implement actual public admission, real sessions, cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI. Preserve measured pending/stale/shared-analysis behavior and native D4224/D4225 gates.",
         "latestCheckpoint": {
           "at": "2026-11-12",
-          "summary": "Current9011b36e full normal make verify-software/build/verify-content exits0:21487software/all593 files811.43s;7 isolated performance/four61.29s;340content/all44 files231.32s;workspace types/Svelte0errors0warnings and server/web builds. Canonical1928/1928/24of89/63population/8external is current;92-document clearance audit errors[] and104 capability declarations match. b62b39f4 installed genuine per-node attachment/endpoint acquisition with complete-only issuance and nested retirement. D4261 private coordinator/job research covers complete pending Maps, safe staleness on late durable delivery, shared-analysis survival and full-byte fresh snapshots without extra evaluation/PV. D4262 fixes retry-state observation via original reservation/outcome store, with held second-attempt red→green proof. Independent source reviews and focused gates pass. D4260 next-source readback confirms registered windows belong to endpoint subjects, not each older operand FEN; preserve sharing/lazy matching without speculative duty facts. Engine-context capture, workflow-first ordering, actual public admission/session/page/transport/progress/retry and native/default/full1.0 gates remain open. No learner capability/milestone closes; no push or remote-CI claim.",
+          "summary": "D4260 rich Map window acquisition now follows actual endpoints. The original owner validates the full immutable scope/demand without factories, then acquires complete eleven-family/horizon populations with retained edge/capture/check sharing and unchanged lazy per-window duty/exchange. Original synchronous sorted-edge then endpoint/route/horizon order remains. Complete-only frames and no-factory finish remain. D4263 genuine constructor test first reproduces progress+active nested work after owner retirement; adoption/post-step/final lifetime guards repair it, with real source/relation/opening/finish cancellation controls.347/five affected tests18.42s,types/Svelte0errors0warnings,canonical1928/1928 and server/web builds pass;74 implementation markers only, all other generated JSON unchanged. Authorized normal verify-content passes340/all44 tests225.20s,92-document audit errors[],104 exact capability declarations; restricted first run failed listen EPERM only. Independent source review accepts the finite dependency/repair. Latest full software baseline remains9011b36e21487/593; it has not yet been repeated for this dependency. Workflow-first ordering, full engine-context acquisition, explicit original PhaseArc/full-packet whole-prefix invocation accounting and public admission/session/page/transport/progress/retry remain D4260/D4250. No paging exemption follows from nodeId:null progress; preserve original logical window anchors/full-prefix authorities. No native/default/full1.0 capability or milestone closes.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -4005,7 +4012,7 @@
             {
               "kind": "work_state",
               "id": "D4260",
-              "digest": "sha256:a045050787d1c435ce5398ea91ff6b870da6bfbc9021b550253d66af10b607e9"
+              "digest": "sha256:5caf76d122120583e8c6bb0dd5cb1c0ef4207b04c593089dcdb926b960f0ef73"
             },
             {
               "kind": "work_state",
@@ -4016,6 +4023,11 @@
               "kind": "work_state",
               "id": "D4262",
               "digest": "sha256:ce16bf0c8bfcf5f9af635a4a9f7283e6d05222f38c854ad9a64deef70b86a523"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4263",
+              "digest": "sha256:be32d7e977f91cf5e0d8f01986e01da1d8131fb5903e53c0f7e505e0ef34aded"
             }
           ]
         },

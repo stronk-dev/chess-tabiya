@@ -80,11 +80,15 @@ uses the same original arc issuer with no source acquisition; mutation, failure,
 retire the private work. Whole-path computation remains indivisible, without a latency guarantee.
 
 Review Map's remaining relation/opening sources likewise have private
-`beginReviewMapSourceCollection` / advance / finish / cancel work. Separate advances prepare the
-whole original eleven-family window union, collect each original node's local edge/exposure,
-phase/setup/window facts, and acquire the original opening history/deepest-reached result. Root
-positions retain their lack of an incoming edge. Whole-window preparation and opening history
-remain indivisible units; the job can inspect its clock between them and the per-node units.
+`beginReviewMapSourceCollection` / advance / finish / cancel work. Its initial window-scope step
+validates the full original branch and captures demand metadata without evidence factories.
+Each nonroot node then acquires its complete eleven-family windows with shared original edge,
+capture and check populations, plus local edge/exposure and phase/setup facts. Genuine empty
+populations and omitted horizons remain distinct; lazy duty/exchange inputs keep their original
+matching rules. A window belongs to its ending node even when it uses an earlier position.
+Future endpoint windows remain uncollected. Synchronous callers retain their original sorted-edge
+then endpoint/route/horizon acquisition order. Whole-scope validation and opening history remain
+indivisible units; the job can inspect its clock between them and the per-node units.
 
 Only complete work can issue the opaque `PreparedReviewMapSources` consumed by Map assembly.
 It must match the exact original ledger boundary, ordered source plan and opening authority.
@@ -93,6 +97,9 @@ private exposure index exposes only a reader. With prepared sources supplied, th
 and renders retained originals without relation/opening recollection. Invalid or partial handles
 throw instead of taking an eager fallback. Existing synchronous reads retain their shared source
 helpers and cache until the actual job transport replaces that selected flow.
+Nested window work retires with its Map owner. If cancellation happens inside a constructor,
+the returned handle is cancelled before adoption; retired owners cannot publish progress or a
+prepared frame. Actual storage currentness is checked separately from this owner lifetime.
 
 Independent historical reports now also have internal `beginReviewMeasurementSource` / advance /
 finish / cancel work. Begin captures original position and registry-admission metadata without

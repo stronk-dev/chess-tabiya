@@ -35747,7 +35747,7 @@
       "id": "D4260",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:a045050787d1c435ce5398ea91ff6b870da6bfbc9021b550253d66af10b607e9",
+      "sourceDigest": "sha256:5caf76d122120583e8c6bb0dd5cb1c0ef4207b04c593089dcdb926b960f0ef73",
       "uxItems": [],
       "owner": "review-and-return",
       "since": "2026-11-12"
@@ -35768,6 +35768,15 @@
       "sourceDigest": "sha256:ce16bf0c8bfcf5f9af635a4a9f7283e6d05222f38c854ad9a64deef70b86a523",
       "uxItems": [],
       "evidence": "apps/server/src/review-evidence.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4263",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:be32d7e977f91cf5e0d8f01986e01da1d8131fb5903e53c0f7e505e0ef34aded",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/review-map-sources.test.ts",
       "evidenceKind": "path"
     }
   ]

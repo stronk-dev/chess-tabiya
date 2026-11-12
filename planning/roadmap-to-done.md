@@ -2,11 +2,17 @@
 
 ## Current continuation — 2026-11-12
 
-D4260 now stages original runtime attachments and server endpoint selection by actual node,
-with complete aggregates still complete-only and nested work retired on cancel/failure/finish.
+D4260 now stages original runtime attachments, server endpoint selection and rich Map windows
+by actual endpoint, with original complete aggregates and nested work retired on terminal paths.
+Window begin validates the full original scope without factories; admitted endpoints retain all
+eleven families, horizons and source sharing. D4263's reproduced constructor-retirement gap is
+repaired before adoption/publication.347 focused tests, types, canonical1928/1928, builds and340
+real-content tests pass; this dependency has not yet repeated the full software suite.
 The rich collector still finishes the whole grade context before other sources; workflow-first
-ordering, full-branch engine observation/window preparation and public page accounting remain
-open. Registered windows count under their original endpoint subject, not each older operand
+ordering, full-branch engine observation and actual public page accounting remain open. The
+original PhaseArc/full-packet whole-prefix semantic-path acquisitions also need explicit placement
+in the literal job plan; nodeId:null progress proves no paging exemption. Registered windows
+count under their original endpoint subject, not each older operand
 FEN; retain shared source inputs and existing lazy matching semantics while staging those endpoints.
 These are dependency checkpoints, not a completed Review journey. See the latest source plan entry
 for verification.
@@ -37,8 +43,8 @@ make verify-software/build/verify-content:21487software/all593 files811.43s,7 is
 four61.29s,340content/all44 files231.32s,types/build. Canonical1928/1928 remains current; the
 92-document clearance audit has zero errors and104 capability declarations match. Nothing is pushed.
 
-The selected HTTP/UI path still uses synchronous reads. Next implement D4260 subject-ordered original attachment/endpoint acquisition for actual page
-accounting and preserve the measured D4261/D4262 admission/retry semantics;
+The selected HTTP/UI path still uses synchronous reads. Next finish D4260 original engine-context,
+workflow-first and whole-prefix source accounting while preserving measured D4261/D4262 semantics;
 then actual session binding, literal source plan/cursors/receipts, strict ordinary/rich transport
 and selected progress/cancel/retry UI. D4250/D4228 and native D4224/D4225 cost/memory/default gates
 remain open; no whole-product milestone closes.

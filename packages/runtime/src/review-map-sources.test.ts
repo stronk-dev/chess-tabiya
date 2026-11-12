@@ -58,10 +58,50 @@ function mutableBoundaryFixture() {
 }
 
 describe("original Review Map source preparation", () => {
+  it("D4263 retires genuine nested work returned after its Map owner is cancelled", () => {
+    const f = mutableBoundaryFixture(), handle = beginReviewMapSourceCollection(f.boundary), original = sequences.beginRecordedSemanticBranchWindows;
+    let nested: ReturnType<typeof original> | undefined;
+    const begin = vi.spyOn(sequences, "beginRecordedSemanticBranchWindows").mockImplementation((...args) => {
+      nested = original(...args); cancelReviewMapSourceCollection(handle); return nested;
+    });
+    try {
+      let state = "progress";
+      try { advanceReviewMapSourceCollection(handle); } catch { state = "refused"; }
+      expect(nested).toBeDefined();
+      const stillActive = sequences.cancelRecordedSemanticBranchWindows(nested!);
+      expect({ state, stillActive }).toEqual({ state: "refused", stillActive: false });
+      expect(cancelReviewMapSourceCollection(handle)).toBe(false);
+    } finally { begin.mockRestore(); if (nested !== undefined) sequences.cancelRecordedSemanticBranchWindows(nested); }
+  });
+
+  it.each(["relations", "opening", "finish"] as const)("D4263 refuses publication after cancellation inside %s", stage => {
+    const f = mutableBoundaryFixture(), handle = beginReviewMapSourceCollection(f.boundary, opening);
+    advanceReviewMapSourceCollection(handle); advanceReviewMapSourceCollection(handle); // scope metadata, root
+    if (stage !== "relations") for (let i = 1; i < f.path.length; i++) advanceReviewMapSourceCollection(handle);
+    if (stage === "finish") advanceReviewMapSourceCollection(handle);
+    const originalEdge = localEdges.collectPostcommitEdge, originalOpening = openingHistory.collectRecordedOpeningHistory;
+    const originalFinish = sequences.finishRecordedSemanticBranchWindows;
+    const edge = vi.spyOn(localEdges, "collectPostcommitEdge").mockImplementation((...args) => {
+      const result = originalEdge(...args); if (stage === "relations") cancelReviewMapSourceCollection(handle); return result;
+    });
+    const history = vi.spyOn(openingHistory, "collectRecordedOpeningHistory").mockImplementation((...args) => {
+      const result = originalOpening(...args); if (stage === "opening") cancelReviewMapSourceCollection(handle); return result;
+    });
+    const finish = vi.spyOn(sequences, "finishRecordedSemanticBranchWindows").mockImplementation((...args) => {
+      const result = originalFinish(...args); if (stage === "finish") cancelReviewMapSourceCollection(handle); return result;
+    });
+    try {
+      expect(() => stage === "finish" ? finishReviewMapSourceCollection(handle) : advanceReviewMapSourceCollection(handle)).toThrow(/retired/);
+      expect(cancelReviewMapSourceCollection(handle)).toBe(false);
+    } finally { edge.mockRestore(); history.mockRestore(); finish.mockRestore(); }
+  });
+
   it("keeps begin metadata-only and complete assembly free from relation/opening recollection", () => {
     const f = fixture(play(importedRun("review-source-stages"), ["e2e4", "e7e5", "g1f3", "b8c6"]), undefined, true);
     const expected = JSON.stringify(reviewMapProjection(f.input));
-    const windows = vi.spyOn(sequences, "prepareRecordedSemanticBranchWindows"), edge = vi.spyOn(localEdges, "collectPostcommitEdge");
+    const windows = vi.spyOn(sequences, "beginRecordedSemanticBranchWindows"), step = vi.spyOn(sequences, "advanceRecordedSemanticBranchWindows");
+    const eager = vi.spyOn(sequences, "prepareRecordedSemanticBranchWindows").mockImplementation(() => { throw new Error("Eager full-branch window acquisition"); });
+    const edge = vi.spyOn(localEdges, "collectPostcommitEdge");
     const history = vi.spyOn(openingHistory, "collectRecordedOpeningHistory"), dispatch = vi.spyOn(routes, "invokeEvidenceValueRoute");
     try {
       const handle = beginReviewMapSourceCollection(f.boundary, opening);
@@ -70,8 +110,10 @@ describe("original Review Map source preparation", () => {
       expect(() => reviewMapProjection({ ...f.input, preparedSources: handle as unknown as PreparedReviewMapSources })).toThrow(/not complete original/);
       advanceReviewMapSourceCollection(handle);
       expect(windows).toHaveBeenCalledTimes(1); expect(edge).not.toHaveBeenCalled(); expect(history).not.toHaveBeenCalled();
+      expect(dispatch).not.toHaveBeenCalled(); expect(step).not.toHaveBeenCalled();
       for (const _node of f.path) advanceReviewMapSourceCollection(handle);
       expect(edge).toHaveBeenCalledTimes(f.path.length - 1); expect(history).not.toHaveBeenCalled();
+      expect(step.mock.results.map(result => result.value.nodeId)).toEqual(f.path.slice(1).map(node => node.id));
       expect(() => finishReviewMapSourceCollection(handle)).toThrow(/incomplete/);
       advanceReviewMapSourceCollection(handle);
       expect(history).toHaveBeenCalledTimes(1);
@@ -83,9 +125,10 @@ describe("original Review Map source preparation", () => {
       const actual = reviewMapProjection({ ...f.input, preparedSources: sources });
       expect(JSON.stringify(actual)).toBe(expected);
       expect(windows).toHaveBeenCalledTimes(1); expect(edge).toHaveBeenCalledTimes(f.path.length - 1); expect(history).toHaveBeenCalledTimes(1);
+      expect(eager).not.toHaveBeenCalled();
       expect(dispatch.mock.calls.slice(beforeFinish).every(([ref]) => ref === "derived.grade.move_quality@2")).toBe(true);
       expect(() => finishReviewMapSourceCollection(handle)).toThrow(/retired/);
-    } finally { windows.mockRestore(); edge.mockRestore(); history.mockRestore(); dispatch.mockRestore(); }
+    } finally { windows.mockRestore(); step.mockRestore(); eager.mockRestore(); edge.mockRestore(); history.mockRestore(); dispatch.mockRestore(); }
   });
 
   it.each([false, true])("preserves the complete inherited/mirrored Review Map: black=%s", black => {
@@ -152,12 +195,47 @@ describe("original Review Map source preparation", () => {
 
   it.each([0, 1, 2])("cancels only the exact original work after %s advances", advances => {
     const f = fixture(play(importedRun(`review-source-cancel-${advances}`), ["e2e4"]));
+    const begin = vi.spyOn(sequences, "beginRecordedSemanticBranchWindows");
     const handle = beginReviewMapSourceCollection(f.boundary), other = beginReviewMapSourceCollection(f.boundary);
-    for (let index = 0; index < advances; index++) advanceReviewMapSourceCollection(handle);
-    expect(cancelReviewMapSourceCollection(handle)).toBe(true); expect(cancelReviewMapSourceCollection(handle)).toBe(false);
-    expect(() => finishReviewMapSourceCollection(handle)).toThrow(/retired/);
-    for (let index = 0; index < f.path.length + 2; index++) advanceReviewMapSourceCollection(other);
-    expect(() => readPreparedReviewMapSources(finishReviewMapSourceCollection(other), f.image, sequenceRoutes, undefined)).not.toThrow();
+    try {
+      for (let index = 0; index < advances; index++) advanceReviewMapSourceCollection(handle);
+      expect(cancelReviewMapSourceCollection(handle)).toBe(true); expect(cancelReviewMapSourceCollection(handle)).toBe(false);
+      expect(() => finishReviewMapSourceCollection(handle)).toThrow(/retired/);
+      if (advances > 0) expect(sequences.cancelRecordedSemanticBranchWindows(begin.mock.results[0]!.value)).toBe(false);
+      for (let index = 0; index < f.path.length + 2; index++) advanceReviewMapSourceCollection(other);
+      expect(() => readPreparedReviewMapSources(finishReviewMapSourceCollection(other), f.image, sequenceRoutes, undefined)).not.toThrow();
+      expect(sequences.cancelRecordedSemanticBranchWindows(begin.mock.results.at(-1)!.value)).toBe(false);
+    } finally { begin.mockRestore(); }
+  });
+
+  it("retires the nested window owner on mutation during actual endpoint acquisition", () => {
+    const f = mutableBoundaryFixture(), handle = beginReviewMapSourceCollection(f.boundary);
+    const begin = vi.spyOn(sequences, "beginRecordedSemanticBranchWindows"), original = sequences.advanceRecordedSemanticBranchWindows;
+    const step = vi.spyOn(sequences, "advanceRecordedSemanticBranchWindows").mockImplementation((...args) => {
+      const result = original(...args); f.mutate(); return result;
+    });
+    try {
+      advanceReviewMapSourceCollection(handle); advanceReviewMapSourceCollection(handle); // metadata, then root
+      expect(() => advanceReviewMapSourceCollection(handle)).toThrow(/no longer/);
+      expect(cancelReviewMapSourceCollection(handle)).toBe(false);
+      expect(sequences.cancelRecordedSemanticBranchWindows(begin.mock.results[0]!.value)).toBe(false);
+    } finally { begin.mockRestore(); step.mockRestore(); }
+  });
+
+  it.each(["node", "completed", "total", "complete"] as const)("refuses crossed original window progress: %s", fault => {
+    const f = fixture(play(importedRun(`review-window-progress-${fault}`), ["e2e4", "e7e5"]));
+    const handle = beginReviewMapSourceCollection(f.boundary), original = sequences.advanceRecordedSemanticBranchWindows;
+    const step = vi.spyOn(sequences, "advanceRecordedSemanticBranchWindows").mockImplementation((...args) => {
+      const result = original(...args);
+      return { ...result, ...(fault === "node" ? { nodeId: f.path[0]!.id } : fault === "completed" ? { completedSubjects: 2 }
+        : fault === "total" ? { totalSubjects: 1 } : { complete: true }) };
+    });
+    try {
+      advanceReviewMapSourceCollection(handle); advanceReviewMapSourceCollection(handle);
+      expect(() => advanceReviewMapSourceCollection(handle)).toThrow(/original endpoint/);
+      expect(cancelReviewMapSourceCollection(handle)).toBe(false);
+      expect(sequences.cancelRecordedSemanticBranchWindows(step.mock.calls[0]![0])).toBe(false);
+    } finally { step.mockRestore(); }
   });
 
   it.each(["windows", "relations", "opening", "finish"] as const)("rechecks actual storage at the %s boundary", stage => {
@@ -175,9 +253,9 @@ describe("original Review Map source preparation", () => {
     if (stage !== "windows") advanceReviewMapSourceCollection(handle);
     if (stage === "relations") advanceReviewMapSourceCollection(handle); // root has no incoming edge
     if (stage === "opening") for (const _node of f.path) advanceReviewMapSourceCollection(handle);
-    const originalWindows = sequences.prepareRecordedSemanticBranchWindows, originalEdge = localEdges.collectPostcommitEdge;
+    const originalWindows = sequences.beginRecordedSemanticBranchWindows, originalEdge = localEdges.collectPostcommitEdge;
     const originalOpening = openingHistory.collectRecordedOpeningHistory;
-    const windows = vi.spyOn(sequences, "prepareRecordedSemanticBranchWindows").mockImplementation((...args) => {
+    const windows = vi.spyOn(sequences, "beginRecordedSemanticBranchWindows").mockImplementation((...args) => {
       const result = originalWindows(...args); if (stage === "windows") f.mutate(); return result;
     });
     const edge = vi.spyOn(localEdges, "collectPostcommitEdge").mockImplementation((...args) => {
@@ -190,6 +268,7 @@ describe("original Review Map source preparation", () => {
       expect(() => advanceReviewMapSourceCollection(handle)).toThrow(/no longer/);
       expect(cancelReviewMapSourceCollection(handle)).toBe(false);
       expect(() => finishReviewMapSourceCollection(handle)).toThrow(/retired/);
+      if (stage === "windows") expect(sequences.cancelRecordedSemanticBranchWindows(windows.mock.results[0]!.value)).toBe(false);
     } finally { windows.mockRestore(); edge.mockRestore(); history.mockRestore(); }
   });
 

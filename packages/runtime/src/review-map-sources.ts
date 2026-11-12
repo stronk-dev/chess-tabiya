@@ -5,7 +5,10 @@ import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { compileEvidenceConsumerExecutionV2 } from "./evidence-binding-execution.js";
 import type { DeclaredEvidence } from "./evidence-contract.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
-import { collectRecordedSequenceWindow, prepareRecordedSemanticBranchWindows, RECORDED_SEQUENCE_HORIZONS, type RecordedWindowRoute } from "./recorded-sequence-window.js";
+import { collectRecordedSequenceWindow, prepareRecordedSemanticBranchWindows, RECORDED_SEQUENCE_HORIZONS, type RecordedWindowRoute,
+  beginRecordedSemanticBranchWindows, advanceRecordedSemanticBranchWindows, readRecordedSemanticWindowSubject,
+  finishRecordedSemanticBranchWindows, cancelRecordedSemanticBranchWindows, type RecordedSemanticBranchWindowCollection,
+  type RecordedSemanticWindowPopulation } from "./recorded-sequence-window.js";
 import { collectPostcommitEdge } from "./postcommit-nudge.js";
 import { localDefenderExposure } from "./semantic-evidence.js";
 import { ENDGAME_SETUP_CONVENTIONS } from "./endgame-setup.js";
@@ -22,7 +25,6 @@ export interface RecordedReviewRelations {
   readonly exposureForNode: (nodeId: string) => Exposure | undefined;
 }
 type Execution = ReturnType<typeof compileEvidenceConsumerExecutionV2>;
-type Sequences = ReturnType<typeof prepareRecordedSemanticBranchWindows>;
 
 export function reviewMapSequenceRoutes(execution: Execution): readonly RecordedWindowRoute[] {
   const routes = execution.bindings.map(({ binding }) => `${binding.projection.id}@${binding.projection.version}`)
@@ -31,7 +33,7 @@ export function reviewMapSequenceRoutes(execution: Execution): readonly Recorded
   return Object.freeze(routes);
 }
 
-function collectRelationPoint(path: readonly Node[], index: number, sequences: Sequences, routes: readonly RecordedWindowRoute[]) {
+function collectRelationPoint(path: readonly Node[], index: number, sequences: RecordedSemanticWindowPopulation, routes: readonly RecordedWindowRoute[]) {
   const node = path[index]!, collected = collectPostcommitEdge(path[index - 1]!, node);
   const exposure = localDefenderExposure(collected.closure);
   const edge = collected.evidence.map(evidence => Object.freeze({ evidence, nodeId: node.id }));
@@ -42,7 +44,7 @@ function collectRelationPoint(path: readonly Node[], index: number, sequences: S
     return result.kind === "available" ? [{ evidence: result.value, nodeId: node.id }] : [];
   });
   const events = [...edge, { evidence: phase, nodeId: node.id }, ...setups,
-    ...routes.flatMap(route => sequences.get(node.id)!.get(route)!.windows.flatMap(window =>
+    ...routes.flatMap(route => sequences.get(route)!.windows.flatMap(window =>
       collectRecordedSequenceWindow(window).map(evidence => Object.freeze({ evidence, nodeId: node.id }))))];
   return { exposure, events };
 }
@@ -60,7 +62,7 @@ export function collectReviewRelations(run: DrillRun, branchId: string, routes: 
   const sequences = prepareRecordedSemanticBranchWindows({ run, branchId, throughNodeIds: path.slice(1).map(node => node.id), routes });
   const exposures = new Map<string, Exposure>();
   const events = path.slice(1).flatMap((node, index) => {
-    const point = collectRelationPoint(path, index + 1, sequences, routes);
+    const point = collectRelationPoint(path, index + 1, sequences.get(node.id)!, routes);
     exposures.set(node.id, point.exposure); return point.events;
   });
   const result = retainRelations(events, exposures);
@@ -97,7 +99,7 @@ interface SourceWork {
   readonly opening: OpeningCatalogueAvailability | undefined;
   readonly events: RecordedReviewRelation[];
   readonly exposures: Map<string, Exposure>;
-  sequences: Sequences | undefined;
+  sequences: RecordedSemanticBranchWindowCollection | undefined;
   next: number;
   stage: "windows" | "relations" | "opening" | "complete";
   openingEvents: readonly RecordedReviewRelation[];
@@ -121,8 +123,11 @@ function workOf(handle: ReviewMapSourceCollection): SourceWork {
   if (state === undefined) throw new TypeError("Review Map source collection is unknown or retired");
   return state;
 }
+function assertWorkActive(handle: ReviewMapSourceCollection, state: SourceWork): void {
+  if (WORK.get(handle) !== state) throw new TypeError("Review Map source collection retired during acquisition");
+}
 
-/** Whole-branch window preparation and opening history are separate indivisible units. */
+/** Full window-scope validation is metadata only; actual windows follow their endpoint subjects. */
 export function advanceReviewMapSourceCollection(handle: ReviewMapSourceCollection): Readonly<{
   stage: "windows" | "relations" | "opening"; nodeId: string | null;
   completedSubjects: number; totalSubjects: number; complete: boolean;
@@ -133,13 +138,20 @@ export function advanceReviewMapSourceCollection(handle: ReviewMapSourceCollecti
     readRecordedReviewBoundary(state.boundary);
     let nodeId: string | null = null;
     if (stage === "windows") {
-      if (state.path.length > 1) state.sequences = prepareRecordedSemanticBranchWindows({ run: state.image.run,
-        branchId: state.image.request.branchId, throughNodeIds: state.path.slice(1).map(node => node.id), routes: state.routes });
+      if (state.path.length > 1) {
+        const sequences = beginRecordedSemanticBranchWindows({ run: state.image.run,
+          branchId: state.image.request.branchId, throughNodeIds: state.path.slice(1).map(node => node.id), routes: state.routes });
+        if (WORK.get(handle) !== state) cancelRecordedSemanticBranchWindows(sequences);
+        assertWorkActive(handle, state); state.sequences = sequences;
+      }
       state.stage = "relations";
     } else if (stage === "relations") {
       const node = state.path[state.next]!; nodeId = node.id;
       if (state.next > 0) {
-        const point = collectRelationPoint(state.path, state.next, state.sequences!, state.routes);
+        const acquired = advanceRecordedSemanticBranchWindows(state.sequences!);
+        if (acquired.nodeId !== nodeId || acquired.completedSubjects !== state.next || acquired.totalSubjects !== state.path.length - 1
+          || acquired.complete !== (state.next === state.path.length - 1)) throw new TypeError("Review window acquisition crossed its original endpoint");
+        const point = collectRelationPoint(state.path, state.next, readRecordedSemanticWindowSubject(state.sequences!, nodeId), state.routes);
         state.events.push(...point.events); state.exposures.set(node.id, point.exposure);
       }
       state.next++;
@@ -149,8 +161,9 @@ export function advanceReviewMapSourceCollection(handle: ReviewMapSourceCollecti
       state.stage = "complete";
     }
     readRecordedReviewBoundary(state.boundary);
+    assertWorkActive(handle, state);
     return Object.freeze({ stage, nodeId, completedSubjects: state.next, totalSubjects: state.path.length, complete: state.stage === "complete" });
-  } catch (error) { WORK.delete(handle); throw error; }
+  } catch (error) { cancelReviewMapSourceCollection(handle); throw error; }
 }
 
 /** Complete preparation only; no collector or reducer runs during this handoff. */
@@ -159,16 +172,22 @@ export function finishReviewMapSourceCollection(handle: ReviewMapSourceCollectio
   if (state.stage !== "complete") throw new TypeError("Review Map source collection is incomplete");
   try {
     readRecordedReviewBoundary(state.boundary);
+    if (state.sequences !== undefined) finishRecordedSemanticBranchWindows(state.sequences);
     const sources = Object.freeze({}) as PreparedReviewMapSources;
     const data = Object.freeze({ boundary: state.boundary, image: state.image, routes: state.routes, opening: state.opening,
       recorded: state.path.length === 1 ? undefined : retainRelations(state.events, state.exposures), openingEvents: state.openingEvents });
     readRecordedReviewBoundary(state.boundary);
+    assertWorkActive(handle, state);
     PREPARED.set(sources, data); return sources;
-  } finally { WORK.delete(handle); }
+  } finally { cancelReviewMapSourceCollection(handle); }
 }
 
 export function cancelReviewMapSourceCollection(handle: ReviewMapSourceCollection): boolean {
-  return typeof handle === "object" && handle !== null && WORK.delete(handle);
+  const state = typeof handle === "object" && handle !== null ? WORK.get(handle) : undefined;
+  if (state === undefined) return false;
+  WORK.delete(handle);
+  if (state.sequences !== undefined) cancelRecordedSemanticBranchWindows(state.sequences);
+  return true;
 }
 
 function sameOpening(left: OpeningCatalogueAvailability | undefined, right: OpeningCatalogueAvailability | undefined): boolean {

@@ -17,7 +17,7 @@ import {
   recordedCheckZwischenzugObservedOperands, overloadExploitationObservedOperands,
   recordedDeflectionObservedOperands, recordedAttractionObservedOperands, deflectionObservedInduction,
 } from "./semantic-evidence.js";
-import type { DrillRun } from "./types.js";
+import type { DrillRun, Node } from "./types.js";
 
 /** Exact accepted scoped image, never latest-version or base-id dispatch. Trade retains its owner. */
 const horizons = {
@@ -99,9 +99,26 @@ export function prepareRecordedSemanticWindowPopulation(input: Readonly<{ run: D
   return prepareRecordedSemanticBranchWindows({ run: input.run, branchId: input.branchId, throughNodeIds: [input.throughNodeId], routes: input.routes }).get(input.throughNodeId)!;
 }
 
-/** The same original branch can serve several actual endpoints without reminting their shared
- * edges/captures/checks. Each result retains its own endpoint and complete horizon population. */
-export function prepareRecordedSemanticBranchWindows(input: Readonly<{ run: DrillRun; branchId: string; throughNodeIds: readonly string[]; routes: readonly RecordedWindowRoute[] }>) {
+type BranchWindowInput = Readonly<{ run: DrillRun; branchId: string; throughNodeIds: readonly string[]; routes: readonly RecordedWindowRoute[] }>;
+interface BranchWindowWork {
+  readonly run: DrillRun;
+  readonly eventHeadDigest: string;
+  readonly branchId: string;
+  readonly throughNodeIds: readonly string[];
+  readonly routes: readonly RecordedWindowRoute[];
+  readonly original: readonly Node[];
+  readonly endpoints: readonly number[];
+  readonly wanted: readonly number[];
+  readonly edges: Map<number, DeclaredEvidence<RecordedEdge>>;
+  readonly captures: Map<number, readonly Value[]>;
+  readonly checks: Map<number, readonly Value[]>;
+  readonly subjects: Map<string, RecordedSemanticWindowPopulation>;
+  next: number;
+}
+const requestedHorizons = (route: RecordedWindowRoute): readonly number[] => route === "derived.exchange.trade_completed@2" ? [2] : RECORDED_SEQUENCE_HORIZONS[route];
+
+/** Validate the entire original scope and capture demand metadata, without minting sources. */
+function prepareBranchWindows(input: BranchWindowInput): BranchWindowWork {
   if (input === null || typeof input !== "object" || Reflect.ownKeys(input).length !== 4 || !["run", "branchId", "throughNodeIds", "routes"].every(field => Object.hasOwn(input, field))) throw new TypeError("Recorded branch windows require exactly {run,branchId,throughNodeIds,routes}");
   const { branchId, throughNodeIds, routes } = input;
   if (!Array.isArray(routes) || routes.length === 0 || new Set(routes).size !== routes.length || routes.some(route => typeof route !== "string" || route !== "derived.exchange.trade_completed@2" && !Object.hasOwn(RECORDED_SEQUENCE_HORIZONS, route))) throw new RecordedSequenceScopeError("projection_unsupported", "Recorded sequence projection unsupported or duplicated");
@@ -124,19 +141,26 @@ export function prepareRecordedSemanticBranchWindows(input: Readonly<{ run: Dril
   }
   const endpoints = throughNodeIds.map(id => original.findIndex(node => node.id === id));
   if (endpoints.some(index => index < 0)) throw new RecordedSequenceScopeError("endpoint_not_on_branch", "Recorded sequence endpoint is not on branch");
-  const requestedHorizons = (route: RecordedWindowRoute): readonly number[] => route === "derived.exchange.trade_completed@2" ? [2] : RECORDED_SEQUENCE_HORIZONS[route];
   const wanted = new Set(endpoints.flatMap(endpoint => routes.flatMap(route => requestedHorizons(route).filter(horizon => horizon <= endpoint)
     .flatMap(horizon => Array.from({ length: horizon }, (_, index) => endpoint - horizon + index + 1)))));
-  // Full graph validation above remains unconditional; acquisition is only the demanded union.
-  const edges = new Map([...wanted].sort((a, b) => a - b).map(index => {
-    const parent = original[index - 1]!, child = original[index]!, value = acquireSource("run.record.edge@1", { run, parent, child });
-    assertSource(value, "run.record.edge@1", "createRunRecordEdgeV1Evidence", { run: { run: run.id, nodes: run.nodes.length, events: run.events.length }, parentId: parent.id, childId: child.id });
-    if (evidenceDigest(value.payload) !== evidenceDigest(recordedEdgePayload(run, parent, child))) throw new TypeError("Recorded sequence edge payload crosses its original occurrence");
-    return [index, value] as const;
-  }));
-  const captures = new Map<number, readonly Value[]>(), checks = new Map<number, readonly Value[]>();
-  const subjects = new Map<string, RecordedSemanticWindowPopulation>();
-  for (const [subjectIndex, endpoint] of endpoints.entries()) {
+  return { run, eventHeadDigest, branchId, original, throughNodeIds: Object.freeze([...throughNodeIds]), routes: Object.freeze([...routes]),
+    endpoints: Object.freeze(endpoints), wanted: Object.freeze([...wanted].sort((a, b) => a - b)),
+    edges: new Map(), captures: new Map(), checks: new Map(), subjects: new Map(), next: 0 };
+}
+
+function branchWindowEdge(work: BranchWindowWork, index: number): DeclaredEvidence<RecordedEdge> {
+  const previous = work.edges.get(index); if (previous !== undefined) return previous;
+  const { run, original } = work, parent = original[index - 1]!, child = original[index]!;
+  const value = acquireSource("run.record.edge@1", { run, parent, child });
+  assertSource(value, "run.record.edge@1", "createRunRecordEdgeV1Evidence", { run: { run: run.id, nodes: run.nodes.length, events: run.events.length }, parentId: parent.id, childId: child.id });
+  if (evidenceDigest(value.payload) !== evidenceDigest(recordedEdgePayload(run, parent, child))) throw new TypeError("Recorded sequence edge payload crosses its original occurrence");
+  work.edges.set(index, value); return value;
+}
+
+/** One complete endpoint, all of its original families/horizons, sharing prior exact sources. */
+function branchWindowSubject(work: BranchWindowWork, subjectIndex: number): RecordedSemanticWindowPopulation {
+  const { run, eventHeadDigest, branchId, routes, throughNodeIds, endpoints, captures, checks } = work;
+  const endpoint = endpoints[subjectIndex]!;
   const throughNodeId = throughNodeIds[subjectIndex]!;
   const result = new Map<RecordedWindowRoute, Readonly<{ run: DrillRun; eventHeadDigest: string; windows: readonly RecordedSequenceWindow[]; omittedHorizons: readonly number[]; availableEdges: number }>>();
   for (const route of routes) {
@@ -144,7 +168,7 @@ export function prepareRecordedSemanticBranchWindows(input: Readonly<{ run: Dril
   const own: RecordedSequenceWindow[] = [], omitted: number[] = [];
   for (const horizon of requestedHorizons(route)) {
     if (endpoint < horizon) { omitted.push(horizon); continue; }
-    const start = endpoint - horizon + 1, selected = Object.freeze(Array.from({ length: horizon }, (_, index) => edges.get(start + index)!));
+    const start = endpoint - horizon + 1, selected = Object.freeze(Array.from({ length: horizon }, (_, index) => branchWindowEdge(work, start + index)));
     const captureRows = selected.map((value, index): readonly Value[] => {
       if (!needsCapture && !(route === "derived.tactic.check_zwischenzug_observed@3" && index === 0)) return Object.freeze([]);
       const ordinal = start + index;
@@ -167,9 +191,56 @@ export function prepareRecordedSemanticBranchWindows(input: Readonly<{ run: Dril
   }
     result.set(route, Object.freeze({ run, eventHeadDigest, windows: Object.freeze(own), omittedHorizons: Object.freeze(omitted), availableEdges: endpoint }));
   }
-    subjects.set(throughNodeId, result);
-  }
-  return subjects as ReadonlyMap<string, RecordedSemanticWindowPopulation>;
+  return result;
+}
+
+/** Original synchronous order: sorted demanded edges, then endpoint/route/horizon first use. */
+export function prepareRecordedSemanticBranchWindows(input: BranchWindowInput): ReadonlyMap<string, RecordedSemanticWindowPopulation> {
+  const work = prepareBranchWindows(input);
+  for (const index of work.wanted) branchWindowEdge(work, index);
+  for (const [index, id] of work.throughNodeIds.entries()) work.subjects.set(id, branchWindowSubject(work, index));
+  return work.subjects;
+}
+
+declare const branchWindowCollectionBrand: unique symbol;
+/** Private acquisition work, not a complete branch or an access grant. */
+export interface RecordedSemanticBranchWindowCollection { readonly [branchWindowCollectionBrand]: true }
+const branchWindowCollections = new WeakMap<object, BranchWindowWork>();
+export function beginRecordedSemanticBranchWindows(input: BranchWindowInput): RecordedSemanticBranchWindowCollection {
+  const work = prepareBranchWindows(input), handle = Object.freeze({}) as RecordedSemanticBranchWindowCollection;
+  branchWindowCollections.set(handle, work); return handle;
+}
+function branchWindowWork(handle: RecordedSemanticBranchWindowCollection): BranchWindowWork {
+  const work = handle !== null && typeof handle === "object" ? branchWindowCollections.get(handle) : undefined;
+  if (work === undefined) throw new TypeError("Recorded branch window collection is foreign or retired");
+  return work;
+}
+export function advanceRecordedSemanticBranchWindows(handle: RecordedSemanticBranchWindowCollection): Readonly<{
+  nodeId: string; completedSubjects: number; totalSubjects: number; complete: boolean;
+}> {
+  const work = branchWindowWork(handle);
+  if (work.next === work.throughNodeIds.length) throw new TypeError("Recorded branch window collection has no remaining subject");
+  try {
+    const nodeId = work.throughNodeIds[work.next]!, result = branchWindowSubject(work, work.next);
+    if (branchWindowCollections.get(handle) !== work) throw new TypeError("Recorded branch window collection retired during acquisition");
+    work.subjects.set(nodeId, result); work.next++;
+    return Object.freeze({ nodeId, completedSubjects: work.next, totalSubjects: work.throughNodeIds.length, complete: work.next === work.throughNodeIds.length });
+  } catch (error) { branchWindowCollections.delete(handle); throw error; }
+}
+/** Only completed subjects can be read. Copy the index; original window/source identities stay. */
+export function readRecordedSemanticWindowSubject(handle: RecordedSemanticBranchWindowCollection, nodeId: string): RecordedSemanticWindowPopulation {
+  const result = branchWindowWork(handle).subjects.get(nodeId);
+  if (result === undefined) throw new TypeError("Recorded branch window subject has not been acquired");
+  return new Map(result);
+}
+export function finishRecordedSemanticBranchWindows(handle: RecordedSemanticBranchWindowCollection): ReadonlyMap<string, RecordedSemanticWindowPopulation> {
+  const work = branchWindowWork(handle);
+  if (work.next !== work.throughNodeIds.length) throw new TypeError("Recorded branch window collection is incomplete");
+  try { return new Map([...work.subjects].map(([id, result]) => [id, new Map(result)])); }
+  finally { branchWindowCollections.delete(handle); }
+}
+export function cancelRecordedSemanticBranchWindows(handle: RecordedSemanticBranchWindowCollection): boolean {
+  return handle !== null && typeof handle === "object" && branchWindowCollections.delete(handle);
 }
 
 export type RecordedSemanticWindowPopulation = ReadonlyMap<RecordedWindowRoute, Readonly<{ run: DrillRun; eventHeadDigest: string; windows: readonly RecordedSequenceWindow[]; omittedHorizons: readonly number[]; availableEdges: number }>>;
