@@ -35778,6 +35778,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/review-map-sources.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D4264",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:979c846c408b1238cde90cd9e25a5aac7522b9ce514cb001b355a4cf6df92fe7",
+      "uxItems": [],
+      "owner": "review-and-return",
+      "since": "2026-11-12"
     }
   ]
 }

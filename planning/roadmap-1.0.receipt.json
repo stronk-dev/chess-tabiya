@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:fb8d36785caad31f0805570410cfaa07670178b18760f3724f6b25473e328a8a",
+    "roadmap": "sha256:7ad43e79478204cea4bdd14e4345cffa8c5ce7de63f526588e55457c13b6c119",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:a236f97d5e70afc3892cbe5af5353d813037ba79865bfdc6772cbe5a945699f6",
+    "workState": "sha256:962fc7d2877866f476e2796529a8190f8ba3ff8097bd4aba3e8d58d884706e41",
     "rfcRegister": "sha256:49e46c03e8cf65e0983bcbd7a00a465007dbd3b6aeaa05915b5988fcd462b071",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -31,7 +31,7 @@
     "workState": {
       "untriaged": 0,
       "todo": 634,
-      "doing": 178,
+      "doing": 179,
       "blocked": 1061,
       "done": 1976,
       "refused": 163
@@ -357,7 +357,7 @@
       "nextAction": "Continue D4260: original engine row/context acquisition and workflow-first permission; explicitly account original PhaseArc/full-packet whole-prefix source invocations and per-subject outputs in the literal job plan. Then implement actual public admission, real sessions, cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI. Preserve measured pending/stale/shared-analysis behavior and native D4224/D4225 gates.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "D4260 rich Map window acquisition now follows actual endpoints. The original owner validates the full immutable scope/demand without factories, then acquires complete eleven-family/horizon populations with retained edge/capture/check sharing and unchanged lazy per-window duty/exchange. Original synchronous sorted-edge then endpoint/route/horizon order remains. Complete-only frames and no-factory finish remain. D4263 genuine constructor test first reproduces progress+active nested work after owner retirement; adoption/post-step/final lifetime guards repair it, with real source/relation/opening/finish cancellation controls.347/five affected tests18.42s,types/Svelte0errors0warnings,canonical1928/1928 and server/web builds pass;74 implementation markers only, all other generated JSON unchanged. Authorized normal verify-content passes340/all44 tests225.20s,92-document audit errors[],104 exact capability declarations; restricted first run failed listen EPERM only. Independent source review accepts the finite dependency/repair. Latest full software baseline remains9011b36e21487/593; it has not yet been repeated for this dependency. Workflow-first ordering, full engine-context acquisition, explicit original PhaseArc/full-packet whole-prefix invocation accounting and public admission/session/page/transport/progress/retry remain D4260/D4250. No paging exemption follows from nodeId:null progress; preserve original logical window anchors/full-prefix authorities. No native/default/full1.0 capability or milestone closes.",
+        "summary": "eb3d4d17 stages rich Map windows by actual endpoint with full immutable scope, complete eleven-family/horizon populations, original edge/capture/check sharing and lazy matching. D4263 constructor/post-step/final retirement repair passes347/five focused tests,types,canonical1928/1928,builds and340/44 content tests225.20s;92-document audit errors[],104 capability declarations. The first full software run ends21541pass/1fail of21542/593 files847.28s: Vitest5000ms outer timeout in the long group32 oracle-plus-job test, not proven product budget exhaustion. D4264 gives only those3 cases a local10000ms two-execution harness bound and moves the real-clock integration file to the existing serial lane; project default5000 and actual job5000/source500 guards, fixtures, assertions and overrun negatives are unchanged. Exact discovery593files/8serial,53 focused job/lifetime cases21.02s,types/Svelte0errors0warnings and independent review pass; fresh full software verification remains required. D4260 still owes engine-context/workflow-first and original PhaseArc/full-packet whole-prefix source accounting, public/session/page/transport/UI; no native/default/full1.0 capability/milestone closes.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -683,7 +683,9 @@
           "packages/runtime/src/recorded-grade-source.test.ts",
           "apps/server/src/review-evidence.test.ts",
           "packages/runtime/src/recorded-sequence-window.ts",
-          "packages/runtime/src/recorded-sequence-window.test.ts"
+          "packages/runtime/src/recorded-sequence-window.test.ts",
+          "tools/test-tiers.mjs",
+          "tools/software-scheduling.test.mjs"
         ],
         "anchors": [
           {
@@ -1540,6 +1542,11 @@
             "kind": "work_state",
             "id": "D4263",
             "digest": "sha256:be32d7e977f91cf5e0d8f01986e01da1d8131fb5903e53c0f7e505e0ef34aded"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4264",
+            "digest": "sha256:979c846c408b1238cde90cd9e25a5aac7522b9ce514cb001b355a4cf6df92fe7"
           }
         ]
       },
@@ -1563,7 +1570,7 @@
       "nextAction": "Continue D4260: original engine row/context acquisition and workflow-first permission; explicitly account original PhaseArc/full-packet whole-prefix source invocations and per-subject outputs in the literal job plan. Then implement actual public admission, real sessions, cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI. Preserve measured pending/stale/shared-analysis behavior and native D4224/D4225 gates.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "D4260 rich Map window acquisition now follows actual endpoints. The original owner validates the full immutable scope/demand without factories, then acquires complete eleven-family/horizon populations with retained edge/capture/check sharing and unchanged lazy per-window duty/exchange. Original synchronous sorted-edge then endpoint/route/horizon order remains. Complete-only frames and no-factory finish remain. D4263 genuine constructor test first reproduces progress+active nested work after owner retirement; adoption/post-step/final lifetime guards repair it, with real source/relation/opening/finish cancellation controls.347/five affected tests18.42s,types/Svelte0errors0warnings,canonical1928/1928 and server/web builds pass;74 implementation markers only, all other generated JSON unchanged. Authorized normal verify-content passes340/all44 tests225.20s,92-document audit errors[],104 exact capability declarations; restricted first run failed listen EPERM only. Independent source review accepts the finite dependency/repair. Latest full software baseline remains9011b36e21487/593; it has not yet been repeated for this dependency. Workflow-first ordering, full engine-context acquisition, explicit original PhaseArc/full-packet whole-prefix invocation accounting and public admission/session/page/transport/progress/retry remain D4260/D4250. No paging exemption follows from nodeId:null progress; preserve original logical window anchors/full-prefix authorities. No native/default/full1.0 capability or milestone closes.",
+        "summary": "eb3d4d17 stages rich Map windows by actual endpoint with full immutable scope, complete eleven-family/horizon populations, original edge/capture/check sharing and lazy matching. D4263 constructor/post-step/final retirement repair passes347/five focused tests,types,canonical1928/1928,builds and340/44 content tests225.20s;92-document audit errors[],104 capability declarations. The first full software run ends21541pass/1fail of21542/593 files847.28s: Vitest5000ms outer timeout in the long group32 oracle-plus-job test, not proven product budget exhaustion. D4264 gives only those3 cases a local10000ms two-execution harness bound and moves the real-clock integration file to the existing serial lane; project default5000 and actual job5000/source500 guards, fixtures, assertions and overrun negatives are unchanged. Exact discovery593files/8serial,53 focused job/lifetime cases21.02s,types/Svelte0errors0warnings and independent review pass; fresh full software verification remains required. D4260 still owes engine-context/workflow-first and original PhaseArc/full-packet whole-prefix source accounting, public/session/page/transport/UI; no native/default/full1.0 capability/milestone closes.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2207,7 +2214,8 @@
           "apps/server/src/rich-review-collection.test.ts",
           "apps/server/src/application.ts",
           "packages/runtime/src/review-durable-engine-memo.test.ts",
-          "apps/server/src/review-evidence.test.ts"
+          "apps/server/src/review-evidence.test.ts",
+          "tools/software-scheduling.test.mjs"
         ],
         "anchors": [
           {
@@ -3409,6 +3417,11 @@
             "kind": "work_state",
             "id": "D4263",
             "digest": "sha256:be32d7e977f91cf5e0d8f01986e01da1d8131fb5903e53c0f7e505e0ef34aded"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4264",
+            "digest": "sha256:979c846c408b1238cde90cd9e25a5aac7522b9ce514cb001b355a4cf6df92fe7"
           }
         ]
       },

@@ -2,12 +2,18 @@
 
 ## Current continuation — 2026-11-12
 
+The full eb3d4d17 software run found one harness timeout:21541pass/1fail of21542/593 files.
+D4264 keeps the genuine five-second Review deadline, gives only three oracle-plus-job cases a
+local ten-second harness allowance, and isolates the real-clock integration file in the existing
+serial lane. Exact discovery and53 focused cases/types pass; a fresh full software pass is still
+required before D4264 closes.
+
 D4260 now stages original runtime attachments, server endpoint selection and rich Map windows
 by actual endpoint, with original complete aggregates and nested work retired on terminal paths.
 Window begin validates the full original scope without factories; admitted endpoints retain all
 eleven families, horizons and source sharing. D4263's reproduced constructor-retirement gap is
 repaired before adoption/publication.347 focused tests, types, canonical1928/1928, builds and340
-real-content tests pass; this dependency has not yet repeated the full software suite.
+real-content tests pass; the full software harness repair at D4264 still requires a fresh pass.
 The rich collector still finishes the whole grade context before other sources; workflow-first
 ordering, full-branch engine observation and actual public page accounting remain open. The
 original PhaseArc/full-packet whole-prefix semantic-path acquisitions also need explicit placement

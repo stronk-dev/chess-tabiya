@@ -88,6 +88,8 @@ describe("complete original rich Review under its private lifetime", () => {
     await expect(f.service.advanceRichReviewCollection(job.lease, map => JSON.stringify(map))).rejects.toMatchObject({ reason: "not_found" });
   });
 
+  // This case executes an independent full oracle AND a separately budgeted job. The local
+  // harness allowance covers both; ReviewJobOwner still enforces its own absolute 5,000ms.
   it.each([1, 2, 32])("retains the original complete long-line Map across real-yield source groups=%s", async group => {
     const began = performance.now(); let oracleMs: number | null = null, jobBegan: number | null = null;
     const progress: RichReviewProgress[] = [];
@@ -101,7 +103,7 @@ describe("complete original rich Review under its private lifetime", () => {
     const job = f.service.beginRichReviewCollection(run.id, f.access);
     expect(await drain(f.service, job.lease, progress, group)).toBe(expected);
     expect(progress.filter(row => row.stage === "subject").map(row => row.nodeId)).toEqual(run.nodes.map(node => node.id));
-  });
+  }, 10_000);
 
   it("retains inherited subjects and a genuine distinct occurrence with the same full FEN", async () => {
     const f = await fixture();

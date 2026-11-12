@@ -132,13 +132,14 @@ function assertScheduling(rows, expected) {
   const expectedNative = new Set([
     "apps/server/src/application-startup-cleanup.test.ts",
     "apps/server/src/review-map.test.ts",
+    "apps/server/src/rich-review-collection.test.ts",
     "apps/server/src/longitudinal-worker.test.ts",
     "apps/server/src/longitudinal-predecessor-upgrade.test.ts",
     "apps/server/src/longitudinal-successor-upgrade.test.ts",
     "apps/server/src/longitudinal-worker-start.test.ts",
     "apps/server/src/learner-profile-application.test.ts",
   ]);
-  assert.deepEqual([...native].sort(), [...expectedNative].sort(), "only the seven primary native-worker owners run serially");
+  assert.deepEqual([...native].sort(), [...expectedNative].sort(), "only the eight declared native/publication/real-clock owners run serially");
   assert.deepEqual(rows.map(row => row.path).sort(), [...expected].sort(), "complete software population, exactly once");
   for (const row of rows) {
     const serial = expectedNative.has(row.path);

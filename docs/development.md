@@ -151,6 +151,12 @@ complete software pool followed by the isolated performance pool. Its unchanged2
 the normal serial Make command in host development and CI; no extra wrapper or environment
 prefix is needed. The actual expanded Make plan and complete test population have scheduling
 regressions in `tools/software-scheduling.test.mjs`.
+Declared lifecycle/publication and real-clock Review integration suites run after the main pool
+in the existing single-worker lane. Discovery checks their exact membership and includes every
+software file once. Project defaults remain five seconds. Only the three long Review equivalence
+cases have a ten-second outer allowance: each executes an independent full oracle and a separate
+job whose production deadline remains five seconds. The job's own budget and overrun controls
+are enforced independently of this test-harness allowance.
 For complete affected software files, use the same pinned toolchain with an explicit selection:
 `make test-software-files TEST_FILES="apps/server/src/drill-client-server.test.ts apps/server/src/pack-registry-validation.test.ts"`.
 Empty, missing or wrong-tier paths and runner flags are refused before Vitest starts. This is a

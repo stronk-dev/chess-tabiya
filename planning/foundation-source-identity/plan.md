@@ -4447,3 +4447,27 @@ review-evidence.ts original path adapter; D4241/review-map§1a; independent sour
 
 Normal roadmap-receipt/verify-governance exits0 for the window checkpoint.4012 rows remain
 tracked with zero untriaged; D4263 is done, D4260/D4250 and whole1.0 remain open.
+
+
+### 2026-11-12 — D4264 distinguishes the two-execution harness from the job deadline
+
+The first full software run on eb3d4d17 ends21541pass/1fail of21542 across593 files847.28s.
+The exact error is Vitest Test timed out in5000ms in the long group32 equivalence case, not
+budget_exhausted. At interruption, fixture/oracle cost1358.65ms and job work4039.11ms with all
+35 subjects acquired; those incomplete timings do not prove final-job latency. No production
+budget failure is inferred from the test-harness error.
+
+Only the three existing full-oracle-plus-job cases now have a10000ms outer allowance. Their
+actual job still has the absolute5000ms clock, optional sources500ms and unchanged overrun
+negatives. The same real-clock integration file joins the existing serial software lane, keeping
+its cases/fixtures/byte oracles intact and avoiding unrelated worker CPU overlap. The actual
+Vitest discovery guard now checks exact eight-file membership and all593 files exactly once;
+project defaults remain5000ms. No source, authorization, skip, retry or fixture size changes.
+
+Normal software-scheduling and53 job/lifetime tests/two files21.02s plus workspace types/Svelte
+0errors0warnings pass. Independent read-only review accepts this narrowly scoped harness repair.
+D4264 stays doing until a fresh full software lane passes. Window code/content/build/canonical
+proof remains eb3d4d17; D4260/D4250 and all native/default/full1.0 obligations remain open.
+
+Normal roadmap-receipt/verify-governance passes for the D4264 harness checkpoint;4013 rows
+remain tracked with zero untriaged. The full rerun and D4264 closure remain pending.
