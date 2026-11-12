@@ -13,8 +13,47 @@ import { reviewFixtureRun } from "./testing/review-map-fixture.js";
 import { recordedReviewFixtureSources } from "./testing/recorded-grade-fixture.js";
 import { reviewMapProjection } from "./review-map.js";
 import * as engineNodes from "./internal/recorded-engine-node.js";
+import { recordedLastLevelFixture } from "./testing/recorded-last-level-fixture.js";
+import { attachDelivery, evaluationDelivery } from "./testing/review-evidence-fixture.js";
+import { beginRecordedEngineAttachmentCollection, advanceRecordedEngineAttachmentCollection, cancelRecordedEngineAttachmentCollection,
+  recordedEngineAttachmentNode, collectRecordedEngineAttachments, collectRecordedEngineEdge, finishRecordedEngineAttachmentCollection } from "./internal/recorded-engine-attachments.js";
 
 describe("current recorded grade source and sole factory", () => {
+  it.each(["white", "black"] as const)("issues the unchanged original %s grade before later attachment nodes have been acquired", side => {
+    const f = recordedLastLevelFixture(side), permission = recordedGradeFixture({ workflow: "imported" }).capture.permission;
+    let run = f.run;
+    for (const node of f.path) run = attachDelivery(run, node.id, evaluationDelivery(node.fen, "cp 100"));
+    f.setRun(run);
+    const boundary = f.boundary(), full = collectRecordedEngineAttachments({ boundary }), work = beginRecordedEngineAttachmentCollection({ boundary });
+    const foreign = beginRecordedEngineAttachmentCollection({ boundary }), signal = new AbortController(), parent = f.path[0]!, child = f.path[1]!;
+    const assertCurrent = () => { f.owner.assertCurrent(boundary); };
+    const base = { permission, signal: signal.signal, origins: ["provider_delivery", "provider_delivery"] as const,
+      before: { attachments: full, nodeId: parent.id, offline: null, pending: null },
+      after: { attachments: full, nodeId: child.id, offline: null, pending: null }, edge: collectRecordedEngineEdge(full, child.id) };
+    const expected = RECORDED_GRADE_SOURCE_AUTHORITY.issue(base, assertCurrent);
+    try {
+      for (const handle of [work, foreign]) { advanceRecordedEngineAttachmentCollection(handle); advanceRecordedEngineAttachmentCollection(handle); }
+      const before = { ...base.before, attachments: recordedEngineAttachmentNode(work, parent.id) };
+      const after = { ...base.after, attachments: recordedEngineAttachmentNode(work, child.id) };
+      expect(() => finishRecordedEngineAttachmentCollection(work)).toThrow(/incomplete/u);
+      expect(() => recordedEngineAttachmentNode(work, f.path[2]!.id)).toThrow(/not been acquired/u);
+      const capture = { ...base, before, after, edge: collectRecordedEngineEdge(after.attachments, child.id) };
+      const actual = RECORDED_GRADE_SOURCE_AUTHORITY.issue(capture, assertCurrent);
+      expect(JSON.stringify(readRecordedGradeSource(actual).authority)).toBe(JSON.stringify(readRecordedGradeSource(expected).authority));
+      const grade = invokeEvidenceValueRoute("derived.grade.move_quality@2", { recordedGrade: actual });
+      expect(grade).toEqual(invokeEvidenceValueRoute("derived.grade.move_quality@2", { recordedGrade: expected }));
+      if (grade.kind !== "available" || grade.value.length !== 1) throw new Error("Expected the unchanged original grade");
+      const original = invokeEvidenceValueRoute("derived.grade.move_quality@2", { recordedGrade: expected });
+      if (original.kind !== "available") throw new Error("Missing complete original grade");
+      expect(evidenceValueReceipt(grade.value[0]!)).toEqual(evidenceValueReceipt(original.value[0]!));
+      expect(() => RECORDED_GRADE_SOURCE_AUTHORITY.issue({ ...capture, after: { ...after,
+        attachments: recordedEngineAttachmentNode(foreign, child.id) } }, assertCurrent)).toThrow(/different original storage/u);
+      expect(() => RECORDED_GRADE_SOURCE_AUTHORITY.issue({ ...capture, before: { ...before, attachments: { ...before.attachments } } }, assertCurrent)).toThrow();
+      expect(() => RECORDED_GRADE_SOURCE_AUTHORITY.issue({ ...capture, before: { ...before, attachments: work as never } }, assertCurrent)).toThrow();
+      signal.abort(); expect(() => readRecordedGradeSource(actual)).toThrow();
+    } finally { cancelRecordedEngineAttachmentCollection(work); cancelRecordedEngineAttachmentCollection(foreign); }
+  });
+
   it("D3934 requires an owner lifetime check without accepting its Boolean as source authority", () => {
     const f = recordedGradeFixture({ before: null, after: null });
     expect(() => RECORDED_GRADE_SOURCE_AUTHORITY.issue(f.capture, undefined as never)).toThrow(/owner/u);

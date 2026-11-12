@@ -1,6 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { attachEvidence } from "./evidence.js";
-import { collectRecordedEngineAttachments, collectRecordedEngineEdge, readRecordedEngineAttachments, type RecordedEngineAttachments } from "./internal/recorded-engine-attachments.js";
+import { collectRecordedEngineAttachments, collectRecordedEngineEdge, readRecordedEngineAttachments, beginRecordedEngineAttachmentCollection,
+  advanceRecordedEngineAttachmentCollection, finishRecordedEngineAttachmentCollection, cancelRecordedEngineAttachmentCollection,
+  recordedEngineAttachmentNode, readRecordedEngineAttachmentNode, sameRecordedEngineAttachmentSource, type RecordedEngineAttachments } from "./internal/recorded-engine-attachments.js";
 import * as routes from "./internal/evidence-value-routes.js";
 import * as contracts from "./evidence-contract.js";
 import { readRecordedEngineNode } from "./internal/recorded-engine-node.js";
@@ -23,6 +25,95 @@ const legacy = (centipawns = 999): EvidencePayload => ({ kind: "eval", source: "
 const modern = (value: unknown): EvidencePayload => ({ kind: "eval", source: "engine_validated", values: { centipawns: 999, [REVIEW_PROVIDER_DELIVERY_KEY]: value } });
 
 describe("original durable modern engine attachment source primitive", () => {
+  it.each(["white", "black"] as const)("acquires only the next original %s node and publishes the unchanged complete aggregate", async side => {
+    const f = fixture(side); for (let i = 0; i < f.path.length; i++) f.delivery(i);
+    f.attach(1, legacy()); f.delivery(1); f.attach(1, legacy());
+    const boundary = f.boundary(), expected = readRecordedEngineAttachments(collectRecordedEngineAttachments({ boundary }));
+    const dispatch = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    try {
+      const work = beginRecordedEngineAttachmentCollection({ boundary });
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(() => readRecordedEngineAttachments(work as never)).toThrow(/not issued/u);
+      expect(() => recordedEngineAttachmentNode(work, f.path[0]!.id)).toThrow(/not been acquired/u);
+      expect(() => finishRecordedEngineAttachmentCollection(work)).toThrow(/incomplete/u);
+      for (const [index, node] of f.path.entries()) {
+        const previous = dispatch.mock.calls.length;
+        expect(advanceRecordedEngineAttachmentCollection(work)).toEqual({ nodeId: node.id, completedSubjects: index + 1,
+          totalSubjects: f.path.length, complete: index === f.path.length - 1 });
+        const issued = dispatch.mock.calls.slice(previous);
+        expect(issued.filter(([route]) => route === "run.record.position@1").map(([, input]) => (input as { nodeId: string }).nodeId)).toEqual([node.id]);
+        expect(issued.filter(([route]) => route === "live.stockfish.position_eval@1")).toHaveLength(index === 1 ? 2 : 1);
+        const source = recordedEngineAttachmentNode(work, node.id), actual = readRecordedEngineAttachmentNode(source, node.id);
+        expect(actual.boundary).toBe(expected.boundary); expect(actual.row).toEqual(expected.rows[index]);
+        expect(recordedEngineAttachmentNode(work, node.id)).toBe(source);
+        expect(() => readRecordedEngineAttachments(source as never)).toThrow(/not issued/u);
+        expect(() => readRecordedEngineAttachmentNode(work as never, node.id)).toThrow(/not issued/u);
+        expect(() => readRecordedEngineAttachmentNode(source, "not-this-node")).toThrow(/original occurrence/u);
+        if (index < f.path.length - 1) {
+          expect(() => recordedEngineAttachmentNode(work, f.path[index + 1]!.id)).toThrow(/not been acquired/u);
+          expect(() => finishRecordedEngineAttachmentCollection(work)).toThrow(/incomplete/u);
+        }
+        await new Promise<void>(resolve => setImmediate(resolve));
+      }
+      const calls = dispatch.mock.calls.length, aggregate = finishRecordedEngineAttachmentCollection(work);
+      expect(readRecordedEngineAttachments(aggregate)).toEqual(expected);
+      expect(dispatch).toHaveBeenCalledTimes(calls);
+      expect(cancelRecordedEngineAttachmentCollection(work)).toBe(false);
+      expect(() => advanceRecordedEngineAttachmentCollection(work)).toThrow(/retired/u);
+    } finally { dispatch.mockRestore(); }
+  });
+
+  it("keeps completed node sources in their own original capture even when full boundary/FENs are identical", () => {
+    const f = fixture(), boundary = f.boundary(), a = beginRecordedEngineAttachmentCollection({ boundary }), b = beginRecordedEngineAttachmentCollection({ boundary });
+    advanceRecordedEngineAttachmentCollection(a); advanceRecordedEngineAttachmentCollection(a);
+    advanceRecordedEngineAttachmentCollection(b); advanceRecordedEngineAttachmentCollection(b);
+    const first = recordedEngineAttachmentNode(a, f.path[0]!.id), second = recordedEngineAttachmentNode(a, f.path[1]!.id);
+    const foreign = recordedEngineAttachmentNode(b, f.path[1]!.id);
+    expect(sameRecordedEngineAttachmentSource(first, f.path[0]!.id, second, f.path[1]!.id)).toBe(true);
+    expect(sameRecordedEngineAttachmentSource(first, f.path[0]!.id, foreign, f.path[1]!.id)).toBe(false);
+    expect(() => readRecordedEngineAttachmentNode({ ...first } as never, f.path[0]!.id)).toThrow();
+    expect(() => readRecordedEngineAttachments(first as never)).toThrow();
+    expect(collectRecordedEngineEdge(second, f.path[1]!.id).payload.beforeNodeId).toBe(f.path[0]!.id);
+    expect(() => collectRecordedEngineEdge(first, f.path[1]!.id)).toThrow(/original occurrence/u);
+    cancelRecordedEngineAttachmentCollection(a); cancelRecordedEngineAttachmentCollection(b);
+  });
+
+  it("does not inspect a later corrupt modern report before its original subject is acquired", () => {
+    const f = fixture(); f.delivery(0); f.attach(1, modern(null)); f.delivery(1);
+    const work = beginRecordedEngineAttachmentCollection({ boundary: f.boundary() });
+    expect(advanceRecordedEngineAttachmentCollection(work).nodeId).toBe(f.path[0]!.id);
+    const root = recordedEngineAttachmentNode(work, f.path[0]!.id);
+    expect(readRecordedEngineAttachmentNode(root, f.path[0]!.id).row.selected).not.toBeNull();
+    expect(() => advanceRecordedEngineAttachmentCollection(work)).toThrow();
+    expect(cancelRecordedEngineAttachmentCollection(work)).toBe(false);
+    expect(() => finishRecordedEngineAttachmentCollection(work)).toThrow(/retired/u);
+  });
+
+  it("retires stale, failed, cancelled or forged work without acquiring another original node", () => {
+    const f = fixture(), work = beginRecordedEngineAttachmentCollection({ boundary: f.boundary() });
+    advanceRecordedEngineAttachmentCollection(work);
+    const source = recordedEngineAttachmentNode(work, f.path[0]!.id), dispatch = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    try {
+      f.attach(0, legacy());
+      expect(() => advanceRecordedEngineAttachmentCollection(work)).toThrow(/no longer/u);
+      expect(() => readRecordedEngineAttachmentNode(source, f.path[0]!.id)).toThrow(/no longer/u);
+      expect(dispatch).not.toHaveBeenCalled(); expect(cancelRecordedEngineAttachmentCollection(work)).toBe(false);
+      const cancelled = beginRecordedEngineAttachmentCollection({ boundary: f.boundary() });
+      expect(cancelRecordedEngineAttachmentCollection(cancelled)).toBe(true);
+      for (const invalid of [cancelled, { ...cancelled }]) expect(() => advanceRecordedEngineAttachmentCollection(invalid as never)).toThrow(/foreign or retired/u);
+    } finally { dispatch.mockRestore(); }
+  });
+
+  it("checks actual storage after a staged factory and refuses publication of that node", () => {
+    const f = fixture(), work = beginRecordedEngineAttachmentCollection({ boundary: f.boundary() }), original = routes.invokeEvidenceValueRoute;
+    const dispatch = vi.spyOn(routes, "invokeEvidenceValueRoute").mockImplementation(((...args: Parameters<typeof original>) => {
+      const result = original(...args); f.attach(0, legacy()); return result;
+    }) as typeof original);
+    try {
+      expect(() => advanceRecordedEngineAttachmentCollection(work)).toThrow(/no longer/u);
+      expect(() => recordedEngineAttachmentNode(work, f.path[0]!.id)).toThrow(/retired/u);
+    } finally { dispatch.mockRestore(); }
+  });
   it("D3935 preserves every position/head check without rehashing the same immutable event stream", () => {
     const f = fixture(), source = f.collect(), image = readRecordedEngineAttachments(source);
     const digests = vi.spyOn(contracts, "evidenceDigest");

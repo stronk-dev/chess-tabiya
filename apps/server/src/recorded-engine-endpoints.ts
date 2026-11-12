@@ -247,7 +247,7 @@ export class RecordedEngineEndpointOwner {
   }
 
   /** Original operands for separately authorized workflow issuers, not a numeric endpoint API. */
-  nodeCapture(source: RecordedEngineEndpoints, nodeId: string): RecordedEngineNodeCapture {
+  nodeCapture(source: RecordedEngineEndpoints, nodeId: string): RecordedEngineNodeCapture & Readonly<{ attachments: RecordedEngineAttachments }> {
     const row = this.resolveRecordedEngineEndpoint(source, nodeId), owned = this.#sources.get(source)!;
     const ledger = row.ledger;
     return Object.freeze({ attachments: owned.attachments, nodeId, pending: row.pending,

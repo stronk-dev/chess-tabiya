@@ -53,6 +53,16 @@ requests, registry identity and cancellation still govern steps and publication;
 source must join the exact original context boundary. Existing synchronous callers share the
 same collectors/issuers without replaying per-step guards when no yield occurs.
 
+The original runtime attachment owner now also has begin/advance/finish/cancel collection.
+Each advance parses every original attachment occurrence for just the next original node and
+invokes that node's position/evaluation factories. Only acquired nodes can issue opaque node
+sources; those are distinct from the complete aggregate and carry no permission. The original
+grade issuer can consume two nodes from the same original capture while later nodes remain
+uncollected. Equal boundaries/FENs from separate captures cannot be mixed. Expanded grade
+authority and evidence receipts remain identical to the complete-source path. Synchronous
+collection retains its original event-major order. This dependency is not yet installed in
+the server endpoint/workflow collector; actual public page accounting remains D4260 work.
+
 RunService also exposes internal begin/advance/finish/cancel methods for the existing recorded
 population through its actual grade source owner. They retain the original modern-attachment
 normalization and owned grade context, hide the runtime handle and check live grants/storage/signal

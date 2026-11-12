@@ -8,7 +8,7 @@ import { assertRecordedEdgeEvidence, recordedEdgePayload, type RecordedEdge } fr
 import { sideToMove } from "./review-points.js";
 import { readRecordedEngineNode, recordedEngineNodesComparable, snapshotRecordedEngineOffline, type RecordedEngineNodeCapture } from "./internal/recorded-engine-node.js";
 import { recordedOfflineEngineEndpoint } from "./internal/recorded-engine-endpoint-values.js";
-import { readRecordedEngineAttachments } from "./internal/recorded-engine-attachments.js";
+import { readRecordedEngineAttachmentNode, sameRecordedEngineAttachmentSource } from "./internal/recorded-engine-attachments.js";
 
 export interface RecordedGradePermission {
   readonly principal: Readonly<{ learnerId: string; handle: string }>;
@@ -74,7 +74,7 @@ function validate(input: RecordedGradeCapture) {
   if (!Array.isArray(input.origins) || input.origins.length !== 2 || Reflect.ownKeys(input.origins).length !== 3
     || !["0", "1"].every(key => { const field = Object.getOwnPropertyDescriptor(input.origins, key); return field?.enumerable && "value" in field; })
     || input.origins.some(value => value !== null && value !== "provider_delivery" && value !== "offline_engine")) return refuse("invalid original origin image");
-  if (input.before.attachments !== input.after.attachments) return refuse("endpoints have different original storage sources");
+  if (!sameRecordedEngineAttachmentSource(input.before.attachments, input.before.nodeId, input.after.attachments, input.after.nodeId)) return refuse("endpoints have different original storage sources");
   const before = readRecordedEngineNode(input.before), after = readRecordedEngineNode(input.after);
   if (before.boundary !== after.boundary) return refuse("endpoints cross the original snapshot/head/branch");
   const boundary = before.boundary, run = boundary.run;
@@ -148,7 +148,7 @@ export function readRecordedGradeSource(source: RecordedGradeSource): GradeData 
   owned.capture.signal.throwIfAborted();
   assertOwnerCurrent(owned.assertOwnerCurrent);
   assertEvidenceConsumerExecutionManifestV2(owned.capture.permission.execution, PRIMARY_EVIDENCE_MANIFEST);
-  if (readRecordedEngineAttachments(owned.capture.before.attachments).boundary !== owned.data.before.boundary) return refuse("original attachment boundary changed");
+  if (readRecordedEngineAttachmentNode(owned.capture.before.attachments, owned.capture.before.nodeId).boundary !== owned.data.before.boundary) return refuse("original attachment boundary changed");
   assertOwnerCurrent(owned.assertOwnerCurrent);
   owned.capture.signal.throwIfAborted();
   return owned.data;

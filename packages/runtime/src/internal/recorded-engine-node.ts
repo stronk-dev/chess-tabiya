@@ -6,7 +6,7 @@ import { recordedMeasurementPosition } from "../recorded-measurement.js";
 import type { SourcingLedgerRecord } from "../recorded-reading.js";
 import type { SourceManifest } from "../recorded-source-manifest.js";
 import { reviewPointComparability } from "../review-points.js";
-import { readRecordedEngineAttachments, type RecordedEngineAttachments } from "./recorded-engine-attachments.js";
+import { readRecordedEngineAttachmentNode, type RecordedEngineAttachmentInput } from "./recorded-engine-attachments.js";
 import { recordedOfflineEngineEndpoint, recordedEngineRequestedBound, type RecordedEngineCandidate, type RecordedEngineAvailable } from "./recorded-engine-endpoint-values.js";
 import { recordedEventDigest } from "./recorded-event-digest.js";
 
@@ -22,7 +22,7 @@ export interface RecordedEngineOfflineCapture {
   readonly abstentions: readonly Readonly<{ ordinal: number; sourceOrdinal: number; abstention: SourceAbstention; source: SourceManifest["entries"][number] }>[];
 }
 export interface RecordedEngineNodeCapture {
-  readonly attachments: RecordedEngineAttachments;
+  readonly attachments: RecordedEngineAttachmentInput;
   readonly nodeId: string;
   readonly offline: RecordedEngineOfflineCapture | null;
   readonly pending: object | null;
@@ -36,9 +36,7 @@ export function readRecordedEngineNode(input: RecordedEngineNodeCapture) {
     || Reflect.ownKeys(input).length !== 4 || !["attachments", "nodeId", "offline", "pending"].every(key => {
       const field = Object.getOwnPropertyDescriptor(input, key); return field?.enumerable && "value" in field;
     })) return refuse("requires exactly {attachments,nodeId,offline,pending}");
-  const { boundary, rows } = readRecordedEngineAttachments(input.attachments), { run } = boundary;
-  const row = rows.find(value => value.position.payload.nodeId === input.nodeId);
-  if (row === undefined) return refuse("node is outside the original granted prefix");
+  const { boundary, row } = readRecordedEngineAttachmentNode(input.attachments, input.nodeId), { run } = boundary;
   const positionOrigin = recordedMeasurementPosition(row.position);
   if (positionOrigin.runId !== run.id || positionOrigin.headDigest !== recordedEventDigest(run.events)) return refuse("foreign original position invocation");
   let selected: RecordedEngineAvailable | null = null, selectedOperand: DeclaredEvidence<unknown> | null = null;
@@ -93,7 +91,7 @@ export function readRecordedEngineNode(input: RecordedEngineNodeCapture) {
       selectedOperand = candidate.invocation.result.kind === "available" ? candidate.invocation.result.value : null;
     } else if (offline.candidates.length > 0 || offline.abstentions.length > 0) unavailable = "input_abstained";
   }
-  readRecordedEngineAttachments(input.attachments);
+  readRecordedEngineAttachmentNode(input.attachments, input.nodeId);
   return Object.freeze({ boundary, row, selected, selectedOperand, selectedOrdinal, unavailable });
 }
 

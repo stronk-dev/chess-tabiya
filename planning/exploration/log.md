@@ -42174,3 +42174,37 @@ Full local checkpoint verification: Normal full make verify-software/build/verif
 Final normal verify-governance exits0;4011 ledger rows stay tracked with zero untriaged.
 D4260 subject-ordered source work and D4261/D4262 actual coordinator admission/retry observation
 remain assigned next; independent readback confirms existing D4250 factoring authorization.
+
+
+## 2026-11-12 — D4260 attachment acquisition dependency checkpoint
+
+The original runtime attachment owner now supports metadata-only begin, one actual original
+node acquisition per advance, complete-only finish and retirement. Every occurrence at that
+node retains its original event ordinal, modern corruption/FEN checks and evaluation/position/
+point factories. The synchronous path shares those helpers and keeps event-major collection.
+A completed-node source carries only its original boundary/capture identity and own row; it
+cannot read uncollected nodes or masquerade as a complete aggregate. Separate captures cannot
+mix operands even with identical full boundaries/FENs. The original grade issuer accepts the
+two genuine ordered nodes from one capture, with unchanged expanded authority and receipts.
+No new grade factory or service permission is introduced.
+
+Normal affected-file verification passes245 tests/six files16.68s, including complete rich Map,
+endpoint, comparison and original grading regressions; workspace types and Svelte pass with
+zero errors/warnings. New tests exercise actual factory boundaries, corrupt later reports,
+storage changes, cancel/forgery, both learner colours and full authority/receipt equivalence
+before later nodes are acquired. A test fixture initially used opposite side-to-move scores
+that described no loss; it now uses the existing nonempty-grade fixture convention.
+
+This is a verified source dependency, not completion of D4260. The server endpoint/workflow
+collector still prepares the full attachment aggregate first. Its integration, other window
+acquisition accounting, public pages/cursors/receipts, session binding and selected UI remain
+open, alongside D4261/D4262. D4260 is doing; no capability or milestone closes.
+
+Independent read-only source/test review finds no blocker in this finite prerequisite; actual
+service adoption, window scheduling and page accounting remain open. No implementation agent
+was delegated.
+
+Canonical validation passes1928/1928 with24/89 qualified,63 population and8 external receipts.
+Normal regeneration changes only74 implementation markers; all other JSON values are unchanged.
+Normal verify-governance passes after updating the two roadmap anchors for D4260 doing.
+All4011 ledger rows remain tracked, zero untriaged. No push or remote-CI claim.
