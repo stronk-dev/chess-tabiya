@@ -973,10 +973,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Original packet/population/PhaseArc/Map, grade-context/engine-endpoint and independent historical-ledger staging are verified. Next compose shared job ownership/absolute clock before capture/capacity/idle expiry/live authority/cancel and actual strict rich Review API/selected UI progressive admission. D4250/D4228 and D4224/D4225 resources/defaults remain open.",
+        "nextAction": "Compose the committed original Review source preparations into the verified private lifecycle owner with actual session/access binding, full subject plan/cursors and literal invocation receipts. Install explicit application maxJobs1/shutdown and strict ordinary/rich job transport, then selected Review progress/cancel/retry UI. D4250/D4228 and D4224/D4225 resources/defaults remain open.",
         "latestCheckpoint": {
           "at": "2026-11-12",
-          "summary": "D4250 now stages independent historical ledger reports through the original registry and complete source issuer. Metadata-only begin and one original projection/position per advance preserve root, duplicates, refusals, abstentions, source/record identities and all original source outcomes. Current authority/source checks bracket acquisition and publication; incomplete/foreign/cancelled/failed/finished handles cannot publish. Cached source generations cannot be reset. Synchronous cache/order and D4256 linear registry-read regression remain unchanged. Independent code/test readback accepts this finite source dependency. Focused157/three source cases plus101/two authenticated module/Review API cases pass258/five; full types/Svelte0errors0warnings/server+web builds pass. Canonical proof last passes84edd1ce; full normal gates last pass3f416821. Actual shared job/clock/capacity/idle/currentness/cancel plus strict rich API/selected UI remain open; no5s/resource/default/full1.0 or milestone completion claim.",
+          "summary": "D4250 now has a private bounded ReviewJobOwner for modules/rich scopes, reserving capacity and starting the absolute5000ms clock before original preparation. Real idle expiry, live checks around actual units/yields/final serialization, cancellation/shutdown/ref cleanup and no completed graph cache are implemented. Optional operations enforce500ms/remaining whole milliseconds with actual abort races and absolute pre/post checks; late ignored-abort and synchronous results refuse. D4257 is reproduced33pass/2fail and fixed: preparation returned after prior retirement is disposed exactly once. Independent code/test review accepts this finite lifecycle dependency. Final36 lifecycle controls and96/three affected owner/grade/ledger cases pass4.34s; types/Svelte0errors0warnings/server+web builds pass. Genuine SQLite/RunService tests cover original ledger serialization, grade preparation overrun and real grant revocation. The owner is not yet installed in application/service transport: full source orchestration, real session binding, cursors/receipts, strict delivery scopes and selected UI remain. Full normal gates last pass3f416821; canonical last passes84edd1ce. D4250/D4228 and D4224/D4225 cost/memory/default/full1.0 remain open; no milestone completion.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1290,7 +1290,9 @@
             "packages/runtime/src/review-map.ts",
             "apps/server/src/recorded-engine-endpoints.ts",
             "apps/server/src/recorded-engine-endpoints.test.ts",
-            "apps/server/src/recorded-review-ledger.test.ts"
+            "apps/server/src/recorded-review-ledger.test.ts",
+            "apps/server/src/review-job-owner.ts",
+            "apps/server/src/review-job-owner.test.ts"
           ],
           "anchors": [
             {
@@ -2071,7 +2073,7 @@
             {
               "kind": "work_state",
               "id": "D4250",
-              "digest": "sha256:ce99a84b73708c4c90bff4a0f7b8acb7b04a050920bac445c0ddc6681f84e3da"
+              "digest": "sha256:4a3562ea8c072cd7da5a927121619135cebf8a48fccb7e51dca27b6f9caf6c47"
             },
             {
               "kind": "rfc",
@@ -2112,6 +2114,11 @@
               "kind": "work_state",
               "id": "D4256",
               "digest": "sha256:2b3237a338aa3f6736c9b641eb5e050158577d05f6694b0f04a21987b09b3a3e"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4257",
+              "digest": "sha256:f6288ed32dcd6f1bf629f627633aa5d1927784914628f0b4cd59bec374cb6a82"
             }
           ]
         },
@@ -2132,10 +2139,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Original packet/population/PhaseArc/Map, grade-context/engine-endpoint and independent historical-ledger staging are verified. Next compose shared job ownership/absolute clock before capture/capacity/idle expiry/live authority/cancel and actual strict rich Review API/selected UI progressive admission. D4250/D4228 and D4224/D4225 resources/defaults remain open.",
+        "nextAction": "Compose the committed original Review source preparations into the verified private lifecycle owner with actual session/access binding, full subject plan/cursors and literal invocation receipts. Install explicit application maxJobs1/shutdown and strict ordinary/rich job transport, then selected Review progress/cancel/retry UI. D4250/D4228 and D4224/D4225 resources/defaults remain open.",
         "latestCheckpoint": {
           "at": "2026-11-12",
-          "summary": "D4250 now stages independent historical ledger reports through the original registry and complete source issuer. Metadata-only begin and one original projection/position per advance preserve root, duplicates, refusals, abstentions, source/record identities and all original source outcomes. Current authority/source checks bracket acquisition and publication; incomplete/foreign/cancelled/failed/finished handles cannot publish. Cached source generations cannot be reset. Synchronous cache/order and D4256 linear registry-read regression remain unchanged. Independent code/test readback accepts this finite source dependency. Focused157/three source cases plus101/two authenticated module/Review API cases pass258/five; full types/Svelte0errors0warnings/server+web builds pass. Canonical proof last passes84edd1ce; full normal gates last pass3f416821. Actual shared job/clock/capacity/idle/currentness/cancel plus strict rich API/selected UI remain open; no5s/resource/default/full1.0 or milestone completion claim.",
+          "summary": "D4250 now has a private bounded ReviewJobOwner for modules/rich scopes, reserving capacity and starting the absolute5000ms clock before original preparation. Real idle expiry, live checks around actual units/yields/final serialization, cancellation/shutdown/ref cleanup and no completed graph cache are implemented. Optional operations enforce500ms/remaining whole milliseconds with actual abort races and absolute pre/post checks; late ignored-abort and synchronous results refuse. D4257 is reproduced33pass/2fail and fixed: preparation returned after prior retirement is disposed exactly once. Independent code/test review accepts this finite lifecycle dependency. Final36 lifecycle controls and96/three affected owner/grade/ledger cases pass4.34s; types/Svelte0errors0warnings/server+web builds pass. Genuine SQLite/RunService tests cover original ledger serialization, grade preparation overrun and real grant revocation. The owner is not yet installed in application/service transport: full source orchestration, real session binding, cursors/receipts, strict delivery scopes and selected UI remain. Full normal gates last pass3f416821; canonical last passes84edd1ce. D4250/D4228 and D4224/D4225 cost/memory/default/full1.0 remain open; no milestone completion.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2773,7 +2780,9 @@
             "apps/server/src/phase-arc-collection.test.ts",
             "packages/runtime/src/review-map-sources.ts",
             "packages/runtime/src/review-map-sources.test.ts",
-            "packages/runtime/src/review-map.ts"
+            "packages/runtime/src/review-map.ts",
+            "apps/server/src/review-job-owner.ts",
+            "apps/server/src/review-job-owner.test.ts"
           ],
           "anchors": [
             {
@@ -3909,7 +3918,7 @@
             {
               "kind": "work_state",
               "id": "D4250",
-              "digest": "sha256:ce99a84b73708c4c90bff4a0f7b8acb7b04a050920bac445c0ddc6681f84e3da"
+              "digest": "sha256:4a3562ea8c072cd7da5a927121619135cebf8a48fccb7e51dca27b6f9caf6c47"
             },
             {
               "kind": "work_state",
@@ -3940,6 +3949,11 @@
               "kind": "work_state",
               "id": "D4256",
               "digest": "sha256:2b3237a338aa3f6736c9b641eb5e050158577d05f6694b0f04a21987b09b3a3e"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4257",
+              "digest": "sha256:f6288ed32dcd6f1bf629f627633aa5d1927784914628f0b4cd59bec374cb6a82"
             }
           ]
         },

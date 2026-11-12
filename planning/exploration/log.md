@@ -42123,3 +42123,24 @@ verification is258/five. This is a local scoped checkpoint, not a fresh full-CI 
 
 Normal make verify-governance and final roadmap-check exit0;4005 ledger rows stay tracked,
 zero untriaged. The existing rich Review journey remains open, as recorded in the roadmap.
+
+
+## 2026-11-12 — Bounded Review job lifetime; close D4257
+
+D4250 gains a private shared-scope lifetime owner: capacity before preparation, original absolute
+5000ms clock/idle expiry, live checks around actual units and real yields, cancel/final/shutdown
+cleanup and no completed graph cache. Optional source operations enforce500ms/remaining cap,
+reject ignored-abort and synchronous late results and leave outcome mapping to original adapters.
+Independent review's D4257 reproduces33pass/2fail: work returned after preparation already retired
+its entry gets dispose0, not1. Retirement now drains it exactly once, severing refs before callbacks.
+
+Independent code/test readback accepts. Final36 lifecycle controls and96/three affected cases pass
+4.34s; types/Svelte0errors0warnings and server/web builds pass. Genuine SQLite/RunService controls
+exercise original ledger serialization, grade preparation overrun and actual grant revocation.
+Next compose full original source pipeline/plan/cursors/receipts into this owner, install actual
+session/application composition and strict module/rich transport/selected UI. The owner alone is
+not the public journey; D4250/D4228 and native D4224/D4225 cost/memory/default gates remain open.
+Commit this verified dependency before starting that integration. No milestone closes.
+
+Normal verify-governance/roadmap checks exit0. Work state tracks4006 rows with zero untriaged;
+D4257 closes with explicit test-path evidence while D4250 remains doing.

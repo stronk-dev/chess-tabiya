@@ -35657,7 +35657,7 @@
       "id": "D4250",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ce99a84b73708c4c90bff4a0f7b8acb7b04a050920bac445c0ddc6681f84e3da",
+      "sourceDigest": "sha256:4a3562ea8c072cd7da5a927121619135cebf8a48fccb7e51dca27b6f9caf6c47",
       "uxItems": [],
       "owner": "review-and-return",
       "since": "2026-11-12"
@@ -35714,6 +35714,15 @@
       "sourceDigest": "sha256:2b3237a338aa3f6736c9b641eb5e050158577d05f6694b0f04a21987b09b3a3e",
       "uxItems": [],
       "evidence": "apps/server/src/recorded-engine-endpoints.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4257",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f6288ed32dcd6f1bf629f627633aa5d1927784914628f0b4cd59bec374cb6a82",
+      "uxItems": [],
+      "evidence": "apps/server/src/review-job-owner.test.ts",
       "evidenceKind": "path"
     }
   ]

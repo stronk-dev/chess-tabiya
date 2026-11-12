@@ -95,6 +95,22 @@ The rich Review transport and bounded job/capacity/idle clock
 remain D4250/D4228 work. Existing learner routes have not switched to the new job.
 The current verified checkpoint and its limits are in `planning/foundation-source-identity/plan.md`.
 
+### Private job lifetime
+
+`apps/server/src/review-job-owner.ts` supplies the accepted shared lifetime for the ordinary-module
+and rich-Review scopes. It reserves bounded capacity and starts the absolute five-second clock
+before preparation. Current authenticated identity/selection and source-owner checks govern
+resume, work units, real yields and final serialization. Idle expiry, request cancellation,
+failure, completion and shutdown release owned references; a retained retired token holds no
+source graph. Optional operations receive at most500ms or the remaining whole milliseconds and
+cannot return expired results, including synchronous overruns and providers ignoring abort.
+Original source adapters still own their existing failure/absence mapping.
+
+This private owner is not yet connected to the selected Review routes. Source composition,
+literal invocation receipts/cursors, strict transport, application maxJobs1 composition and
+selected progress/cancel/retry UI remain open. Its deadline controls do not establish native
+latency, memory or safe default capacity.
+
 ## One engine source, five Review projections
 
 The recorded PGN result belongs only to the imported mainline. A rehearsal branch remains

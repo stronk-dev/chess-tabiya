@@ -2,23 +2,26 @@
 
 ## Current continuation — 2026-11-12
 
-D4250's source dependencies now include independent historical engine/tablebase reports.
-Original packet/population, PhaseArc, complete Map relations/opening and grade-context/endpoint
-preparation are committed at3f416821/9e9aa551/84edd1ce/bf0b5f00. Historical capture adds metadata-
-only begin and one original position/projection per advance, retaining root, duplicates, original
-identities, refusals and abstentions. Complete-only issuance and current authority/source checks
-remain; a fresh capture cannot reset an observed source generation. Synchronous cache/order and
-D4256's linear registry-read regression remain intact. Independent code/test review accepts.
+Original complete Review source preparations are committed throughcefcbe46. D4250 now also has
+a private bounded job lifetime owner for ordinary-module/rich scopes. It starts its absolute5000ms
+clock and reserves capacity before preparation; real idle expiry, current checks around units/
+yields/final serialization, cancellation, shutdown and reference cleanup are implemented. Optional
+operations enforce500ms/remaining caps with abort races and explicit pre/post deadlines.
 
-Focused157/three source cases plus101/two authenticated module/Review API cases pass258/five;
-full types/Svelte0errors0warnings and server/web builds pass.
-Canonical1928/1928/24qualified of89 last passed84edd1ce; no runtime producer/qualifier changes
-occur here. Complete software/performance/content gates last passed3f416821.
+Independent review finds D4257: preparation returned after its entry retired was not disposed.
+Actual33pass/2fail reproduces both close/observed-expiry paths; retirement now disposes later
+returned work exactly once. Final36 lifecycle controls and96/three affected owner/grade/ledger
+cases pass4.34s. Workspace types/Svelte0errors0warnings and server/web builds pass. Real SQLite/
+RunService controls cover original ledger serialization, preparation overrun and actual revoked
+grants. Independent code/test readback accepts this finite lifecycle dependency.
 
-Next compose shared bounded job ownership/clock before capture/capacity/idle expiry/live authority/
-cancel and strict rich Review transport/selected UI progressive admission. Existing learner routes
-still use synchronous reads. D4250/D4228 and D4224/D4225 resource/default work remain open; no
-whole-product milestone closes. [Implementation and verification](foundation-source-identity/plan.md).
+Next compose full original sources/subject plan/cursors/invocation receipts into the owner, bind
+actual session/access authority, install explicit application maxJobs1/shutdown and implement
+strict module/rich transport and selected Review progress/cancel/retry UI. The owner is not yet
+connected to learner routes; those still use synchronous reads. D4250/D4228 and native cost/memory/
+default gates D4224/D4225 remain open. Full normal gates last pass3f416821; canonical source proof
+last passes84edd1ce. No whole-product milestone closes.
+[Implementation and verification](foundation-source-identity/plan.md).
 
 ## Current continuation — 2026-11-11
 

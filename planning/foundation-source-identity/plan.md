@@ -4162,3 +4162,27 @@ and strict rich API/selected UI remain D4250/D4228; resource/default gates remai
 
 Existing authenticated module-query and Review API101/two pass98.79s; combined affected
 verification is258/five. This is a local scoped checkpoint, not a fresh full-CI run.
+
+
+### 2026-11-12 — Bounded private Review job lifetime
+
+ReviewJobOwner reserves capacity before original preparation and owns one absolute5000ms cap,
+including idle time, current checks and final serialization. Owner/session/run/delivery scope/
+selection isolate handles. Each actual unit checks before/after work and a real yield; cancellation,
+stale authority, errors, idle expiry, completion and shutdown retire references. Retired tokens hold
+only ids. Optional-source execution enforces min500ms/remaining whole milliseconds, original
+adapter outcome mapping and before/after deadline checks, including ignored abort and sync overruns.
+
+Independent review finds D4257: work returned after preparation already retired its job was never
+disposed. The actual35-case predecessor gives33pass/2fail (close/observed expiry, dispose0 not1).
+Retirement now drains later returned work exactly once, with refs severed before callbacks.
+Final36 lifecycle controls pass; normal96/three affected owner/grade/ledger cases pass4.34s,
+workspace types/Svelte0errors0warnings and server/web builds pass. Actual SQLite/RunService controls
+include original source serialization, grade preparation overrun and real grant revocation after
+one collection. Independent code/test readback accepts this finite dependency.
+
+This owner is not yet installed in application/service transport. Next compose original sources,
+metadata plan/cursors and source receipts into it, pin actual session/access authority, install
+explicit application maxJobs1/shutdown and implement both strict delivery scopes/selected UI.
+D4250/D4228 remain doing; native cost/memory/default gates D4224/D4225 remain. Full normal gates
+last passed3f416821; canonical source proof last passed84edd1ce. No public journey or milestone closes.

@@ -11748,3 +11748,16 @@ and staged validation-cost proof remain open.
 
 Existing authenticated module-query and Review API101/two pass98.79s; combined affected
 verification is258/five. This is a local scoped checkpoint, not a fresh full-CI run.
+
+
+## 2026-11-12 — D4250 private lifetime and D4257 independently accepted
+
+Read-only reviewer identifies returned-preparation cleanup and fractional optional-budget hazards.
+D4257's actual35-case predecessor fails exactly two cleanup cases,33pass/2fail. Final retirement
+severs work refs before callbacks and drains work returned after earlier retirement, exactly once.
+Sub-millisecond source budget refuses before dispatch. Wrapped optional operations enforce a real
+source abort race and their own absolute pre/post deadline; ignored125/500ms responses and sync
+501ms returns cannot escape. Final serialized bytes are rechecked after a real yield, then retired
+as complete. No remaining finite source/test blocker found; reviewer runs no tests or edits.
+Primary36 lifecycle controls/96 affected cases, types/build pass. Public integration, original plan/
+page/strict receiver/UI and native cost/default proof remain owed.
