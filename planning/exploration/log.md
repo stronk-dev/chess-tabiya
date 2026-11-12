@@ -42673,3 +42673,35 @@ software/content, remote-CI, native/default or capability/milestone exit claim i
 Normal make typecheck build verify-governance passes for the final uninstrumented service
 checkpoint.4016 ledger rows retain zero untriaged; D4267 is done, D4260/D4250/full1.0 remain open.
 Independent final readback confirms diagnostic removal and no false public/native completion claim.
+
+
+### 2026-11-12 — D4268 refreshes the generated source markers caught by the full gate
+
+The complete normal make verify-software verify-content on b7108458 ended at semantic-validation-
+check with exit2:89 subjects/24 qualified, all1928 cases passing,63 population and8 external
+receipts, but the two generated files were stale. The full software/performance/content pools
+had not run. This failure was observed to terminal, not inferred from a quiet log.
+
+Normal make semantic-validation-update regenerates exactly74 JSON implementation-marker leaves:
+11 operations[].implementationDigest and63 populations[].predicateImplementationDigest. A
+recursive comparison of every JSON value against HEAD proves all other keys, array lengths,
+cases, verdicts, inputs/results, source vectors and external receipts unchanged. The only TS
+change is its JSON checksum. Independent read-only review reproduces that comparison and checksum
+join. Normal make semantic-validation-check then passes all1928 cases and confirms both generated
+files current. No source, generator, checker, result, policy, deadline or threshold was changed.
+
+D4268 closes as the generated-source repair. D4260/D4250/full1.0 remain open; complete normal
+gates are still required at the refreshed committed checkpoint. Semantic-source refactoring
+invalidates these generated markers even when every result is unchanged, so the ordinary writer
+and check belong before its dependency checkpoint; do not create another bespoke checker.
+
+Read-only next-owner review confirms the common staged semantic API should keep its own detached
+full run and original graph/edge refusal domain, with outer packet/PhaseArc authorities remaining
+independent. Pure full legality validation precedes F1; endpoint execution retains results by
+original start×13-row slot and finalizes original ordering/digests without recollection. Valid
+completed-endpoint event reads must remain distinct from the complete path result, and cooperative
+packet adapters must never touch the eager semantic getter. No extra replay-equality constraint,
+caller validity callback, sliced run, projection change or new RFC is needed for this factoring.
+
+Normal verify-governance passes for the finite generated-source repair;4017 rows retain zero
+untriaged. This checkpoint holds the feature milestone; D4260/D4250/full1.0 remain open.

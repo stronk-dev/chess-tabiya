@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:022a8afe2caaedb1129775fb9df962e8785b4dfc22254e35c3dea1879ef3053f",
+    "roadmap": "sha256:6ea5b11bf8d19b92ca33f0386d9f987751a838853ef38437afeb5b64c7cb817e",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:e40f98755dd92233f445ec2ff4248a01d3e1a0b3a1b48f34d37b64e3d96602a7",
+    "workState": "sha256:67c2543638bb6ab6b7c571c6ce64b4e78bb1d7a94f15da2a704ebb1f9597073c",
     "rfcRegister": "sha256:49e46c03e8cf65e0983bcbd7a00a465007dbd3b6aeaa05915b5988fcd462b071",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 634,
       "doing": 178,
       "blocked": 1061,
-      "done": 1980,
+      "done": 1981,
       "refused": 163
     },
     "workItems": {
@@ -354,11 +354,11 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Run complete normal gates at the committed objective service checkpoint; continue original PhaseArc and packet semantic/shape/pivotal acquisition and literal invocation/per-subject accounting, then public source plans/cursors/receipts/sessions/strict API/UI delivery. Objectives now use actual acquired-subject ownership and fixed local units with live inter-collector checks. D4267 is closed; public paging/native/default/full1.0 gates remain open.",
+      "nextAction": "Rerun complete normal software/performance/content gates at the refreshed objective service checkpoint after D4268. Then continue original PhaseArc and packet semantic/shape/pivotal acquisition and literal invocation/per-subject accounting, followed by public source plans/cursors/receipts/sessions/strict API/UI delivery. D4267/D4268 are closed finite repairs; public paging/native/default/full1.0 gates remain open.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "Private rich Review now uses the original staged objective owner after each acquired endpoint, retaining eventOrdinal order, complete original proof and stable workflow through promotion. D4267 fixes real5011.74/5022.24/5021.96ms refusals with one fixed local subject per unit and actual control.clock checkpoints between every collector. Original calls/order/permission/deadlines remain; no optional I/O or future subject is bundled. Temporary diagnostic35-subject group1:54 units2251.43ms, largest subject unit85.75ms and largest overall unit402.54ms, including guards/scheduling; no universal native/default/p95 claim. Temporary instrumentation removed. Final uninstrumented1791 authority/runtime/service/coordinator/ledger cases/nine files38.32s and full types pass; independent review finds no blocker. Eight actual post-collector grant/session/cancel/expiry controls stop next collector/publication and free capacity. Prior complete normal gates remain baseline history; fresh full gates next. Whole-prefix semantic/shape/pivotal accounting, public sources/pages/receipts/sessions/transport/UI and full1.0 remain open.",
-        "impact": "advanced",
+        "summary": "Objective service adoption and fixed local subject units remain proven by1791 uninstrumented source/authority/runtime/service/coordinator/ledger cases and full types/build/governance/review. The b7108458 complete normal run then stopped at stale generated semantic receipts; all1928 validation cases passed but full software/content pools had not run. D4268 normal writer/check now pass89subjects24qualified/1928cases/63population/8external and both generated files current. Independent full-value comparison confirms only11 operation markers,63 population predicate markers and matching TS checksum changed; all other values identical. Full normal gates must now run on refreshed committed bytes. Original semantic/shape/pivotal acquisition/accounting and public sources/pages/receipts/sessions/transport/UI remain open; no complete current/remote-CI/native/default/full1.0 claim.",
+        "impact": "held",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
           "packages/runtime/src/semantic-validation-receipt-storage.ts",
@@ -1526,7 +1526,7 @@
           {
             "kind": "work_state",
             "id": "D4260",
-            "digest": "sha256:b68075045b58449f4c6bcbff1d8f94648a9f7f8e3561cd9dc793aa4920918e9a"
+            "digest": "sha256:127b668309c5a796e750f87bdd9b234d9d6a860c9d55c56f67162391b9b6232e"
           },
           {
             "kind": "work_state",
@@ -1562,6 +1562,11 @@
             "kind": "work_state",
             "id": "D4267",
             "digest": "sha256:750f2098074178c25f0f642ad312f89083e5c9559e50a40c0bcf8417258af3ff"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4268",
+            "digest": "sha256:e8ef41d9ec86a93d3a9998c7c20ac87c85a4bea94923c3552aeeb3072eb8f5d9"
           }
         ]
       },
@@ -1582,11 +1587,11 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Run complete normal gates at the committed objective service checkpoint; continue original PhaseArc and packet semantic/shape/pivotal acquisition and literal invocation/per-subject accounting, then public source plans/cursors/receipts/sessions/strict API/UI delivery. Objectives now use actual acquired-subject ownership and fixed local units with live inter-collector checks. D4267 is closed; public paging/native/default/full1.0 gates remain open.",
+      "nextAction": "Rerun complete normal software/performance/content gates at the refreshed objective service checkpoint after D4268. Then continue original PhaseArc and packet semantic/shape/pivotal acquisition and literal invocation/per-subject accounting, followed by public source plans/cursors/receipts/sessions/strict API/UI delivery. D4267/D4268 are closed finite repairs; public paging/native/default/full1.0 gates remain open.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "Private rich Review now uses the original staged objective owner after each acquired endpoint, retaining eventOrdinal order, complete original proof and stable workflow through promotion. D4267 fixes real5011.74/5022.24/5021.96ms refusals with one fixed local subject per unit and actual control.clock checkpoints between every collector. Original calls/order/permission/deadlines remain; no optional I/O or future subject is bundled. Temporary diagnostic35-subject group1:54 units2251.43ms, largest subject unit85.75ms and largest overall unit402.54ms, including guards/scheduling; no universal native/default/p95 claim. Temporary instrumentation removed. Final uninstrumented1791 authority/runtime/service/coordinator/ledger cases/nine files38.32s and full types pass; independent review finds no blocker. Eight actual post-collector grant/session/cancel/expiry controls stop next collector/publication and free capacity. Prior complete normal gates remain baseline history; fresh full gates next. Whole-prefix semantic/shape/pivotal accounting, public sources/pages/receipts/sessions/transport/UI and full1.0 remain open.",
-        "impact": "advanced",
+        "summary": "Objective service adoption and fixed local subject units remain proven by1791 uninstrumented source/authority/runtime/service/coordinator/ledger cases and full types/build/governance/review. The b7108458 complete normal run then stopped at stale generated semantic receipts; all1928 validation cases passed but full software/content pools had not run. D4268 normal writer/check now pass89subjects24qualified/1928cases/63population/8external and both generated files current. Independent full-value comparison confirms only11 operation markers,63 population predicate markers and matching TS checksum changed; all other values identical. Full normal gates must now run on refreshed committed bytes. Original semantic/shape/pivotal acquisition/accounting and public sources/pages/receipts/sessions/transport/UI remain open; no complete current/remote-CI/native/default/full1.0 claim.",
+        "impact": "held",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
           "packages/runtime/src/semantic-validation-receipt-storage.ts",
@@ -3416,7 +3421,7 @@
           {
             "kind": "work_state",
             "id": "D4260",
-            "digest": "sha256:b68075045b58449f4c6bcbff1d8f94648a9f7f8e3561cd9dc793aa4920918e9a"
+            "digest": "sha256:127b668309c5a796e750f87bdd9b234d9d6a860c9d55c56f67162391b9b6232e"
           },
           {
             "kind": "work_state",
@@ -3452,6 +3457,11 @@
             "kind": "work_state",
             "id": "D4267",
             "digest": "sha256:750f2098074178c25f0f642ad312f89083e5c9559e50a40c0bcf8417258af3ff"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4268",
+            "digest": "sha256:e8ef41d9ec86a93d3a9998c7c20ac87c85a4bea94923c3552aeeb3072eb8f5d9"
           }
         ]
       },

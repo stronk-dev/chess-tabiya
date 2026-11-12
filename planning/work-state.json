@@ -35747,7 +35747,7 @@
       "id": "D4260",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:b68075045b58449f4c6bcbff1d8f94648a9f7f8e3561cd9dc793aa4920918e9a",
+      "sourceDigest": "sha256:127b668309c5a796e750f87bdd9b234d9d6a860c9d55c56f67162391b9b6232e",
       "uxItems": [],
       "owner": "review-and-return",
       "since": "2026-11-12"
@@ -35813,6 +35813,15 @@
       "sourceDigest": "sha256:750f2098074178c25f0f642ad312f89083e5c9559e50a40c0bcf8417258af3ff",
       "uxItems": [],
       "evidence": "apps/server/src/rich-review-collection.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4268",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e8ef41d9ec86a93d3a9998c7c20ac87c85a4bea94923c3552aeeb3072eb8f5d9",
+      "uxItems": [],
+      "evidence": "planning/foundation-source-identity/plan.md",
       "evidenceKind": "path"
     }
   ]

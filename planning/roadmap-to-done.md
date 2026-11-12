@@ -2,6 +2,14 @@
 
 ## Current continuation — 2026-11-12
 
+The b7108458 complete normal run stopped in the semantic-validation precheck: all1928 cases
+passed, but two generated source-marker files were stale. D4268 refreshes them using the normal
+writer; the normal check now confirms both are current. Independent full-value comparison finds
+only11 implementation markers,63 population predicate markers and their generated checksum
+changed. Cases, verdicts, population inputs/results and external receipts are identical. The
+full software/performance/content pools must now run on this refreshed checkpoint; the earlier
+partial run is not reported as a complete passing gate.
+
 The private rich job now uses the original objective owner after each subject's actual endpoint
 is acquired, preserving global eventOrdinal order, repeats/empty rows, complete original proofs
 and stable workflow permission through promotion. D4267 fixes repeated per-collector async
