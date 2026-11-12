@@ -370,6 +370,19 @@ and actual edge authority; neither treats a provider PV as recorded play.
 - **Execution shape.** One `transitionSemanticEvents` compile and one `checkSemanticEvent` probe per
   edge; defender duty is memoised per window-start FEN within one call; full `localSemanticEvents`
   fan-out is never used except by the eager byte-parity oracle.
+- **Internal cooperative collection.** `beginRecordedSemanticPathCollection` detaches the complete
+  run and validates its original graph and every edge without minting evidence. Each advance
+  acquires only the next original endpoint's edge, capture/check preparation and newly complete
+  windows. `readRecordedSemanticPathSubject` exposes that completed endpoint's retained events,
+  never a partial path result. The owned state reader exposes only `refused | collecting | complete`
+  and subject counts; a genuine refusal is immediately finishable with zero source acquisitions.
+  `finishRecordedSemanticPathCollection` returns the complete execution, with the original path
+  result in `.result`, and retires the handle; cancel releases unfinished work. Completion restores
+  original start-major evaluator order before first-ID deduplication and the existing final sort,
+  preserving event objects, value receipts, counters, windows and digests without recollection.
+  The synchronous exact/eager operation retains its original acquisition order and refusal domain.
+  Outer consumers still own live storage, permission, cancellation and job budgets. Packet and
+  PhaseArc adoption remain separate work; this runtime API does not clear public Review paging.
 - **Exchange operands.** Each matching family still reproduces and validates its complete legal
   exchange operand through the sole factory. Sharing FEN/UCI does not permit a different result,
   captured piece or chosen line. Invocation-local source reuse was measured and rejected without

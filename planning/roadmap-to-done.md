@@ -2,6 +2,16 @@
 
 ## Current continuation — 2026-11-12
 
+The original semantic runtime compiler now has metadata-only full-run capture and exact current-
+endpoint advancement. Completed endpoint events remain original objects; finish restores canonical
+start-major window order before deduplication and returns the original complete result without
+recollection. The state reader exposes only owned lifecycle/count metadata, including genuine
+complete refusals. Final1802 authority/runtime/packet/Map/PhaseArc cases/six files11.95s, full
+types/builds and canonical1928/1928 pass. Independent review confirms exact value-receipt parity
+and74 generated implementation-marker changes only. The guard-removal control fails for the
+actual post-cancel edge acquisition; the guard is restored. This is a runtime dependency,
+not yet packet/PhaseArc adoption or a new complete normal-suite certificate.
+
 The refreshed8bc43532 checkpoint now passes complete normal make verify-software verify-content:
 21,627 software cases/all593 files885.47s, seven isolated performance checks/four63.30s,340
 content/all44 files227.88s, the92-document clearance audit with zero errors (354 blocking/34
@@ -38,8 +48,9 @@ accepted) and104 exact capability declarations. The full corpus/assertions, two-
 separately pinned64 five-second cases and all product budgets remain. D4266 is closed; this is
 local gate proof, not a remote-CI, native/default or whole-product completion claim.
 
-**Next: finish D4260 source/page accounting.** PhaseArc and packet semantic/shape/pivotal
-operations still acquire whole-prefix facts. Preserve their original
+**Next: adopt the original staged semantic owner independently into PhaseArc and packet, then
+finish D4260 source/page accounting.** Their semantic/shape/pivotal operations still acquire
+whole-prefix facts. Preserve their original
 invocations and account their per-subject outputs before claiming the public32-subject bound;
 moving a call earlier or labelling its progress nodeId:null is no exemption. No source is narrowed
 or partial context cast as complete. The original eleven window families, horizons, sharing and

@@ -4842,3 +4842,47 @@ their source-specific checks and normal generated receipt refresh before their o
 
 Normal verify-governance passes for this full-gate closeout;4017 rows retain zero untriaged.
 The objective checkpoint is verified; D4260/D4250 and full1.0 remain open.
+
+
+### 2026-11-12 — D4260 original semantic runtime advances by completed endpoint
+
+The original compiler now shares prepareEdge, window collection and canonical reduction between
+its unchanged synchronous exact/eager order and a private cooperative owner. Begin detaches the
+complete raw run and validates all original graph/edge metadata without F1. Advance acquires only
+the current endpoint's original edge/capture/check preparation and now-complete windows. Original
+start×13-row slots retain actual outputs; finish traverses that original order before first-ID
+deduplication, then applies the same final sort/convention/source-closure/path digest. Lazy duty
+sharing and original per-emission exchange calls remain. No sliced run, caller validity callback,
+new event-replay equality rule, projection/version or changed chess judgement is introduced.
+
+Completed-subject reads return retained event objects, never partial path results. The owned
+state reader exposes frozen refused/collecting/complete metadata and counts only; it neither
+mints nor consumes. Actual metadata refusals remain complete original refusals with zero staged
+F1, while the old synchronous invalid-edge order can still discard earlier edge mints. Failure
+call-count parity is not claimed. Finish returns the original result in execution.result and
+retires; foreign/busy/cancelled owners refuse. Outer packet and PhaseArc permissions/currentness
+and cleanup remain their own next implementation, not granted by these runtime handles.
+
+Final normal types/Svelte0errors0warnings, server/web builds, semantic-validation-update plus
+semantic-validation-check and1802 authority/runtime/packet/Map/PhaseArc cases/six files11.95s
+pass. All1928 canonical cases and24/89 qualified subjects,63 population/8 external receipts
+remain. Recursive full-value comparison and independent review find only74 implementation-marker
+leaves changed; every other generated value is identical and the TS checksum matches.
+
+All166 semantic cases pass, including curated positives/hard negatives/castling, exact/eager
+result+work+real event/input receipt parity, exact current-edge arguments, no future edge/F1,
+immutable caller capture, root/quiet windows, complete refusals,37-subject groups1/2/32, inherited
+equal-FEN siblings and original event-object retention. Actual edge/prepare/window/convention
+proof cancellation and reentrancy controls pass. Temporarily removing the pre-edge activity
+guard yields165pass/1fail specifically because the factory is called after cancellation; the
+guard is restored and final checks are green. Natural duplicate-ID winner behavior has source-
+order proof, not a measured collision fixture; do not claim that unrun experiment.
+
+D4260/D4250/full1.0 remain open. The current complete normal gate certificate is the preceding
+objective checkpoint8bc43532, closed at12660efa; this new runtime dependency has scoped checks.
+Next independently wire it into actual PhaseArc and packet owners without eager getter fallback,
+then original shape/pivotal source ownership and public plans/pages/receipts/sessions/strict API/UI.
+No protected design sentence is falsified by this internal execution factoring.
+
+Normal verify-governance passes for the semantic runtime dependency;4017 rows retain zero
+untriaged. D4260/D4250/full1.0 stay open, with actual packet/PhaseArc adoption next.

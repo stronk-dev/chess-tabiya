@@ -9,6 +9,7 @@ import { CONVENTION_REGISTRY } from "./evidence-conventions.js";
 import type { LegalExchangeResult } from "./exchange.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import * as valueRoutes from "./internal/evidence-value-routes.js";
+import * as evidenceContract from "./evidence-contract.js";
 import type { RecordedEdge } from "./recorded-edge.js";
 
 /** Test-only compiler fixture: a correctly-shaped wrapper whose receipt names a non-edge factory. */
@@ -27,10 +28,17 @@ import {
   recordedSemanticPath,
   recordedSemanticPathExecution,
   recordedSemanticPathIdentity,
+  beginRecordedSemanticPathCollection,
+  advanceRecordedSemanticPathCollection,
+  readRecordedSemanticPathSubject,
+  readRecordedSemanticPathCollectionState,
+  finishRecordedSemanticPathCollection,
+  cancelRecordedSemanticPathCollection,
+  type RecordedSemanticPathCollection,
   type RecordedPathIdentityMaterial,
   type RecordedSemanticPathResult,
 } from "./recorded-semantic-path.js";
-import { commitMove, createRun, rewind } from "./runtime.js";
+import { commitMove, createRun, rewind, fork } from "./runtime.js";
 import {
   assertSemanticEvidenceEvent,
   compileSemanticEvidenceEvent,
@@ -52,6 +60,7 @@ import {
 import { defenderDutyReading, defenderDutyRelocatedEvents } from "./tactics.js";
 import * as squareControl from "./square-control.js";
 import * as semanticEvidence from "./semantic-evidence.js";
+import * as pawnDynamics from "./pawn-dynamics.js";
 import { positionFromFen } from "./position-cache.js";
 import { parseSquare } from "chessops/util";
 import type { DrillRun, Node } from "./types.js";
@@ -795,5 +804,252 @@ describe("recorded semantic path compiler", () => {
       expect(exactExecution.work).toMatchObject({ preparedEdges: plies, transitionCompiles: plies, checkProbes: plies, localFanOut: 0, receipts: plies * 13 });
       expect(eager.work).toMatchObject({ transitionCompiles: 0, checkProbes: 0, localFanOut: plies });
     }
+  });
+});
+
+describe("cooperative original recorded semantic path", () => {
+  const receipts = (result: RecordedSemanticPathResult) => result.kind === "refused" ? [] : result.events.map(event => ({
+    event: evidenceValueReceipt(event.evidence), inputs: event.derivationInputs.map(input => evidenceValueReceipt(input)),
+  }));
+  const fixtures = [...POSITIVES, ...HARD_NEGATIVES, ATTRACTION_FIVE, DEFLECTION_CHECK,
+    ...RECORDED_CASTLING_ATTRACTION, ...RECORDED_CASTLING_CLEARANCE, ...RECORDED_CASTLING_DEFENDER];
+  const counts = (calls: readonly (readonly unknown[])[]) => {
+    const result = new Map<string, number>();
+    for (const [route] of calls) result.set(String(route), (result.get(String(route)) ?? 0) + 1);
+    return [...result].sort(([left], [right]) => left.localeCompare(right));
+  };
+
+  it.each([1, 2, 32])("retains all37 original subjects and complete receipts across real scheduling groups=%s", async limit => {
+    const moves = ["g1f3", "g8f6", "f3g1", "f6g8",
+      "e2e4", "e7e5", "g1f3", "b8c6", "f1b5", "a7a6", "b5a4", "g8f6",
+      "e1g1", "f8e7", "f1e1", "b7b5", "a4b3", "d7d6", "c2c3", "e8g8",
+      "h2h3", "c6b8", "d2d4", "b8d7", "b1d2", "c7c5", "d4d5", "d8c7",
+      "d2f1", "f8e8", "f1g3", "g7g6", "a2a4", "b5b4", "c3b4", "c5b4"];
+    const run = recordedRun("staged-groups-" + limit, INITIAL, moves), path = branchPath(run, run.activeCursor.branchId);
+    const expected = recordedSemanticPathExecution(run, run.activeCursor.branchId), handle = beginRecordedSemanticPathCollection(run, run.activeCursor.branchId);
+    const seen: string[] = [];
+    for (let start = 0; start < path.length; start += limit) {
+      for (let index = start; index < Math.min(start + limit, path.length); index++) seen.push(advanceRecordedSemanticPathCollection(handle).nodeId);
+      if (seen.length < path.length) expect(() => finishRecordedSemanticPathCollection(handle)).toThrow(/incomplete/);
+      await new Promise<void>(resolve => setTimeout(resolve, 0));
+    }
+    expect(seen).toEqual(path.map(node => node.id));
+    const actual = finishRecordedSemanticPathCollection(handle);
+    expect(actual.result).toEqual(expected.result); expect(actual.work).toEqual(expected.work);
+  });
+
+  it("keeps inherited nodes and exact equal-FEN sibling edges distinct", () => {
+    let run = recordedRun("staged-inherited", INITIAL, ["e2e4", "e7e5"]);
+    const original = branchPath(run, run.activeCursor.branchId), shared = original[1]!, sibling = original[2]!;
+    run = fork(rewind(run, shared.id, at).run, shared.id, { at }).run;
+    run = commitMove(run, "e7e5", { at }).run;
+    const path = branchPath(run, run.activeCursor.branchId);
+    expect(path.at(-1)!.fen).toBe(sibling.fen); expect(path.at(-1)!.id).not.toBe(sibling.id);
+    const expected = recordedSemanticPathExecution(run, run.activeCursor.branchId), handle = beginRecordedSemanticPathCollection(run, run.activeCursor.branchId);
+    const dispatch = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+    try {
+      for (const node of path) expect(advanceRecordedSemanticPathCollection(handle).nodeId).toBe(node.id);
+      expect(dispatch.mock.calls.filter(([route]) => route === "run.record.edge@1").map(([, input]) => (input as { child: Node }).child.id))
+        .toEqual(path.slice(1).map(node => node.id));
+      const actual = finishRecordedSemanticPathCollection(handle);
+      expect(actual.result).toEqual(expected.result); expect(actual.work).toEqual(expected.work);
+    } finally { dispatch.mockRestore(); }
+  });
+
+  it("keeps complete quiet-window receipts without eager duty or exchange work", () => {
+    const run = recordedRun("staged-quiet", INITIAL, ["g1f3", "g8f6", "b1c3"]);
+    const handle = beginRecordedSemanticPathCollection(run, run.activeCursor.branchId), dispatch = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+    try {
+      for (const node of branchPath(run, run.activeCursor.branchId)) advanceRecordedSemanticPathCollection(handle);
+      const actual = finishRecordedSemanticPathCollection(handle);
+      expect(available(actual.result).windows).toHaveLength(39);
+      expect(actual.work).toMatchObject({ preparedEdges: 3, transitionCompiles: 3, checkProbes: 3, localFanOut: 0, defenderDutyReads: 0, receipts: 39 });
+      expect(dispatch.mock.calls.filter(([route]) => route === "rules.tactic.reading.defender_duty_set@1" || route === "rules.exchange.predicate.legal_exchange@1")).toEqual([]);
+    } finally { dispatch.mockRestore(); }
+  });
+
+  it.each(fixtures.map((fixture, index) => ({ fixture, index })))("preserves every original positive/negative source for fixture$index", ({ fixture, index }) => {
+    const run = recordedRun("staged-fixture-" + index, fixture.fen, fixture.moves), branchId = run.activeCursor.branchId;
+    const dispatch = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+    const transitions = vi.spyOn(semanticEvidence, "transitionSemanticEvents"), checks = vi.spyOn(semanticEvidence, "checkSemanticEvent");
+    try {
+      const expected = recordedSemanticPathExecution(run, branchId), expectedCalls = counts(dispatch.mock.calls);
+      dispatch.mockClear(); transitions.mockClear(); checks.mockClear();
+      const handle = beginRecordedSemanticPathCollection(run, branchId), path = branchPath(run, branchId);
+      const status = readRecordedSemanticPathCollectionState(handle);
+      expect(status).toEqual({ state: "collecting", completedSubjects: 0, totalSubjects: path.length });
+      expect(Object.isFrozen(status)).toBe(true);
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(() => finishRecordedSemanticPathCollection(handle)).toThrow(/incomplete/);
+      const retained: SemanticEvidenceEvent[] = [];
+      for (const [index, node] of path.entries()) {
+        expect(() => readRecordedSemanticPathSubject(handle, node.id)).toThrow(/not been acquired/);
+        const began = dispatch.mock.calls.length, transitionStart = transitions.mock.calls.length, checkStart = checks.mock.calls.length;
+        expect(advanceRecordedSemanticPathCollection(handle)).toEqual({ nodeId: node.id, completedSubjects: index + 1,
+          totalSubjects: path.length, complete: index + 1 === path.length });
+        expect(readRecordedSemanticPathCollectionState(handle)).toEqual({ state: index + 1 === path.length ? "complete" : "collecting",
+          completedSubjects: index + 1, totalSubjects: path.length });
+        const edges = dispatch.mock.calls.slice(began).filter(([route]) => route === "run.record.edge@1");
+        expect(edges).toHaveLength(index === 0 ? 0 : 1);
+        if (edges.length > 0) expect((edges[0]![1] as { child: Node }).child.id).toBe(node.id);
+        if (index === 0) {
+          expect(transitions).not.toHaveBeenCalled(); expect(checks).not.toHaveBeenCalled();
+        } else {
+          const parent = path[index - 1]!;
+          expect(transitions.mock.calls[transitionStart]).toEqual([parent.fen, node.moveUci, node.fen]);
+          expect(checks.mock.calls[checkStart]).toEqual([parent.fen, node.moveUci, node.fen]);
+        }
+        const subject = readRecordedSemanticPathSubject(handle, node.id);
+        expect(subject.events.every(event => event.anchor.nodeId === node.id)).toBe(true);
+        retained.push(...subject.events);
+      }
+      expect(counts(dispatch.mock.calls)).toEqual(expectedCalls);
+      const before = dispatch.mock.calls.length, actual = finishRecordedSemanticPathCollection(handle);
+      expect(dispatch).toHaveBeenCalledTimes(before);
+      expect(actual.result).toEqual(expected.result); expect(actual.work).toEqual(expected.work);
+      expect(receipts(actual.result)).toEqual(receipts(expected.result));
+      const complete = available(actual.result);
+      for (const event of retained) expect(complete.events.find(value => value.id === event.id)).toBe(event);
+      expect(() => readRecordedSemanticPathSubject(handle, path[0]!.id)).toThrow(/retired/);
+    } finally { dispatch.mockRestore(); transitions.mockRestore(); checks.mockRestore(); }
+  });
+
+  it.each(["exact", "eager"] as const)("keeps the original %s counters and complete receipt for a captured mutable caller", preparation => {
+    const initial = recordedRun("staged-mutable", INITIAL, ["e2e4", "d7d5", "e4d5", "d8d5"]);
+    const run = structuredClone(initial), expected = recordedSemanticPathExecution(run, run.activeCursor.branchId, { preparation });
+    const handle = beginRecordedSemanticPathCollection(run, run.activeCursor.branchId, { preparation });
+    Object.assign(run.nodes[1]!, { fen: "changed-after-capture" });
+    for (const node of branchPath(initial, initial.activeCursor.branchId)) expect(advanceRecordedSemanticPathCollection(handle).nodeId).toBe(node.id);
+    const actual = finishRecordedSemanticPathCollection(handle);
+    expect(actual.result).toEqual(expected.result); expect(actual.work).toEqual(expected.work);
+  });
+
+  it("retains exact late-edge and graph refusals without staged F1 or detector acquisitions", () => {
+    const initial = recordedRun("staged-refusal", INITIAL, ["e2e4", "e7e5", "g1f3"]);
+    const bad = replaceNode(initial, initial.activeCursor.nodeId, node => ({ ...node, moveSan: "not-canonical" }));
+    for (const [run, branchId] of [[bad, bad.activeCursor.branchId], [initial, "unknown-branch"]] as const) {
+      const expected = recordedSemanticPathExecution(run, branchId);
+      expect(expected.result.kind).toBe("refused");
+      const dispatch = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+      try {
+        const handle = beginRecordedSemanticPathCollection(run, branchId);
+        expect(readRecordedSemanticPathCollectionState(handle)).toEqual({ state: "refused", completedSubjects: 0, totalSubjects: 0 });
+        expect(() => advanceRecordedSemanticPathCollection(handle)).toThrow(/no remaining/);
+        const actual = finishRecordedSemanticPathCollection(handle);
+        expect(actual.result).toEqual(expected.result); expect(actual.work).toEqual(expected.work);
+        expect(dispatch).not.toHaveBeenCalled();
+        expect(() => finishRecordedSemanticPathCollection(handle)).toThrow(/retired/);
+        expect(() => readRecordedSemanticPathCollectionState(handle)).toThrow(/retired/);
+      } finally { dispatch.mockRestore(); }
+    }
+  });
+
+  it("preserves an actual root-only result and no-source endpoint", () => {
+    const run = recordedRun("staged-root", INITIAL, []), branchId = run.activeCursor.branchId;
+    const expected = recordedSemanticPathExecution(run, branchId), handle = beginRecordedSemanticPathCollection(run, branchId);
+    expect(advanceRecordedSemanticPathCollection(handle).complete).toBe(true);
+    expect(readRecordedSemanticPathSubject(handle, run.nodes[0]!.id).events).toEqual([]);
+    const actual = finishRecordedSemanticPathCollection(handle);
+    expect(actual.result).toEqual(expected.result); expect(actual.work).toEqual(expected.work);
+  });
+
+  it("refuses foreign/copied/cancelled handles without a partial path result", () => {
+    const run = recordedRun("staged-foreign", INITIAL, ["e2e4"]), handle = beginRecordedSemanticPathCollection(run, run.activeCursor.branchId);
+    for (const copy of [{}, { ...handle }]) {
+      expect(() => advanceRecordedSemanticPathCollection(copy as RecordedSemanticPathCollection)).toThrow(/foreign/);
+      expect(() => readRecordedSemanticPathCollectionState(copy as RecordedSemanticPathCollection)).toThrow(/foreign/);
+      expect(() => finishRecordedSemanticPathCollection(copy as RecordedSemanticPathCollection)).toThrow(/foreign/);
+    }
+    advanceRecordedSemanticPathCollection(handle);
+    expect(() => finishRecordedSemanticPathCollection(handle)).toThrow(/incomplete/);
+    expect(cancelRecordedSemanticPathCollection(handle)).toBe(true);
+    expect(cancelRecordedSemanticPathCollection(handle)).toBe(false);
+    expect(() => finishRecordedSemanticPathCollection(handle)).toThrow(/retired/);
+  });
+
+  it("rechecks retirement after a timing callback before the next original edge mint", () => {
+    const run = recordedRun("staged-clock", INITIAL, ["e2e4"]), handle = beginRecordedSemanticPathCollection(run, run.activeCursor.branchId);
+    advanceRecordedSemanticPathCollection(handle);
+    const dispatch = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+    const clock = vi.spyOn(performance, "now").mockImplementationOnce(() => { cancelRecordedSemanticPathCollection(handle); return 0; });
+    let failure: unknown;
+    try { advanceRecordedSemanticPathCollection(handle); } catch (error) { failure = error; }
+    finally { clock.mockRestore(); }
+    try {
+      expect(failure).toBeInstanceOf(TypeError); expect(dispatch).not.toHaveBeenCalled();
+      expect(() => finishRecordedSemanticPathCollection(handle)).toThrow(/retired/);
+    } finally { dispatch.mockRestore(); }
+  });
+
+  it.each(["cancel", "throw", "reentrant"] as const)("keeps an original edge's actual %s outcome inside its lifetime", fault => {
+    const run = recordedRun("staged-edge-" + fault, INITIAL, ["e2e4"]), handle = beginRecordedSemanticPathCollection(run, run.activeCursor.branchId);
+    advanceRecordedSemanticPathCollection(handle);
+    const original = valueRoutes.invokeEvidenceValueRoute;
+    const dispatch = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute").mockImplementation(((...args: Parameters<typeof original>) => {
+      if (args[0] === "run.record.edge@1") {
+        if (fault === "cancel") cancelRecordedSemanticPathCollection(handle);
+        else if (fault === "throw") throw new TypeError("actual edge factory failed");
+        else {
+          expect(() => advanceRecordedSemanticPathCollection(handle)).toThrow(/already advancing/);
+          expect(() => readRecordedSemanticPathCollectionState(handle)).toThrow(/already advancing/);
+        }
+      }
+      return original(...args);
+    }) as typeof original);
+    try {
+      if (fault === "reentrant") {
+        expect(advanceRecordedSemanticPathCollection(handle).complete).toBe(true);
+        expect(finishRecordedSemanticPathCollection(handle).result.kind).toBe("available");
+      } else {
+        expect(() => advanceRecordedSemanticPathCollection(handle)).toThrow();
+        expect(() => finishRecordedSemanticPathCollection(handle)).toThrow(/retired/);
+      }
+    } finally { dispatch.mockRestore(); }
+  });
+
+  it.each(["cancel", "reentrant"] as const)("checks lifetime during the actual complete convention proof: %s", fault => {
+    const fixture = POSITIVES[0]!, run = recordedRun("staged-finish-" + fault, fixture.fen, fixture.moves);
+    const handle = beginRecordedSemanticPathCollection(run, run.activeCursor.branchId);
+    for (const node of branchPath(run, run.activeCursor.branchId)) advanceRecordedSemanticPathCollection(handle);
+    expect(readRecordedSemanticPathSubject(handle, run.activeCursor.nodeId).events.length).toBeGreaterThan(0);
+    const original = evidenceContract.evidenceConventionReceipt;
+    const proof = vi.spyOn(evidenceContract, "evidenceConventionReceipt").mockImplementationOnce(value => {
+      if (fault === "cancel") cancelRecordedSemanticPathCollection(handle);
+      else expect(() => finishRecordedSemanticPathCollection(handle)).toThrow(/already advancing or finishing/);
+      return original(value);
+    });
+    const dispatch = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+    try {
+      if (fault === "cancel") expect(() => finishRecordedSemanticPathCollection(handle)).toThrow(/retired/);
+      else expect(finishRecordedSemanticPathCollection(handle).result.kind).toBe("available");
+      expect(proof).toHaveBeenCalled(); expect(dispatch).not.toHaveBeenCalled();
+      expect(() => finishRecordedSemanticPathCollection(handle)).toThrow(/retired/);
+    } finally { proof.mockRestore(); dispatch.mockRestore(); }
+  });
+
+  it.each(["prepare", "window"] as const)("stops before the next collection boundary after actual %s cancellation", stage => {
+    const fixture = POSITIVES[0]!, run = recordedRun("staged-atomic-" + stage, fixture.fen, fixture.moves);
+    const handle = beginRecordedSemanticPathCollection(run, run.activeCursor.branchId);
+    advanceRecordedSemanticPathCollection(handle); advanceRecordedSemanticPathCollection(handle);
+    const nextWindow = vi.spyOn(pawnDynamics, "pawnContactTimingSequence");
+    let injected = false, restore = () => {};
+    if (stage === "prepare") {
+      const original = semanticEvidence.transitionSemanticEvents;
+      const hook = vi.spyOn(semanticEvidence, "transitionSemanticEvents").mockImplementationOnce((...args) => {
+        const result = original(...args); injected = true; cancelRecordedSemanticPathCollection(handle); return result;
+      });
+      restore = () => hook.mockRestore();
+    } else {
+      const original = semanticEvidence.recordedTradeCompletedSemanticEvent;
+      const hook = vi.spyOn(semanticEvidence, "recordedTradeCompletedSemanticEvent").mockImplementationOnce((...args) => {
+        const result = original(...args); injected = true; cancelRecordedSemanticPathCollection(handle); return result;
+      });
+      restore = () => hook.mockRestore();
+    }
+    try {
+      expect(() => advanceRecordedSemanticPathCollection(handle)).toThrow(/retired/);
+      expect(injected).toBe(true); expect(nextWindow).not.toHaveBeenCalled();
+      expect(() => finishRecordedSemanticPathCollection(handle)).toThrow(/retired/);
+    } finally { restore(); nextWindow.mockRestore(); }
   });
 });
