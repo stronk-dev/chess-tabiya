@@ -2,28 +2,27 @@
 
 ## Current continuation — 2026-11-12
 
-D4250's next verified dependency stages original PhaseArc sources: a separate whole-path advance,
-then one genuine point per step, followed by complete-only assembly through the original issuer.
-D4255 closes the independently found foreign-refusal gap in synchronous/staged PhaseArc and the
-full packet. Affected107/four source cases, actual Review/grade service114/two, types/build and
-canonical1928/1928 pass. The24/89 qualification outcomes are unchanged. This focused checkpoint
-does not claim a fresh complete software/performance/content run; that proof below is from
-committed3f416821. Original windows/local edges/exposure, deepest-opening history, remaining
-grade/ledger acquisition and the actual bounded job/strict rich API/selected UI remain next.
+D4250's original full packet, grade-population and PhaseArc acquisition dependencies are
+committed at3f416821/9e9aa551. The next verified dependency prepares the complete original Map
+window union, per-node local edge/exposure/phase/setup/sequence facts and opening history/deepest
+result. Complete prepared frames join their original ledger boundary, ordered source plan and
+installed opening authority; final Map assembly can render retained originals without source
+recollection or fallback on malformed input. Existing synchronous source helpers/cache remain
+until the selected job flow is actually wired. Independent review and all requested source
+mutation/failure/retained-frame controls pass.
 
-D4250 now stages the genuine original full Review packet and actual grade-owned source population;
-complete outputs preserve their original authorities and cannot publish partial evidence. D4251
-captures the immutable original game, and D4253 repairs repeated storage reads without dropping
-currentness/access checks. Independent review accepts these finite dependencies. D4254 isolates
-the same579 edge inputs and89 Inspector topics into individual correctness cases with unchanged
-assertions/deadlines; the increased count is parameterization, not new chess coverage.
-Committed3f416821 passes normal software/build/content gates:21315 software/all588,7 performance/four,
-340 content/all44 with zero skips, clean types/Svelte, server/web builds,92-document audit errors[]
-and104 capability declarations. Canonical1928/1928 and24/89 qualification remain unchanged.
-Next stage remaining PhaseArc/window/opening/ledger sources and final assembly, then bounded job
-ownership/clock/capacity and the strict rich Review API/selected UI. D4250/D4228 and D4224/D4225
-cost/default/memory work remain open. This source checkpoint completes no whole-product milestone.
-[Implementation and verification](foundation-source-identity/plan.md).
+Affected199/four source/projection cases, existing authenticated Review API/Review-screen127/
+two, types/Svelte0errors0warnings and server/web builds pass. Canonical1928/1928,24/89 qualified
+and generated receipts are current without rewriting. This is focused dependency verification;
+complete software/performance/content gates last passed at3f416821 (21315 software/all588,
+7 performance/four,340 content/all44,92-document audit errors[] and104 exact capability
+declarations). No fresh whole-wave/push-readiness claim follows.
+
+Next complete remaining original grade/engine/historical-ledger capture, then shared bounded
+job ownership/clock/capacity/idle expiry/current authority and strict rich transport/selected UI
+progress/cancel/progressive analysis admission. D4250/D4228 and D4224/D4225 cost/default/memory
+stay open. Existing learner routes have not switched to the new job; no whole-product milestone
+closes. [Implementation and verification](foundation-source-identity/plan.md).
 
 ## Current continuation — 2026-11-11
 

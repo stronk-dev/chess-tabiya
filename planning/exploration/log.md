@@ -42055,3 +42055,28 @@ and remaining original grade/ledger inputs, then bounded job ownership/clock/cap
 strict rich Review API/UI. D4250/D4228 and all broader resource/default/full1.0 obligations stay open.
 
 Normal governance also exits0: C1-C8/P1-P7/R1-R10 green; work-state remains zero untriaged.
+
+
+## 2026-11-12 — Complete original Map source preparation
+
+D4250 now retains the original window union, per-node local edge/exposure/phase/setup/sequence
+facts and original opening history/deepest reducer in separate acquisition advances. A complete
+private frame joins the exact ledger boundary/source plan/opening authority; Map assembly can
+consume it without recollection or eager fallback. Event order, exposure factory ordinals and
+complete output remain unchanged. The existing synchronous helpers/cache remain until actual
+job transport cutover. Independent source review and its requested during-acquisition/retained
+stale proof controls are complete. No new issuer, schema, result cache or deadline is invented.
+
+Affected199/four source/projection cases pass8.38s, existing authenticated API/Review-screen127/
+two pass116.32s, workspace types/Svelte0errors0warnings and server/web builds pass. Normal
+canonical check passes1928/1928 with24/89 qualified,63 population/8 external receipts; generated
+files are current without rewriting. Full Map equality covers inherited/mirrored/37-node real
+yields and all eleven sequence-family positives/hard negatives. Fixture async/type setup errors
+were corrected under unchanged rules. Complete normal gates last passed at3f416821; no fresh
+whole-wave, remote-CI or push-readiness claim.
+
+Next finish original grade/engine/historical-ledger capture, shared bounded job ownership/clock/
+capacity/expiry/currentness and actual strict rich Review API/selected UI progressive admission.
+D4250/D4228 and D4224/D4225 resources/defaults/full1.0 remain open. No milestone closes.
+
+Normal governance also exits0: C1-C8/P1-P7/R1-R10 green,4004 ledger rows tracked and zero untriaged.

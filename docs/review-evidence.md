@@ -57,8 +57,23 @@ This gives the future job a deadline/yield boundary before the first point. Comp
 uses the same original arc issuer with no source acquisition; mutation, failure, cancel and handoff
 retire the private work. Whole-path computation remains indivisible, without a latency guarantee.
 
-The rich Review transport, bounded job/capacity/idle clock and final window/opening-history
-preparation remain D4250/D4228 work. Existing learner routes have not switched to the new job.
+Review Map's remaining relation/opening sources likewise have private
+`beginReviewMapSourceCollection` / advance / finish / cancel work. Separate advances prepare the
+whole original eleven-family window union, collect each original node's local edge/exposure,
+phase/setup/window facts, and acquire the original opening history/deepest-reached result. Root
+positions retain their lack of an incoming edge. Whole-window preparation and opening history
+remain indivisible units; the job can inspect its clock between them and the per-node units.
+
+Only complete work can issue the opaque `PreparedReviewMapSources` consumed by Map assembly.
+It must match the exact original ledger boundary, ordered source plan and opening authority.
+Event order, repeated/inherited occurrences and exposure factory ordinals survive intact; the
+private exposure index exposes only a reader. With prepared sources supplied, the Map selects
+and renders retained originals without relation/opening recollection. Invalid or partial handles
+throw instead of taking an eager fallback. Existing synchronous reads retain their shared source
+helpers and cache until the actual job transport replaces that selected flow.
+
+The rich Review transport, remaining grade/ledger preparation and bounded job/capacity/idle clock
+remain D4250/D4228 work. Existing learner routes have not switched to the new job.
 The current verified checkpoint and its limits are in `planning/foundation-source-identity/plan.md`.
 
 ## One engine source, five Review projections

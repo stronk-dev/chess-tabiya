@@ -11700,3 +11700,20 @@ retirement remain. The reviewer performs no commands/edits and finds no remainin
 Primary affected107/four source cases, actual Review/grade service114/two, types/build and
 canonical1928/1928 pass;24/89 qualification remains unchanged. Whole-job budget/resource, live
 permission/configuration revalidation and rich Review API/UI remain implementation obligations.
+
+
+## 2026-11-12 — D4250 complete Map source preparation independently accepted
+
+Source readback accepts shared original local/phase/setup/eleven-route collection ordering,
+exposure identity and original history/deepest reducer. Complete private frames retain the exact
+ledger boundary image, ordered plan and opening source/catalogue identities; malformed/crossed
+frames throw without eager fallback. Final Map rendering consumes retained events and exposure
+readers with no recollection. Original synchronous helpers/cache remain until actual job cutover.
+The reviewer requests during-acquisition and retained-frame stale controls; these are added and
+independently read back before this checkpoint. Each wraps the real original collector, mutates
+genuine storage afterward and requires retirement/refusal. Retained stale reads run no collector;
+opening-wrapper mutation retains installed authority and source failure cannot become empty.
+No remaining finite blocker is found; no reviewer commands/edits run. Primary199/four source
+cases, existing authenticated API/UI127/two, types/build and canonical1928/1928 pass. Generated
+receipts are current without rewrite;24/89 qualification is unchanged. This accepts a source
+dependency, not public job/API/UI integration or any5s/resource/default clearance.

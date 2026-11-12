@@ -4071,3 +4071,38 @@ performance/content gates last passed at3f416821; this is a focused dependency c
 fresh whole-wave/push-readiness claim. Next stage original windows/local edges/exposure, deepest-
 opening history and remaining grade/ledger acquisition, then actual owned job and strict API/UI.
 D4250/D4228, D4224/D4225 resource/default proof and full1.0 stay open.
+
+
+### 2026-11-12 — Prepare complete original Map relations and opening history
+
+D4250 factors original collection into review-map-sources without a new evidence issuer or
+result cache. Shared helpers retain the unchanged synchronous source cache, eleven-family order,
+node/edge→phase→setup→window ordering, exposure identities and original opening history/deepest
+reducer. New work is bound to a genuine complete recorded boundary; separate advances prepare
+the whole window union, each original root/incoming-edge subject and opening history. Only
+complete work can issue the private prepared frame. Map assembly joins that frame to the exact
+ledger boundary, ordered plan and installed opening authority and never falls back on bad input.
+It then renders retained originals with no relation/opening recollection. The exposure index
+exposes only a private-map reader; no mutable map or arbitrary replacement events escape.
+
+Independent readback accepts the source factoring and exact output/order/authority preservation.
+Its proof-gap request is completed now: real windows/local-edge/opening acquisitions mutate
+authoritative storage after returning original results, and retained complete-frame reads reject
+later mutation without collecting again. Source errors retire rather than becoming empty. Full
+Map-byte equality covers mirrored/inherited branches,37-node real-yield groups1/2/32, root-only
+absence and every sequence-family positive; all eleven hard negatives retain actual absence.
+
+Affected199/four source/projection suites pass8.38s and workspace types/Svelte0errors0warnings
+pass. Existing actual authenticated Review API and Review-screen127/two cases pass116.32s; both
+production builds pass. The first fixture missed awaiting installed-opening admission; the next
+run passed59 cases but exactOptionalPropertyTypes caught an opening:undefined test literal,
+corrected by omitting it. Neither source policy nor assertion/deadline was relaxed. Normal
+semantic-validation-check passes1928/1928,24/89 qualified,63 population/8 external receipts; both
+generated files are current without rewrite. Complete software/performance/content gates last
+passed at3f416821; these are focused source and existing consumer checks, not current whole-wave
+push readiness or the new public job journey.
+
+D4250 remains doing. Grade/engine and historical-ledger capture, shared owned job clock/capacity/
+idle expiry/current authority, strict rich transport and selected UI progressive admission remain
+next. The selected HTTP flow still uses synchronous reads until that cutover. D4224/D4225 cost/
+default/memory and all broader1.0 obligations stay open; no milestone closes.

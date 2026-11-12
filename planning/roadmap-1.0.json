@@ -973,10 +973,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "The original PhaseArc/D4255 dependency is verified. Next stage original windows/local edges/exposure, deepest-opening history and remaining grade/ledger inputs. Complete the bounded job owner/clock/capacity and strict rich Review API/selected UI from retained originals. D4250/D4228 and D4224/D4225 cost/default/memory remain open; private collection is not the learner journey.",
+        "nextAction": "Original full-packet/grade-population/PhaseArc/Map relation and opening dependencies are verified. Finish remaining original grade/engine/historical-ledger capture, then shared job ownership/absolute clock/capacity/idle expiry/live authority and actual strict rich Review API/selected UI progressive admission. D4250/D4228 and D4224/D4225 cost/default/memory stay open; no private helper substitutes for that journey.",
         "latestCheckpoint": {
           "at": "2026-11-12",
-          "summary": "D4250 adds original PhaseArc collection over a genuine complete boundary: separate path/point advances, captured original dependencies, complete-only shared arc issuer and actual storage checks. D4255 independently reproduces and repairs foreign refused-semantic-result adoption in sync/staged PhaseArc and full packet (pre-fix34pass/3fail). Final107/four affected source cases, actual Review/grade service114/two, workspace types/Svelte0errors0warnings, server/web builds and canonical1928/1928 pass. Normal governance passes C1-C8/P1-P7/R1-R10. Qualification24/89 and all non-implementation receipt values remain unchanged; only11 operation/63 predicate digests update. Full software/performance/content gates last pass at3f416821; no fresh whole-wave/push-readiness claim. Remaining original windows/local edges/exposure, deepest-opening history and grade/ledger acquisition precede actual owned job/clock/capacity and strict rich API/selected UI. D4250/D4228, D4224/D4225 resource/default proof and full1.0 remain open; no milestone transition.",
+          "summary": "D4250 now prepares the complete original Map window union, per-node local edge/exposure/phase/setup/eleven-family sequence events and original opening history/deepest reducer. Shared helpers retain original synchronous behavior/cache. Complete private frames join the exact ledger boundary, ordered plan and opening authority; prepared Map assembly recollects nothing and rejects malformed/foreign/partial work. Independent review and its during-acquisition/stale-retained-frame controls pass. Affected199/four source/projection cases pass8.38s; existing authenticated API/Review-screen127/two pass116.32s; types/Svelte0errors0warnings and server/web builds pass. Canonical1928/1928,24/89 qualification and generated files are current without rewrite. Full normal gates last pass at3f416821; no fresh whole-wave/push-readiness claim. Remaining grade/engine/ledger capture and actual owned job/clock/capacity/idle/currentness plus strict rich API/selected UI remain. D4250/D4228 and D4224/D4225 resources/defaults/full1.0 stay open; no milestone transition.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1284,7 +1284,10 @@
             "apps/server/src/service.ts",
             "docs/review-evidence.md",
             "apps/server/src/phase-source-composition.ts",
-            "apps/server/src/phase-arc-collection.test.ts"
+            "apps/server/src/phase-arc-collection.test.ts",
+            "packages/runtime/src/review-map-sources.ts",
+            "packages/runtime/src/review-map-sources.test.ts",
+            "packages/runtime/src/review-map.ts"
           ],
           "anchors": [
             {
@@ -2065,7 +2068,7 @@
             {
               "kind": "work_state",
               "id": "D4250",
-              "digest": "sha256:d9ffd41d03807ccdcbf21a7c17e5e1baeb4ee99876f786953dbf79760a637058"
+              "digest": "sha256:f7a610b6064333c1dc902e0d1aebb25446401b0dbee0d7ffc54e4846c97df493"
             },
             {
               "kind": "rfc",
@@ -2121,10 +2124,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "The original PhaseArc/D4255 dependency is verified. Next stage original windows/local edges/exposure, deepest-opening history and remaining grade/ledger inputs. Complete the bounded job owner/clock/capacity and strict rich Review API/selected UI from retained originals. D4250/D4228 and D4224/D4225 cost/default/memory remain open; private collection is not the learner journey.",
+        "nextAction": "Original full-packet/grade-population/PhaseArc/Map relation and opening dependencies are verified. Finish remaining original grade/engine/historical-ledger capture, then shared job ownership/absolute clock/capacity/idle expiry/live authority and actual strict rich Review API/selected UI progressive admission. D4250/D4228 and D4224/D4225 cost/default/memory stay open; no private helper substitutes for that journey.",
         "latestCheckpoint": {
           "at": "2026-11-12",
-          "summary": "D4250 adds original PhaseArc collection over a genuine complete boundary: separate path/point advances, captured original dependencies, complete-only shared arc issuer and actual storage checks. D4255 independently reproduces and repairs foreign refused-semantic-result adoption in sync/staged PhaseArc and full packet (pre-fix34pass/3fail). Final107/four affected source cases, actual Review/grade service114/two, workspace types/Svelte0errors0warnings, server/web builds and canonical1928/1928 pass. Normal governance passes C1-C8/P1-P7/R1-R10. Qualification24/89 and all non-implementation receipt values remain unchanged; only11 operation/63 predicate digests update. Full software/performance/content gates last pass at3f416821; no fresh whole-wave/push-readiness claim. Remaining original windows/local edges/exposure, deepest-opening history and grade/ledger acquisition precede actual owned job/clock/capacity and strict rich API/selected UI. D4250/D4228, D4224/D4225 resource/default proof and full1.0 remain open; no milestone transition.",
+          "summary": "D4250 now prepares the complete original Map window union, per-node local edge/exposure/phase/setup/eleven-family sequence events and original opening history/deepest reducer. Shared helpers retain original synchronous behavior/cache. Complete private frames join the exact ledger boundary, ordered plan and opening authority; prepared Map assembly recollects nothing and rejects malformed/foreign/partial work. Independent review and its during-acquisition/stale-retained-frame controls pass. Affected199/four source/projection cases pass8.38s; existing authenticated API/Review-screen127/two pass116.32s; types/Svelte0errors0warnings and server/web builds pass. Canonical1928/1928,24/89 qualification and generated files are current without rewrite. Full normal gates last pass at3f416821; no fresh whole-wave/push-readiness claim. Remaining grade/engine/ledger capture and actual owned job/clock/capacity/idle/currentness plus strict rich API/selected UI remain. D4250/D4228 and D4224/D4225 resources/defaults/full1.0 stay open; no milestone transition.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2759,7 +2762,10 @@
             "packages/runtime/src/review-packet-collection.test.ts",
             "apps/server/src/service.ts",
             "apps/server/src/phase-source-composition.ts",
-            "apps/server/src/phase-arc-collection.test.ts"
+            "apps/server/src/phase-arc-collection.test.ts",
+            "packages/runtime/src/review-map-sources.ts",
+            "packages/runtime/src/review-map-sources.test.ts",
+            "packages/runtime/src/review-map.ts"
           ],
           "anchors": [
             {
@@ -3895,7 +3901,7 @@
             {
               "kind": "work_state",
               "id": "D4250",
-              "digest": "sha256:d9ffd41d03807ccdcbf21a7c17e5e1baeb4ee99876f786953dbf79760a637058"
+              "digest": "sha256:f7a610b6064333c1dc902e0d1aebb25446401b0dbee0d7ffc54e4846c97df493"
             },
             {
               "kind": "work_state",
