@@ -35747,7 +35747,7 @@
       "id": "D4260",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:b1bbf673d1f38683b80d2569afe6d778db96e069161bd5c8224d08f75d86e547",
+      "sourceDigest": "sha256:9ec71afdd15f2a51a2d109ed408a3a20840e56f25c91d7aaac2b162edcdb1ddf",
       "uxItems": [],
       "owner": "review-and-return",
       "since": "2026-11-12"
@@ -35799,12 +35799,12 @@
     },
     {
       "id": "D4266",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0ede2c2f9fa50e0119272ac5b389cc99a168d97eeebb9bcca7e463b2811e87ea",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c430c1987469e8d8fd0f4456fbb4abe80b5c282342eeb11ece70a3ac35c93efc",
       "uxItems": [],
-      "owner": "release-engineering",
-      "since": "2026-11-12"
+      "evidence": "planning/foundation-source-identity/plan.md",
+      "evidenceKind": "path"
     }
   ]
 }

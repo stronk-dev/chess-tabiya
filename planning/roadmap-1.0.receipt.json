@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:5e680f13e33588eff310d22c752d7d4134242bec099ec36b0e3d2a179c766e46",
+    "roadmap": "sha256:8d9c784216bc2b0d7b2b7c6df46908d5d7372a855656d6bc7c510a13eb76f43e",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:b5a2347126fb0871c3b1d4d8277c33ab4b6774b70ec97424e0b81f25053b6d02",
+    "workState": "sha256:082f7e35abfc783227b7ca488e873a519b9b1ff8b02386a026180e3df8d3f561",
     "rfcRegister": "sha256:49e46c03e8cf65e0983bcbd7a00a465007dbd3b6aeaa05915b5988fcd462b071",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -31,9 +31,9 @@
     "workState": {
       "untriaged": 0,
       "todo": 634,
-      "doing": 179,
+      "doing": 178,
       "blocked": 1061,
-      "done": 1978,
+      "done": 1979,
       "refused": 163
     },
     "workItems": {
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Finish D4266 fresh full normal content verification after its scoped test-tier repair; retain already-passing c61f3842 production software/performance proof. Then stage original whole-prefix objective/path/shape/pivotal owners with complete original arrays/digests/receipts and no future-subject acquisition, followed by literal source plan/cursor/receipt/session/API/UI delivery. Actual private server ordering is integrated; public paging/native/default/full1.0 gates remain open.",
+      "nextAction": "Stage the original objective collector with exact eventOrdinal ordering and complete original array proof, then integrate its actual per-subject acquisition in a separate checkpoint. Continue original semantic/path/shape/pivotal staging and source accounting, followed by literal source plans/cursors/receipts/session/API/UI delivery. D4266 is closed with full normal content proof; public paging/native/default/full1.0 gates remain open.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "Committed c61f3842 passes fresh normal software21592/all593 files895.44s and7 isolated performance/four61.40s. Content ends339/340 across44 files277.79s: the unchanged opt-in shape-warning case takes13247ms against its local10000ms override. D4266 removes only that override to inherit the existing content-tier30000ms integration ceiling; exact corpus/assertions/worker count/pinned64 five-second cases/product budgets remain. Independent review accepts tier alignment; focused19/one cases213.47s pass, fresh full content rerun still required. Actual private Review source ordering, original position/cache identity,190/six affected cases/types/canonical1928/1928/build/governance remain proven at c61f3842. Whole-prefix objective/path/shape/pivotal staging and original invocation/per-subject accounting, then public source plans/pages/receipts/sessions/transport/UI remain open. No full content, remote-CI, native/default or1.0 completion claim.",
+        "summary": "D4266 closes at c70e6ca8: fresh normal make verify-content passes340/all44 files374.48s,92-document clearance audit errors[] (354 blocking/34 resolved/48 accepted) and104 exact capability declarations. Only the obsolete local integration override was removed; corpus/assertions/two-worker pool/pinned64 five-second cases/product budgets remain. Production is unchanged from c61f3842, whose fresh normal software21592/all593895.44s and7 isolated performance/four61.40s pass. Existing private rich Review ordering/source identity/oracles/types/canonical1928/1928/build proof stands. Next original objective, semantic/path/shape/pivotal staging and complete invocation accounting, then public source plans/pages/receipts/sessions/transport/UI. No remote-CI/native/default/full1.0 claim.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1526,12 +1526,12 @@
           {
             "kind": "work_state",
             "id": "D4260",
-            "digest": "sha256:b1bbf673d1f38683b80d2569afe6d778db96e069161bd5c8224d08f75d86e547"
+            "digest": "sha256:9ec71afdd15f2a51a2d109ed408a3a20840e56f25c91d7aaac2b162edcdb1ddf"
           },
           {
             "kind": "work_state",
             "id": "D4266",
-            "digest": "sha256:0ede2c2f9fa50e0119272ac5b389cc99a168d97eeebb9bcca7e463b2811e87ea"
+            "digest": "sha256:c430c1987469e8d8fd0f4456fbb4abe80b5c282342eeb11ece70a3ac35c93efc"
           },
           {
             "kind": "work_state",
@@ -1577,10 +1577,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Finish D4266 fresh full normal content verification after its scoped test-tier repair; retain already-passing c61f3842 production software/performance proof. Then stage original whole-prefix objective/path/shape/pivotal owners with complete original arrays/digests/receipts and no future-subject acquisition, followed by literal source plan/cursor/receipt/session/API/UI delivery. Actual private server ordering is integrated; public paging/native/default/full1.0 gates remain open.",
+      "nextAction": "Stage the original objective collector with exact eventOrdinal ordering and complete original array proof, then integrate its actual per-subject acquisition in a separate checkpoint. Continue original semantic/path/shape/pivotal staging and source accounting, followed by literal source plans/cursors/receipts/session/API/UI delivery. D4266 is closed with full normal content proof; public paging/native/default/full1.0 gates remain open.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "Committed c61f3842 passes fresh normal software21592/all593 files895.44s and7 isolated performance/four61.40s. Content ends339/340 across44 files277.79s: the unchanged opt-in shape-warning case takes13247ms against its local10000ms override. D4266 removes only that override to inherit the existing content-tier30000ms integration ceiling; exact corpus/assertions/worker count/pinned64 five-second cases/product budgets remain. Independent review accepts tier alignment; focused19/one cases213.47s pass, fresh full content rerun still required. Actual private Review source ordering, original position/cache identity,190/six affected cases/types/canonical1928/1928/build/governance remain proven at c61f3842. Whole-prefix objective/path/shape/pivotal staging and original invocation/per-subject accounting, then public source plans/pages/receipts/sessions/transport/UI remain open. No full content, remote-CI, native/default or1.0 completion claim.",
+        "summary": "D4266 closes at c70e6ca8: fresh normal make verify-content passes340/all44 files374.48s,92-document clearance audit errors[] (354 blocking/34 resolved/48 accepted) and104 exact capability declarations. Only the obsolete local integration override was removed; corpus/assertions/two-worker pool/pinned64 five-second cases/product budgets remain. Production is unchanged from c61f3842, whose fresh normal software21592/all593895.44s and7 isolated performance/four61.40s pass. Existing private rich Review ordering/source identity/oracles/types/canonical1928/1928/build proof stands. Next original objective, semantic/path/shape/pivotal staging and complete invocation accounting, then public source plans/pages/receipts/sessions/transport/UI. No remote-CI/native/default/full1.0 claim.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -3411,12 +3411,12 @@
           {
             "kind": "work_state",
             "id": "D4260",
-            "digest": "sha256:b1bbf673d1f38683b80d2569afe6d778db96e069161bd5c8224d08f75d86e547"
+            "digest": "sha256:9ec71afdd15f2a51a2d109ed408a3a20840e56f25c91d7aaac2b162edcdb1ddf"
           },
           {
             "kind": "work_state",
             "id": "D4266",
-            "digest": "sha256:0ede2c2f9fa50e0119272ac5b389cc99a168d97eeebb9bcca7e463b2811e87ea"
+            "digest": "sha256:c430c1987469e8d8fd0f4456fbb4abe80b5c282342eeb11ece70a3ac35c93efc"
           },
           {
             "kind": "work_state",

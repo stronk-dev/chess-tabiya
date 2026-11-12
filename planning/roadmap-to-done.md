@@ -12,14 +12,13 @@ and now refuse without calling getters or dispatching evidence. Full Map/Story/r
 37-subject scheduling groups1/2/32, real pending historical reports, exact position/cache identity
 and constructor cancellation pass. These are private source-composition results.
 
-Committed c61f3842 now passes fresh normal software21,592/all593 files895.44s and seven
-isolated performance checks/four61.40s. Its combined content run finishes339/340: D4266 records
-a local10000ms override expiring on the unchanged optional corpus-warning case at13247ms. The
-content tier already defines a30000ms integration deadlock ceiling, not a product-latency budget.
-Only that case's local override is removed; corpus, assertions, worker count and separately pinned
-64 five-second cases remain. Independent review accepts the repair; focused expression-census
-checks pass19/one213.47s. A fresh full normal content run is pending before closure. The prior
-b7ba5971 complete content certificate is retained as history, not a new passing current result.
+Committed c61f3842 passes fresh normal software21,592/all593 files895.44s and seven
+isolated performance checks/four61.40s. D4266's obsolete local content-test timeout is repaired
+in c70e6ca8, with production unchanged. Fresh normal make verify-content now passes340/all44
+files374.48s, the92-document clearance audit with zero errors (354 blocking/34 resolved/48
+accepted) and104 exact capability declarations. The full corpus/assertions, two-worker pool,
+separately pinned64 five-second cases and all product budgets remain. D4266 is closed; this is
+local gate proof, not a remote-CI, native/default or whole-product completion claim.
 
 **Next: finish actual D4260 source/page accounting.** Original objective, PhaseArc and packet
 semantic/shape/pivotal operations still acquire whole-prefix facts. Preserve their original

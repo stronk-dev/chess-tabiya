@@ -42582,3 +42582,19 @@ source symbols; module-registration§2.5.2; review-map§1a; independent read-onl
 
 Normal verify-governance passes for the scoped D4266 harness checkpoint.4015 rows retain
 zero untriaged. D4266 remains doing until the full normal content rerun; D4260/D4250/full1.0 remain open.
+
+
+### 2026-11-12 — D4266 full normal content verification closes the harness repair
+
+Committed c70e6ca8 passes normal make verify-content to terminal exit0. All340 content cases
+across44 files pass374.48s; the92-document clearance audit reports errors[] (354 blocking,34
+resolved,48 accepted); all104 documents declare exactly their derived capabilities. The original
+process was retained through tests and the Git-history ruling audit, without restart, retries,
+skips or source edits. The separately pinned64 five-second cases also pass their discovery check.
+
+D4266 is closed. Production is unchanged from c61f3842's full21,592 software/593-file and seven
+isolated performance/four-file passing runs, so those results still apply. No remote-CI or product
+latency claim is added. D4260/D4250 and full1.0 remain open. Next: stage the original objective
+source under its own factory, retain original eventOrdinal order and complete array proof, then
+wire it to the actual acquired-subject service loop in a separate verified checkpoint. The accepted
+whole-prefix semantic/shape/pivotal, literal source-plan/page/receipt/session/API/UI work remains.
