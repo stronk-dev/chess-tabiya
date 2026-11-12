@@ -42544,3 +42544,41 @@ full software/content or native/default certificate. D4265 is done with its actu
 
 Normal verify-governance and server/web builds pass for this integration checkpoint.4014 rows
 retain zero untriaged; D4265 is done, D4260/D4250/full1.0 remain open.
+
+
+### 2026-11-12 — D4266 aligns one corpus-warning case with the existing content tier
+
+The unchanged committed c61f3842 full normal run passes21,592 software cases/all593 files895.44s
+and seven isolated performance checks/four61.40s. Content then ends339pass/1fail of340 across44
+files277.79s. The actual failure is Test timed out in10000ms at expression-census.test.ts:364;
+its opt-in corpus-warning case takes13247ms. No assertion or product-budget failure is established.
+The same original combined session was retained through termination; no quiet-run restart occurred.
+
+D4266 removes ONLY the case's local10000ms override. It inherits the existing content-tier30000ms
+integration deadlock ceiling and unchanged maxWorkers2 policy (vitest.content.config.ts;
+docs/testing.md). The case is not one of the separately pinned64 moved five-second cases checked
+by actual Vitest discovery. Exact roots content/drafts+content/packs, selected shape, validity and
+warning assertions, cases, production source/job/optional deadlines and all source code remain.
+No skip, retry, smaller fixture, global timeout change or product-performance claim is introduced.
+
+Independent read-only review accepts this as tier alignment. Normal make expression-census-check
+passes all19 cases/one file213.47s (192.13s import/setup;21.23s total test bodies). This is a focused
+proof, not the still-required full content rerun. D4266 stays doing until that fresh normal gate
+passes; the next source-accounting implementation waits on the current verification result.
+
+Read-only next-source audit ties the remaining D4260 work to actual owners: evidence-factories.ts
+recordedObjectiveOccurrences, createTheoryShapesFiringV1Evidence and pivotalFactory;
+recorded-semantic-path.ts recordedSemanticPathExecution; review-evidence.ts shapesAt/pivotalAt;
+phase-source-composition.ts advanceRecordedPhaseArcCollection. Full-input authority permits full
+validation/indexing, not early acquisition of future subjects. Stage each original owner, keeping
+objective global eventOrdinal order, cross-page shape spans, pivotal lookahead/phase state and
+canonical semantic-window/event/digest order. Final original array proofs remain complete-only.
+Provider guards genuinely dispatch live evaluation factories again for acquired entries; plan
+these as revalidation, not new retained occurrences. No current missed500ms optional-source cap
+was established: this rich path reads captured/durable/local sources and schedules no optional
+external work. Future actual optional requests/waits must use the accepted source cap and signal;
+independently owned shared coordinator work keeps its original budgets/cancellation. [V: named
+source symbols; module-registration§2.5.2; review-map§1a; independent read-only source review.]
+
+Normal verify-governance passes for the scoped D4266 harness checkpoint.4015 rows retain
+zero untriaged. D4266 remains doing until the full normal content rerun; D4260/D4250/full1.0 remain open.

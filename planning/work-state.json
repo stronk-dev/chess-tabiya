@@ -35747,7 +35747,7 @@
       "id": "D4260",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:a8c9b2fb2fc4da12ddcad9d5216f4d8e849cc8f8f71e581d77613b6dff52126a",
+      "sourceDigest": "sha256:b1bbf673d1f38683b80d2569afe6d778db96e069161bd5c8224d08f75d86e547",
       "uxItems": [],
       "owner": "review-and-return",
       "since": "2026-11-12"
@@ -35796,6 +35796,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/recorded-grade-sources.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D4266",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0ede2c2f9fa50e0119272ac5b389cc99a168d97eeebb9bcca7e463b2811e87ea",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-12"
     }
   ]
 }

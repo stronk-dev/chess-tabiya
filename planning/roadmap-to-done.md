@@ -12,11 +12,14 @@ and now refuse without calling getters or dispatching evidence. Full Map/Story/r
 37-subject scheduling groups1/2/32, real pending historical reports, exact position/cache identity
 and constructor cancellation pass. These are private source-composition results.
 
-The latest whole normal local certificate remains committed b7ba5971, before this new source
-change:21,579 software cases/all593 files999.38s, seven isolated performance checks/four68.86s,
-and340 real-content cases/all44 files240.84s. Its92-document clearance audit has zero errors and
-104 documents declare exact capabilities. That previous certificate is not a full-suite result
-for the current integration. Current integration checks are recorded in the latest source-plan entry.
+Committed c61f3842 now passes fresh normal software21,592/all593 files895.44s and seven
+isolated performance checks/four61.40s. Its combined content run finishes339/340: D4266 records
+a local10000ms override expiring on the unchanged optional corpus-warning case at13247ms. The
+content tier already defines a30000ms integration deadlock ceiling, not a product-latency budget.
+Only that case's local override is removed; corpus, assertions, worker count and separately pinned
+64 five-second cases remain. Independent review accepts the repair; focused expression-census
+checks pass19/one213.47s. A fresh full normal content run is pending before closure. The prior
+b7ba5971 complete content certificate is retained as history, not a new passing current result.
 
 **Next: finish actual D4260 source/page accounting.** Original objective, PhaseArc and packet
 semantic/shape/pivotal operations still acquire whole-prefix facts. Preserve their original

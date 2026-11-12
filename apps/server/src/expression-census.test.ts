@@ -365,7 +365,7 @@ describe("expression census", () => {
     const result = await checkShapeFile("content/shapes/knight-vs-bishop.json", { corpus: ["content/drafts", "content/packs"] });
     expect(result.valid).toBe(true);
     expect(result.issues.some((issue) => issue.severity === "warning" && issue.code === "SHAPE_TRIGGER_NEVER_FIRES_IN_CORPUS")).toBe(true);
-  }, 10_000);
+  });
 
   it("prints an unambiguous result for each shape probe", () => {
     expect(formatProbeResult("content/shapes/carlsbad.json", true)).toBe("PROBE FIRES: content/shapes/carlsbad.json#/trigger");

@@ -973,10 +973,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Finish D4260 original whole-prefix objective/PhaseArc/packet acquisition factoring and literal original-invocation/per-subject-output accounting; private server source ordering is now integrated. Preserve complete source identity, original scopes/receipts, independent historical reports and bounded acquired-prefix currentness. Then implement actual public admission/sessions, source plans/cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI. Native D4224/D4225 and full1.0 gates remain open.",
+        "nextAction": "Finish D4266 fresh full normal content verification after its scoped test-tier repair; retain already-passing c61f3842 production software/performance proof. Then stage original whole-prefix objective/path/shape/pivotal owners with complete original arrays/digests/receipts and no future-subject acquisition, followed by literal source plan/cursor/receipt/session/API/UI delivery. Actual private server ordering is integrated; public paging/native/default/full1.0 gates remain open.",
         "latestCheckpoint": {
           "at": "2026-11-12",
-          "summary": "Private rich Review now composes original sources by actual subject: endpoint/provider input, packet/population, independent engine+tablebase reports, phase/Map and early grade; the complete grade context is promoted after all subjects. Stable workflow/cache/currentness and exact original position/modern-delivery identity are preserved.190 affected cases/six files29.64s, workspace types/Svelte0errors0warnings and canonical1928/1928 pass (24/89qualified,63population,8external); only74 generated implementation markers changed. Independent review caught D4265: two real accessor controls first reproduced acceptance, then passed by reusing original input capture before normalization; zero getters/dispatches and no new source authority. Real pending reports, grant/registry mutation, source/cache promotion, constructor cancellation, full Map/Story/receipt bytes and37-subject groups1/2/32 pass. Source changes postdate b7ba5971 full software/content baseline; no full-suite/remote/native/default claim for current code. Whole-prefix objective/PhaseArc/packet invocation accounting and public source plans/pages/receipts/sessions/transport/UI remain open.",
+          "summary": "Committed c61f3842 passes fresh normal software21592/all593 files895.44s and7 isolated performance/four61.40s. Content ends339/340 across44 files277.79s: the unchanged opt-in shape-warning case takes13247ms against its local10000ms override. D4266 removes only that override to inherit the existing content-tier30000ms integration ceiling; exact corpus/assertions/worker count/pinned64 five-second cases/product budgets remain. Independent review accepts tier alignment; focused19/one cases213.47s pass, fresh full content rerun still required. Actual private Review source ordering, original position/cache identity,190/six affected cases/types/canonical1928/1928/build/governance remain proven at c61f3842. Whole-prefix objective/path/shape/pivotal staging and original invocation/per-subject accounting, then public source plans/pages/receipts/sessions/transport/UI remain open. No full content, remote-CI, native/default or1.0 completion claim.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2145,7 +2145,12 @@
             {
               "kind": "work_state",
               "id": "D4260",
-              "digest": "sha256:a8c9b2fb2fc4da12ddcad9d5216f4d8e849cc8f8f71e581d77613b6dff52126a"
+              "digest": "sha256:b1bbf673d1f38683b80d2569afe6d778db96e069161bd5c8224d08f75d86e547"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4266",
+              "digest": "sha256:0ede2c2f9fa50e0119272ac5b389cc99a168d97eeebb9bcca7e463b2811e87ea"
             },
             {
               "kind": "work_state",
@@ -2191,10 +2196,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Finish D4260 original whole-prefix objective/PhaseArc/packet acquisition factoring and literal original-invocation/per-subject-output accounting; private server source ordering is now integrated. Preserve complete source identity, original scopes/receipts, independent historical reports and bounded acquired-prefix currentness. Then implement actual public admission/sessions, source plans/cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI. Native D4224/D4225 and full1.0 gates remain open.",
+        "nextAction": "Finish D4266 fresh full normal content verification after its scoped test-tier repair; retain already-passing c61f3842 production software/performance proof. Then stage original whole-prefix objective/path/shape/pivotal owners with complete original arrays/digests/receipts and no future-subject acquisition, followed by literal source plan/cursor/receipt/session/API/UI delivery. Actual private server ordering is integrated; public paging/native/default/full1.0 gates remain open.",
         "latestCheckpoint": {
           "at": "2026-11-12",
-          "summary": "Private rich Review now composes original sources by actual subject: endpoint/provider input, packet/population, independent engine+tablebase reports, phase/Map and early grade; the complete grade context is promoted after all subjects. Stable workflow/cache/currentness and exact original position/modern-delivery identity are preserved.190 affected cases/six files29.64s, workspace types/Svelte0errors0warnings and canonical1928/1928 pass (24/89qualified,63population,8external); only74 generated implementation markers changed. Independent review caught D4265: two real accessor controls first reproduced acceptance, then passed by reusing original input capture before normalization; zero getters/dispatches and no new source authority. Real pending reports, grant/registry mutation, source/cache promotion, constructor cancellation, full Map/Story/receipt bytes and37-subject groups1/2/32 pass. Source changes postdate b7ba5971 full software/content baseline; no full-suite/remote/native/default claim for current code. Whole-prefix objective/PhaseArc/packet invocation accounting and public source plans/pages/receipts/sessions/transport/UI remain open.",
+          "summary": "Committed c61f3842 passes fresh normal software21592/all593 files895.44s and7 isolated performance/four61.40s. Content ends339/340 across44 files277.79s: the unchanged opt-in shape-warning case takes13247ms against its local10000ms override. D4266 removes only that override to inherit the existing content-tier30000ms integration ceiling; exact corpus/assertions/worker count/pinned64 five-second cases/product budgets remain. Independent review accepts tier alignment; focused19/one cases213.47s pass, fresh full content rerun still required. Actual private Review source ordering, original position/cache identity,190/six affected cases/types/canonical1928/1928/build/governance remain proven at c61f3842. Whole-prefix objective/path/shape/pivotal staging and original invocation/per-subject accounting, then public source plans/pages/receipts/sessions/transport/UI remain open. No full content, remote-CI, native/default or1.0 completion claim.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -4025,7 +4030,12 @@
             {
               "kind": "work_state",
               "id": "D4260",
-              "digest": "sha256:a8c9b2fb2fc4da12ddcad9d5216f4d8e849cc8f8f71e581d77613b6dff52126a"
+              "digest": "sha256:b1bbf673d1f38683b80d2569afe6d778db96e069161bd5c8224d08f75d86e547"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4266",
+              "digest": "sha256:0ede2c2f9fa50e0119272ac5b389cc99a168d97eeebb9bcca7e463b2811e87ea"
             },
             {
               "kind": "work_state",
