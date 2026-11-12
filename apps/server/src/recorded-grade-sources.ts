@@ -40,6 +40,8 @@ export interface GradeContextCapture { readonly [gradeContextCaptureBrand]: true
 declare const reviewPopulationCollectionBrand: unique symbol;
 /** Service-owned work: never a runtime source handle, grant or wire value. */
 export interface ReviewPopulationCollection { readonly [reviewPopulationCollectionBrand]: true }
+declare const reviewMeasurementCollectionBrand: unique symbol;
+export interface ReviewMeasurementCollection { readonly [reviewMeasurementCollectionBrand]: true }
 interface Owned {
   readonly boundary: RecordedReviewBoundary;
   readonly permission: RecordedGradePermission;
@@ -62,6 +64,16 @@ interface ContextCaptureInputs {
 interface ContextCaptureWork extends ContextCaptureInputs {
   readonly endpoints: RecordedEngineEndpointCapture;
   complete: boolean;
+}
+type MeasurementPosition = Parameters<typeof RECORDED_REVIEW_LEDGER_SOURCE_AUTHORITY.issue>[0]["rows"][number]["position"];
+interface MeasurementWork {
+  readonly context: RecordedGradeContext;
+  readonly owned: Owned;
+  readonly positions: readonly MeasurementPosition[];
+  readonly admission: RecordedMeasurementAdmission;
+  readonly checkCurrent: () => void;
+  readonly rows: { position: MeasurementPosition; slots: ReviewLedgerCapture[] }[];
+  next: number;
 }
 export class RecordedGradeContextError extends TypeError {
   constructor(readonly reason: "permission_withheld" | "source_contract_invalid", message: string) {
@@ -91,6 +103,7 @@ export class RecordedGradeSourceOwner {
   readonly #endpoints: RecordedEngineEndpointOwner;
   readonly #registry: PackRegistry | undefined;
   readonly #reviewMeasurements = new WeakMap<RecordedGradeContext, RecordedReviewLedgerSource>();
+  readonly #measurementCollections = new WeakMap<object, MeasurementWork>();
   readonly #reviewCollections = new WeakMap<object, { readonly context: RecordedGradeContext; readonly collection: RecordedReviewSourceCollection; complete: boolean }>();
   constructor(storage: RunStorage, registry: PackRegistry | undefined, coordinator: ReviewEvidenceCoordinator | undefined) {
     this.#registry = registry;
@@ -319,6 +332,16 @@ export class RecordedGradeSourceOwner {
     if (owned.selection.timing !== "review") return refuse("ledger population requires its own Review workflow");
     const retained = this.#reviewMeasurements.get(context);
     if (retained !== undefined) { readRecordedReviewLedgerSource(retained); return retained; }
+    const work = this.#measurementInput(context, owned);
+    // Original synchronous order and cache: no cooperative validation loop without a yield.
+    for (const position of work.positions) work.rows.push({ position,
+      slots: REVIEW_LEDGER_REFS.map(projection => this.#measurementSlot(work, position, projection)) });
+    work.next = work.positions.length * REVIEW_LEDGER_REFS.length;
+    return this.#finishMeasurements(work);
+  }
+
+  #measurementInput(context: RecordedGradeContext, owned: Owned): MeasurementWork {
+    if (owned.selection.timing !== "review") return refuse("ledger population requires its own Review workflow");
     const image = this.#endpoints.read(owned.endpoints), registry = this.#registry;
     const admit = (): RecordedMeasurementAdmission => {
       if (registry === undefined || image.boundary.run.sessionKind !== "pack") return Object.freeze({ kind: "unavailable", reason: "source_absent" });
@@ -326,26 +349,78 @@ export class RecordedGradeSourceOwner {
       catch (error) { return Object.freeze({ kind: "failed", reason: error instanceof TypeError ? "source_contract_invalid" : "source_lookup_failed" }); }
     };
     const admission = admit();
+    // A second explicit capture cannot reset this context's already observed source generation.
+    const retained = this.#reviewMeasurements.get(context);
+    if (retained !== undefined) readRecordedReviewLedgerSource(retained);
     const checkCurrent = () => {
       this.read(context);
       const actual = admit();
       if (actual.kind !== admission.kind || (actual.kind === "available" && admission.kind === "available"
         ? actual.source !== admission.source : "reason" in actual && "reason" in admission && actual.reason !== admission.reason)) return refuse("Review ledger artifact admission changed");
     };
-    const rows = image.rows.map(({ position }) => ({ position, slots: REVIEW_LEDGER_REFS.map((projection): ReviewLedgerCapture => {
-      owned.signal.throwIfAborted();
-      if (admission.kind !== "available") return { projection, source: admission };
-      try {
-        const population = registry!.collectRecordedMeasurements({ source: admission.source, position, projection });
-        return { projection, source: { kind: "population", read: () => registry!.readRecordedMeasurements(population) } };
-      } catch (error) {
-        return { projection, source: { kind: "failed", reason: error instanceof RecordedMeasurementSourceError ? error.reason
-          : error instanceof TypeError ? "source_contract_invalid" : "source_lookup_failed" } };
-      }
-    }) }));
-    const source = RECORDED_REVIEW_LEDGER_SOURCE_AUTHORITY.issue({ boundary: owned.boundary, permission: owned.permission,
-      signal: owned.signal, rows }, checkCurrent);
-    this.#reviewMeasurements.set(context, source); return source;
+    return { context, owned, positions: Object.freeze(image.rows.map(row => row.position)), admission, checkCurrent, rows: [], next: 0 };
+  }
+
+  #measurementSlot(work: MeasurementWork, position: MeasurementPosition, projection: typeof REVIEW_LEDGER_REFS[number]): ReviewLedgerCapture {
+    work.owned.signal.throwIfAborted();
+    if (work.admission.kind !== "available") return { projection, source: work.admission };
+    try {
+      const population = this.#registry!.collectRecordedMeasurements({ source: work.admission.source, position, projection });
+      return { projection, source: { kind: "population", read: () => this.#registry!.readRecordedMeasurements(population) } };
+    } catch (error) {
+      return { projection, source: { kind: "failed", reason: error instanceof RecordedMeasurementSourceError ? error.reason
+        : error instanceof TypeError ? "source_contract_invalid" : "source_lookup_failed" } };
+    }
+  }
+
+  #finishMeasurements(work: MeasurementWork): RecordedReviewLedgerSource {
+    if (work.next !== work.positions.length * REVIEW_LEDGER_REFS.length) return refuse("Review ledger collection is incomplete");
+    const source = RECORDED_REVIEW_LEDGER_SOURCE_AUTHORITY.issue({ boundary: work.owned.boundary, permission: work.owned.permission,
+      signal: work.owned.signal, rows: work.rows }, work.checkCurrent);
+    this.#reviewMeasurements.set(work.context, source); return source;
+  }
+
+  /** Capture only original context/position/source-admission metadata. No measurement factories. */
+  beginReviewMeasurements(context: RecordedGradeContext): ReviewMeasurementCollection {
+    const work = this.#measurementInput(context, this.read(context));
+    work.checkCurrent();
+    const handle = Object.freeze({}) as ReviewMeasurementCollection;
+    this.#measurementCollections.set(handle, work); return handle;
+  }
+
+  #measurementWork(handle: ReviewMeasurementCollection): MeasurementWork {
+    const work = typeof handle === "object" && handle !== null ? this.#measurementCollections.get(handle) : undefined;
+    if (work === undefined) return refuse("Review ledger collection is foreign or retired");
+    return work;
+  }
+
+  /** One original projection at one original position, so the job can check each source cap. */
+  advanceReviewMeasurements(handle: ReviewMeasurementCollection): Readonly<{
+    nodeId: string; projection: typeof REVIEW_LEDGER_REFS[number]; completedSubjects: number; totalSubjects: number; complete: boolean;
+  }> {
+    const work = this.#measurementWork(handle), width = REVIEW_LEDGER_REFS.length;
+    if (work.next === work.positions.length * width) return refuse("Review ledger collection has no remaining source");
+    try {
+      work.checkCurrent();
+      const index = Math.floor(work.next / width), projection = REVIEW_LEDGER_REFS[work.next % width]!, position = work.positions[index]!;
+      const slot = this.#measurementSlot(work, position, projection);
+      if (work.next % width === 0) work.rows.push({ position, slots: [] });
+      work.rows[index]!.slots.push(slot); work.next++;
+      work.checkCurrent();
+      return Object.freeze({ nodeId: position.payload.nodeId, projection, completedSubjects: Math.floor(work.next / width),
+        totalSubjects: work.positions.length, complete: work.next === work.positions.length * width });
+    } catch (error) { this.#measurementCollections.delete(handle); throw error; }
+  }
+
+  finishReviewMeasurements(handle: ReviewMeasurementCollection): RecordedReviewLedgerSource {
+    const work = this.#measurementWork(handle);
+    if (work.next !== work.positions.length * REVIEW_LEDGER_REFS.length) return refuse("Review ledger collection is incomplete");
+    try { return this.#finishMeasurements(work); }
+    finally { this.#measurementCollections.delete(handle); }
+  }
+
+  cancelReviewMeasurements(handle: ReviewMeasurementCollection): boolean {
+    return typeof handle === "object" && handle !== null && this.#measurementCollections.delete(handle);
   }
 
   postcommitSources(context: RecordedGradeContext) {

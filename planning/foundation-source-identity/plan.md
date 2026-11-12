@@ -4140,3 +4140,25 @@ in this server-owner factoring. Complete normal gates last passed at3f416821. No
 remote-CI or push-readiness claim. Next stage independent historical-ledger reports, then compose
 the actual shared owned job with clock before all capture, capacity/idle/currentness/cancel and
 strict rich API/selected UI. D4250/D4228 and D4224/D4225 costs/defaults/full1.0 stay open.
+
+
+### 2026-11-12 — Stage independent historical Review reports
+
+D4250 now has private RunService begin/advance/finish/cancel for original ledger capture.
+Begin acquires only original positions/admission metadata. Each advance collects one original
+projection at one position; complete finish uses the sole existing source issuer without
+recollection. Root, original record/source ordinals and identities, duplicate reports, factory
+refusals and source abstentions survive independently of modern grade endpoints. Existing
+synchronous cache and collection order remain; partial work never becomes a source.
+
+Independent code/test readback accepts the finite dependency. Actual controls change grants,
+role, storage, source admission and abort during a real collection; final issuer abort, cached
+source generation reset, foreign/forged/incomplete handles and cancellation all refuse. Mirrored
+complete original-image tests preserve both refs and exactly six collection calls. All157/three
+endpoint/grade/ledger cases pass5.30s; types/Svelte0errors0warnings and server/web builds pass.
+Canonical last passed84edd1ce; complete normal gates last passed3f416821. Source staging does
+not establish whole-job latency. Actual bounded ownership/clock/capacity/idle/currentness/cancel
+and strict rich API/selected UI remain D4250/D4228; resource/default gates remain D4224/D4225.
+
+Existing authenticated module-query and Review API101/two pass98.79s; combined affected
+verification is258/five. This is a local scoped checkpoint, not a fresh full-CI run.

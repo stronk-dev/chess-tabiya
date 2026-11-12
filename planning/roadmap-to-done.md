@@ -2,26 +2,23 @@
 
 ## Current continuation — 2026-11-12
 
-D4250's full packet/grade-population, PhaseArc and complete Map relation/opening dependencies
-are committed at3f416821/9e9aa551/84edd1ce. The next verified dependency stages actual grade-
-context and engine endpoint capture: original workflow metadata, original modern attachments,
-then one fixed original endpoint per step, followed by complete-only original issuance. Partial
-work cannot become a context/source. Live permission/disclosure/storage/registry/pending checks
-and exact original boundary joins remain. D4256 repairs repeated synchronous guards measured
-at4/10/18 registry reads; the synchronous cardinality guard is now linear without weakening
-yielded-work checks. Independent source/cost readback accepts this finite dependency.
+D4250's source dependencies now include independent historical engine/tablebase reports.
+Original packet/population, PhaseArc, complete Map relations/opening and grade-context/endpoint
+preparation are committed at3f416821/9e9aa551/84edd1ce/bf0b5f00. Historical capture adds metadata-
+only begin and one original position/projection per advance, retaining root, duplicates, original
+identities, refusals and abstentions. Complete-only issuance and current authority/source checks
+remain; a fresh capture cannot reset an observed source generation. Synchronous cache/order and
+D4256's linear registry-read regression remain intact. Independent code/test review accepts.
 
-Final245/five source/module-query/Review API cases, full types/Svelte0errors0warnings and
-server/web builds pass. Canonical1928/1928/24qualified of89 last passed84edd1ce, with generated
-receipts current; no runtime producer/qualifier changes occur here. Complete software/
-performance/content gates last passed3f416821. These are focused checkpoints, without a new
-whole-wave/push-readiness claim.
+Focused157/three source cases plus101/two authenticated module/Review API cases pass258/five;
+full types/Svelte0errors0warnings and server/web builds pass.
+Canonical1928/1928/24qualified of89 last passed84edd1ce; no runtime producer/qualifier changes
+occur here. Complete software/performance/content gates last passed3f416821.
 
-Next stage original independent historical-ledger reports, then shared bounded job ownership/
-clock before capture/capacity/idle expiry/live authority/cancel and strict rich Review transport/
-selected UI progressive admission. D4250/D4228 and D4224/D4225 resource/default work remain open.
-Existing learner routes have not switched to the new job; no whole-product milestone closes.
-[Implementation and verification](foundation-source-identity/plan.md).
+Next compose shared bounded job ownership/clock before capture/capacity/idle expiry/live authority/
+cancel and strict rich Review transport/selected UI progressive admission. Existing learner routes
+still use synchronous reads. D4250/D4228 and D4224/D4225 resource/default work remain open; no
+whole-product milestone closes. [Implementation and verification](foundation-source-identity/plan.md).
 
 ## Current continuation — 2026-11-11
 

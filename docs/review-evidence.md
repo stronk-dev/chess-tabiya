@@ -82,7 +82,16 @@ and renders retained originals without relation/opening recollection. Invalid or
 throw instead of taking an eager fallback. Existing synchronous reads retain their shared source
 helpers and cache until the actual job transport replaces that selected flow.
 
-The rich Review transport, remaining historical-ledger preparation and bounded job/capacity/idle clock
+Independent historical reports now also have internal `beginReviewMeasurementSource` / advance /
+finish / cancel work. Begin captures original position and registry-admission metadata without
+measurement factories; each advance collects one original engine or tablebase projection at one
+original position. The root, duplicates, original ordinals, factory refusals and source abstentions
+remain intact independently of modern grading endpoints. Only complete work reaches the existing
+ledger issuer. Live authority/source checks bracket acquisition and publication; cancelled, failed
+and finished handles retire. A new capture cannot reset an already observed source generation.
+Existing synchronous callers keep their complete-source cache and original collection order.
+
+The rich Review transport and bounded job/capacity/idle clock
 remain D4250/D4228 work. Existing learner routes have not switched to the new job.
 The current verified checkpoint and its limits are in `planning/foundation-source-identity/plan.md`.
 

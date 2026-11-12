@@ -207,7 +207,7 @@ import { compilePhaseArc, compileRecordedEvidenceSnapshot, type PhaseSourceDepen
 import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import { InspectorContextError, InspectorRecordedContextOwner, type InspectorRecordedContext, type InspectorRecordedSelection } from "./inspector-recorded-context.js";
 import { RecordedComparisonContextError, RecordedComparisonPointOwner, type RecordedComparisonContext, type ComparisonSelection } from "./recorded-comparison-points.js";
-import { RecordedGradeContextError, RecordedGradeSourceOwner, type RecordedGradeContext, type GradeSelection, type GradeContextCapture, type ReviewPopulationCollection } from "./recorded-grade-sources.js";
+import { RecordedGradeContextError, RecordedGradeSourceOwner, type RecordedGradeContext, type GradeSelection, type GradeContextCapture, type ReviewPopulationCollection, type ReviewMeasurementCollection } from "./recorded-grade-sources.js";
 import type { ReviewSourceContext } from "../../../packages/runtime/src/review-evidence.js";
 import { RecordedFoundationSourceOwner } from "./recorded-foundation-sources.js";
 import type { FoundationRecordedPrefix, FoundationRecordedDecision } from "../../../packages/runtime/src/recorded-foundation-source.js";
@@ -3450,6 +3450,10 @@ export class RunService {
   readGradeRecordedContext(context: RecordedGradeContext) { return this.#gradeSources.read(context); }
   readGradeMoveSource(source: RecordedGradeSource) { return this.#gradeSources.readSource(source); }
   resolveReviewMeasurementSource(context: RecordedGradeContext) { return this.#gradeSources.reviewMeasurements(context); }
+  beginReviewMeasurementSource(context: RecordedGradeContext) { return this.#gradeSources.beginReviewMeasurements(context); }
+  advanceReviewMeasurementSource(handle: ReviewMeasurementCollection) { return this.#gradeSources.advanceReviewMeasurements(handle); }
+  finishReviewMeasurementSource(handle: ReviewMeasurementCollection) { return this.#gradeSources.finishReviewMeasurements(handle); }
+  cancelReviewMeasurementSource(handle: ReviewMeasurementCollection) { return this.#gradeSources.cancelReviewMeasurements(handle); }
   beginReviewSourcePopulation(context: RecordedGradeContext, input: ReviewSourceContext) { return this.#gradeSources.beginReviewPopulation(context, input); }
   advanceReviewSourcePopulation(handle: ReviewPopulationCollection) { return this.#gradeSources.advanceReviewPopulation(handle); }
   finishReviewSourcePopulation(handle: ReviewPopulationCollection) { return this.#gradeSources.finishReviewPopulation(handle); }

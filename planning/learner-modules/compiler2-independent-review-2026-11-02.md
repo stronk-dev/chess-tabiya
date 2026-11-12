@@ -11732,3 +11732,19 @@ common context issuer joins the exact original endpoint boundary and performs fi
 No remaining finite blocker is found; no reviewer commands/edits run. Primary245/five source and
 actual module/Review API cases, types/build pass. Cooperative validation growth remains a real
 resource-proof concern; no job/API/progress UI/default5s clearance is inferred.
+
+
+## 2026-11-12 — D4250 historical-ledger staging independently accepted
+
+Read-only independent source/test review accepts preserved original position/projection order,
+cache/error behavior, source and record identities, duplicate/refusal/abstention retention and
+complete-only original issuance. The13 new controls cover real authority changes during actual
+collection, final issuer abort, cached-generation restart and foreign/partial/cancelled handles.
+Mutation failures cannot masquerade as passing advance refusal because collector failures are
+mapped to slots; the required post-collection authority check is exercised. Mirrored original
+images and exact call counts prohibit recollection. No finite blocker found; reviewer runs no
+commands or edits. Primary157/three source tests, types/build pass. Actual job/API/UI/budget
+and staged validation-cost proof remain open.
+
+Existing authenticated module-query and Review API101/two pass98.79s; combined affected
+verification is258/five. This is a local scoped checkpoint, not a fresh full-CI run.

@@ -42102,3 +42102,24 @@ staging, then shared job clock/capacity/expiry/current authority/cancel and actu
 transport/selected UI. D4250/D4228 and broader cost/default/full1.0 obligations stay open.
 
 Normal governance also exits0: C1-C8/P1-P7/R1-R10 green,4005 ledger rows tracked and zero untriaged.
+
+
+## 2026-11-12 — Stage independent original historical Review reports
+
+D4250 adds internal begin/advance/finish/cancel through the original grade owner and sole ledger
+issuer. Metadata-only begin and one original position/projection per step retain root, duplicates,
+refusals, abstentions and original source/record identities independently of modern grading.
+Complete-only publication checks actual authority/source state; cached source generations cannot
+be reset. Synchronous cache/order and D4256's linear-read regression remain unchanged.
+
+Independent source/test review accepts. Focused157/three source cases pass5.30s, full types/
+Svelte0errors0warnings and server/web builds pass. Canonical last passed84edd1ce; complete normal
+gates last passed3f416821. Actual bounded job clock/capacity/idle/currentness/cancel and strict
+rich API/selected UI remain D4250/D4228, with D4224/D4225 resource/default gates still open.
+No milestone closes. Commit this verified dependency before starting that next integration wave.
+
+Existing authenticated module-query and Review API101/two pass98.79s; combined affected
+verification is258/five. This is a local scoped checkpoint, not a fresh full-CI run.
+
+Normal make verify-governance and final roadmap-check exit0;4005 ledger rows stay tracked,
+zero untriaged. The existing rich Review journey remains open, as recorded in the roadmap.
