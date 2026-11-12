@@ -12,6 +12,8 @@ import { parsePresentationReceipt, presentedSentence } from "../../../packages/r
 import { readRecordedSequenceWindow } from "../../../packages/runtime/src/recorded-sequence-window.js";
 import { RecordedGradeSourceOwner } from "./recorded-grade-sources.js";
 import { attachDelivery, evaluationDelivery } from "../../../packages/runtime/src/testing/review-evidence-fixture.js";
+import * as attachments from "../../../packages/runtime/src/internal/recorded-engine-attachments.js";
+import { RecordedEngineEndpointOwner } from "./recorded-engine-endpoints.js";
 
 const stores: SQLiteRunStorage[] = [];
 afterEach(() => { for (const storage of stores.splice(0)) storage.close(); });
@@ -27,6 +29,112 @@ function fixture(black = false, input: Pick<NonNullable<Parameters<typeof record
   return { ...original, run, storage, service, principal, lease, controller, query, resolve };
 }
 describe("sole service-owned recorded grade issuer", () => {
+  it.each([false, true])("captures the actual %s-side context in original stages before grading", black => {
+    const f = fixture(black), expectedContext = f.resolve();
+    const expectedSource = f.service.resolveGradeMoveSource(expectedContext, { nodeId: f.child.id, signal: f.controller.signal });
+    const expected = JSON.stringify(invokeEvidenceValueRoute("derived.grade.move_quality@2", { recordedGrade: expectedSource }));
+    const collect = vi.spyOn(attachments, "collectRecordedEngineAttachments");
+    try {
+      const work = f.service.beginGradeRecordedContext(f.run.id, f.principal, null, f.query, f.controller.signal);
+      expect(collect).not.toHaveBeenCalled();
+      expect(() => f.service.readGradeRecordedContext(work as never)).toThrow(/foreign/);
+      expect(() => f.service.finishGradeRecordedContext(work)).toThrow(/incomplete/);
+      expect(f.service.advanceGradeRecordedContext(work)).toMatchObject({ stage: "attachments", completedSubjects: 0, complete: false });
+      for (const [index, node] of f.run.nodes.entries()) expect(f.service.advanceGradeRecordedContext(work)).toEqual({
+        stage: "endpoint", nodeId: node.id, completedSubjects: index + 1, totalSubjects: f.run.nodes.length, complete: index + 1 === f.run.nodes.length,
+      });
+      const context = f.service.finishGradeRecordedContext(work), value = f.service.resolveGradeMoveSource(context, { nodeId: f.child.id, signal: f.controller.signal });
+      expect(JSON.stringify(invokeEvidenceValueRoute("derived.grade.move_quality@2", { recordedGrade: value }))).toBe(expected);
+      expect(f.service.readGradeMoveSource(value).authority.permission.assistance).toBeNull();
+      expect(collect).toHaveBeenCalledTimes(1);
+      expect(f.service.cancelGradeRecordedContext(work)).toBe(false);
+    } finally { collect.mockRestore(); }
+  });
+
+  it.each(["before", "attachments", "finish"] as const)("rechecks actual revoked grants at context %s", stage => {
+    const f = fixture(), reader = { learnerId: "context-capture-reader", handle: "context-capture-reader" };
+    f.storage.createLearner({ id: reader.learnerId, handle: reader.handle, passwordHash: "!", createdAt: "2026-11-12T00:00:00.000Z" });
+    f.storage.grantRole(f.run.id, reader.learnerId, "spectator", f.lease, "2026-11-12T00:00:00.000Z");
+    const handle = f.service.beginGradeRecordedContext(f.run.id, reader, null, f.query, f.controller.signal);
+    const revoke = () => f.storage.revokeGrant(f.run.id, reader.learnerId, f.lease);
+    if (stage === "finish") {
+      while (!f.service.advanceGradeRecordedContext(handle).complete) { /* original complete work */ }
+      const original = RecordedEngineEndpointOwner.prototype.finishCapture;
+      const finish = vi.spyOn(RecordedEngineEndpointOwner.prototype, "finishCapture").mockImplementation(function(this: RecordedEngineEndpointOwner, work) {
+        const source = original.call(this, work); revoke(); return source;
+      });
+      try { expect(() => f.service.finishGradeRecordedContext(handle)).toThrow(expect.objectContaining({ code: "RUN_NOT_FOUND" })); }
+      finally { finish.mockRestore(); }
+    } else {
+      const original = attachments.collectRecordedEngineAttachments;
+      const collect = vi.spyOn(attachments, "collectRecordedEngineAttachments").mockImplementation((...args) => {
+        const result = original(...args); if (stage === "attachments") revoke(); return result;
+      });
+      try { if (stage === "before") revoke(); expect(() => f.service.advanceGradeRecordedContext(handle)).toThrow(expect.objectContaining({ code: "RUN_NOT_FOUND" })); }
+      finally { collect.mockRestore(); }
+    }
+    expect(f.service.cancelGradeRecordedContext(handle)).toBe(false);
+  });
+
+  it("retires cancelled/aborted context work and refuses another actual service owner", () => {
+    const f = fixture(), other = fixture(true);
+    const handle = f.service.beginGradeRecordedContext(f.run.id, f.principal, null, f.query, f.controller.signal);
+    expect(() => other.service.advanceGradeRecordedContext(handle)).toThrow(/foreign/);
+    expect(other.service.cancelGradeRecordedContext(handle)).toBe(false);
+    expect(() => f.service.advanceGradeRecordedContext({ ...handle })).toThrow(/foreign/);
+    f.controller.abort();
+    expect(() => f.service.advanceGradeRecordedContext(handle)).toThrow(expect.objectContaining({ name: "AbortError" }));
+    expect(f.service.cancelGradeRecordedContext(handle)).toBe(false);
+    const own = other.service.beginGradeRecordedContext(other.run.id, other.principal, null, other.query, other.controller.signal);
+    expect(other.service.cancelGradeRecordedContext(own)).toBe(true);
+    expect(() => other.service.finishGradeRecordedContext(own)).toThrow(/retired/);
+  });
+
+  it("refuses a genuine endpoint source retained from another original context boundary", () => {
+    const f = fixture(), original = RecordedEngineEndpointOwner.prototype.finishCapture;
+    let retained: ReturnType<RecordedEngineEndpointOwner["finishCapture"]> | undefined;
+    const finish = vi.spyOn(RecordedEngineEndpointOwner.prototype, "finishCapture").mockImplementation(function(this: RecordedEngineEndpointOwner, work) {
+      const source = original.call(this, work); return retained ??= source;
+    });
+    try {
+      f.resolve(); // genuine prior source, from this same actual service/endpoint owner
+      const handle = f.service.beginGradeRecordedContext(f.run.id, f.principal, null, f.query, f.controller.signal);
+      while (!f.service.advanceGradeRecordedContext(handle).complete) { /* complete the new original boundary */ }
+      expect(() => f.service.finishGradeRecordedContext(handle)).toThrow(/original context boundary/);
+      expect(f.service.cancelGradeRecordedContext(handle)).toBe(false);
+    } finally { finish.mockRestore(); }
+  });
+
+  it.each([1, 2, 32])("preserves every original long-line grade source across real-yield groups=%s", async limit => {
+    const f = fixture(false, { before: null, after: null });
+    let run = f.run;
+    const moves = ["e7e5", "g1f3", "b8c6", "f1b5", "a7a6", "b5a4", "g8f6", "e1g1", "f8e7",
+      "f1e1", "b7b5", "a4b3", "d7d6", "c2c3", "e8g8", "h2h3", "c6b8", "d2d4", "b8d7",
+      "b1d2", "c7c5", "d4d5", "d8c7", "d2f1", "f8e8", "f1g3", "g7g6", "a2a4", "b5b4", "c3b4", "c5b4"];
+    for (const move of moves) run = commitMove(run, move, { at: "2026-11-12T00:00:00.000Z" }).run;
+    run = revealFeedback(run, "2026-11-12T00:00:00.000Z").run; f.storage.save(run, f.lease);
+    const query = { ...f.query, throughNodeId: run.activeCursor.nodeId, decisionDigest: moduleDecisionStamp(run).digest };
+    const baseline = f.service.resolveGradeRecordedContext(run.id, f.principal, null, query, f.controller.signal);
+    const image = (context: typeof baseline) => run.nodes.slice(1).map(node => {
+      const source = f.service.resolveGradeMoveSource(context, { nodeId: node.id, signal: f.controller.signal });
+      const row = f.service.readGradeMoveSource(source); return { edge: row.edge.payload, state: row.state, context: row.context };
+    });
+    const expected = JSON.stringify(image(baseline));
+    const handle = f.service.beginGradeRecordedContext(run.id, f.principal, null, query, f.controller.signal);
+    f.service.advanceGradeRecordedContext(handle); await new Promise<void>(done => setTimeout(done, 0));
+    const seen: string[] = [];
+    for (let start = 0; start < run.nodes.length; start += limit) {
+      for (let index = start; index < Math.min(start + limit, run.nodes.length); index++) {
+        seen.push(f.service.advanceGradeRecordedContext(handle).nodeId!);
+        await new Promise<void>(done => setTimeout(done, 0));
+      }
+      if (seen.length !== run.nodes.length) expect(() => f.service.finishGradeRecordedContext(handle)).toThrow(/incomplete/);
+    }
+    const context = f.service.finishGradeRecordedContext(handle);
+    expect(seen).toEqual(run.nodes.map(node => node.id)); expect(seen.length).toBeGreaterThan(32);
+    expect(JSON.stringify(image(context))).toBe(expected);
+  });
+
   it.each([false, true])("steps the actual Review population with the original normalized sources: black=%s", async black => {
     const f = fixture(black), capture = vi.spyOn(RecordedGradeSourceOwner.prototype, "reviewPopulation");
     try {

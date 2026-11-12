@@ -2,27 +2,26 @@
 
 ## Current continuation — 2026-11-12
 
-D4250's original full packet, grade-population and PhaseArc acquisition dependencies are
-committed at3f416821/9e9aa551. The next verified dependency prepares the complete original Map
-window union, per-node local edge/exposure/phase/setup/sequence facts and opening history/deepest
-result. Complete prepared frames join their original ledger boundary, ordered source plan and
-installed opening authority; final Map assembly can render retained originals without source
-recollection or fallback on malformed input. Existing synchronous source helpers/cache remain
-until the selected job flow is actually wired. Independent review and all requested source
-mutation/failure/retained-frame controls pass.
+D4250's full packet/grade-population, PhaseArc and complete Map relation/opening dependencies
+are committed at3f416821/9e9aa551/84edd1ce. The next verified dependency stages actual grade-
+context and engine endpoint capture: original workflow metadata, original modern attachments,
+then one fixed original endpoint per step, followed by complete-only original issuance. Partial
+work cannot become a context/source. Live permission/disclosure/storage/registry/pending checks
+and exact original boundary joins remain. D4256 repairs repeated synchronous guards measured
+at4/10/18 registry reads; the synchronous cardinality guard is now linear without weakening
+yielded-work checks. Independent source/cost readback accepts this finite dependency.
 
-Affected199/four source/projection cases, existing authenticated Review API/Review-screen127/
-two, types/Svelte0errors0warnings and server/web builds pass. Canonical1928/1928,24/89 qualified
-and generated receipts are current without rewriting. This is focused dependency verification;
-complete software/performance/content gates last passed at3f416821 (21315 software/all588,
-7 performance/four,340 content/all44,92-document audit errors[] and104 exact capability
-declarations). No fresh whole-wave/push-readiness claim follows.
+Final245/five source/module-query/Review API cases, full types/Svelte0errors0warnings and
+server/web builds pass. Canonical1928/1928/24qualified of89 last passed84edd1ce, with generated
+receipts current; no runtime producer/qualifier changes occur here. Complete software/
+performance/content gates last passed3f416821. These are focused checkpoints, without a new
+whole-wave/push-readiness claim.
 
-Next complete remaining original grade/engine/historical-ledger capture, then shared bounded
-job ownership/clock/capacity/idle expiry/current authority and strict rich transport/selected UI
-progress/cancel/progressive analysis admission. D4250/D4228 and D4224/D4225 cost/default/memory
-stay open. Existing learner routes have not switched to the new job; no whole-product milestone
-closes. [Implementation and verification](foundation-source-identity/plan.md).
+Next stage original independent historical-ledger reports, then shared bounded job ownership/
+clock before capture/capacity/idle expiry/live authority/cancel and strict rich Review transport/
+selected UI progressive admission. D4250/D4228 and D4224/D4225 resource/default work remain open.
+Existing learner routes have not switched to the new job; no whole-product milestone closes.
+[Implementation and verification](foundation-source-identity/plan.md).
 
 ## Current continuation — 2026-11-11
 

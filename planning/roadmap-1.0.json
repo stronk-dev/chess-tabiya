@@ -973,10 +973,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Original full-packet/grade-population/PhaseArc/Map relation and opening dependencies are verified. Finish remaining original grade/engine/historical-ledger capture, then shared job ownership/absolute clock/capacity/idle expiry/live authority and actual strict rich Review API/selected UI progressive admission. D4250/D4228 and D4224/D4225 cost/default/memory stay open; no private helper substitutes for that journey.",
+        "nextAction": "Original packet/population/PhaseArc/Map and actual grade-context/engine-endpoint staging are verified. Next stage independent historical-ledger reports, then compose shared job ownership/absolute clock before capture/capacity/idle expiry/live authority/cancel and actual strict rich Review API/selected UI progressive admission. D4250/D4228 and D4224/D4225 resources/defaults remain open.",
         "latestCheckpoint": {
           "at": "2026-11-12",
-          "summary": "D4250 now prepares the complete original Map window union, per-node local edge/exposure/phase/setup/eleven-family sequence events and original opening history/deepest reducer. Shared helpers retain original synchronous behavior/cache. Complete private frames join the exact ledger boundary, ordered plan and opening authority; prepared Map assembly recollects nothing and rejects malformed/foreign/partial work. Independent review and its during-acquisition/stale-retained-frame controls pass. Affected199/four source/projection cases pass8.38s; existing authenticated API/Review-screen127/two pass116.32s; types/Svelte0errors0warnings and server/web builds pass. Canonical1928/1928,24/89 qualification and generated files are current without rewrite. Full normal gates last pass at3f416821; no fresh whole-wave/push-readiness claim. Remaining grade/engine/ledger capture and actual owned job/clock/capacity/idle/currentness plus strict rich API/selected UI remain. D4250/D4228 and D4224/D4225 resources/defaults/full1.0 stay open; no milestone transition.",
+          "summary": "D4250 now stages actual grade-context/engine endpoint acquisition through the same workflow metadata, original attachment/row collectors and complete issuers. Partial owner-local handles cannot become contexts/sources. Live permission/signature/disclosure/storage/registry/pending/signal and exact original endpoint-boundary checks remain. D4256 reproduces repeated synchronous scans (96pass/1fail;4,10,18 registry reads) and restores linear synchronous cardinality without changing cooperative guards. Independent final source/cost readback accepts. Final245/five source/module-query/Review API cases pass103.29s; full types/Svelte0errors0warnings and server/web builds pass. Canonical proof last passes84edd1ce; no runtime producer/qualifier/generated changes here. Full normal gates last pass3f416821; no fresh whole-wave/push-readiness claim. Historical-ledger staging and actual shared job/clock/capacity/idle/currentness/cancel plus strict rich API/selected UI remain. D4250/D4228 and D4224/D4225 resource/default/full1.0 obligations stay open; no milestone transition.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1287,7 +1287,9 @@
             "apps/server/src/phase-arc-collection.test.ts",
             "packages/runtime/src/review-map-sources.ts",
             "packages/runtime/src/review-map-sources.test.ts",
-            "packages/runtime/src/review-map.ts"
+            "packages/runtime/src/review-map.ts",
+            "apps/server/src/recorded-engine-endpoints.ts",
+            "apps/server/src/recorded-engine-endpoints.test.ts"
           ],
           "anchors": [
             {
@@ -2068,7 +2070,7 @@
             {
               "kind": "work_state",
               "id": "D4250",
-              "digest": "sha256:f7a610b6064333c1dc902e0d1aebb25446401b0dbee0d7ffc54e4846c97df493"
+              "digest": "sha256:e84220f0784c548faf7d45425b6c5b8383c7868fb3a0ec78253981b5af2d014c"
             },
             {
               "kind": "rfc",
@@ -2104,6 +2106,11 @@
               "kind": "work_state",
               "id": "D4255",
               "digest": "sha256:5613fbce942b079b79b4e3acce64f45784b84ce00ec4c4dde874e6c5ee23e3a7"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4256",
+              "digest": "sha256:2b3237a338aa3f6736c9b641eb5e050158577d05f6694b0f04a21987b09b3a3e"
             }
           ]
         },
@@ -2124,10 +2131,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Original full-packet/grade-population/PhaseArc/Map relation and opening dependencies are verified. Finish remaining original grade/engine/historical-ledger capture, then shared job ownership/absolute clock/capacity/idle expiry/live authority and actual strict rich Review API/selected UI progressive admission. D4250/D4228 and D4224/D4225 cost/default/memory stay open; no private helper substitutes for that journey.",
+        "nextAction": "Original packet/population/PhaseArc/Map and actual grade-context/engine-endpoint staging are verified. Next stage independent historical-ledger reports, then compose shared job ownership/absolute clock before capture/capacity/idle expiry/live authority/cancel and actual strict rich Review API/selected UI progressive admission. D4250/D4228 and D4224/D4225 resources/defaults remain open.",
         "latestCheckpoint": {
           "at": "2026-11-12",
-          "summary": "D4250 now prepares the complete original Map window union, per-node local edge/exposure/phase/setup/eleven-family sequence events and original opening history/deepest reducer. Shared helpers retain original synchronous behavior/cache. Complete private frames join the exact ledger boundary, ordered plan and opening authority; prepared Map assembly recollects nothing and rejects malformed/foreign/partial work. Independent review and its during-acquisition/stale-retained-frame controls pass. Affected199/four source/projection cases pass8.38s; existing authenticated API/Review-screen127/two pass116.32s; types/Svelte0errors0warnings and server/web builds pass. Canonical1928/1928,24/89 qualification and generated files are current without rewrite. Full normal gates last pass at3f416821; no fresh whole-wave/push-readiness claim. Remaining grade/engine/ledger capture and actual owned job/clock/capacity/idle/currentness plus strict rich API/selected UI remain. D4250/D4228 and D4224/D4225 resources/defaults/full1.0 stay open; no milestone transition.",
+          "summary": "D4250 now stages actual grade-context/engine endpoint acquisition through the same workflow metadata, original attachment/row collectors and complete issuers. Partial owner-local handles cannot become contexts/sources. Live permission/signature/disclosure/storage/registry/pending/signal and exact original endpoint-boundary checks remain. D4256 reproduces repeated synchronous scans (96pass/1fail;4,10,18 registry reads) and restores linear synchronous cardinality without changing cooperative guards. Independent final source/cost readback accepts. Final245/five source/module-query/Review API cases pass103.29s; full types/Svelte0errors0warnings and server/web builds pass. Canonical proof last passes84edd1ce; no runtime producer/qualifier/generated changes here. Full normal gates last pass3f416821; no fresh whole-wave/push-readiness claim. Historical-ledger staging and actual shared job/clock/capacity/idle/currentness/cancel plus strict rich API/selected UI remain. D4250/D4228 and D4224/D4225 resource/default/full1.0 obligations stay open; no milestone transition.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -3901,7 +3908,7 @@
             {
               "kind": "work_state",
               "id": "D4250",
-              "digest": "sha256:f7a610b6064333c1dc902e0d1aebb25446401b0dbee0d7ffc54e4846c97df493"
+              "digest": "sha256:e84220f0784c548faf7d45425b6c5b8383c7868fb3a0ec78253981b5af2d014c"
             },
             {
               "kind": "work_state",
@@ -3927,6 +3934,11 @@
               "kind": "work_state",
               "id": "D4255",
               "digest": "sha256:5613fbce942b079b79b4e3acce64f45784b84ce00ec4c4dde874e6c5ee23e3a7"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4256",
+              "digest": "sha256:2b3237a338aa3f6736c9b641eb5e050158577d05f6694b0f04a21987b09b3a3e"
             }
           ]
         },

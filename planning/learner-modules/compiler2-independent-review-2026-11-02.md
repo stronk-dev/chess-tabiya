@@ -11717,3 +11717,18 @@ No remaining finite blocker is found; no reviewer commands/edits run. Primary199
 cases, existing authenticated API/UI127/two, types/build and canonical1928/1928 pass. Generated
 receipts are current without rewrite;24/89 qualification is unchanged. This accepts a source
 dependency, not public job/API/UI integration or any5s/resource/default clearance.
+
+
+## 2026-11-12 — D4250 grade-context/endpoint capture and D4256 accepted
+
+Independent source readback accepts unchanged modern→pending→pinned-ledger precedence, full
+candidate normalization and complete-only original source/context issuance. Owner-local partial
+handles cannot be read as contexts/sources; original workflow permission/null Review assistance,
+run/signature/boundary/registry/pending/signal checks remain. The cost return is D4256: synchronous
+paths initially replayed every prior row/population at each cooperative step. The actual96pass/
+1fail falsifier records4,10,18 reads. Final readback accepts shared single-pass synchronous row
+collection/complete issuers, while every yielded step retains pre/post authority checks. The
+common context issuer joins the exact original endpoint boundary and performs final owned reads.
+No remaining finite blocker is found; no reviewer commands/edits run. Primary245/five source and
+actual module/Review API cases, types/build pass. Cooperative validation growth remains a real
+resource-proof concern; no job/API/progress UI/default5s clearance is inferred.

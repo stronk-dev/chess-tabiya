@@ -35657,7 +35657,7 @@
       "id": "D4250",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f7a610b6064333c1dc902e0d1aebb25446401b0dbee0d7ffc54e4846c97df493",
+      "sourceDigest": "sha256:e84220f0784c548faf7d45425b6c5b8383c7868fb3a0ec78253981b5af2d014c",
       "uxItems": [],
       "owner": "review-and-return",
       "since": "2026-11-12"
@@ -35705,6 +35705,15 @@
       "sourceDigest": "sha256:5613fbce942b079b79b4e3acce64f45784b84ce00ec4c4dde874e6c5ee23e3a7",
       "uxItems": [],
       "evidence": "apps/server/src/phase-arc-collection.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4256",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2b3237a338aa3f6736c9b641eb5e050158577d05f6694b0f04a21987b09b3a3e",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-engine-endpoints.test.ts",
       "evidenceKind": "path"
     }
   ]

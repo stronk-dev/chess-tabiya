@@ -43,6 +43,16 @@ currentness checks before/after computation and exact path validation. Engine st
 shape operands are independently captured; genuine provider evidence objects retain their identity.
 Whole-branch collectors remain indivisible work, so this alone proves no five-second budget.
 
+RunService's internal `beginGradeRecordedContext` / advance / finish / cancel methods now retain
+the actual workflow permission and complete original boundary before acquiring engine sources.
+The first advance captures original modern attachments as one indivisible unit; later advances
+select one original endpoint each, preserving modern→pending→pinned-ledger precedence and the
+complete candidate normalization. Only complete work issues the original grade context. Partial
+handles cannot be read as contexts or engine sources. Live grants, disclosure, storage, pending
+requests, registry identity and cancellation still govern steps and publication; the final engine
+source must join the exact original context boundary. Existing synchronous callers share the
+same collectors/issuers without replaying per-step guards when no yield occurs.
+
 RunService also exposes internal begin/advance/finish/cancel methods for the existing recorded
 population through its actual grade source owner. They retain the original modern-attachment
 normalization and owned grade context, hide the runtime handle and check live grants/storage/signal
@@ -72,7 +82,7 @@ and renders retained originals without relation/opening recollection. Invalid or
 throw instead of taking an eager fallback. Existing synchronous reads retain their shared source
 helpers and cache until the actual job transport replaces that selected flow.
 
-The rich Review transport, remaining grade/ledger preparation and bounded job/capacity/idle clock
+The rich Review transport, remaining historical-ledger preparation and bounded job/capacity/idle clock
 remain D4250/D4228 work. Existing learner routes have not switched to the new job.
 The current verified checkpoint and its limits are in `planning/foundation-source-identity/plan.md`.
 

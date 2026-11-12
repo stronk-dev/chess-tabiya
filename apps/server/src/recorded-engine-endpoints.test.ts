@@ -12,6 +12,8 @@ import { composeProviderTraversalApplication } from "./provider-traversal.js";
 import { MockProviderEngineClient } from "./mock-provider-engine.js";
 import { SQLiteRunStorage } from "./storage.js";
 import * as nodes from "../../../packages/runtime/src/internal/recorded-engine-node.js";
+import * as attachments from "../../../packages/runtime/src/internal/recorded-engine-attachments.js";
+import { rewind } from "../../../packages/runtime/src/runtime.js";
 
 const at = "2026-11-01T19:00:00.000Z", lease = { writerId: "endpoint-writer", learnerId: "__legacy" };
 const stores: SQLiteRunStorage[] = [], coordinators: ReviewEvidenceCoordinator[] = [];
@@ -65,6 +67,89 @@ function pending(f: Awaited<ReturnType<typeof fixture>>) {
 }
 
 describe("fixed original engine endpoints — registry, canonical stored boundary and request owner", () => {
+  it("D4256 synchronous capture has linear original registry-read cardinality", async () => {
+    const f = await fixture([{ node: 0 }, { node: 1 }, { node: 2 }]), reads: number[] = [];
+    for (let index = 0; index < 3; index++) {
+      const read = vi.spyOn(f.registry, "readRecordedMeasurements"), source = f.capture(index);
+      reads.push(read.mock.calls.length); read.mockRestore();
+      expect(f.owner.read(source).rows).toHaveLength(index + 1);
+    }
+    expect(reads[0]).toBeGreaterThan(0);
+    expect(reads[2]! - reads[1]!, JSON.stringify(reads)).toBe(reads[1]! - reads[0]!);
+  });
+  it.each([false, true])("stages complete original endpoint output without partial publication: modern=%s", async modern => {
+    const f = await fixture([{ node: 0 }, { node: 1 }, { node: 2 }]);
+    if (modern) { f.delivery(0, "cp 25"); f.delivery(2, "mate -3"); }
+    const expected = JSON.stringify(f.owner.read(f.capture()));
+    const collect = vi.spyOn(attachments, "collectRecordedEngineAttachments"), historical = vi.spyOn(f.registry, "collectRecordedMeasurements");
+    const handle = f.owner.beginCapture({ boundary: f.boundary(), signal: f.controller.signal });
+    expect(collect).not.toHaveBeenCalled(); expect(historical).not.toHaveBeenCalled();
+    expect(() => f.owner.read(handle as unknown as RecordedEngineEndpoints)).toThrow(/foreign/);
+    expect(() => f.owner.finishCapture(handle)).toThrow(/incomplete/);
+    expect(f.owner.advanceCapture(handle)).toEqual({ stage: "attachments", nodeId: null, completedSubjects: 0, totalSubjects: 3, complete: false });
+    expect(collect).toHaveBeenCalledTimes(1); expect(historical).not.toHaveBeenCalled();
+    for (const [index, node] of f.path.entries()) expect(f.owner.advanceCapture(handle)).toEqual({
+      stage: "endpoint", nodeId: node.id, completedSubjects: index + 1, totalSubjects: 3, complete: index === 2,
+    });
+    const beforeFinish = historical.mock.calls.length, source = f.owner.finishCapture(handle);
+    expect(JSON.stringify(f.owner.read(source))).toBe(expected);
+    expect(collect).toHaveBeenCalledTimes(1); expect(historical).toHaveBeenCalledTimes(beforeFinish);
+    expect(beforeFinish).toBe(modern ? 1 : 3);
+    expect(f.owner.cancelCapture(handle)).toBe(false);
+    expect(() => f.owner.finishCapture(handle)).toThrow(/retired/);
+  });
+
+  it.each([0, 1, 2])("retires only the exact owned endpoint work after %s advances", async count => {
+    const f = await fixture([{ node: 0 }, { node: 1 }, { node: 2 }]), other = new RecordedEngineEndpointOwner(f.registry, undefined);
+    const handle = f.owner.beginCapture({ boundary: f.boundary(), signal: f.controller.signal });
+    expect(() => other.advanceCapture(handle)).toThrow(/foreign/); expect(other.cancelCapture(handle)).toBe(false);
+    expect(() => f.owner.advanceCapture({ ...handle })).toThrow(/foreign/);
+    for (let index = 0; index < count; index++) f.owner.advanceCapture(handle);
+    expect(f.owner.cancelCapture(handle)).toBe(true); expect(f.owner.cancelCapture(handle)).toBe(false);
+    expect(() => f.owner.finishCapture(handle)).toThrow(/retired/);
+  });
+
+  it.each(["before", "attachments", "endpoint", "finish"] as const)("rechecks actual storage at the %s acquisition boundary", async stage => {
+    const f = await fixture([{ node: 0 }, { node: 1 }]);
+    const handle = f.owner.beginCapture({ boundary: f.boundary(), signal: f.controller.signal });
+    const mutate = () => f.save(rewind(f.storage.read(f.run.id)!.run, f.path[0]!.id, at).run);
+    if (stage === "finish") {
+      while (!f.owner.advanceCapture(handle).complete) { /* complete original work first */ }
+      mutate(); expect(() => f.owner.finishCapture(handle)).toThrow(/no longer/);
+    } else {
+      if (stage === "endpoint") f.owner.advanceCapture(handle);
+      const originalAttachments = attachments.collectRecordedEngineAttachments, originalHistorical = f.registry.collectRecordedMeasurements.bind(f.registry);
+      const capture = vi.spyOn(attachments, "collectRecordedEngineAttachments").mockImplementation((...args) => {
+        const result = originalAttachments(...args); if (stage === "attachments") mutate(); return result;
+      });
+      const historical = vi.spyOn(f.registry, "collectRecordedMeasurements").mockImplementation((...args) => {
+        const result = originalHistorical(...args); if (stage === "endpoint") mutate(); return result;
+      });
+      try { if (stage === "before") mutate(); expect(() => f.owner.advanceCapture(handle)).toThrow(/no longer/); }
+      finally { capture.mockRestore(); historical.mockRestore(); }
+    }
+    expect(f.owner.cancelCapture(handle)).toBe(false);
+  });
+
+  it("refuses replacement of an observed registry artifact before the next endpoint", async () => {
+    const f = await fixture([{ node: 0 }, { node: 1 }]), handle = f.owner.beginCapture({ boundary: f.boundary(), signal: f.controller.signal });
+    f.owner.advanceCapture(handle); f.owner.advanceCapture(handle);
+    const collect = vi.spyOn(f.registry, "collectRecordedMeasurements");
+    vi.spyOn(f.registry, "resolveRecordedMeasurementSource").mockReturnValue({ kind: "unavailable", reason: "source_absent" });
+    expect(() => f.owner.advanceCapture(handle)).toThrow(/artifact source changed/);
+    expect(collect).not.toHaveBeenCalled(); expect(f.owner.cancelCapture(handle)).toBe(false);
+  });
+
+  it("retains an actual pending request and refuses its retirement between endpoints", async () => {
+    const f = await fixture([{ node: 0 }]), p = pending(f);
+    p.coordinator.ensureBranch(f.run.id, f.path[0]!.branchId);
+    const handle = p.owner.beginCapture({ boundary: f.boundary(), signal: f.controller.signal });
+    p.owner.advanceCapture(handle); p.owner.advanceCapture(handle);
+    await p.coordinator.close(); p.release(null);
+    expect(() => p.owner.advanceCapture(handle)).toThrow(/pending source changed/);
+    expect(p.owner.cancelCapture(handle)).toBe(false); expect(p.get).not.toHaveBeenCalled();
+  });
+
   it.each(["record", "abstention"] as const)("rejects a conflicting engine evidence kind on an unselected suffix %s", async fault => {
     const f = await fixture([{ node: 0 }, { node: 1 }, { node: 2 }], "white", (ledger, manifest) => {
       manifest.entries[2].origin.evidenceKind = "tablebase_result";

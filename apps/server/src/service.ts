@@ -207,7 +207,7 @@ import { compilePhaseArc, compileRecordedEvidenceSnapshot, type PhaseSourceDepen
 import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import { InspectorContextError, InspectorRecordedContextOwner, type InspectorRecordedContext, type InspectorRecordedSelection } from "./inspector-recorded-context.js";
 import { RecordedComparisonContextError, RecordedComparisonPointOwner, type RecordedComparisonContext, type ComparisonSelection } from "./recorded-comparison-points.js";
-import { RecordedGradeContextError, RecordedGradeSourceOwner, type RecordedGradeContext, type GradeSelection, type ReviewPopulationCollection } from "./recorded-grade-sources.js";
+import { RecordedGradeContextError, RecordedGradeSourceOwner, type RecordedGradeContext, type GradeSelection, type GradeContextCapture, type ReviewPopulationCollection } from "./recorded-grade-sources.js";
 import type { ReviewSourceContext } from "../../../packages/runtime/src/review-evidence.js";
 import { RecordedFoundationSourceOwner } from "./recorded-foundation-sources.js";
 import type { FoundationRecordedPrefix, FoundationRecordedDecision } from "../../../packages/runtime/src/recorded-foundation-source.js";
@@ -3412,8 +3412,21 @@ export class RunService {
   }
 
   resolveGradeRecordedContext(runId: string, principal: Principal, assistance: FinalizedAssistanceV1 | null, query: GradeSelection, signal: AbortSignal) {
+    const input = this.#gradeContextInput(runId, principal, assistance, query, signal);
+    return this.#gradeSources.resolve(input.selection, input.read, signal);
+  }
+
+  beginGradeRecordedContext(runId: string, principal: Principal, assistance: FinalizedAssistanceV1 | null, query: GradeSelection, signal: AbortSignal): GradeContextCapture {
+    const input = this.#gradeContextInput(runId, principal, assistance, query, signal);
+    return this.#gradeSources.beginResolve(input.selection, input.read, signal);
+  }
+  advanceGradeRecordedContext(handle: GradeContextCapture) { return this.#gradeSources.advanceResolve(handle); }
+  finishGradeRecordedContext(handle: GradeContextCapture) { return this.#gradeSources.finishResolve(handle); }
+  cancelGradeRecordedContext(handle: GradeContextCapture) { return this.#gradeSources.cancelResolve(handle); }
+
+  #gradeContextInput(runId: string, principal: Principal, assistance: FinalizedAssistanceV1 | null, query: GradeSelection, signal: AbortSignal) {
     const owner = Object.freeze({ ...principal }), finalized = structuredClone(assistance), selection = Object.freeze({ ...query });
-    return this.#gradeSources.resolve(selection, () => {
+    const read = () => {
       signal.throwIfAborted(); this.#refuseRatedAssistance(runId);
       const { stored, role } = requireRead(this.#storage, runId, owner);
       this.#requireRecordedBranchDisclosure(runId, owner, stored.run, selection.branchId);
@@ -3426,7 +3439,8 @@ export class RunService {
       return { run: stored.run, principal: owner, role: moduleEvidenceRole(role), assistance: finalized,
         timing: selection.timing, session: this.#moduleViewer(runId, owner, stored.run, role).session,
         access: workflowAccess };
-    }, signal);
+    };
+    return { selection, read };
   }
 
   resolveGradeMoveSource(context: RecordedGradeContext, input: Readonly<{ nodeId: string; signal: AbortSignal }>) {

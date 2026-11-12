@@ -8,13 +8,13 @@ import { moduleDecisionStamp } from "../../../packages/runtime/src/module-decisi
 import { prepareRecordedSemanticBranchWindows, RECORDED_SEQUENCE_HORIZONS, type RecordedSemanticWindowPopulation, type RecordedWindowRoute } from "../../../packages/runtime/src/recorded-sequence-window.js";
 import { moduleConsumerCeilings } from "../../../packages/runtime/src/module-policy.js";
 import { parseFinalizedAssistanceV1 } from "../../../packages/runtime/src/assistance-exchange.js";
-import { canonicalRunBytes, createRecordedReviewBoundarySourceOwner } from "../../../packages/runtime/src/recorded-review-boundary.js";
+import { canonicalRunBytes, createRecordedReviewBoundarySourceOwner, readRecordedReviewBoundary } from "../../../packages/runtime/src/recorded-review-boundary.js";
 import type { RecordedReviewBoundary } from "../../../packages/runtime/src/recorded-review-boundary.js";
 import { advanceRecordedReviewSourceCollection, beginRecordedReviewSourceCollection, cancelRecordedReviewSourceCollection,
   finishRecordedReviewSourceCollection, collectRecordedReviewObjectives, collectRecordedReviewSourcePopulation,
   readRecordedReviewSourcePopulation, type RecordedReviewSourceCollection, type ReviewSourceContext } from "../../../packages/runtime/src/review-evidence.js";
 import type { DrillRun } from "../../../packages/runtime/src/types.js";
-import { RecordedEngineEndpointOwner, type RecordedEngineEndpoints } from "./recorded-engine-endpoints.js";
+import { RecordedEngineEndpointOwner, type RecordedEngineEndpoints, type RecordedEngineEndpointCapture } from "./recorded-engine-endpoints.js";
 import type { RunService } from "./service.js";
 import type { RunStorage } from "./storage.js";
 import type { PackRegistry } from "./pack-registry.js";
@@ -35,6 +35,8 @@ export interface GradeSelection {
 }
 declare const recordedGradeContextBrand: unique symbol;
 export interface RecordedGradeContext { readonly [recordedGradeContextBrand]: true }
+declare const gradeContextCaptureBrand: unique symbol;
+export interface GradeContextCapture { readonly [gradeContextCaptureBrand]: true }
 declare const reviewPopulationCollectionBrand: unique symbol;
 /** Service-owned work: never a runtime source handle, grant or wire value. */
 export interface ReviewPopulationCollection { readonly [reviewPopulationCollectionBrand]: true }
@@ -48,6 +50,18 @@ interface Owned {
   readonly signal: AbortSignal;
   readonly sources: Map<string, RecordedGradeSource>;
   readonly windows: Map<string, RecordedSemanticWindowPopulation>;
+}
+interface ContextCaptureInputs {
+  readonly boundary: RecordedReviewBoundary;
+  readonly execution: RecordedGradePermission["execution"];
+  readonly selection: GradeSelection;
+  readonly read: Owned["read"];
+  readonly signature: CurrentSignature;
+  readonly signal: AbortSignal;
+}
+interface ContextCaptureWork extends ContextCaptureInputs {
+  readonly endpoints: RecordedEngineEndpointCapture;
+  complete: boolean;
 }
 export class RecordedGradeContextError extends TypeError {
   constructor(readonly reason: "permission_withheld" | "source_contract_invalid", message: string) {
@@ -70,6 +84,7 @@ const sameSignature = (left: CurrentSignature, right: CurrentSignature) => left.
 /** One per RunService. Storage/access callbacks cannot be passed to a runtime factory. */
 export class RecordedGradeSourceOwner {
   readonly #contexts = new WeakMap<object, Owned>();
+  readonly #contextCaptures = new WeakMap<object, ContextCaptureWork>();
   readonly #sources = new WeakMap<object, RecordedGradeContext>();
   readonly #windowPopulations = new WeakMap<AbortSignal, { signature: CurrentSignature; branchId: string; population: ReadonlyMap<string, RecordedSemanticWindowPopulation> }[]>();
   readonly #boundaries: ReturnType<typeof createRecordedReviewBoundarySourceOwner>;
@@ -87,6 +102,12 @@ export class RecordedGradeSourceOwner {
   }
 
   resolve(query: GradeSelection, read: Owned["read"], signal: AbortSignal): RecordedGradeContext {
+    const input = this.#contextInputs(query, read, signal);
+    const endpoints = this.#endpoints.capture({ boundary: input.boundary, signal });
+    return this.#issueContext(input, endpoints);
+  }
+
+  #contextInputs(query: GradeSelection, read: Owned["read"], signal: AbortSignal): ContextCaptureInputs {
     if (!exact(query, ["branchId", "throughNodeId", "decisionDigest", "timing"])) return refuse("invalid selection");
     signal.throwIfAborted();
     const first = read(); this.#permitted(first);
@@ -96,15 +117,71 @@ export class RecordedGradeSourceOwner {
     // No @1 fallback while the coordinated @2 consumer migration is still in flight.
     const execution = compileEvidenceConsumerExecutionV2(PRIMARY_EVIDENCE_MANIFEST, { id: `module.${module}`, version: 2 });
     const boundary = this.#boundaries.resolve({ runId: first.run.id, branchId: query.branchId, throughNodeId: query.throughNodeId });
-    const endpoints = this.#endpoints.capture({ boundary, signal });
-    const current = read(); this.#permitted(current);
-    if (!sameSignature(currentSignature(current), signature)) return refuse("current permission or stored run changed during capture");
+    return { boundary, execution, selection: Object.freeze({ ...query }), read, signature, signal };
+  }
+
+  /** Actual workflow checks and complete original boundary precede every source acquisition. */
+  beginResolve(query: GradeSelection, read: Owned["read"], signal: AbortSignal): GradeContextCapture {
+    const input = this.#contextInputs(query, read, signal);
+    const endpoints = this.#endpoints.beginCapture({ boundary: input.boundary, signal });
+    const work: ContextCaptureWork = { ...input, endpoints, complete: false };
+    try {
+      this.#readContextCapture(work);
+      const handle = Object.freeze({}) as GradeContextCapture;
+      this.#contextCaptures.set(handle, work); return handle;
+    } catch (error) { this.#endpoints.cancelCapture(endpoints); throw error; }
+  }
+
+  #contextCapture(handle: GradeContextCapture): ContextCaptureWork {
+    const work = typeof handle === "object" && handle !== null ? this.#contextCaptures.get(handle) : undefined;
+    if (work === undefined) return refuse("context capture is foreign or retired");
+    return work;
+  }
+
+  #readContextCapture(work: ContextCaptureInputs): GradeCurrentState {
+    work.signal.throwIfAborted();
+    const current = work.read(); this.#permitted(current);
+    if (!sameSignature(currentSignature(current), work.signature)) return refuse("current permission or stored run changed during capture");
+    this.#boundaries.assertCurrent(work.boundary);
+    work.signal.throwIfAborted(); return current;
+  }
+
+  advanceResolve(handle: GradeContextCapture) {
+    const work = this.#contextCapture(handle);
+    if (work.complete) return refuse("context capture has no remaining subject");
+    try {
+      this.#readContextCapture(work);
+      const progress = this.#endpoints.advanceCapture(work.endpoints);
+      this.#readContextCapture(work);
+      work.complete = progress.complete; return progress;
+    } catch (error) { this.cancelResolve(handle); throw error; }
+  }
+
+  finishResolve(handle: GradeContextCapture): RecordedGradeContext {
+    const work = this.#contextCapture(handle);
+    if (!work.complete) return refuse("context capture is incomplete");
+    try {
+      this.#readContextCapture(work);
+      const endpoints = this.#endpoints.finishCapture(work.endpoints);
+      return this.#issueContext(work, endpoints);
+    } finally { this.cancelResolve(handle); }
+  }
+
+  #issueContext(work: ContextCaptureInputs, endpoints: RecordedEngineEndpoints): RecordedGradeContext {
+    const current = this.#readContextCapture(work);
+    if (this.#endpoints.read(endpoints).boundary !== readRecordedReviewBoundary(work.boundary)) return refuse("captured endpoints cross their original context boundary");
     const permission = Object.freeze({ principal: Object.freeze({ ...current.principal }), role: current.role,
-      assistance: freeze(structuredClone(current.assistance)), timing: current.timing, session: current.session, execution });
+      assistance: freeze(structuredClone(current.assistance)), timing: current.timing, session: current.session, execution: work.execution });
     const context = Object.freeze({}) as RecordedGradeContext;
-    this.#contexts.set(context, Object.freeze({ permission, boundary, endpoints, selection: Object.freeze({ ...query }),
-      read, signature, signal, sources: new Map<string, RecordedGradeSource>(), windows: new Map<string, RecordedSemanticWindowPopulation>() }));
+    this.#contexts.set(context, Object.freeze({ permission, boundary: work.boundary, endpoints, selection: work.selection,
+      read: work.read, signature: work.signature, signal: work.signal, sources: new Map<string, RecordedGradeSource>(), windows: new Map<string, RecordedSemanticWindowPopulation>() }));
     this.read(context); return context;
+  }
+
+  cancelResolve(handle: GradeContextCapture): boolean {
+    const work = typeof handle === "object" && handle !== null ? this.#contextCaptures.get(handle) : undefined;
+    if (work === undefined) return false;
+    this.#contextCaptures.delete(handle); this.#endpoints.cancelCapture(work.endpoints); return true;
   }
 
   read(context: RecordedGradeContext): Owned {

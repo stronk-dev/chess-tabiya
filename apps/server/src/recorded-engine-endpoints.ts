@@ -52,15 +52,43 @@ interface Owned {
   readonly image: SourceImage;
   readonly pairs: Map<string, RecordedEnginePair>;
 }
+declare const endpointCaptureBrand: unique symbol;
+/** Incomplete original acquisition, never a source or permission. */
+export interface RecordedEngineEndpointCapture { readonly [endpointCaptureBrand]: true }
+interface CaptureWork {
+  readonly boundary: RecordedReviewBoundary;
+  readonly signal: AbortSignal;
+  readonly image: SourceImage["boundary"];
+  attachments: RecordedEngineAttachments | undefined;
+  modern: ModernRows | undefined;
+  admission: RecordedMeasurementAdmission | null;
+  readonly populations: RecordedMeasurementPopulation[];
+  readonly rows: Endpoint[];
+}
 const invalid = (message: string): never => { throw new RecordedMeasurementSourceError("source_contract_invalid", message); };
 
 /** Server-private source owner. A storage boundary is source scope, not Nudge/Review/Compare
  * permission; those complete current consumer operations must admit access before calling it. */
 export class RecordedEngineEndpointOwner {
   readonly #sources = new WeakMap<object, Owned>();
+  readonly #captures = new WeakMap<object, CaptureWork>();
   constructor(readonly registry: PackRegistry | undefined, readonly coordinator: ReviewEvidenceCoordinator | undefined) {}
 
   capture(input: Readonly<{ boundary: RecordedReviewBoundary; signal: AbortSignal }>): RecordedEngineEndpoints {
+    const handle = this.beginCapture(input);
+    const work = this.#captureWork(handle);
+    try {
+      // No yield here: retain the original single-pass checks and selection order rather than
+      // repeating cooperative guards over every prior row. Both paths share the same issuers.
+      work.attachments = collectRecordedEngineAttachments({ boundary: work.boundary });
+      work.modern = readRecordedEngineAttachments(work.attachments);
+      for (const row of work.modern.rows) work.rows.push(this.#captureEndpoint(work, row));
+      return this.finishCapture(handle);
+    } catch (error) { this.cancelCapture(handle); throw error; }
+  }
+
+  /** Metadata only; original modern attachment collection is its own first advance. */
+  beginCapture(input: Readonly<{ boundary: RecordedReviewBoundary; signal: AbortSignal }>): RecordedEngineEndpointCapture {
     if (input === null || typeof input !== "object" || Object.getPrototypeOf(input) !== Object.prototype
       || Reflect.ownKeys(input).length !== 2 || !["boundary", "signal"].every(key => {
         const descriptor = Object.getOwnPropertyDescriptor(input, key);
@@ -69,55 +97,114 @@ export class RecordedEngineEndpointOwner {
     const { boundary, signal } = input;
     signal.throwIfAborted();
     const image = readRecordedReviewBoundary(boundary);
-    const attachments = collectRecordedEngineAttachments({ boundary }), modern = readRecordedEngineAttachments(attachments);
-    let admission: RecordedMeasurementAdmission | null = null;
-    const populations: RecordedMeasurementPopulation[] = [];
-    const rows = Object.freeze(modern.rows.map((row): Endpoint => {
-      signal.throwIfAborted();
-      if (row.selected !== null) {
-        const value = row.selected.occurrence.evaluation.payload, actual = value.acquisition.actualIdentity;
-        const generation = value.acquisition.generation;
-        if (generation === null) return invalid("Modern engine endpoint has no actual engine generation");
-        return Object.freeze({ position: row.position, modern: row, origin: "provider_delivery", pending: null, ledger: null,
-          candidates: Object.freeze([]), selectedOrdinal: null,
-          state: Object.freeze({ kind: "available", engineId: actual.id, score: value.payload.score, bound: requestedBound(value.payload.bound),
-            instrument: Object.freeze({ origin: "provider_delivery", engineVersion: actual.version, generation }) }) });
+    const handle = Object.freeze({}) as RecordedEngineEndpointCapture;
+    this.#captures.set(handle, { boundary, signal, image, attachments: undefined, modern: undefined,
+      admission: null, populations: [], rows: [] });
+    return handle;
+  }
+
+  #captureWork(handle: RecordedEngineEndpointCapture): CaptureWork {
+    const work = typeof handle === "object" && handle !== null ? this.#captures.get(handle) : undefined;
+    if (work === undefined) return invalid("Engine endpoint capture is foreign or retired");
+    return work;
+  }
+
+  #captureCurrent(work: CaptureWork): void {
+    work.signal.throwIfAborted();
+    if (readRecordedReviewBoundary(work.boundary) !== work.image) return invalid("Engine endpoint capture boundary changed");
+    if (work.attachments !== undefined) this.#checkCurrent({ boundary: work.boundary, signal: work.signal,
+      attachments: work.attachments, admission: work.admission, populations: work.populations,
+      image: { boundary: work.image, rows: work.rows } });
+    work.signal.throwIfAborted();
+  }
+
+  advanceCapture(handle: RecordedEngineEndpointCapture): Readonly<{
+    stage: "attachments" | "endpoint"; nodeId: string | null;
+    completedSubjects: number; totalSubjects: number; complete: boolean;
+  }> {
+    const work = this.#captureWork(handle), totalSubjects = work.image.path.length;
+    if (work.rows.length === totalSubjects) return invalid("Engine endpoint capture has no remaining subject");
+    try {
+      this.#captureCurrent(work);
+      if (work.attachments === undefined) {
+        work.attachments = collectRecordedEngineAttachments({ boundary: work.boundary });
+        work.modern = readRecordedEngineAttachments(work.attachments);
+        this.#captureCurrent(work);
+        return Object.freeze({ stage: "attachments", nodeId: null, completedSubjects: 0, totalSubjects, complete: false });
       }
-      const pending = this.#pending(image, row.position.payload.nodeId, row.position.payload.fen);
-      const empty = { position: row.position, modern: row, ledger: null, candidates: Object.freeze([]), selectedOrdinal: null };
-      if (pending !== undefined) return Object.freeze({ ...empty, origin: "provider_delivery", pending,
-        state: Object.freeze({ kind: "unavailable", reason: "source_pending" }) });
-      if (image.run.sessionKind !== "pack" || this.registry === undefined) return Object.freeze({ ...empty, origin: null, pending: null,
-        state: Object.freeze({ kind: "unavailable", reason: "missing_eval" }) });
-      admission ??= this.#admit(image.run.packDigest!);
-      if (admission.kind === "failed") throw new RecordedMeasurementSourceError(admission.reason, "Recorded endpoint artifact admission failed");
-      if (admission.kind === "unavailable") return Object.freeze({ ...empty, origin: "offline_engine", pending: null,
-        state: Object.freeze({ kind: "unavailable", reason: "missing_eval" }) });
-      const population = this.registry.collectRecordedMeasurements({ source: admission.source, position: row.position, projection: "recorded.engine.eval@1" });
-      populations.push(population);
-      const ledger = this.registry.readRecordedMeasurements(population);
-      // Normalize the complete candidate image before selecting. A later conflicting artifact
-      // must fail, not disappear because an earlier candidate would have been usable.
-      let normalized: readonly (Available | null)[];
-      try { normalized = ledger.records.map(recordedOfflineEngineEndpoint); }
-      catch (cause) { throw new RecordedMeasurementSourceError("source_contract_invalid", "Invalid original engine endpoint", { cause }); }
-      const selected = normalized.findIndex(value => value !== null);
-      const candidates = Object.freeze(ledger.records.map((candidate, index): Candidate => Object.freeze({ row: candidate,
-        disposition: candidate.invocation.result.kind === "unavailable" ? "ledger_record_not_admitted"
-          : normalized[index] === null ? "input_abstained" : index === selected ? "selected" : "eligible" })));
-      return Object.freeze({ position: row.position, modern: row, origin: "offline_engine", pending: null, ledger, candidates,
-        selectedOrdinal: selected < 0 ? null : ledger.records[selected]!.ordinal,
-        state: selected < 0 ? Object.freeze({ kind: "unavailable", reason: ledger.records.length > 0 || ledger.abstentions.length > 0 ? "input_abstained" : "missing_eval" }) : normalized[selected]! });
-    }));
-    const source = Object.freeze({}) as RecordedEngineEndpoints;
-    this.#sources.set(source, { boundary, signal, attachments, admission, populations, image: Object.freeze({ boundary: image, rows }), pairs: new Map() });
-    this.read(source);
-    return source;
+      const row = work.modern!.rows[work.rows.length]!;
+      work.rows.push(this.#captureEndpoint(work, row));
+      this.#captureCurrent(work);
+      return Object.freeze({ stage: "endpoint", nodeId: row.position.payload.nodeId,
+        completedSubjects: work.rows.length, totalSubjects, complete: work.rows.length === totalSubjects });
+    } catch (error) { this.#captures.delete(handle); throw error; }
+  }
+
+  #captureEndpoint(work: CaptureWork, row: ModernRows["rows"][number]): Endpoint {
+    const { signal, image } = work;
+    signal.throwIfAborted();
+    if (row.selected !== null) {
+      const value = row.selected.occurrence.evaluation.payload, actual = value.acquisition.actualIdentity;
+      const generation = value.acquisition.generation;
+      if (generation === null) return invalid("Modern engine endpoint has no actual engine generation");
+      return Object.freeze({ position: row.position, modern: row, origin: "provider_delivery", pending: null, ledger: null,
+        candidates: Object.freeze([]), selectedOrdinal: null,
+        state: Object.freeze({ kind: "available", engineId: actual.id, score: value.payload.score, bound: requestedBound(value.payload.bound),
+          instrument: Object.freeze({ origin: "provider_delivery", engineVersion: actual.version, generation }) }) });
+    }
+    const pending = this.#pending(image, row.position.payload.nodeId, row.position.payload.fen);
+    const empty = { position: row.position, modern: row, ledger: null, candidates: Object.freeze([]), selectedOrdinal: null };
+    if (pending !== undefined) return Object.freeze({ ...empty, origin: "provider_delivery", pending,
+      state: Object.freeze({ kind: "unavailable", reason: "source_pending" }) });
+    if (image.run.sessionKind !== "pack" || this.registry === undefined) return Object.freeze({ ...empty, origin: null, pending: null,
+      state: Object.freeze({ kind: "unavailable", reason: "missing_eval" }) });
+    work.admission ??= this.#admit(image.run.packDigest!);
+    const admission = work.admission;
+    if (admission.kind === "failed") throw new RecordedMeasurementSourceError(admission.reason, "Recorded endpoint artifact admission failed");
+    if (admission.kind === "unavailable") return Object.freeze({ ...empty, origin: "offline_engine", pending: null,
+      state: Object.freeze({ kind: "unavailable", reason: "missing_eval" }) });
+    const population = this.registry.collectRecordedMeasurements({ source: admission.source, position: row.position, projection: "recorded.engine.eval@1" });
+    work.populations.push(population);
+    const ledger = this.registry.readRecordedMeasurements(population);
+    // Normalize the complete candidate image before selecting. A later conflicting artifact
+    // must fail, not disappear because an earlier candidate would have been usable.
+    let normalized: readonly (Available | null)[];
+    try { normalized = ledger.records.map(recordedOfflineEngineEndpoint); }
+    catch (cause) { throw new RecordedMeasurementSourceError("source_contract_invalid", "Invalid original engine endpoint", { cause }); }
+    const selected = normalized.findIndex(value => value !== null);
+    const candidates = Object.freeze(ledger.records.map((candidate, index): Candidate => Object.freeze({ row: candidate,
+      disposition: candidate.invocation.result.kind === "unavailable" ? "ledger_record_not_admitted"
+        : normalized[index] === null ? "input_abstained" : index === selected ? "selected" : "eligible" })));
+    return Object.freeze({ position: row.position, modern: row, origin: "offline_engine", pending: null, ledger, candidates,
+      selectedOrdinal: selected < 0 ? null : ledger.records[selected]!.ordinal,
+      state: selected < 0 ? Object.freeze({ kind: "unavailable", reason: ledger.records.length > 0 || ledger.abstentions.length > 0 ? "input_abstained" : "missing_eval" }) : normalized[selected]! });
+  }
+
+  /** Sole original endpoint-source issuer, after every original selection has been observed. */
+  finishCapture(handle: RecordedEngineEndpointCapture): RecordedEngineEndpoints {
+    const work = this.#captureWork(handle);
+    if (work.attachments === undefined || work.rows.length !== work.image.path.length) return invalid("Engine endpoint capture is incomplete");
+    try {
+      this.#captureCurrent(work);
+      const source = Object.freeze({}) as RecordedEngineEndpoints;
+      this.#sources.set(source, { boundary: work.boundary, signal: work.signal, attachments: work.attachments,
+        admission: work.admission, populations: Object.freeze([...work.populations]),
+        image: Object.freeze({ boundary: work.image, rows: Object.freeze([...work.rows]) }), pairs: new Map() });
+      this.read(source); return source;
+    } finally { this.#captures.delete(handle); }
+  }
+
+  cancelCapture(handle: RecordedEngineEndpointCapture): boolean {
+    return typeof handle === "object" && handle !== null && this.#captures.delete(handle);
   }
 
   read(source: RecordedEngineEndpoints): SourceImage {
     const owned = source !== null && typeof source === "object" ? this.#sources.get(source) : undefined;
     if (owned === undefined) return invalid("Engine endpoint source is foreign or not original");
+    this.#checkCurrent(owned); return owned.image;
+  }
+
+  #checkCurrent(owned: Omit<Owned, "pairs">): void {
     owned.signal.throwIfAborted();
     if (readRecordedReviewBoundary(owned.boundary) !== owned.image.boundary) return invalid("Engine endpoint storage boundary changed");
     const modern = readRecordedEngineAttachments(owned.attachments);
@@ -132,7 +219,6 @@ export class RecordedEngineEndpointOwner {
     }
     for (const population of owned.populations) this.registry!.readRecordedMeasurements(population);
     owned.signal.throwIfAborted();
-    return owned.image;
   }
 
   resolveRecordedEngineEndpoint(source: RecordedEngineEndpoints, nodeId: string): Endpoint {

@@ -4106,3 +4106,37 @@ D4250 remains doing. Grade/engine and historical-ledger capture, shared owned jo
 idle expiry/current authority, strict rich transport and selected UI progressive admission remain
 next. The selected HTTP flow still uses synchronous reads until that cutover. D4224/D4225 cost/
 default/memory and all broader1.0 obligations stay open; no milestone closes.
+
+
+### 2026-11-12 — Stage the actual grade context and original engine endpoints
+
+D4250 now exposes internal RunService grade-context begin/advance/finish/cancel through its
+actual workflow owner. Initial checks retain the same selected permission, dedicated Review
+null assistance, original complete boundary and actual read callback. Modern attachments use
+their original whole-prefix constructor as a separate unit; endpoint advances retain original
+modern→pending→pinned-ledger selection, all candidate normalization/ordinal/refusal semantics
+and source identities. Complete-only finish invokes the original source/context issuers and
+checks the exact endpoint boundary. Partial/foreign handles cannot be contexts or sources.
+Actual grants/signature/storage/pending/registry/signal checks bracket yielded work/publication.
+
+Independent review accepts authority/output preservation and finds repeated synchronous guards.
+D4256's actual pre-fix counterfalsifier96pass/1fail measures registry reads4,10,18 over1/2/3
+positions. Synchronous paths now share original metadata/row collectors/complete issuers without
+cooperative scans when no yield occurs; complete entry/publication checks remain. The nonzero
+linear-cardinality guard passes and staged checks are unchanged. Independent exact readback
+accepts. This does not clear the retained cooperative verification cost or any whole-job budget.
+
+Final245/five unchanged/new endpoint/grade/ledger/module-query/Review API cases pass103.29s,
+workspace types/Svelte0errors0warnings and server/web production builds pass. Controls include
+modern/offline byte equality, original source identity, metadata-only begin, partial/foreign
+refusal, actual grant revocation during attachment capture/after endpoint finish, observed
+pending retirement, registry replacement, storage mutation, abort/cancel and over32-node actual
+service lines across real-yield groups1/2/32. A genuine prior endpoint from the same actual owner
+cannot attach to a new original context boundary. The initial cancellation fixture's empty invalid
+sidecars were replaced by valid original fixture reports, preserving the source rejection.
+
+Canonical proof last passed at84edd1ce; no runtime producer/qualifier/generated receipt changes
+in this server-owner factoring. Complete normal gates last passed at3f416821. No fresh full-wave,
+remote-CI or push-readiness claim. Next stage independent historical-ledger reports, then compose
+the actual shared owned job with clock before all capture, capacity/idle/currentness/cancel and
+strict rich API/selected UI. D4250/D4228 and D4224/D4225 costs/defaults/full1.0 stay open.

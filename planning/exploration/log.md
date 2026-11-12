@@ -42080,3 +42080,25 @@ capacity/expiry/currentness and actual strict rich Review API/selected UI progre
 D4250/D4228 and D4224/D4225 resources/defaults/full1.0 remain open. No milestone closes.
 
 Normal governance also exits0: C1-C8/P1-P7/R1-R10 green,4004 ledger rows tracked and zero untriaged.
+
+
+## 2026-11-12 — Stage original grade-context/engine acquisition
+
+D4250 now captures original workflow metadata, actual modern attachments and fixed per-node
+engine selection through private begin/advance/finish/cancel. Only complete original issuers
+produce contexts/sources; partial handles grant nothing. Original precedence/candidate image,
+live grants/disclosure/storage/registry/pending checks and exact endpoint-boundary joins remain.
+Independent review finds D4256: synchronous callers repeated cooperative guards without yielding.
+Actual96pass/1fail shows4,10,18 registry reads over1/2/3 positions. Shared synchronous collection
+and complete issuers restore linear cardinality; yielded work retains all pre/post checks.
+
+Final245/five source and actual module/Review API tests pass103.29s; full types/Svelte0errors
+0warnings and server/web builds pass. Controls cover real revocation/storage/source changes,
+modern/offline equality, genuine foreign original endpoints, cancellation and long actual service
+lines across real-yield groups1/2/32. The cancellation fixture setup was corrected without
+changing source rules or deadlines. Canonical proof last passed84edd1ce; full normal gates last
+passed3f416821. No fresh full-wave/remote/push-readiness claim. Next independent historical-ledger
+staging, then shared job clock/capacity/expiry/current authority/cancel and actual strict rich
+transport/selected UI. D4250/D4228 and broader cost/default/full1.0 obligations stay open.
+
+Normal governance also exits0: C1-C8/P1-P7/R1-R10 green,4005 ledger rows tracked and zero untriaged.
