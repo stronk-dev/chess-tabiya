@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
 import { normalizeMove } from "chessops/chess";
 import { makeSan } from "chessops/san";
 import { parseUci } from "chessops/util";
@@ -208,10 +208,19 @@ describe("shared current-source production execution", () => {
     expect(calls.mock.calls.map(([route]) => route)).toEqual(["rules.mobility.reading.legal_moves@1", "rules.structural.reading.backward_pawn@3", "rules.mobility.reading.legal_moves@1", "rules.structural.reading.backward_pawn@3", "rules.structural.event.backward_pawn@2"]);
   });
 
-  it("preserves the complete579-edge Inspector singleton/batch populations and multiplicity", () => {
-    const edges = readSemanticValidationPopulation(SEMANTIC_VALIDATION_REPOSITORY_ROOT).sampledEdges.map(({ edge: { beforeFen, moveUci, afterFen } }) => ({ beforeFen, moveUci, afterFen })); expect(edges).toHaveLength(579);
-    const positives = new Map(keys.map(key => [key, 0]));
-    for (const input of edges) {
+  describe("complete579-edge Inspector singleton/batch populations and multiplicity", () => {
+    // Each public collector input keeps the ordinary five-second deadline. The complete fixed
+    // correctness cohort is not a single request's latency budget; never sample or omit inputs.
+    const edges = readSemanticValidationPopulation(SEMANTIC_VALIDATION_REPOSITORY_ROOT).sampledEdges
+      .map(({ edge: { beforeFen, moveUci, afterFen } }, ordinal) => ({ ordinal, input: { beforeFen, moveUci, afterFen } }));
+    const completed = new Set<number>(), positives = new Map(keys.map(key => [key, 0]));
+
+    it("registers all579 original inputs without duplicate cohort addresses", () => {
+      expect(edges).toHaveLength(579);
+      expect(new Set(edges.map(row => row.ordinal)).size).toBe(579);
+    });
+
+    it.each(edges)("edge $ordinal preserves every singleton/batch value and multiplicity", ({ ordinal, input }) => {
       const singleton = keys.flatMap(key => {
         const result = collectInspectorLocalEdge(key, input);
         expect(result.semanticEvents).not.toBeNull();
@@ -222,9 +231,16 @@ describe("shared current-source production execution", () => {
         return result.semanticEvents!;
       });
       expect(image(collectFoundationEdgeEvents(input, keys))).toEqual(image(singleton));
-    }
-    // A corpus zero is retained; separate genuine fixtures, not this census, prove each family.
-    expect([...positives.values()].some(count => count > 0)).toBe(true);
-    console.info("D4167 complete579-edge source occurrence counts", Object.fromEntries(positives));
+      expect(completed.has(ordinal)).toBe(false);
+      completed.add(ordinal);
+    });
+
+    afterAll(() => {
+      expect([...completed].sort((left, right) => left - right)).toEqual(edges.map(row => row.ordinal));
+      expect(completed.size).toBe(579);
+      // A corpus zero is retained; separate genuine fixtures, not this census, prove each family.
+      expect([...positives.values()].some(count => count > 0)).toBe(true);
+      console.info("D4167 complete579-edge source occurrence counts", Object.fromEntries(positives));
+    });
   });
 });

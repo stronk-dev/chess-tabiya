@@ -3980,3 +3980,64 @@ expected cursors. Pure metadata slicing/source collection does not provide that 
 Pre-commit initially refuses the checkpoint because next actions/receipts were updated without
 advancing latestCheckpoint. The dated milestone summary and original source/RFC evidence are
 corrected before retry; no guard is relaxed and production bytes remain those fully verified.
+
+
+### 2026-11-12 — D4250 full-packet and grade-owned source staging
+
+The private full packet now has its own original-prefix/source-result frame. Begin captures
+metadata/context, advance executes one original node's planned slots, and finish requires the
+complete canonical plan through compileReviewEvidence. No twelve-source cast or partial packet
+is allowed. Original semantic collection is privately memoized at first source use, not metadata
+authorization; currentness checks bracket computation and wrong original paths refuse. The
+synchronous runner stays adapter-major. Complete packet/Story byte comparisons include inherited
+mirrored branches and37-node real-yield groups1/2/32. Pending/refused inputs remain explicit.
+
+Actual RecordedGradeSourceOwner/RunService begin/advance/finish/cancel now bind the original
+normalized modern attachments and owned grade context. Opaque service handles never expose the
+runtime handle; real grants/storage/signal are checked before/after steps/publication, and all
+retirement paths release original partial work. Actual SQLite/RunService controls include both
+colours, modern source positives/genuine wrong-source refusal, revoked grants before/during/after
+finalization, abort and cross-service handles. The first during-revoke test revoked more than
+once and hit its own second-revoke error; its one-shot control now measures post-source access.
+Story legitimately derives rank/title at finish: the no-recollection check distinguishes those
+registered derivations from source acquisition instead of forbidding every value-route call.
+
+D4251 pre-fix RED15pass/1fail demonstrates borrowed storage mutation changing deferred work while
+fresh metadata still matched. Prefix issue now captures/freezes the complete original run once,
+retains its own path and leaves caller objects untouched. No provider F1 values are cloned and
+ordinary currentness reads do not clone/recollect. Both original sync and stepped packet outputs
+remain exact after mutation.135/five focused and full types/Svelte0errors0warnings pass.
+Independent code/capture readback finds no blocker.
+
+D4253 catches a production regression before this checkpoint: the lazy getter checked storage
+before checking its immutable memo. The actual falsifier reads storage17 times at the root and61
+times for five nodes. Currentness now brackets the first computation only; source-entry, per-node,
+aggregate/publication and actual service grant checks remain. The original37 UI tests are unchanged
+byte-for-byte, and the combined81 UI/source/service checks and full types pass18.75s. The abandoned
+UI fixture-cache experiment does not ship (D4252). Independent exact code readback accepts the fix.
+
+Normal canonical regeneration passes1928/1928 with24/89 subjects qualified. Structured comparison
+against HEAD changes only11 operation and63 predicate implementation digests: no receipt values,
+source membership, cases, expectations or qualification outcomes change.
+
+The subsequent full run passes the original UI but stops at two monolithic correctness tests:
+579 edges times eight collector calls exceed5s, as do89 actual Inspector source requests together.
+D4254's unchanged isolated runs reproduce the edge timeout and pass Inspector. Readback traces
+the edge path outside the changed Review code. The repair parameterizes the same579 edges and89
+topics into individual logical cases, retaining all source identities, multiplicity, population
+comparisons, read-only/source-only assertions and ordinary5s deadlines. Exact completed-cohort
+guards prevent omission or duplication. No production code, tier or cohort changes. The resulting
+710 cases/two files and full types/Svelte0errors0warnings pass; independent review accepts this
+finite restructuring. The increased test count is case isolation, not expanded chess coverage.
+Final normal make verify-software build verify-content exits0 against these fixed implementation/
+test bytes:21315/all588 software903.94s,7performance/four63.08s, full workspace types/Svelte
+0errors0warnings and actual server/web builds. All340 content cases/all44 pass272.89s with zero
+skips; the92-document clearance audit reports errors[] and104 capability declarations pass.
+The software count grows668 only because D4254 isolates the same original cohorts. No push or
+remote-CI claim is made. Normal governance also exits0: C1-C8/P1-P7/R1-R10 green. The
+verified dependency is committed before the next source/job implementation wave.
+
+This is still preparation, not the bounded HTTP job. Next stage the actual remaining PhaseArc/
+window/opening/ledger/final assembly owners, then job ownership/deadline/idle capacity and strict
+rich API/selected UI. Actual one-run capture and whole-branch indivisible work still need cost
+proof. D4250/D4228 and broader D4224/D4225/qualification/release remain open.

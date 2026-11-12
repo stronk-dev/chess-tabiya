@@ -11634,3 +11634,52 @@ from upstream engine-ready. No other wrapper/scope/branch/assistance:null blocke
 This is independent contract acceptance only. No reviewer commands/edits/jobs ran. D4250 stays
 doing until actual rich delivery/source integration; D4228, costs/default activation, actual API/UI
 and whole1.0 remain open. The finite original collector dependency remains separately verified.
+
+
+## 2026-11-12 — D4250 original full-packet and actual service collection readback
+
+Separate objective/source review finds no blocking authority/output/readiness regression in the
+bounded full-packet frame and grade-owned population integration. The full packet keeps its own
+ReviewRecordedPrefixReceipt/SOURCE_RESULTS and canonical adapter-major finish via the existing
+compiler; it never aliases the separate twelve-adapter population. Captured provider maps and
+complete trigger operands retain actual genuine delivery objects. Lazy original semantic access
+checks live prefix before/after, preserves original available/refused results and exact path ids.
+The synchronous runner retains its dispatch order. Actual service wrappers keep modern attachment
+normalization, owner-local opaque handles, before/after live access/signal and cleanup.
+
+D4251 subsequently reproduces a borrowed-run mutation with an actual pre-fix RED:15pass/1fail,
+fen_mismatch although fresh authoritative metadata still matched. Independent final readback
+accepts once-only full-run capture/freezing and deriving the retained path from that same image.
+Provider F1 evidence is not cloned, receipt body/digests stay unchanged, and ordinary currentness
+reads do not copy or collect. Both sync and stepped full-packet controls preserve exact original
+bytes after the storage adapter mutates its own issued object.
+
+The reviewer performs no commands/edits. Primary focused135/five and complete types pass before
+the final additional genuine-refusal memoization control. Complete broader gates remain required.
+This is source-stage implementation, not public job/Map assembly/provider admission/UI completion
+or whole-run capture/longest-unit/deadline/resource/default proof.
+
+### 2026-11-12 — D4253/D4254 regression and test-cohort readback
+
+Independent final readback accepts D4253: live prefix validation brackets the first lazy semantic
+computation, while repeated immutable memo reads do not rehash storage per family/node. Original
+source-entry, step, publication and actual grant checks remain. The cardinality control is red
+before the repair (root17 reads versus61 for five nodes); stale/revoked/cancelled controls still
+pass afterward. Original UI fixtures are restored unchanged; the combined81 UI/source/service
+cases and workspace types pass. No fixture workaround or production deadline clearance is claimed.
+
+D4254 is independently accepted as finite correctness-test restructuring. All579 original sampled
+edges stay in order, including multiplicity; each keeps seven singleton acquisitions, exact genuine
+identity/frozen/population checks and complete batch equality. The aggregate guard verifies the
+exact completed579-address image and retains all seven family counts, including zeroes. Inspector
+keeps all89 topics, original contexts/forced-mate parameters and real request construction. Cold
+per-topic services each assert one source acquisition and unchanged stored bytes; the aggregate
+guard verifies the exact89-topic image and89 acquisitions. Five-second limits and normal software
+tier are unchanged. The increased count is parameterization of the original cohorts, not added
+feature coverage. Primary focused710/two and full types/Svelte0errors0warnings pass. The reviewer
+runs no commands or edits. Primary final normal make verify-software build verify-content exits0:
+21315software/all588903.94s,7performance/four63.08s,340content/all44272.89s with zero skips,
+types/Svelte0errors0warnings and server/web builds. The92-document audit has errors[] and104
+capability declarations pass. Canonical1928/1928 and24/89 qualification remain unchanged apart
+from11 operation/63 predicate implementation digests. No public delivery, deadline/memory/default
+activation, whole milestone or remote-CI completion follows from this finite source checkpoint.

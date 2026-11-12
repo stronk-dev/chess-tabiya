@@ -1,5 +1,5 @@
 // Actual current102 source-page operation, never a narrowed manifest or a generic module packet.
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
 import { compileAssistanceRequest, moduleDecisionStamp, revealFeedback, serverAvailabilityFromProviders, createRun, commitMove } from "@chess-tabiya/runtime";
 import { parseInspectorQueryPage } from "../../web/src/lib/inspector-query-response.js";
 import { INSPECTOR_SOURCE_TOPICS, type InspectorQueryView, type InspectorQueryRequest, type InspectorSourceContext } from "../../../packages/runtime/src/inspector-query-contract.js";
@@ -71,9 +71,17 @@ describe("actual current Inspector source-page operation", () => {
     expect(await f.send()).toMatchObject({ protocol: "inspector.query_page@1", kind: "page", body: { kind: "inventory", range: { start: 0, count: 8, total: 89, next: 8 } } });
     expect(acquire).not.toHaveBeenCalled();
   });
-  it("acquires only the actual requested source for each of the89 topics", async () => {
-    const f = fixture(), acquire = vi.spyOn(f.service, "acquireInspectorQuerySource"), original = JSON.stringify(f.storage.read(f.run.id));
-    for (const topic of INSPECTOR_SOURCE_TOPICS) {
+  describe("complete89-topic actual source requests", () => {
+    const completed = new Set<string>();
+    let acquired = 0;
+    it("registers the entire original topic image without duplicates", () => {
+      expect(INSPECTOR_SOURCE_TOPICS).toHaveLength(89);
+      expect(new Set(INSPECTOR_SOURCE_TOPICS.map(topic => topic.projection)).size).toBe(89);
+    });
+    // A topic is one actual request, with a cold service and the ordinary five-second deadline.
+    // Keep all89 requests and the aggregate source-only/read-only contract below.
+    it.each(INSPECTOR_SOURCE_TOPICS)("$projection acquires only its actual requested source", async topic => {
+      const f = fixture(), acquire = vi.spyOn(f.service, "acquireInspectorQuerySource"), original = JSON.stringify(f.storage.read(f.run.id));
       const kind = topic.contexts[0]!, nodeId = f.mainPath.at(-1)!.id;
       const context: InspectorSourceContext = kind === "branch" || kind === "recorded_review" ? { kind, throughNodeId: nodeId }
         : kind === "comparison" ? { kind, otherBranchId: f.peer, otherNodeId: f.peerPath.at(-1)!.id } : { kind };
@@ -82,8 +90,15 @@ describe("actual current Inspector source-page operation", () => {
         ? { kind: "source", projection, context, start: 0, collectionKey: null, parameters: { kind: "forced_mate", maxAttackerMoves: 1 } }
         : { kind: "source", projection, context, start: 0, collectionKey: null };
       expect(await f.send(f.request(view))).toMatchObject({ protocol: "inspector.query_page@1", kind: "page", body: { kind: "source", projection } });
-    }
-    expect(acquire).toHaveBeenCalledTimes(89); expect(JSON.stringify(f.storage.read(f.run.id))).toBe(original);
+      expect(acquire).toHaveBeenCalledTimes(1);
+      expect(JSON.stringify(f.storage.read(f.run.id))).toBe(original);
+      expect(completed.has(projection)).toBe(false);
+      completed.add(projection); acquired += acquire.mock.calls.length;
+    });
+    afterAll(() => {
+      expect([...completed].sort()).toEqual(INSPECTOR_SOURCE_TOPICS.map(topic => topic.projection).sort());
+      expect(completed.size).toBe(89); expect(acquired).toBe(89);
+    });
   });
   it("keeps current access, disclosure and decision refusals ahead of source work", async () => {
     const f = fixture(), acquire = vi.spyOn(f.service, "acquireInspectorQuerySource");

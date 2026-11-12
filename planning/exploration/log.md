@@ -42002,3 +42002,35 @@ native/content qualification and whole1.0 remain open; no parent capability/mile
 Pre-commit initially refuses the checkpoint because next actions/receipts were updated without
 advancing latestCheckpoint. The dated milestone summary and original source/RFC evidence are
 corrected before retry; no guard is relaxed and production bytes remain those fully verified.
+
+
+## 2026-11-12 — Original full Review packet and grade-owned collection checkpoint
+
+D4250 stages the actual full packet through its original prefix/SOURCE_RESULTS compiler and the
+actual grade-owned population through internal RunService begin/advance/finish/cancel methods.
+One-node progress never exposes partial evidence. Complete packet/Story equality, inherited
+mirrored branches, genuine provider/shape capture, pending/refused inputs, cancellation, stale
+authority and actual grant revocation remain covered. Independent readback accepts the source
+dependency, not public job/Map delivery.
+
+D4251 closes a reproduced borrowed-run mutation by capturing the entire immutable original once.
+D4253 closes reproduced root17-versus-five-node61 storage-read amplification by checking currentness
+around the first semantic computation while retaining source/step/publication/access checks.
+The abandoned D4252 UI-cache experiment is fully reverted; original UI fixture bytes do not change.
+D4254 isolates the same579 edges and89 Inspector topics with all original assertions, aggregate
+completion guards, ordinary5s limits and normal software tier. Independent review and710 focused
+cases/types pass; the higher count is parameterization, not added feature coverage.
+
+Final normal make verify-software build verify-content exits0:21315software/all588903.94s,
+7performance/four63.08s,340content/all44272.89s with zero skips, types/Svelte0errors0warnings
+and actual server/web builds. Canonical1928/1928 and24/89 qualification are unchanged; generated
+metadata changes only11 operation/63 predicate implementation digests. The92-document corpus
+audit reports errors[];104 exact capability declarations pass. Earlier full-run failures and
+their finite repairs remain in the ledger/source plan. No push or remote-CI claim.
+
+Next complete remaining PhaseArc/window/opening/ledger staging and final assembly, then the owned
+job clock/capacity/cancellation and actual strict rich Review API/selected UI. D4250/D4228, broader
+D4224/D4225 cost/default/memory, native qualification and whole1.0 remain open. No milestone closes.
+
+Normal governance subsequently exits0: C1-C8/P1-P7/R1-R10 green; all4003 ledger rows remain
+tracked with zero untriaged. The verified dependency is committed before the next implementation wave.

@@ -207,7 +207,8 @@ import { compilePhaseArc, compileRecordedEvidenceSnapshot, type PhaseSourceDepen
 import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import { InspectorContextError, InspectorRecordedContextOwner, type InspectorRecordedContext, type InspectorRecordedSelection } from "./inspector-recorded-context.js";
 import { RecordedComparisonContextError, RecordedComparisonPointOwner, type RecordedComparisonContext, type ComparisonSelection } from "./recorded-comparison-points.js";
-import { RecordedGradeContextError, RecordedGradeSourceOwner, type RecordedGradeContext, type GradeSelection } from "./recorded-grade-sources.js";
+import { RecordedGradeContextError, RecordedGradeSourceOwner, type RecordedGradeContext, type GradeSelection, type ReviewPopulationCollection } from "./recorded-grade-sources.js";
+import type { ReviewSourceContext } from "../../../packages/runtime/src/review-evidence.js";
 import { RecordedFoundationSourceOwner } from "./recorded-foundation-sources.js";
 import type { FoundationRecordedPrefix, FoundationRecordedDecision } from "../../../packages/runtime/src/recorded-foundation-source.js";
 import type { RecordedGradeSource } from "../../../packages/runtime/src/recorded-grade-source.js";
@@ -3435,6 +3436,10 @@ export class RunService {
   readGradeRecordedContext(context: RecordedGradeContext) { return this.#gradeSources.read(context); }
   readGradeMoveSource(source: RecordedGradeSource) { return this.#gradeSources.readSource(source); }
   resolveReviewMeasurementSource(context: RecordedGradeContext) { return this.#gradeSources.reviewMeasurements(context); }
+  beginReviewSourcePopulation(context: RecordedGradeContext, input: ReviewSourceContext) { return this.#gradeSources.beginReviewPopulation(context, input); }
+  advanceReviewSourcePopulation(handle: ReviewPopulationCollection) { return this.#gradeSources.advanceReviewPopulation(handle); }
+  finishReviewSourcePopulation(handle: ReviewPopulationCollection) { return this.#gradeSources.finishReviewPopulation(handle); }
+  cancelReviewSourcePopulation(handle: ReviewPopulationCollection) { return this.#gradeSources.cancelReviewPopulation(handle); }
 
   #reviewGradeContext(runId: string, principal: Principal, run: DrillRun, branchId: string, signal: AbortSignal) {
     const path = branchPath(run, branchId), throughNodeId = path.at(-1)?.id;

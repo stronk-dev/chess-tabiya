@@ -116,7 +116,7 @@ describe("review evidence compiler: typed shared delivery and Review projections
       const subject = authorize({ runId: run.id, branchId: run.activeCursor.branchId });
       const readsAtIssue = loadRun.mock.calls.length;
       const callsAtIssue = collect.mock.calls.length;
-      expect(callsAtIssue).toBe(1);
+      expect(callsAtIssue).toBe(0);
       assertReviewRecordedPrefixReceipt(subject);
       reviewSubjectPath(subject);
       const packet = compileReviewPacketForSubject(subject, { engine: reviewDurableEngineStates(run, mainPath(run)), shapes: [] });
@@ -124,12 +124,14 @@ describe("review evidence compiler: typed shared delivery and Review projections
       reviewStoryMoments(packet);
       renderReviewStoryReceipt(packet);
       expect(loadRun.mock.calls.length).toBeGreaterThan(readsAtIssue);
-      expect(collect).toHaveBeenCalledTimes(callsAtIssue);
-      // A new issuance still executes its own collector, even for identical storage bytes.
+      expect(collect).toHaveBeenCalledTimes(1);
+      // New metadata issuance performs no collection; its own later source execution does.
       const again = authorize({ runId: run.id, branchId: run.activeCursor.branchId });
       expect(again).not.toBe(subject);
       expect(again).toEqual(subject);
-      expect(collect).toHaveBeenCalledTimes(callsAtIssue + 1);
+      expect(collect).toHaveBeenCalledTimes(1);
+      compileReviewPacketForSubject(again, { engine: reviewDurableEngineStates(run, mainPath(run)), shapes: [] });
+      expect(collect).toHaveBeenCalledTimes(2);
     } finally { collect.mockRestore(); }
   });
 

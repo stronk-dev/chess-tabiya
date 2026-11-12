@@ -973,10 +973,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "D4241 prefix planning is committed51e69170. D4228 original12-source cooperative collection passes independent readback,110/four focused checks and complete normal gates:20621/all587 software,7performance,340/all44 content, types/build/governance. D4250 rich transport/source-factoring/common-cancel amendment is independently accepted; actual rich delivery stays doing. Next stage original grade/fullpacket/PhaseArc/windows/opening owners and implement the bounded owned job/strict rich API/selected UI. No private helper substitutes for actual rich Review. D4224/D4225 activation/cost/memory, D3791 native Inspector, D4246 import attribution and full1.0 remain open.",
+        "nextAction": "D4250 full-packet and grade-owned collection are implemented and independently reviewed; complete normal software/build/content gates pass. Next stage original PhaseArc/window/opening/ledger sources and final assembly, then bounded job ownership/clock/capacity and strict rich Review API/selected UI. Existing ordinary queries are not rich Review. D4224/D4225 activation/cost/memory, D3791 native Inspector, D4246 import attribution and full1.0 remain open.",
         "latestCheckpoint": {
           "at": "2026-11-12",
-          "summary": "D4241 whole-prefix planning is committed51e69170. D4228 original12-source cooperative collection preserves genuine slots/results and complete canonical outputs; independent source readback and110/four focused controls pass. Complete normal gates pass20621software/all5871002.09s,7performance/four61.37s,340content/all44/no skips235.14s, types/Svelte0errors0warnings, actual server/web builds and governance. Canonical1928/1928 and24/89 remain unchanged; regenerated metadata changes only11operation/63predicate implementation digests plus exact helper dependency membership. D4250 joint rich-Review transport/source-factoring/common-cancel amendment is independently accepted; actual rich delivery stays doing. No private helper substitutes for original grade/fullpacket/PhaseArc/windows/opening staging, bounded job ownership/clock/capacity or selected API/UI proof. D4224/D4225 cost/default/memory and all broader1.0 obligations remain open; no milestone transition, push or remote-CI claim.",
+          "summary": "D4250 now stages the genuine original full packet and actual grade-owned population without a twelve-source cast or partial packet. D4251 captures the complete immutable original run; D4253 removes memoized semantic storage-read amplification while retaining currentness/access checks. Original UI fixtures are unchanged;81 focused UI/source/service cases and types pass. D4254 independently accepts isolation of all579 original edges and89 original Inspector topics into710 focused cases, preserving assertions/deadlines/cohorts; the count increase is parameterization, not added feature coverage. Canonical1928/1928 and24/89 qualification remain unchanged apart from11 operation/63 predicate implementation digests. Final normal software/build/content gates pass:21315software/all588903.94s,7performance/four63.08s,340content/all44272.89s with zero skips, types/Svelte0errors0warnings, server/web builds,92-document audit errors[] and104 exact capability declarations. Normal governance passes C1-C8/P1-P7/R1-R10. Public rich Review/job lifecycle/remaining source staging, D4224/D4225 cost/default/memory and broader1.0 remain open; no milestone transition or remote-CI claim.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1276,7 +1276,13 @@
             "packages/runtime/src/module-review-prefix.ts",
             "packages/runtime/src/module-review-prefix.test.ts",
             "packages/runtime/src/review-evidence.ts",
-            "packages/runtime/src/recorded-review-source-collection.test.ts"
+            "packages/runtime/src/recorded-review-source-collection.test.ts",
+            "packages/runtime/src/review-packet-collection.test.ts",
+            "packages/runtime/src/review-evidence.test.ts",
+            "apps/server/src/recorded-grade-sources.ts",
+            "apps/server/src/recorded-grade-sources.test.ts",
+            "apps/server/src/service.ts",
+            "docs/review-evidence.md"
           ],
           "anchors": [
             {
@@ -2068,6 +2074,26 @@
               "kind": "rfc",
               "id": "review-map.md",
               "digest": "sha256:36cfe2cdbf10b96ff4745c200b0f7c48ce65d00f314e5770b0c51aabfcc35b93"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4251",
+              "digest": "sha256:9ce76ea9c3f3591e03b0de05aa75f8b8494d4bde1b9ce602860510e83433bb77"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4252",
+              "digest": "sha256:ad6cb34bd042eafbab1ff2eb6b550f0b0effccaaa613f971e6af6a4dc600c827"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4253",
+              "digest": "sha256:d3ee61fa644b8053053d71c949fd472e9dd4468fc146672e175ab0fd76b6d87f"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4254",
+              "digest": "sha256:2ce514c7069a351009dd2230dbc7e96edc1288b552e8e6f2788b85d2148bb15d"
             }
           ]
         },
@@ -2088,10 +2114,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "D4241 prefix planning is committed51e69170. D4228 original12-source cooperative collection passes independent readback,110/four focused checks and complete normal gates:20621/all587 software,7performance,340/all44 content, types/build/governance. D4250 rich transport/source-factoring/common-cancel amendment is independently accepted; actual rich delivery stays doing. Next stage original grade/fullpacket/PhaseArc/windows/opening owners and implement the bounded owned job/strict rich API/selected UI. No private helper substitutes for actual rich Review. D4224/D4225 activation/cost/memory, D3791 native Inspector, D4246 import attribution and full1.0 remain open.",
+        "nextAction": "D4250 full-packet and grade-owned collection are implemented and independently reviewed; complete normal software/build/content gates pass. Next stage original PhaseArc/window/opening/ledger sources and final assembly, then bounded job ownership/clock/capacity and strict rich Review API/selected UI. Existing ordinary queries are not rich Review. D4224/D4225 activation/cost/memory, D3791 native Inspector, D4246 import attribution and full1.0 remain open.",
         "latestCheckpoint": {
           "at": "2026-11-12",
-          "summary": "D4241 whole-prefix planning is committed51e69170. D4228 original12-source cooperative collection preserves genuine slots/results and complete canonical outputs; independent source readback and110/four focused controls pass. Complete normal gates pass20621software/all5871002.09s,7performance/four61.37s,340content/all44/no skips235.14s, types/Svelte0errors0warnings, actual server/web builds and governance. Canonical1928/1928 and24/89 remain unchanged; regenerated metadata changes only11operation/63predicate implementation digests plus exact helper dependency membership. D4250 joint rich-Review transport/source-factoring/common-cancel amendment is independently accepted; actual rich delivery stays doing. No private helper substitutes for original grade/fullpacket/PhaseArc/windows/opening staging, bounded job ownership/clock/capacity or selected API/UI proof. D4224/D4225 cost/default/memory and all broader1.0 obligations remain open; no milestone transition, push or remote-CI claim.",
+          "summary": "D4250 now stages the genuine original full packet and actual grade-owned population without a twelve-source cast or partial packet. D4251 captures the complete immutable original run; D4253 removes memoized semantic storage-read amplification while retaining currentness/access checks. Original UI fixtures are unchanged;81 focused UI/source/service cases and types pass. D4254 independently accepts isolation of all579 original edges and89 original Inspector topics into710 focused cases, preserving assertions/deadlines/cohorts; the count increase is parameterization, not added feature coverage. Canonical1928/1928 and24/89 qualification remain unchanged apart from11 operation/63 predicate implementation digests. Final normal software/build/content gates pass:21315software/all588903.94s,7performance/four63.08s,340content/all44272.89s with zero skips, types/Svelte0errors0warnings, server/web builds,92-document audit errors[] and104 exact capability declarations. Normal governance passes C1-C8/P1-P7/R1-R10. Public rich Review/job lifecycle/remaining source staging, D4224/D4225 cost/default/memory and broader1.0 remain open; no milestone transition or remote-CI claim.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2722,7 +2748,9 @@
             "tools/d4175-outcome-delivery/README.md",
             "packages/runtime/src/module-review-prefix.ts",
             "packages/runtime/src/module-review-prefix.test.ts",
-            "packages/runtime/src/recorded-review-source-collection.test.ts"
+            "packages/runtime/src/recorded-review-source-collection.test.ts",
+            "packages/runtime/src/review-packet-collection.test.ts",
+            "apps/server/src/service.ts"
           ],
           "anchors": [
             {
@@ -3859,6 +3887,26 @@
               "kind": "work_state",
               "id": "D4250",
               "digest": "sha256:d9ffd41d03807ccdcbf21a7c17e5e1baeb4ee99876f786953dbf79760a637058"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4251",
+              "digest": "sha256:9ce76ea9c3f3591e03b0de05aa75f8b8494d4bde1b9ce602860510e83433bb77"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4252",
+              "digest": "sha256:ad6cb34bd042eafbab1ff2eb6b550f0b0effccaaa613f971e6af6a4dc600c827"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4253",
+              "digest": "sha256:d3ee61fa644b8053053d71c949fd472e9dd4468fc146672e175ab0fd76b6d87f"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4254",
+              "digest": "sha256:2ce514c7069a351009dd2230dbc7e96edc1288b552e8e6f2788b85d2148bb15d"
             }
           ]
         },
@@ -5408,10 +5456,10 @@
         "dependsOn": [
           "durable-product-state"
         ],
-        "nextAction": "Independently review D3535's authored execution amendment in pack-training-forms §§4.4–4.10, then implement its full application/storage/client criteria: retained pass/member inputs, frozen submissions, repeat/next cycle, all-path tempo, ladder isolation and account lifecycle. D3318 catalogue/detail reads remain delivered; the nine disposable model controls are not production proof. D3317's ramp mapping is separate. Continue the existing theory, profile, bot, Campaign, social/clock and professional API work.",
+        "nextAction": "Independently review D3535's authored execution amendment in pack-training-forms \u00a7\u00a74.4\u20134.10, then implement its full application/storage/client criteria: retained pass/member inputs, frozen submissions, repeat/next cycle, all-path tempo, ladder isolation and account lifecycle. D3318 catalogue/detail reads remain delivered; the nine disposable model controls are not production proof. D3317's ramp mapping is separate. Continue the existing theory, profile, bot, Campaign, social/clock and professional API work.",
         "latestCheckpoint": {
           "at": "2026-10-10",
-          "summary": "D3535's remaining original training-set execution is now specified in pack-training-forms §§4.4–4.10, draft awaiting independent acceptance. Two ordinary tables retain owned pass/member inputs, freeze selected branch results and record exact command receipts; no run-schema or pack-byte change. The contract includes all-path scaled move budgets, automatic-ladder exclusion, deletion/import and complete Learn/result/repeat/resume journeys. Nine disposable model tests execute the draft DDL and shipped pure helpers; nineteen unchanged production catalogue tests pass. The small author model belongs to the explicit RFC-evidence tier, outside ordinary CI and content coverage or product proof. D3318/D1/D3 and separate D3317 remain open; no production mutation, authored content, graduation, migration, whole capability/milestone, remote CI or 1.0 promotion.",
+          "summary": "D3535's remaining original training-set execution is now specified in pack-training-forms \u00a7\u00a74.4\u20134.10, draft awaiting independent acceptance. Two ordinary tables retain owned pass/member inputs, freeze selected branch results and record exact command receipts; no run-schema or pack-byte change. The contract includes all-path scaled move budgets, automatic-ladder exclusion, deletion/import and complete Learn/result/repeat/resume journeys. Nine disposable model tests execute the draft DDL and shipped pure helpers; nineteen unchanged production catalogue tests pass. The small author model belongs to the explicit RFC-evidence tier, outside ordinary CI and content coverage or product proof. D3318/D1/D3 and separate D3317 remain open; no production mutation, authored content, graduation, migration, whole capability/milestone, remote CI or 1.0 promotion.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/application.ts",

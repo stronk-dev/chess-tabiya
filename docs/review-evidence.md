@@ -25,6 +25,34 @@ disclosure. The owner's Review carries its durable campaign origin for returning
 request parameters cannot supply a return URL. See `docs/campaign.md` for retained, abandoned
 and deleted-recording behavior. This navigation does not supply missing evidence sources.
 
+## Resumable source preparation
+
+The complete packet has a private `beginReviewPacketCollection` / `advanceReviewPacketCollection`
+/ `finishReviewPacketCollection` / `cancelReviewPacketCollection` path. It retains the genuine
+original prefix and full source-result plan; it never treats the twelve-adapter recorded
+population as a full packet. An advance executes the next original node's registered slots.
+Only complete work reaches the existing aggregate compiler, in canonical adapter order. Interim
+progress contains node identity/counts, not evidence or a partial packet. Existing synchronous
+callers keep their adapter-major dispatch and complete output.
+
+Prefix authorization captures and freezes the entire original stored run once. A storage adapter
+can mutate its own borrowed object afterward without altering deferred sources. The receipt's
+body/digests are unchanged, and routine currentness reads still consult actual storage without
+cloning or collecting. The original semantic path is acquired once when a source needs it, with
+currentness checks before/after computation and exact path validation. Engine states and complete
+shape operands are independently captured; genuine provider evidence objects retain their identity.
+Whole-branch collectors remain indivisible work, so this alone proves no five-second budget.
+
+RunService also exposes internal begin/advance/finish/cancel methods for the existing recorded
+population through its actual grade source owner. They retain the original modern-attachment
+normalization and owned grade context, hide the runtime handle and check live grants/storage/signal
+before and after each step and final publication. Cancel, failure and successful finish retire the
+private work. These methods do not expose HTTP jobs or grant access to another service's handle.
+
+The rich Review transport, bounded job/capacity/idle clock and final PhaseArc/window/opening
+preparation remain D4250/D4228 work. Existing learner routes have not switched to the new job.
+The current verified checkpoint and its limits are in `planning/foundation-source-identity/plan.md`.
+
 ## One engine source, five Review projections
 
 The recorded PGN result belongs only to the imported mainline. A rehearsal branch remains

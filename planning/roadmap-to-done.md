@@ -1,5 +1,21 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
+## Current continuation — 2026-11-12
+
+D4250 now stages the genuine original full Review packet and actual grade-owned source population;
+complete outputs preserve their original authorities and cannot publish partial evidence. D4251
+captures the immutable original game, and D4253 repairs repeated storage reads without dropping
+currentness/access checks. Independent review accepts these finite dependencies. D4254 isolates
+the same579 edge inputs and89 Inspector topics into individual correctness cases with unchanged
+assertions/deadlines; the increased count is parameterization, not new chess coverage.
+Final normal software/build/content gates pass:21315 software/all588,7 performance/four,
+340 content/all44 with zero skips, clean types/Svelte, server/web builds,92-document audit errors[]
+and104 capability declarations. Canonical1928/1928 and24/89 qualification remain unchanged.
+Next stage remaining PhaseArc/window/opening/ledger sources and final assembly, then bounded job
+ownership/clock/capacity and the strict rich Review API/selected UI. D4250/D4228 and D4224/D4225
+cost/default/memory work remain open. This source checkpoint completes no whole-product milestone.
+[Implementation and verification](foundation-source-identity/plan.md).
+
 ## Current continuation — 2026-11-11
 
 The complete normal real-content gate is green after D3928/D4247:340/all44 tests, zero skips,

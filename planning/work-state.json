@@ -35661,6 +35661,42 @@
       "uxItems": [],
       "owner": "review-and-return",
       "since": "2026-11-12"
+    },
+    {
+      "id": "D4251",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9ce76ea9c3f3591e03b0de05aa75f8b8494d4bde1b9ce602860510e83433bb77",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/review-packet-collection.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4252",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ad6cb34bd042eafbab1ff2eb6b550f0b0effccaaa613f971e6af6a4dc600c827",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/review-packet-collection.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4253",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d3ee61fa644b8053053d71c949fd472e9dd4468fc146672e175ab0fd76b6d87f",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/review-packet-collection.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4254",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2ce514c7069a351009dd2230dbc7e96edc1288b552e8e6f2788b85d2148bb15d",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/foundation-edge-source.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

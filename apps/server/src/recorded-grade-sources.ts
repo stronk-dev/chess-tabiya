@@ -10,7 +10,9 @@ import { moduleConsumerCeilings } from "../../../packages/runtime/src/module-pol
 import { parseFinalizedAssistanceV1 } from "../../../packages/runtime/src/assistance-exchange.js";
 import { canonicalRunBytes, createRecordedReviewBoundarySourceOwner } from "../../../packages/runtime/src/recorded-review-boundary.js";
 import type { RecordedReviewBoundary } from "../../../packages/runtime/src/recorded-review-boundary.js";
-import { collectRecordedReviewObjectives, collectRecordedReviewSourcePopulation, readRecordedReviewSourcePopulation, type ReviewSourceContext } from "../../../packages/runtime/src/review-evidence.js";
+import { advanceRecordedReviewSourceCollection, beginRecordedReviewSourceCollection, cancelRecordedReviewSourceCollection,
+  finishRecordedReviewSourceCollection, collectRecordedReviewObjectives, collectRecordedReviewSourcePopulation,
+  readRecordedReviewSourcePopulation, type RecordedReviewSourceCollection, type ReviewSourceContext } from "../../../packages/runtime/src/review-evidence.js";
 import type { DrillRun } from "../../../packages/runtime/src/types.js";
 import { RecordedEngineEndpointOwner, type RecordedEngineEndpoints } from "./recorded-engine-endpoints.js";
 import type { RunService } from "./service.js";
@@ -33,6 +35,9 @@ export interface GradeSelection {
 }
 declare const recordedGradeContextBrand: unique symbol;
 export interface RecordedGradeContext { readonly [recordedGradeContextBrand]: true }
+declare const reviewPopulationCollectionBrand: unique symbol;
+/** Service-owned work: never a runtime source handle, grant or wire value. */
+export interface ReviewPopulationCollection { readonly [reviewPopulationCollectionBrand]: true }
 interface Owned {
   readonly boundary: RecordedReviewBoundary;
   readonly permission: RecordedGradePermission;
@@ -71,6 +76,7 @@ export class RecordedGradeSourceOwner {
   readonly #endpoints: RecordedEngineEndpointOwner;
   readonly #registry: PackRegistry | undefined;
   readonly #reviewMeasurements = new WeakMap<RecordedGradeContext, RecordedReviewLedgerSource>();
+  readonly #reviewCollections = new WeakMap<object, { readonly context: RecordedGradeContext; readonly collection: RecordedReviewSourceCollection; complete: boolean }>();
   constructor(storage: RunStorage, registry: PackRegistry | undefined, coordinator: ReviewEvidenceCoordinator | undefined) {
     this.#registry = registry;
     this.#boundaries = createRecordedReviewBoundarySourceOwner({ loadRun: id => storage.read(id)?.run, loadImportRecord: id => {
@@ -146,6 +152,12 @@ export class RecordedGradeSourceOwner {
   }
 
   reviewPopulation(context: RecordedGradeContext, input: ReviewSourceContext) {
+    const prepared = this.#reviewPopulationInput(context, input);
+    const population = collectRecordedReviewSourcePopulation(prepared);
+    readRecordedReviewSourcePopulation(population); this.read(context); return population;
+  }
+
+  #reviewPopulationInput(context: RecordedGradeContext, input: ReviewSourceContext) {
     const owned = this.read(context);
     if (owned.selection.timing !== "review") return refuse("Review source population requires its own workflow");
     const image = this.#endpoints.read(owned.endpoints), engine = new Map(input.engine);
@@ -156,8 +168,55 @@ export class RecordedGradeSourceOwner {
         engine.set(id, Object.freeze({ kind: "delivered", delivery: selected.occurrence.evaluation }));
       } else if (state?.kind === "delivered") return refuse("Review source context invented a recorded attachment");
     }
-    const population = collectRecordedReviewSourcePopulation({ boundary: owned.boundary, context: { engine, shapes: input.shapes } });
-    readRecordedReviewSourcePopulation(population); this.read(context); return population;
+    return { boundary: owned.boundary, context: { engine, shapes: input.shapes } };
+  }
+
+  beginReviewPopulation(context: RecordedGradeContext, input: ReviewSourceContext): ReviewPopulationCollection {
+    const prepared = this.#reviewPopulationInput(context, input);
+    const collection = beginRecordedReviewSourceCollection(prepared);
+    try {
+      this.read(context);
+      const handle = Object.freeze({}) as ReviewPopulationCollection;
+      this.#reviewCollections.set(handle, { context, collection, complete: false });
+      return handle;
+    } catch (error) { cancelRecordedReviewSourceCollection(collection); throw error; }
+  }
+
+  #reviewCollection(handle: ReviewPopulationCollection) {
+    const state = typeof handle === "object" && handle !== null ? this.#reviewCollections.get(handle) : undefined;
+    if (state === undefined) return refuse("Review population work is foreign or retired");
+    return state;
+  }
+
+  advanceReviewPopulation(handle: ReviewPopulationCollection) {
+    const state = this.#reviewCollection(handle);
+    if (state.complete) return refuse("Review population work has no remaining subject");
+    try {
+      this.read(state.context);
+      const progress = advanceRecordedReviewSourceCollection(state.collection);
+      this.read(state.context);
+      state.complete = progress.complete;
+      return progress;
+    } catch (error) { this.cancelReviewPopulation(handle); throw error; }
+  }
+
+  finishReviewPopulation(handle: ReviewPopulationCollection) {
+    const state = this.#reviewCollection(handle);
+    if (!state.complete) return refuse("Review population work is incomplete");
+    try {
+      this.read(state.context);
+      const population = finishRecordedReviewSourceCollection(state.collection);
+      readRecordedReviewSourcePopulation(population); this.read(state.context);
+      return population;
+    } finally { this.cancelReviewPopulation(handle); }
+  }
+
+  cancelReviewPopulation(handle: ReviewPopulationCollection): boolean {
+    const state = typeof handle === "object" && handle !== null ? this.#reviewCollections.get(handle) : undefined;
+    if (state === undefined) return false;
+    this.#reviewCollections.delete(handle);
+    cancelRecordedReviewSourceCollection(state.collection);
+    return true;
   }
 
   /** Single-line recorded facts, owned by this current Review workflow, not a fabricated Compare. */

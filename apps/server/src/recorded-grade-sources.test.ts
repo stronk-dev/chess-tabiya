@@ -3,12 +3,15 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { commitMove, revealFeedback } from "../../../packages/runtime/src/runtime.js";
 import { moduleDecisionStamp } from "../../../packages/runtime/src/module-decision.js";
 import { invokeEvidenceValueRoute } from "../../../packages/runtime/src/internal/evidence-value-routes.js";
+import * as routes from "../../../packages/runtime/src/internal/evidence-value-routes.js";
+import * as reviewSources from "../../../packages/runtime/src/review-evidence.js";
 import { recordedGradeFixture } from "../../../packages/runtime/src/testing/recorded-grade-fixture.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 import { parsePresentationReceipt, presentedSentence } from "../../../packages/runtime/src/presentation-contract.js";
 import { readRecordedSequenceWindow } from "../../../packages/runtime/src/recorded-sequence-window.js";
 import { RecordedGradeSourceOwner } from "./recorded-grade-sources.js";
+import { attachDelivery, evaluationDelivery } from "../../../packages/runtime/src/testing/review-evidence-fixture.js";
 
 const stores: SQLiteRunStorage[] = [];
 afterEach(() => { for (const storage of stores.splice(0)) storage.close(); });
@@ -24,6 +27,80 @@ function fixture(black = false, input: Pick<NonNullable<Parameters<typeof record
   return { ...original, run, storage, service, principal, lease, controller, query, resolve };
 }
 describe("sole service-owned recorded grade issuer", () => {
+  it.each([false, true])("steps the actual Review population with the original normalized sources: black=%s", async black => {
+    const f = fixture(black), capture = vi.spyOn(RecordedGradeSourceOwner.prototype, "reviewPopulation");
+    try {
+      let modern = f.run;
+      for (const [index, node] of f.run.nodes.entries()) modern = attachDelivery(modern, node.id, evaluationDelivery(node.fen, index === 0 ? "cp 20" : "cp -300"));
+      f.storage.save(modern, f.lease);
+      await f.service.review(f.run.id, f.principal);
+      expect(capture).toHaveBeenCalledTimes(1);
+      const [context, input] = capture.mock.calls[0]!;
+      const expected = capture.mock.results[0]!.value;
+      const handle = f.service.beginReviewSourcePopulation(context, input);
+      expect(() => f.service.finishReviewSourcePopulation(handle)).toThrow(/incomplete/);
+      for (let index = 0; index < f.run.nodes.length; index++) {
+        const progress = f.service.advanceReviewSourcePopulation(handle);
+        expect(progress.completedSubjects).toBe(index + 1);
+        expect(progress.complete).toBe(index + 1 === f.run.nodes.length);
+      }
+      const actual = f.service.finishReviewSourcePopulation(handle);
+      expect(JSON.stringify(reviewSources.readRecordedReviewSourcePopulation(actual).results))
+        .toBe(JSON.stringify(reviewSources.readRecordedReviewSourcePopulation(expected).results));
+      expect(reviewSources.readRecordedLastLevelPopulation(reviewSources.readRecordedReviewSourcePopulation(actual).lastLevelPopulation).rows
+        .every(row => row.provider?.kind === "delivered" && row.state.kind === "available")).toBe(true);
+      const changed = new Map(input.engine), root = f.run.nodes[0]!;
+      changed.set(root.id, { kind: "delivered", delivery: invokeEvidenceValueRoute("live.stockfish.position_eval@1", { delivery: evaluationDelivery(root.fen, "cp 999") }) });
+      expect(() => f.service.beginReviewSourcePopulation(context, { ...input, engine: changed })).toThrow(/changed its original modern attachment/);
+      expect(f.service.cancelReviewSourcePopulation(handle)).toBe(false);
+      expect(() => f.service.finishReviewSourcePopulation(handle)).toThrow(/foreign or retired/);
+    } finally { capture.mockRestore(); }
+  });
+
+  it.each(["before", "during", "finish"] as const)("rechecks real revoked access at the %s collection boundary", phase => {
+    const f = fixture(false, { before: null, after: null }), reader = { learnerId: "collection-reader", handle: "collection-reader" };
+    f.storage.createLearner({ id: reader.learnerId, handle: reader.handle, passwordHash: "!", createdAt: "2026-11-12T00:00:00.000Z" });
+    f.storage.grantRole(f.run.id, reader.learnerId, "spectator", f.lease, "2026-11-12T00:00:00.000Z");
+    const context = f.service.resolveGradeRecordedContext(f.run.id, reader, null, f.query, f.controller.signal);
+    const handle = f.service.beginReviewSourcePopulation(context, { engine: new Map(), shapes: [] });
+    if (phase === "before") f.storage.revokeGrant(f.run.id, reader.learnerId, f.lease);
+    if (phase === "finish") {
+      for (let index = 0; index < f.run.nodes.length; index++) f.service.advanceReviewSourcePopulation(handle);
+      const original = reviewSources.finishRecordedReviewSourceCollection;
+      const finish = vi.spyOn(reviewSources, "finishRecordedReviewSourceCollection").mockImplementation(input => {
+        const population = original(input); f.storage.revokeGrant(f.run.id, reader.learnerId, f.lease); return population;
+      });
+      try { expect(() => f.service.finishReviewSourcePopulation(handle)).toThrow(expect.objectContaining({ code: "RUN_NOT_FOUND" })); }
+      finally { finish.mockRestore(); }
+    } else {
+      const original = routes.invokeEvidenceValueRoute;
+      let revoked = false;
+      const dispatch = vi.spyOn(routes, "invokeEvidenceValueRoute").mockImplementation(((...args: Parameters<typeof original>) => {
+        const result = original(...args);
+        if (phase === "during" && !revoked) { f.storage.revokeGrant(f.run.id, reader.learnerId, f.lease); revoked = true; }
+        return result;
+      }) as typeof original);
+      try { expect(() => f.service.advanceReviewSourcePopulation(handle)).toThrow(expect.objectContaining({ code: "RUN_NOT_FOUND" })); }
+      finally { dispatch.mockRestore(); }
+    }
+    expect(f.service.cancelReviewSourcePopulation(handle)).toBe(false);
+  });
+
+  it("retires aborted or cancelled work without crossing another actual service owner", () => {
+    const f = fixture(false, { before: null, after: null }), other = fixture(true, { before: null, after: null });
+    const handle = f.service.beginReviewSourcePopulation(f.resolve(), { engine: new Map(), shapes: [] });
+    expect(() => other.service.advanceReviewSourcePopulation(handle)).toThrow(/foreign or retired/);
+    expect(other.service.cancelReviewSourcePopulation(handle)).toBe(false);
+    expect(() => f.service.advanceReviewSourcePopulation({ ...handle })).toThrow(/foreign or retired/);
+    f.controller.abort();
+    expect(() => f.service.advanceReviewSourcePopulation(handle)).toThrow(expect.objectContaining({ name: "AbortError" }));
+    expect(f.service.cancelReviewSourcePopulation(handle)).toBe(false);
+    const current = other.service.beginReviewSourcePopulation(other.resolve(), { engine: new Map(), shapes: [] });
+    other.service.advanceReviewSourcePopulation(current);
+    expect(other.service.cancelReviewSourcePopulation(current)).toBe(true);
+    expect(other.service.cancelReviewSourcePopulation(current)).toBe(false);
+  });
+
   it.each(["mutable", "frozen-envelope"] as const)("D3944 never reuses run bytes over a %s mutable descendant", shape => {
     const f = fixture(), stored = f.storage.read(f.run.id)!, mutable = structuredClone(stored.run);
     const borrowed = shape === "mutable" ? mutable : Object.freeze({ ...mutable });

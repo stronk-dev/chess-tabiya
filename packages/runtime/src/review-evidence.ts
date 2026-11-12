@@ -162,8 +162,8 @@ function learnerResult(result: "1-0" | "0-1" | "1/2-1/2", side: "white" | "black
  * records.
  */
 export function createReviewPrefixAuthority(storage: ReviewStorageAuthority): (input: ReviewPrefixAuthorizationInput) => ReviewRecordedPrefixReceipt {
-  // Identity replay reads storage again. Issuance alone computes semantic evidence; checking a
-  // receipt must neither mint another receipt nor rerun the chess collectors.
+  // Identity replay and issuance are metadata-only. The original semantic source is acquired
+  // once, lazily inside source execution; checking a receipt never reruns its collectors.
   const readPrefix = (input: ReviewPrefixAuthorizationInput) => {
     if (typeof input !== "object" || input === null || Object.keys(input).sort().join("|") !== "branchId|runId" || typeof input.runId !== "string" || typeof input.branchId !== "string") refuse("REVIEW_PREFIX_REFUSED", "prefix input is exactly { runId, branchId }");
     const run = storage.loadRun(input.runId) ?? refuse("REVIEW_PREFIX_REFUSED", `run ${input.runId} is not stored`);
@@ -200,12 +200,27 @@ export function createReviewPrefixAuthority(storage: ReviewStorageAuthority): (i
     return { run, path, body };
   };
   const authorizeReviewRecordedPrefix = (input: ReviewPrefixAuthorizationInput): ReviewRecordedPrefixReceipt => {
-    const { run, path, body } = readPrefix(input);
-    const semantic = recordedSemanticPath(run, body.branchId);
-    if (semantic.kind === "available" && semantic.pathNodeIds.join("\u0000") !== path.map((node) => node.id).join("\u0000")) refuse("REVIEW_PREFIX_REFUSED", "recorded semantic path disagrees with the branch path");
+    const { run: loaded, body } = readPrefix(input);
+    // The storage adapter owns its object. Retain the complete original image, not an alias
+    // whose nodes could change between metadata authorization and deferred source execution.
+    const run = deepFreeze(structuredClone(loaded)), path = branchPath(run, body.branchId);
     const receipt = deepFreeze({ ...body, subjectDigest: presentationDigest("review.subject@1", body) });
     const address = Object.freeze({ runId: body.runId, branchId: body.branchId });
-    PREFIXES.set(receipt, Object.freeze({ currentSubjectDigest: () => presentationDigest("review.subject@1", readPrefix(address).body), run, path: Object.freeze([...path]), semantic }));
+    let semantic: RecordedSemanticPathResult | undefined;
+    PREFIXES.set(receipt, Object.freeze({
+      currentSubjectDigest: () => presentationDigest("review.subject@1", readPrefix(address).body),
+      run, path: Object.freeze([...path]),
+      get semantic() {
+        if (semantic === undefined) {
+          assertReviewRecordedPrefixReceipt(receipt);
+          const collected = recordedSemanticPath(run, body.branchId);
+          if (collected.kind === "available" && collected.pathNodeIds.join("\u0000") !== path.map(node => node.id).join("\u0000")) refuse("REVIEW_PREFIX_REFUSED", "recorded semantic path disagrees with the branch path");
+          assertReviewRecordedPrefixReceipt(receipt);
+          semantic = collected;
+        }
+        return semantic;
+      },
+    }));
     return receipt;
   };
   return authorizeReviewRecordedPrefix;
@@ -675,13 +690,91 @@ function sealSourceResult(subject: ReviewRecordedPrefixReceipt, slot: ReviewSour
  * Executes every planned adapter invocation over the authorized subject and typed context. The
  * caller supplies provider states and shape entries, never evidence, prose or a family string.
  */
-export function runReviewPacketSources(subject: ReviewRecordedPrefixReceipt, context: ReviewSourceContext, options: { readonly windowNodes: number } = { windowNodes: 1 }): readonly ReviewPacketSourceResult[] {
+interface ReviewPacketCollectionWork {
+  readonly subject: ReviewRecordedPrefixReceipt;
+  readonly execution: ExecutionContext;
+  readonly plan: readonly ReviewSourcePlanSlot[];
+  readonly results: Map<ReviewSourcePlanSlot, ReviewPacketSourceResult>;
+}
+
+function prepareReviewPacketCollection(subject: ReviewRecordedPrefixReceipt, context: ReviewSourceContext, options: { readonly windowNodes: number }): ReviewPacketCollectionWork {
   const snapshot = snapshotOf(subject);
-  const execution: ExecutionContext = { kind: "packet", subject, snapshot, byId: new Map(snapshot.path.map((node) => [node.id, node])), context, memo: { points: new Map(), pointInvocations: new Map(), positions: new Map(), edges: new Map() } };
+  const execution: ExecutionContext = { kind: "packet", subject, snapshot, byId: new Map(snapshot.path.map(node => [node.id, node])),
+    context: captureReviewSourceContext(context, snapshot.path), memo: { points: new Map(), pointInvocations: new Map(), positions: new Map(), edges: new Map() } };
   SOURCE_EXECUTIONS.add(execution);
-  const results = Object.freeze(reviewPacketSourcePlan(subject, options).map((slot) => sealSourceResult(subject, slot, ADAPTER_BY_ID.get(slot.adapterId)!.operation({ invocationId: slot.invocationId, adapterId: slot.adapterId, nodeId: slot.nodeId, grain: slot.grain, fromNodeId: slot.fromNodeId, window: slot.window }, execution))));
+  return { subject, execution, plan: reviewPacketSourcePlan(subject, options), results: new Map() };
+}
+
+function executeReviewPacketSlot(work: ReviewPacketCollectionWork, slot: ReviewSourcePlanSlot): void {
+  const { subject, execution } = work;
+  work.results.set(slot, sealSourceResult(subject, slot, ADAPTER_BY_ID.get(slot.adapterId)!.operation({
+    invocationId: slot.invocationId, adapterId: slot.adapterId, nodeId: slot.nodeId,
+    grain: slot.grain, fromNodeId: slot.fromNodeId, window: slot.window,
+  }, execution)));
+}
+
+export function runReviewPacketSources(subject: ReviewRecordedPrefixReceipt, context: ReviewSourceContext, options: { readonly windowNodes: number } = { windowNodes: 1 }): readonly ReviewPacketSourceResult[] {
+  const work = prepareReviewPacketCollection(subject, context, options);
+  for (const slot of work.plan) executeReviewPacketSlot(work, slot);
   assertReviewRecordedPrefixReceipt(subject);
-  return results;
+  return Object.freeze(work.plan.map(slot => work.results.get(slot)!));
+}
+
+declare const reviewPacketCollectionBrand: unique symbol;
+/** Original full-packet work, distinct from the twelve-adapter recorded population. */
+export interface ReviewPacketCollection { readonly [reviewPacketCollectionBrand]: true }
+interface ReviewPacketCollectionState {
+  readonly work: ReviewPacketCollectionWork;
+  readonly slotsByNode: ReadonlyMap<string, readonly ReviewSourcePlanSlot[]>;
+  completed: number;
+}
+const PACKET_COLLECTIONS = new WeakMap<object, ReviewPacketCollectionState>();
+
+/** Metadata and captured inputs only. Job authority/deadline/capacity stay with the service. */
+export function beginReviewPacketCollection(subject: ReviewRecordedPrefixReceipt, context: ReviewSourceContext): ReviewPacketCollection {
+  const work = prepareReviewPacketCollection(subject, context, { windowNodes: 1 });
+  const slotsByNode = new Map<string, ReviewSourcePlanSlot[]>();
+  for (const slot of work.plan) {
+    const slots = slotsByNode.get(slot.nodeId) ?? [];
+    slots.push(slot); slotsByNode.set(slot.nodeId, slots);
+  }
+  const handle = Object.freeze({}) as ReviewPacketCollection;
+  PACKET_COLLECTIONS.set(handle, { work, slotsByNode, completed: 0 });
+  return handle;
+}
+
+function packetCollectionState(handle: ReviewPacketCollection): ReviewPacketCollectionState {
+  const state = typeof handle === "object" && handle !== null ? PACKET_COLLECTIONS.get(handle) : undefined;
+  if (state === undefined) throw new TypeError("Review packet collection is unknown or retired");
+  return state;
+}
+
+/** Executes only the next original node's planned invocations. It returns no evidence or packet. */
+export function advanceReviewPacketCollection(handle: ReviewPacketCollection): Readonly<{
+  nodeId: string; completedSubjects: number; totalSubjects: number; complete: boolean;
+}> {
+  const state = packetCollectionState(handle), { work } = state, ids = work.subject.pathNodeIds;
+  if (state.completed === ids.length) throw new TypeError("Review packet collection has no remaining subject");
+  try {
+    assertReviewRecordedPrefixReceipt(work.subject);
+    const nodeId = ids[state.completed]!;
+    for (const slot of state.slotsByNode.get(nodeId)!) executeReviewPacketSlot(work, slot);
+    assertReviewRecordedPrefixReceipt(work.subject);
+    state.completed++;
+    return Object.freeze({ nodeId, completedSubjects: state.completed, totalSubjects: ids.length, complete: state.completed === ids.length });
+  } catch (error) { PACKET_COLLECTIONS.delete(handle); throw error; }
+}
+
+/** The sole existing compiler receives every genuine original SOURCE_RESULTS result once. */
+export function finishReviewPacketCollection(handle: ReviewPacketCollection): ReviewEvidencePacket {
+  const state = packetCollectionState(handle), { work } = state;
+  if (state.completed !== work.subject.pathNodeIds.length) throw new TypeError("Review packet collection is incomplete");
+  try { return compileReviewEvidence({ subject: work.subject, sources: work.plan.map(slot => work.results.get(slot)!) }); }
+  finally { PACKET_COLLECTIONS.delete(handle); }
+}
+
+export function cancelReviewPacketCollection(handle: ReviewPacketCollection): boolean {
+  return typeof handle === "object" && handle !== null && PACKET_COLLECTIONS.delete(handle);
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -748,6 +841,18 @@ function capturePointContext(context: ReviewSourceContext, path: readonly Node[]
   // its population image nor execution, and no mutable caller map/state is retained.
   return Object.freeze({ engine: captured, shapes: Object.freeze([]) });
 }
+
+/** Capture immutable original provider states/deliveries and registered shape operands once. */
+function captureReviewSourceContext(input: ReviewSourceContext, path: readonly Node[]): ReviewSourceContext {
+  const points = capturePointContext(input, path), ids = new Set<string>();
+  for (const entry of input.shapes) {
+    if (!closedSource(entry, ["id", "trigger"]) || typeof entry.id !== "string" || entry.id.length === 0 || !isRecord(entry.trigger) || ids.has(entry.id)) throw new TypeError("Recorded Review shape inputs are not unique registered trigger records");
+    ids.add(entry.id);
+  }
+  evidenceDigest(input.shapes);
+  return Object.freeze({ engine: points.engine, shapes: deepFreeze(structuredClone(input.shapes)) });
+}
+
 
 /** Select existing registered objects; never a second adapter or operation registry. */
 function recordedPointAdapter(id: string) {
@@ -971,16 +1076,7 @@ interface RecordedReviewCollectionWork {
 function prepareRecordedReviewCollection(input: Readonly<{ boundary: RecordedReviewBoundary; context: ReviewSourceContext }>): RecordedReviewCollectionWork {
   if (!closedSource(input, ["boundary", "context"])) throw new TypeError("Recorded Review collection requires exactly {boundary,context}");
   const boundary = input.boundary, image = readRecordedReviewBoundary(boundary), path = Object.freeze(image.path.map(entry => entry.node));
-  const points = capturePointContext(input.context, path);
-  // Capture complete registered trigger operands, not only IDs or already computed firings.
-  const ids = new Set<string>();
-  for (const entry of input.context.shapes) {
-    if (!closedSource(entry, ["id", "trigger"]) || typeof entry.id !== "string" || entry.id.length === 0 || !isRecord(entry.trigger) || ids.has(entry.id)) throw new TypeError("Recorded Review shape inputs are not unique registered trigger records");
-    ids.add(entry.id);
-  }
-  evidenceDigest(input.context.shapes); // Refuse non-JSON trigger data before any source work.
-  const shapes = deepFreeze(structuredClone(input.context.shapes));
-  const context = Object.freeze({ engine: points.engine, shapes });
+  const context = captureReviewSourceContext(input.context, path);
   const execution: RecordedPointExecution = { kind: "recorded", recordedReview: boundary, boundaryImage: image, snapshot: { run: image.run, path }, byId: new Map(path.map(node => [node.id, node])), context,
     shapePath: Object.freeze(path.map(node => Object.freeze({ id: node.id, fen: node.fen }))),
     memo: { points: new Map(), pointInvocations: new Map(), positions: new Map(), edges: new Map() } };
