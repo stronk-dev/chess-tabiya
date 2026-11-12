@@ -3,7 +3,7 @@
 import { collectRecordedEngineAttachments, collectRecordedEngineEdge, readRecordedEngineAttachments, type RecordedEngineAttachments,
   beginRecordedEngineAttachmentCollection, advanceRecordedEngineAttachmentCollection, finishRecordedEngineAttachmentCollection,
   cancelRecordedEngineAttachmentCollection, recordedEngineAttachmentNode, readRecordedEngineAttachmentNode,
-  type RecordedEngineAttachmentCollection } from "../../../packages/runtime/src/internal/recorded-engine-attachments.js";
+  type RecordedEngineAttachmentCollection, type RecordedEngineAttachmentInput } from "../../../packages/runtime/src/internal/recorded-engine-attachments.js";
 import { readRecordedReviewBoundary, type RecordedReviewBoundary } from "../../../packages/runtime/src/recorded-review-boundary.js";
 import { recordedOfflineEngineEndpoint, recordedEngineRequestedBound as requestedBound, type RecordedEngineAvailable } from "../../../packages/runtime/src/internal/recorded-engine-endpoint-values.js";
 import { PackRegistry, RecordedMeasurementSourceError, type RecordedMeasurementAdmission, type RecordedMeasurementPopulation } from "./pack-registry.js";
@@ -67,6 +67,7 @@ interface CaptureWork {
   admission: RecordedMeasurementAdmission | null;
   readonly populations: RecordedMeasurementPopulation[];
   readonly rows: Endpoint[];
+  readonly pairs: Map<string, RecordedEnginePair>;
 }
 const invalid = (message: string): never => { throw new RecordedMeasurementSourceError("source_contract_invalid", message); };
 
@@ -101,7 +102,7 @@ export class RecordedEngineEndpointOwner {
     const image = readRecordedReviewBoundary(boundary);
     const handle = Object.freeze({}) as RecordedEngineEndpointCapture;
     this.#captures.set(handle, { boundary, signal, image, attachmentWork: beginRecordedEngineAttachmentCollection({ boundary }), attachments: undefined,
-      admission: null, populations: [], rows: [] });
+      admission: null, populations: [], rows: [], pairs: new Map() });
     return handle;
   }
 
@@ -200,7 +201,7 @@ export class RecordedEngineEndpointOwner {
       const source = Object.freeze({}) as RecordedEngineEndpoints;
       this.#sources.set(source, { boundary: work.boundary, signal: work.signal, attachments: work.attachments,
         admission: work.admission, populations: Object.freeze([...work.populations]),
-        image: Object.freeze({ boundary: work.image, rows: Object.freeze([...work.rows]) }), pairs: new Map() });
+        image: Object.freeze({ boundary: work.image, rows: Object.freeze([...work.rows]) }), pairs: work.pairs });
       this.read(source); return source;
     } finally { this.cancelCapture(handle); }
   }
@@ -247,6 +248,30 @@ export class RecordedEngineEndpointOwner {
     return row;
   }
 
+  /** A completed original selection, never an implicit acquisition or a partial aggregate. */
+  capturedNode(handle: RecordedEngineEndpointCapture, nodeId: string): RecordedEngineNodeCapture {
+    const work = this.#captureWork(handle); this.#captureCurrent(work);
+    const row = work.rows.find(row => row.position.payload.nodeId === nodeId);
+    if (row === undefined) return invalid("Engine endpoint node has not been acquired");
+    const attachments = recordedEngineAttachmentNode(work.attachmentWork, nodeId);
+    const result = this.#nodeCapture(attachments, row);
+    this.assertCaptureCurrent(handle); return result;
+  }
+
+  capturedPair(handle: RecordedEngineEndpointCapture, afterNodeId: string): RecordedEnginePair {
+    const work = this.#captureWork(handle); this.#captureCurrent(work);
+    const index = work.image.path.findIndex(entry => entry.node.id === afterNodeId);
+    if (index <= 0) return invalid("Engine pair requires an actual incoming edge on the original granted path");
+    const before = work.rows[index - 1], after = work.rows[index];
+    if (before === undefined || after === undefined) return invalid("Engine pair subjects have not been acquired");
+    const previous = work.pairs.get(afterNodeId); if (previous !== undefined) return previous;
+    const left = this.capturedNode(handle, before.position.payload.nodeId), right = this.capturedNode(handle, afterNodeId);
+    const first = this.#checkedNode(left, before), second = this.#checkedNode(right, after);
+    const edge = collectRecordedEngineEdge(right.attachments, afterNodeId);
+    const pair = Object.freeze({ before, after, edge, mover: sideToMove(edge.payload.beforeFen), state: pairState(before, after, edge, first, second) });
+    this.assertCaptureCurrent(handle); work.pairs.set(afterNodeId, pair); return pair;
+  }
+
   /** Derive only from this snapshot's fixed per-node selections. Revalidate live owners before
    * even a cached unavailable result; absence must not hide revocation or source corruption. */
   resolveRecordedEnginePair(source: RecordedEngineEndpoints, afterNodeId: string): RecordedEnginePair {
@@ -267,8 +292,12 @@ export class RecordedEngineEndpointOwner {
   /** Original operands for separately authorized workflow issuers, not a numeric endpoint API. */
   nodeCapture(source: RecordedEngineEndpoints, nodeId: string): RecordedEngineNodeCapture & Readonly<{ attachments: RecordedEngineAttachments }> {
     const row = this.resolveRecordedEngineEndpoint(source, nodeId), owned = this.#sources.get(source)!;
+    return this.#nodeCapture(owned.attachments, row);
+  }
+
+  #nodeCapture<Source extends RecordedEngineAttachmentInput>(attachments: Source, row: Endpoint) {
     const ledger = row.ledger;
-    return Object.freeze({ attachments: owned.attachments, nodeId, pending: row.pending,
+    return Object.freeze({ attachments, nodeId: row.position.payload.nodeId, pending: row.pending,
       offline: ledger === null ? null : Object.freeze({ packDigest: ledger.artifact.packDigest,
         ledgerDigest: ledger.artifact.ledgerDigest, manifestDigest: ledger.artifact.manifestDigest,
         ledger: ledger.artifact.ledger, manifest: ledger.artifact.manifest, candidates: ledger.records, abstentions: ledger.abstentions }),
@@ -276,7 +305,11 @@ export class RecordedEngineEndpointOwner {
   }
 
   #node(source: RecordedEngineEndpoints, endpoint: Endpoint) {
-    const node = readRecordedEngineNode(this.nodeCapture(source, endpoint.position.payload.nodeId));
+    return this.#checkedNode(this.nodeCapture(source, endpoint.position.payload.nodeId), endpoint);
+  }
+
+  #checkedNode(capture: RecordedEngineNodeCapture, endpoint: Endpoint) {
+    const node = readRecordedEngineNode(capture);
     if (node.row !== endpoint.modern || node.selectedOrdinal !== endpoint.selectedOrdinal
       || (node.selected === null ? endpoint.state.kind !== "unavailable" || node.unavailable !== endpoint.state.reason
         : canonicalizeJson(node.selected) !== canonicalizeJson(endpoint.state))) return invalid("Engine node differs from its original fixed selection");

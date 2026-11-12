@@ -29,6 +29,78 @@ function fixture(black = false, input: Pick<NonNullable<Parameters<typeof record
   return { ...original, run, storage, service, principal, lease, controller, query, resolve };
 }
 describe("sole service-owned recorded grade issuer", () => {
+  it.each([false, true])("keeps an early %s-side grade and its receipt identical through full context completion", black => {
+    const f = fixture(black);
+    let run = commitMove(f.run, black ? "g1f3" : "e7e5", { at: "2026-11-12T00:00:00.000Z" }).run;
+    run = revealFeedback(run, "2026-11-12T00:00:00.000Z").run;
+    f.storage.save(run, f.lease);
+    const query = { ...f.query, throughNodeId: run.activeCursor.nodeId, decisionDigest: moduleDecisionStamp(run).digest };
+    const baseline = f.service.resolveGradeRecordedContext(run.id, f.principal, null, query, f.controller.signal);
+    const baselineSource = f.service.resolveGradeMoveSource(baseline, { nodeId: f.child.id, signal: f.controller.signal });
+    const expected = JSON.stringify(invokeEvidenceValueRoute("derived.grade.move_quality@2", { recordedGrade: baselineSource }));
+    const selected = vi.spyOn(RecordedEngineEndpointOwner.prototype, "advanceCapture");
+    try {
+      const work = f.service.beginGradeRecordedContext(run.id, f.principal, null, query, f.controller.signal);
+      const metadata = f.service.readGradePreparation(work);
+      expect(metadata.permission.assistance).toBeNull(); expect(metadata.permission.timing).toBe("review");
+      expect(selected).not.toHaveBeenCalled();
+      expect(() => f.service.resolveCapturedGradeMoveSource(work, { nodeId: f.child.id, signal: f.controller.signal })).toThrow(/not been acquired/);
+      expect(selected).not.toHaveBeenCalled();
+      f.service.advanceGradeRecordedContext(work); f.service.advanceGradeRecordedContext(work);
+      const early = f.service.resolveCapturedGradeMoveSource(work, { nodeId: f.child.id, signal: f.controller.signal });
+      const value = f.service.readGradeMoveSource(early);
+      expect(value.authority.permission).toStrictEqual(metadata.permission);
+      expect(JSON.stringify(invokeEvidenceValueRoute("derived.grade.move_quality@2", { recordedGrade: early }))).toBe(expected);
+      expect(selected).toHaveBeenCalledTimes(2);
+      expect(() => f.service.resolveCapturedGradeMoveSource(work, { nodeId: run.activeCursor.nodeId, signal: f.controller.signal })).toThrow(/not been acquired/);
+      expect(() => f.service.finishGradeRecordedContext(work)).toThrow(/incomplete/);
+      expect(() => f.service.readGradeRecordedContext(work as never)).toThrow(/foreign/);
+      expect(() => f.service.resolveCapturedGradeMoveSource(work, { nodeId: f.child.id, signal: new AbortController().signal })).toThrow(/cancellation/);
+      expect(() => f.service.resolveCapturedGradeMoveSource({ ...work }, { nodeId: f.child.id, signal: f.controller.signal })).toThrow(/foreign/);
+      expect(selected).toHaveBeenCalledTimes(2);
+      expect(f.service.advanceGradeRecordedContext(work).complete).toBe(true);
+      const context = f.service.finishGradeRecordedContext(work);
+      expect(f.service.readGradeRecordedContext(context).permission).toBe(metadata.permission);
+      expect(f.service.resolveGradeMoveSource(context, { nodeId: f.child.id, signal: f.controller.signal })).toBe(early);
+      expect(f.service.readGradeMoveSource(early)).toBe(value);
+      expect(JSON.stringify(invokeEvidenceValueRoute("derived.grade.move_quality@2", { recordedGrade: early }))).toBe(expected);
+      expect(() => f.service.readGradePreparation(work)).toThrow(/retired/);
+      expect(f.service.cancelGradeRecordedContext(work)).toBe(false);
+      f.controller.abort();
+      expect(() => f.service.readGradeMoveSource(early)).toThrow(expect.objectContaining({ name: "AbortError" }));
+    } finally { selected.mockRestore(); }
+  });
+
+  it.each(["cancel", "grant", "storage"] as const)("retires an early grade on actual %s changes before completion", fault => {
+    const f = fixture(), reader = { learnerId: "early-grade-reader", handle: "early-grade-reader" };
+    f.storage.createLearner({ id: reader.learnerId, handle: reader.handle, passwordHash: "!", createdAt: "2026-11-12T00:00:00.000Z" });
+    f.storage.grantRole(f.run.id, reader.learnerId, "spectator", f.lease, "2026-11-12T00:00:00.000Z");
+    const work = f.service.beginGradeRecordedContext(f.run.id, reader, null, f.query, f.controller.signal);
+    while (!f.service.advanceGradeRecordedContext(work).complete) { /* original selections */ }
+    const early = f.service.resolveCapturedGradeMoveSource(work, { nodeId: f.child.id, signal: f.controller.signal });
+    if (fault === "cancel") expect(f.service.cancelGradeRecordedContext(work)).toBe(true);
+    else if (fault === "grant") f.storage.revokeGrant(f.run.id, reader.learnerId, f.lease);
+    else f.storage.save(commitMove(f.run, "e7e5", { at: "2026-11-12T00:00:00.000Z" }).run, f.lease);
+    expect(() => f.service.readGradeMoveSource(early)).toThrow();
+    expect(() => f.service.finishGradeRecordedContext(work)).toThrow();
+    expect(f.service.cancelGradeRecordedContext(work)).toBe(false);
+  });
+
+  it("cannot resurrect an early grade when its genuine endpoint finisher cancels the caller", () => {
+    const f = fixture(), work = f.service.beginGradeRecordedContext(f.run.id, f.principal, null, f.query, f.controller.signal);
+    while (!f.service.advanceGradeRecordedContext(work).complete) { /* original selections */ }
+    const early = f.service.resolveCapturedGradeMoveSource(work, { nodeId: f.child.id, signal: f.controller.signal });
+    const original = RecordedEngineEndpointOwner.prototype.finishCapture;
+    const finish = vi.spyOn(RecordedEngineEndpointOwner.prototype, "finishCapture").mockImplementation(function(this: RecordedEngineEndpointOwner, handle) {
+      const result = original.call(this, handle); expect(f.service.cancelGradeRecordedContext(work)).toBe(true); return result;
+    });
+    try {
+      expect(() => f.service.finishGradeRecordedContext(work)).toThrow(/retired|promoted/);
+      expect(() => f.service.readGradeMoveSource(early)).toThrow(/retired/);
+      expect(f.service.cancelGradeRecordedContext(work)).toBe(false);
+    } finally { finish.mockRestore(); }
+  });
+
   it.each([false, true])("captures the actual %s-side context in original stages before grading", black => {
     const f = fixture(black), expectedContext = f.resolve();
     const expectedSource = f.service.resolveGradeMoveSource(expectedContext, { nodeId: f.child.id, signal: f.controller.signal });

@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:c8485e5ca1ce0e521dd410e9c1e07d21b21fff361c7a777824245cf7ace117ec",
+    "roadmap": "sha256:49ec2537c406cd7ab0a80575dacf2250caf70bf48c22af9f7c2fcbc533688f96",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:84bde29aa28f730f39923f2850b368c6416fea1c02b5577237e0340abea44863",
+    "workState": "sha256:a5f7ebee10db2128803948da2853fc666747d79bcb85cc9f95feb56a52dc2192",
     "rfcRegister": "sha256:49e46c03e8cf65e0983bcbd7a00a465007dbd3b6aeaa05915b5988fcd462b071",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -357,7 +357,7 @@
       "nextAction": "Continue D4260: original engine row/context acquisition and workflow-first permission; explicitly account original PhaseArc/full-packet whole-prefix source invocations and per-subject outputs in the literal job plan. Then implement actual public admission, real sessions, cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI. Preserve measured pending/stale/shared-analysis behavior and native D4224/D4225 gates.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "Fresh e7288095 normal make verify-software exits0:21542/all593 software files855.08s and7 isolated performance/four62.98s. Matching eb3d4d17 production code also passes347/five focused source/lifetime cases18.42s,types/Svelte0errors0warnings,canonical1928/1928/24of89/63population/8external,server/web builds and340/all44 content cases225.20s;92-document audit errors[],104 capability declarations. Original rich Map windows now acquire by admitted endpoint with complete eleven-family/horizon populations, unchanged lazy inputs and source sharing. D4263 actual constructor/post-step/final retirement repair passes. D4264 closes after confirmed Vitest outer5000ms harness failure: only3 oracle-plus-job cases use local10000ms and the real-clock file uses existing serial lane; actual job5000/source500 guards, all fixtures/assertions/overrun negatives and593-file/eight-member discovery remain. No production deadline/source/authorization change or portable latency/default claim. D4260 still owes engine-context/workflow-first, explicit original PhaseArc/full-packet whole-prefix accounting and public/session/page/transport/progress/retry UI. No whole1.0 capability or milestone closes; no push/remote-CI claim.",
+        "summary": "Fresh e7288095 normal make verify-software exits0:21542/all593 software files855.08s and7 isolated performance/four62.98s. Matching eb3d4d17 production code also passes347/five focused source/lifetime cases18.42s,types/Svelte0errors0warnings,canonical1928/1928/24of89/63population/8external,server/web builds and340/all44 content cases225.20s;92-document audit errors[],104 capability declarations. Original rich Map windows now acquire by admitted endpoint with complete eleven-family/horizon populations, unchanged lazy inputs and source sharing. D4263 actual constructor/post-step/final retirement repair passes. D4264 closes after confirmed Vitest outer5000ms harness failure: only3 oracle-plus-job cases use local10000ms and the real-clock file uses existing serial lane; actual job5000/source500 guards, all fixtures/assertions/overrun negatives and593-file/eight-member discovery remain. No production deadline/source/authorization change or portable latency/default claim. D4260 still owes engine-context/workflow-first, explicit original PhaseArc/full-packet whole-prefix accounting and public/session/page/transport/progress/retry UI. No whole1.0 capability or milestone closes; no push/remote-CI claim. D4260 early-grade dependency: one private workflow owns permission/currentness and source cache before endpoint completion. Acquired pairs issue their original grade; complete context preserves exact source/value/pair/edge identity, future nodes refuse.180/four focused cases, workspace types/Svelte0errors0warnings, builds and independent read-only review pass. Rich composition still completes the full context first; public page/session/transport/UI and engine/whole-prefix accounting remain open. Full software/content results above predate this dependency.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1526,7 +1526,7 @@
           {
             "kind": "work_state",
             "id": "D4260",
-            "digest": "sha256:5caf76d122120583e8c6bb0dd5cb1c0ef4207b04c593089dcdb926b960f0ef73"
+            "digest": "sha256:ba84ed14784af7326268a3555a6c8a2ee75503bbc16e66d8d65777b04122f396"
           },
           {
             "kind": "work_state",
@@ -1570,7 +1570,7 @@
       "nextAction": "Continue D4260: original engine row/context acquisition and workflow-first permission; explicitly account original PhaseArc/full-packet whole-prefix source invocations and per-subject outputs in the literal job plan. Then implement actual public admission, real sessions, cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI. Preserve measured pending/stale/shared-analysis behavior and native D4224/D4225 gates.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "Fresh e7288095 normal make verify-software exits0:21542/all593 software files855.08s and7 isolated performance/four62.98s. Matching eb3d4d17 production code also passes347/five focused source/lifetime cases18.42s,types/Svelte0errors0warnings,canonical1928/1928/24of89/63population/8external,server/web builds and340/all44 content cases225.20s;92-document audit errors[],104 capability declarations. Original rich Map windows now acquire by admitted endpoint with complete eleven-family/horizon populations, unchanged lazy inputs and source sharing. D4263 actual constructor/post-step/final retirement repair passes. D4264 closes after confirmed Vitest outer5000ms harness failure: only3 oracle-plus-job cases use local10000ms and the real-clock file uses existing serial lane; actual job5000/source500 guards, all fixtures/assertions/overrun negatives and593-file/eight-member discovery remain. No production deadline/source/authorization change or portable latency/default claim. D4260 still owes engine-context/workflow-first, explicit original PhaseArc/full-packet whole-prefix accounting and public/session/page/transport/progress/retry UI. No whole1.0 capability or milestone closes; no push/remote-CI claim.",
+        "summary": "Fresh e7288095 normal make verify-software exits0:21542/all593 software files855.08s and7 isolated performance/four62.98s. Matching eb3d4d17 production code also passes347/five focused source/lifetime cases18.42s,types/Svelte0errors0warnings,canonical1928/1928/24of89/63population/8external,server/web builds and340/all44 content cases225.20s;92-document audit errors[],104 capability declarations. Original rich Map windows now acquire by admitted endpoint with complete eleven-family/horizon populations, unchanged lazy inputs and source sharing. D4263 actual constructor/post-step/final retirement repair passes. D4264 closes after confirmed Vitest outer5000ms harness failure: only3 oracle-plus-job cases use local10000ms and the real-clock file uses existing serial lane; actual job5000/source500 guards, all fixtures/assertions/overrun negatives and593-file/eight-member discovery remain. No production deadline/source/authorization change or portable latency/default claim. D4260 still owes engine-context/workflow-first, explicit original PhaseArc/full-packet whole-prefix accounting and public/session/page/transport/progress/retry UI. No whole1.0 capability or milestone closes; no push/remote-CI claim. D4260 early-grade dependency: one private workflow owns permission/currentness and source cache before endpoint completion. Acquired pairs issue their original grade; complete context preserves exact source/value/pair/edge identity, future nodes refuse.180/four focused cases, workspace types/Svelte0errors0warnings, builds and independent read-only review pass. Rich composition still completes the full context first; public page/session/transport/UI and engine/whole-prefix accounting remain open. Full software/content results above predate this dependency.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -3401,7 +3401,7 @@
           {
             "kind": "work_state",
             "id": "D4260",
-            "digest": "sha256:5caf76d122120583e8c6bb0dd5cb1c0ef4207b04c593089dcdb926b960f0ef73"
+            "digest": "sha256:ba84ed14784af7326268a3555a6c8a2ee75503bbc16e66d8d65777b04122f396"
           },
           {
             "kind": "work_state",

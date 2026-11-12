@@ -61,7 +61,15 @@ interface ContextCaptureInputs {
   readonly signature: CurrentSignature;
   readonly signal: AbortSignal;
 }
-interface ContextCaptureWork extends ContextCaptureInputs {
+interface Workflow extends ContextCaptureInputs {
+  readonly permission: RecordedGradePermission;
+  readonly sources: Map<string, RecordedGradeSource>;
+  readonly windows: Map<string, RecordedSemanticWindowPopulation>;
+  state: { readonly kind: "preparing"; readonly endpoints: RecordedEngineEndpointCapture | undefined }
+    | { readonly kind: "complete"; readonly endpoints: RecordedEngineEndpoints } | { readonly kind: "retired" };
+}
+interface ContextCaptureWork {
+  readonly workflow: Workflow;
   readonly endpoints: RecordedEngineEndpointCapture;
   complete: boolean;
 }
@@ -95,9 +103,9 @@ const sameSignature = (left: CurrentSignature, right: CurrentSignature) => left.
 
 /** One per RunService. Storage/access callbacks cannot be passed to a runtime factory. */
 export class RecordedGradeSourceOwner {
-  readonly #contexts = new WeakMap<object, Owned>();
+  readonly #contexts = new WeakMap<object, Readonly<{ workflow: Workflow; data: Owned }>>();
   readonly #contextCaptures = new WeakMap<object, ContextCaptureWork>();
-  readonly #sources = new WeakMap<object, RecordedGradeContext>();
+  readonly #sources = new WeakMap<object, Workflow>();
   readonly #windowPopulations = new WeakMap<AbortSignal, { signature: CurrentSignature; branchId: string; population: ReadonlyMap<string, RecordedSemanticWindowPopulation> }[]>();
   readonly #boundaries: ReturnType<typeof createRecordedReviewBoundarySourceOwner>;
   readonly #endpoints: RecordedEngineEndpointOwner;
@@ -115,9 +123,11 @@ export class RecordedGradeSourceOwner {
   }
 
   resolve(query: GradeSelection, read: Owned["read"], signal: AbortSignal): RecordedGradeContext {
-    const input = this.#contextInputs(query, read, signal);
-    const endpoints = this.#endpoints.capture({ boundary: input.boundary, signal });
-    return this.#issueContext(input, endpoints);
+    const workflow = this.#workflow(this.#contextInputs(query, read, signal));
+    try {
+      const endpoints = this.#endpoints.capture({ boundary: workflow.boundary, signal });
+      return this.#issueContext(workflow, endpoints);
+    } catch (error) { workflow.state = { kind: "retired" }; throw error; }
   }
 
   #contextInputs(query: GradeSelection, read: Owned["read"], signal: AbortSignal): ContextCaptureInputs {
@@ -133,16 +143,23 @@ export class RecordedGradeSourceOwner {
     return { boundary, execution, selection: Object.freeze({ ...query }), read, signature, signal };
   }
 
+  #workflow(input: ContextCaptureInputs): Workflow {
+    const current = this.#readContextCapture(input);
+    const permission = Object.freeze({ principal: Object.freeze({ ...current.principal }), role: current.role,
+      assistance: freeze(structuredClone(current.assistance)), timing: current.timing, session: current.session, execution: input.execution });
+    return { ...input, permission, sources: new Map(), windows: new Map(), state: { kind: "preparing", endpoints: undefined } };
+  }
+
   /** Actual workflow checks and complete original boundary precede every source acquisition. */
   beginResolve(query: GradeSelection, read: Owned["read"], signal: AbortSignal): GradeContextCapture {
-    const input = this.#contextInputs(query, read, signal);
-    const endpoints = this.#endpoints.beginCapture({ boundary: input.boundary, signal });
-    const work: ContextCaptureWork = { ...input, endpoints, complete: false };
+    const workflow = this.#workflow(this.#contextInputs(query, read, signal));
+    const endpoints = this.#endpoints.beginCapture({ boundary: workflow.boundary, signal });
     try {
-      this.#readContextCapture(work);
+      workflow.state = { kind: "preparing", endpoints };
+      this.#readWorkflow(workflow);
       const handle = Object.freeze({}) as GradeContextCapture;
-      this.#contextCaptures.set(handle, work); return handle;
-    } catch (error) { this.#endpoints.cancelCapture(endpoints); throw error; }
+      this.#contextCaptures.set(handle, { workflow, endpoints, complete: false }); return handle;
+    } catch (error) { workflow.state = { kind: "retired" }; this.#endpoints.cancelCapture(endpoints); throw error; }
   }
 
   #contextCapture(handle: GradeContextCapture): ContextCaptureWork {
@@ -159,71 +176,106 @@ export class RecordedGradeSourceOwner {
     work.signal.throwIfAborted(); return current;
   }
 
+  #readWorkflow(workflow: Workflow): void {
+    this.#assertWorkflowActive(workflow);
+    this.#readContextCapture(workflow);
+    const state = workflow.state;
+    if (state.kind === "complete") this.#endpoints.read(state.endpoints);
+    else if (state.kind === "preparing" && state.endpoints !== undefined) this.#endpoints.assertCaptureCurrent(state.endpoints);
+    this.#assertWorkflowActive(workflow);
+    workflow.signal.throwIfAborted();
+  }
+
+  #assertWorkflowActive(workflow: Workflow): void {
+    if (workflow.state.kind === "retired") return refuse("original workflow is retired");
+  }
+
+  /** Current original workflow metadata; never an unfinished context or endpoint aggregate. */
+  readPreparation(handle: GradeContextCapture) {
+    const { workflow } = this.#contextCapture(handle); this.#readWorkflow(workflow);
+    return Object.freeze({ boundary: workflow.boundary, permission: workflow.permission, selection: workflow.selection, signal: workflow.signal });
+  }
+
   advanceResolve(handle: GradeContextCapture) {
     const work = this.#contextCapture(handle);
     if (work.complete) return refuse("context capture has no remaining subject");
     try {
-      this.#readContextCapture(work);
+      this.#readWorkflow(work.workflow);
       const progress = this.#endpoints.advanceCapture(work.endpoints);
-      this.#readContextCapture(work);
+      this.#readWorkflow(work.workflow);
       work.complete = progress.complete; return progress;
     } catch (error) { this.cancelResolve(handle); throw error; }
   }
 
-  assertCaptureCurrent(handle: GradeContextCapture): void {
-    const work = this.#contextCapture(handle);
-    this.#readContextCapture(work); this.#endpoints.assertCaptureCurrent(work.endpoints);
-  }
+  assertCaptureCurrent(handle: GradeContextCapture): void { this.#readWorkflow(this.#contextCapture(handle).workflow); }
 
   finishResolve(handle: GradeContextCapture): RecordedGradeContext {
     const work = this.#contextCapture(handle);
     if (!work.complete) return refuse("context capture is incomplete");
     try {
-      this.#readContextCapture(work);
+      this.#readWorkflow(work.workflow);
       const endpoints = this.#endpoints.finishCapture(work.endpoints);
-      return this.#issueContext(work, endpoints);
-    } finally { this.cancelResolve(handle); }
+      return this.#issueContext(work.workflow, endpoints);
+    } catch (error) { work.workflow.state = { kind: "retired" }; throw error; }
+    finally { this.#contextCaptures.delete(handle); this.#endpoints.cancelCapture(work.endpoints); }
   }
 
-  #issueContext(work: ContextCaptureInputs, endpoints: RecordedEngineEndpoints): RecordedGradeContext {
-    const current = this.#readContextCapture(work);
-    if (this.#endpoints.read(endpoints).boundary !== readRecordedReviewBoundary(work.boundary)) return refuse("captured endpoints cross their original context boundary");
-    const permission = Object.freeze({ principal: Object.freeze({ ...current.principal }), role: current.role,
-      assistance: freeze(structuredClone(current.assistance)), timing: current.timing, session: current.session, execution: work.execution });
+  #issueContext(workflow: Workflow, endpoints: RecordedEngineEndpoints): RecordedGradeContext {
+    if (workflow.state.kind !== "preparing") return refuse("original workflow cannot be promoted");
+    this.#readContextCapture(workflow);
+    if (this.#endpoints.read(endpoints).boundary !== readRecordedReviewBoundary(workflow.boundary)) return refuse("captured endpoints cross their original context boundary");
+    // Constructors/source checks may retire their caller. Recheck before ownership transfer.
+    if (workflow.state.kind !== "preparing") return refuse("original workflow retired during promotion");
+    this.#readContextCapture(workflow);
+    this.#assertWorkflowActive(workflow);
+    workflow.state = { kind: "complete", endpoints };
     const context = Object.freeze({}) as RecordedGradeContext;
-    this.#contexts.set(context, Object.freeze({ permission, boundary: work.boundary, endpoints, selection: work.selection,
-      read: work.read, signature: work.signature, signal: work.signal, sources: new Map<string, RecordedGradeSource>(), windows: new Map<string, RecordedSemanticWindowPopulation>() }));
+    const data = Object.freeze({ permission: workflow.permission, boundary: workflow.boundary, endpoints, selection: workflow.selection,
+      read: workflow.read, signature: workflow.signature, signal: workflow.signal, sources: workflow.sources, windows: workflow.windows });
+    this.#contexts.set(context, Object.freeze({ workflow, data }));
     this.read(context); return context;
   }
 
   cancelResolve(handle: GradeContextCapture): boolean {
     const work = typeof handle === "object" && handle !== null ? this.#contextCaptures.get(handle) : undefined;
     if (work === undefined) return false;
-    this.#contextCaptures.delete(handle); this.#endpoints.cancelCapture(work.endpoints); return true;
+    this.#contextCaptures.delete(handle); work.workflow.state = { kind: "retired" };
+    this.#endpoints.cancelCapture(work.endpoints); return true;
   }
 
   read(context: RecordedGradeContext): Owned {
     const owned = context !== null && typeof context === "object" ? this.#contexts.get(context) : undefined;
     if (owned === undefined) return refuse("foreign context");
-    owned.signal.throwIfAborted();
-    const current = owned.read(); this.#permitted(current);
-    if (!sameSignature(currentSignature(current), owned.signature)) return refuse("current permission or stored run changed");
-    this.#endpoints.read(owned.endpoints);
-    owned.signal.throwIfAborted(); return owned;
+    this.#readWorkflow(owned.workflow); return owned.data;
   }
 
   resolveMove(context: RecordedGradeContext, input: Readonly<{ nodeId: string; signal: AbortSignal }>): RecordedGradeSource {
+    const owned = context !== null && typeof context === "object" ? this.#contexts.get(context) : undefined;
+    if (owned === undefined) return refuse("foreign context");
+    return this.#resolveMove(owned.workflow, input);
+  }
+
+  /** Same sole grade issuer, over only the two selections already acquired by this workflow. */
+  resolveCapturedMove(handle: GradeContextCapture, input: Readonly<{ nodeId: string; signal: AbortSignal }>): RecordedGradeSource {
+    return this.#resolveMove(this.#contextCapture(handle).workflow, input);
+  }
+
+  #resolveMove(workflow: Workflow, input: Readonly<{ nodeId: string; signal: AbortSignal }>): RecordedGradeSource {
     if (!exact(input, ["nodeId", "signal"])) return refuse("invalid move request");
-    const owned = this.read(context);
-    if (input.signal !== owned.signal) return refuse("crossed request cancellation");
-    const pair = this.#endpoints.resolveRecordedEnginePair(owned.endpoints, input.nodeId);
-    let source = owned.sources.get(input.nodeId);
+    this.#readWorkflow(workflow);
+    if (input.signal !== workflow.signal) return refuse("crossed request cancellation");
+    const state = workflow.state;
+    if (state.kind === "retired" || state.kind === "preparing" && state.endpoints === undefined) return refuse("original selections have not been acquired");
+    const pair = state.kind === "complete" ? this.#endpoints.resolveRecordedEnginePair(state.endpoints, input.nodeId)
+      : this.#endpoints.capturedPair(state.endpoints!, input.nodeId);
+    let source = workflow.sources.get(input.nodeId);
     if (source === undefined) {
-      source = RECORDED_GRADE_SOURCE_AUTHORITY.issue({ permission: owned.permission, signal: owned.signal, edge: pair.edge,
-        before: this.#endpoints.nodeCapture(owned.endpoints, pair.before.position.payload.nodeId),
-        after: this.#endpoints.nodeCapture(owned.endpoints, pair.after.position.payload.nodeId),
-        origins: [pair.before.origin, pair.after.origin] }, () => { this.read(context); });
-      owned.sources.set(input.nodeId, source); this.#sources.set(source, context);
+      const capture = (nodeId: string) => state.kind === "complete" ? this.#endpoints.nodeCapture(state.endpoints, nodeId)
+        : this.#endpoints.capturedNode(state.endpoints!, nodeId);
+      source = RECORDED_GRADE_SOURCE_AUTHORITY.issue({ permission: workflow.permission, signal: workflow.signal, edge: pair.edge,
+        before: capture(pair.before.position.payload.nodeId), after: capture(pair.after.position.payload.nodeId),
+        origins: [pair.before.origin, pair.after.origin] }, () => { this.#readWorkflow(workflow); });
+      workflow.sources.set(input.nodeId, source); this.#sources.set(source, workflow);
     }
     const value = this.readSource(source);
     if (value.edge !== pair.edge || value.mover !== pair.mover || canonicalizeJson(value.state) !== canonicalizeJson(pair.state)) return refuse("source differs from the original fixed pair");
@@ -231,10 +283,8 @@ export class RecordedGradeSourceOwner {
   }
 
   readSource(source: RecordedGradeSource) {
-    const context = this.#sources.get(source);
-    if (context === undefined) return refuse("foreign move source");
-    // The shared reader invokes this owner's original context check before and after reading.
-    // Keep issuer membership here; do not duplicate the same live checks around that reader.
+    if (!this.#sources.has(source)) return refuse("foreign move source");
+    // The original reader invokes the stable workflow's live check before/after source access.
     return readRecordedGradeSource(source);
   }
 

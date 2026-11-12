@@ -68,6 +68,36 @@ function pending(f: Awaited<ReturnType<typeof fixture>>) {
 }
 
 describe("fixed original engine endpoints — registry, canonical stored boundary and request owner", () => {
+  for (const side of ["white", "black"] as const) it.each([false, true])(`preserves the same ${side} pair before/after aggregate completion: modern=%s`, async modern => {
+    const f = await fixture([{ node: 0 }, { node: 1 }, { node: 2 }], side);
+    if (modern) { f.delivery(0, "cp 25"); f.delivery(1, "cp 100"); }
+    const expected = JSON.stringify(f.owner.resolveRecordedEnginePair(f.capture(), f.path[1]!.id));
+    const acquire = vi.spyOn(f.registry, "collectRecordedMeasurements");
+    const handle = f.owner.beginCapture({ boundary: f.boundary(), signal: f.controller.signal });
+    expect(() => f.owner.capturedNode(handle, f.path[0]!.id)).toThrow(/not been acquired/);
+    expect(() => f.owner.capturedPair(handle, f.path[1]!.id)).toThrow(/not been acquired/);
+    expect(acquire).not.toHaveBeenCalled();
+    f.owner.advanceCapture(handle); f.owner.advanceCapture(handle);
+    const calls = acquire.mock.calls.length, pair = f.owner.capturedPair(handle, f.path[1]!.id);
+    const left = f.owner.capturedNode(handle, f.path[0]!.id), right = f.owner.capturedNode(handle, f.path[1]!.id);
+    expect(nodes.readRecordedEngineNode(left).row).toBe(pair.before.modern);
+    expect(nodes.readRecordedEngineNode(right).row).toBe(pair.after.modern);
+    expect(JSON.stringify(pair)).toBe(expected);
+    expect(f.owner.capturedPair(handle, f.path[1]!.id)).toBe(pair);
+    expect(() => f.owner.capturedPair(handle, f.path[2]!.id)).toThrow(/not been acquired/);
+    expect(() => f.owner.read(handle as never)).toThrow(/foreign/);
+    expect(() => f.owner.finishCapture(handle)).toThrow(/incomplete/);
+    expect(acquire).toHaveBeenCalledTimes(calls);
+    expect(f.owner.advanceCapture(handle).complete).toBe(true);
+    const source = f.owner.finishCapture(handle);
+    expect(f.owner.resolveRecordedEnginePair(source, f.path[1]!.id)).toBe(pair);
+    expect(f.owner.resolveRecordedEngineEndpoint(source, f.path[0]!.id)).toBe(pair.before);
+    expect(f.owner.resolveRecordedEngineEndpoint(source, f.path[1]!.id)).toBe(pair.after);
+    expect(nodes.readRecordedEngineNode(left).row).toBe(pair.before.modern);
+    expect(() => f.owner.capturedPair(handle, f.path[1]!.id)).toThrow(/retired/);
+    expect(f.owner.cancelCapture(handle)).toBe(false);
+  });
+
   it("D4256 synchronous capture has linear original registry-read cardinality", async () => {
     const f = await fixture([{ node: 0 }, { node: 1 }, { node: 2 }]), reads: number[] = [];
     for (let index = 0; index < 3; index++) {

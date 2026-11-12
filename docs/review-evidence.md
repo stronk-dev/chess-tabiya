@@ -267,6 +267,15 @@ cannot survive a revoked grant or changed role, including when the factory would
 emit no grade or report missing engine readings. That internal lifetime check supplies no
 scores, operands or source-valid Boolean; original nominal source/plan/edge checks remain.
 
+The staged service owner also exposes current workflow metadata before endpoint acquisition.
+Once both original endpoints have been acquired, it can issue that move's original grade without
+acquiring future nodes. A single private workflow retains its permission, source cache and live
+checks through completion; the complete context returns the same early grade source, cached pair
+and edge. Finishing retires only the advancement handle. Cancellation or changed access/storage
+still invalidates early grades. Unacquired nodes refuse rather than becoming missing evaluations,
+and complete-context readers continue to reject preparation handles. This is an internal D4260
+dependency; rich Review still finishes the full context before collecting its other sources.
+
 Compare's separately issued engine-point source has the same lifetime guarantee through its
 own service context. Role downgrade/revocation refuses direct trajectory-factory reads even
 when no point is recorded; it does not inherit Review's broader viewer roles.

@@ -2,6 +2,13 @@
 
 ## Current continuation — 2026-11-12
 
+The next D4260 dependency separates current workflow permission from complete engine-context
+issuance. Already-acquired endpoint pairs can issue their original grade, retaining the same
+permission, source, pair and edge through completion; unacquired nodes still refuse and complete
+readers reject preparing handles.180 focused tests/four files and full types/Svelte0errors0warnings
+pass; independent source review finds no blocker. The selected rich collector has not yet been
+migrated to workflow-first ordering. No public paging, UI journey or1.0 capability closes here.
+
 The fresh e7288095 full software/performance lane is green:21542 tests/all593 files855.08s,
 plus7 isolated performance checks/four62.98s. D4264 closes after repairing the two-execution test
 harness: only three oracle-plus-job cases use a local ten-second allowance; their production

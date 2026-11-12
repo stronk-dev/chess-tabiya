@@ -42386,3 +42386,30 @@ No whole1.0 capability/milestone closes, and no push or remote-CI success is cla
 
 Final normal verify-governance passes after the full-result/roadmap update.4013 rows remain
 tracked with zero untriaged; D4263/D4264 are done and D4260/D4250/full1.0 remain open.
+
+
+### 2026-11-12 — D4260 workflow permission and early original grade checkpoint
+
+One private workflow now owns frozen permission, actual run/access checks and the original
+source cache through endpoint capture and complete-context issuance. Only an already-acquired
+pair may issue its original grade; future nodes refuse without acquisition. Endpoint completion
+transfers the same cached pair/edge, and complete-context resolution returns the identical early
+grade source/value. Preparation remains a distinct nominal token, never a complete context.
+Cancellation, actual grant/storage changes, abort and reentrant cancellation during the genuine
+endpoint finisher refuse early grades; completion retires only advancement, preserving live checks.
+
+180 focused cases across endpoint, grade, comparison and rich-collection tests/four files pass,
+as do full workspace types and Svelte0errors0warnings. Independent read-only review finds no
+production blocker. The first draft had a TypeScript control-flow error; a repeated lifetime
+check through a helper fixes it. New tests initially compared a deliberately copied authority
+permission by object identity; they now require exact structural equality while retaining strict
+identity assertions for the workflow permission and original early source/value/pair/edge.
+
+D4260 remains doing: rich collection still completes the full grade context before other sources.
+Workflow-first composition, engine-row/whole-prefix source accounting and actual public paging,
+sessions/transport/UI remain open. Prior full software/content measurements predate this new
+source change; this checkpoint claims its own focused/types checks, not a fresh full-CI pass.
+
+Normal server/web builds and verify-governance pass for this checkpoint. The updated D4260
+ledger state and its two roadmap anchors agree;4013 ledger rows retain zero untriaged.
+No full software/content rerun or remote CI success is claimed for this new source diff.

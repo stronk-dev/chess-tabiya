@@ -3620,6 +3620,8 @@ export class RunService {
     return this.#gradeSources.beginResolve(input.selection, input.read, signal);
   }
   advanceGradeRecordedContext(handle: GradeContextCapture) { return this.#gradeSources.advanceResolve(handle); }
+  readGradePreparation(handle: GradeContextCapture) { return this.#gradeSources.readPreparation(handle); }
+  resolveCapturedGradeMoveSource(handle: GradeContextCapture, input: Readonly<{ nodeId: string; signal: AbortSignal }>) { return this.#gradeSources.resolveCapturedMove(handle, input); }
   finishGradeRecordedContext(handle: GradeContextCapture) { return this.#gradeSources.finishResolve(handle); }
   cancelGradeRecordedContext(handle: GradeContextCapture) { return this.#gradeSources.cancelResolve(handle); }
 
