@@ -2,18 +2,18 @@
 
 ## Current continuation — 2026-11-12
 
-The full eb3d4d17 software run found one harness timeout:21541pass/1fail of21542/593 files.
-D4264 keeps the genuine five-second Review deadline, gives only three oracle-plus-job cases a
-local ten-second harness allowance, and isolates the real-clock integration file in the existing
-serial lane. Exact discovery and53 focused cases/types pass; a fresh full software pass is still
-required before D4264 closes.
+The fresh e7288095 full software/performance lane is green:21542 tests/all593 files855.08s,
+plus7 isolated performance checks/four62.98s. D4264 closes after repairing the two-execution test
+harness: only three oracle-plus-job cases use a local ten-second allowance; their production
+five-second job deadline is unchanged. Exact discovery retains593 files/eight serial owners,
+with no omitted cases, smaller fixtures, retries or global timeout change.
 
 D4260 now stages original runtime attachments, server endpoint selection and rich Map windows
 by actual endpoint, with original complete aggregates and nested work retired on terminal paths.
 Window begin validates the full original scope without factories; admitted endpoints retain all
 eleven families, horizons and source sharing. D4263's reproduced constructor-retirement gap is
 repaired before adoption/publication.347 focused tests, types, canonical1928/1928, builds and340
-real-content tests pass; the full software harness repair at D4264 still requires a fresh pass.
+real-content tests pass; the fresh full software/performance lane now passes after D4264.
 The rich collector still finishes the whole grade context before other sources; workflow-first
 ordering, full-branch engine observation and actual public page accounting remain open. The
 original PhaseArc/full-packet whole-prefix semantic-path acquisitions also need explicit placement
@@ -44,9 +44,9 @@ oracles pass unchanged5s limits. D4259's actual final-result barrier reproduces 
 one atomic unit now permits one correct complete Map/serializer. Independent readback accepts.
 Final215/six affected cases and full types/Svelte0errors0warnings pass. Canonical1928/1928,
 24qualified of89,63population/8external is fresh after74 implementation-marker-only generated
-updates; every other JSON value remains unchanged. The current9011b36e code checkpoint passes normal full
-make verify-software/build/verify-content:21487software/all593 files811.43s,7 isolated performance/
-four61.29s,340content/all44 files231.32s,types/build. Canonical1928/1928 remains current; the
+updates; every other JSON value remains unchanged. The current e7288095/eb3d4d17 production-code checkpoint passes
+normal software/build/content lanes:21542software/all593 files855.08s,7 isolated performance/
+four62.98s,340content/all44 files225.20s,types/build. Canonical1928/1928 remains current; the
 92-document clearance audit has zero errors and104 capability declarations match. Nothing is pushed.
 
 The selected HTTP/UI path still uses synchronous reads. Next finish D4260 original engine-context,

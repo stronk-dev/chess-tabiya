@@ -35781,12 +35781,12 @@
     },
     {
       "id": "D4264",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:979c846c408b1238cde90cd9e25a5aac7522b9ce514cb001b355a4cf6df92fe7",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:39d6c1e6ab732667094796ce4ec131cab1fbf8aaa0e15263049064f2b8ebc157",
       "uxItems": [],
-      "owner": "review-and-return",
-      "since": "2026-11-12"
+      "evidence": "apps/server/src/rich-review-collection.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

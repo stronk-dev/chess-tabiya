@@ -42362,3 +42362,27 @@ proof remains eb3d4d17; D4260/D4250 and all native/default/full1.0 obligations r
 
 Normal roadmap-receipt/verify-governance passes for the D4264 harness checkpoint;4013 rows
 remain tracked with zero untriaged. The full rerun and D4264 closure remain pending.
+
+
+## 2026-11-12 — D4264 full normal software rerun passes at e7288095
+
+The same normal make verify-software now exits0:21542 software tests/all593 files855.08s and
+7 isolated performance checks/all4 files62.98s. Actual discovery retains every software file
+exactly once, including the eight serial owners; project defaults remain5000ms. The real-clock
+Review cases complete with their production5000ms guards active. No portable latency or default
+capacity is inferred. D4264 closes with actual test-path evidence after independent review.
+
+Current matching-code verification also includes canonical1928/1928 (24/89 qualified,63 population,
+8 external receipts), workspace types/Svelte0errors0warnings, server/web builds, real-content
+340/all44 tests225.20s,92-document clearance audit errors[] and104 exact capability declarations.
+Content/build results are from the same eb3d4d17 production code; e7288095 changes only its test
+harness/scheduling. The first restricted content run failed listen EPERM, then the unchanged
+normal target passed with required local HTTP permission. The first software failure and its
+actual cause remain recorded above; no production time budget was widened to obtain this pass.
+
+D4260 remains doing with engine row/context acquisition, workflow-first permission and explicit
+PhaseArc/full-packet whole-prefix source accounting before public page/session/transport/UI.
+No whole1.0 capability/milestone closes, and no push or remote-CI success is claimed.
+
+Final normal verify-governance passes after the full-result/roadmap update.4013 rows remain
+tracked with zero untriaged; D4263/D4264 are done and D4260/D4250/full1.0 remain open.
