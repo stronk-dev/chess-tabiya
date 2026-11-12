@@ -3934,3 +3934,49 @@ D4241 closes its finite contract question; D4228 is doing for bounded job implem
 D4224/D4225 certification still required before ordinary activation. Next retain actual original
 candidates in the bounded owned job, enforce deadline/expected cursor/cancel/cleanup, then wire
 actual service/API/strict receiver/selected Review and whole-prefix oracle. No milestone advances.
+
+
+### 2026-11-12 — D4228 cooperative original population, verified checkpoint
+
+The existing twelve-adapter owner now shares private preparation/finalization between its
+unchanged adapter-major synchronous dispatch and a full-tip begin/one-original-node advance/
+complete-only finish path. Original slots/results remain under the same population mint and
+factory readers; final order is canonical. Progress has counts/node identity only. Partial,
+forged/copied and stale source data cannot become a population; cancel/failure/final handoff
+retire the private weak handle. This is a collector dependency, not an authenticated job.
+
+Independent source readback accepts the finite code. Normal focused110/four5.71s and complete
+workspace types/Svelte0errors0warnings pass. Genuine37-node groups1/2/32 cross real macrotask
+gaps and preserve every original slot/state/projection/payload against synchronous dispatch;
+real engine, pending/not-scheduled, shape spans, inherited mirrored branches and copied-result
+negatives remain. Longest-unit/resource/deadline/public API/UI/activation claims stay open.
+
+First normal complete run stops at generated semantic receipt staleness AFTER all1928 cases
+pass. Normal semantic-validation-update exits0; exact structured comparison confirms only11
+operation/63 predicate implementation digests and the new prefix-helper membership in11 source
+lists change. Every other JSON value, all1928 cases,89subjects,24qualified and63/8 receipts are
+unchanged. No case, threshold, expectation, timeout or qualification rule is edited. The rerun
+of make verify-software build verify-content exits0:20621/all587 software1002.09s,
+7isolated performance/four61.37s, complete types/Svelte0errors0warnings and actual server/web
+builds. All340 content cases/all44 pass235.14s, zero skips;92-document audit errors[] and104
+exact capability declarations pass. Normal governance also passes; no remote-CI/push claim.
+
+D4250 records the actual rich-Review adoption mismatch found during this work. Independent
+readback accepts the bounded joint module-registration/review-map§1a correction after two
+returns: retain each action's existing readiness (including progressive explicit Analyze), and
+replace App's eager api.story scheduling side effect with the SAME conditional coordinator
+admission, without Story recompilation or new provider/window policy. One bounded private job
+has two explicit delivery scopes; rich Review preserves its complete existing map receipt and
+server-owned dedicated access. D4250 remains doing until actual delivery; acceptance is not code.
+
+Actual next dependencies: start the absolute clock before grade endpoint/history capture;
+stage grade.reviewPopulation through this source owner and resolve each original move once;
+stage the separate full packet with its genuine original prefix/SOURCE_RESULTS (no12-source
+cast); prepare original PhaseArc/windows/local edges/exposure/opening before final assembly;
+then finish genuine packet/Story/rich Map once and wire actual strict API/progress/cancel/retry UI.
+The job owns max capacity, current grants/decision/config/registry checks, idle expiry and exact
+expected cursors. Pure metadata slicing/source collection does not provide that authority.
+
+Pre-commit initially refuses the checkpoint because next actions/receipts were updated without
+advancing latestCheckpoint. The dated milestone summary and original source/RFC evidence are
+corrected before retry; no guard is relaxed and production bytes remain those fully verified.

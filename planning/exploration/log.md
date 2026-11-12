@@ -41968,3 +41968,37 @@ D4241 closes its finite contract question; D4228 is doing for bounded job implem
 D4224/D4225 certification still required before ordinary activation. Next retain actual original
 candidates in the bounded owned job, enforce deadline/expected cursor/cancel/cleanup, then wire
 actual service/API/strict receiver/selected Review and whole-prefix oracle. No milestone advances.
+
+
+## 2026-11-12 — original Review collection verified; rich transport correction accepted
+
+D4228's existing twelve-adapter recorded population owner now shares original input preparation
+and finalization across its unchanged synchronous dispatch and a private full-tip begin/one-node
+advance/complete-only finish path. It retains original position/incoming-edge slots and values,
+restores canonical adapter order, preserves pending/not-scheduled states and issues only through
+the same full-population authority. Counts/node progress cannot become partial evidence. Cancel,
+source/stale/finalization failure and successful handoff retire the weak handle. Independent
+source readback finds no blocker.110/four focused checks and complete types/Svelte pass.
+
+The first full run catches stale generated semantic receipt metadata after all1928 cases pass.
+Normal regeneration and exact structured comparison show only11 operation/63 predicate
+implementation digests and exact new-helper membership in11 dependency lists change; every
+other JSON value, all cases, thresholds, expectations and qualification counts remain unchanged.
+Final normal make verify-software build verify-content exits0:20621software/all5871002.09s,
+7performance/four61.37s, types/Svelte0errors0warnings, actual server/web production builds,
+340content/all44235.14s with zero skips,92-document integrity audit errors[] and104 exact
+capability declarations. Complete normal governance passes. No push/remote-green claim.
+
+D4250 records why this collector is not yet rich Review: ordinary module pages cannot carry the
+complete existing ReviewMap; its genuine full packet and final Map still own other acquisition.
+The bounded existing-RFC correction is independently accepted after two repaired returns: retain
+individual Analyze readiness and the original conditional coordinator analysis admission without
+eager Story recompilation. One private job owner has ordinary/rich delivery scopes, strict rich
+response and common cancel transport, preserving dedicated Review authority and complete output.
+D4250 stays doing until actual delivery. Next stage actual grade/fullpacket/PhaseArc/windows/
+opening owners, bounded job lifecycle and real API/selected UI. D4224/D4225 cost/default/memory,
+native/content qualification and whole1.0 remain open; no parent capability/milestone closes.
+
+Pre-commit initially refuses the checkpoint because next actions/receipts were updated without
+advancing latestCheckpoint. The dated milestone summary and original source/RFC evidence are
+corrected before retry; no guard is relaxed and production bytes remain those fully verified.

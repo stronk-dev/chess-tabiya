@@ -11584,3 +11584,53 @@ canonical tuple/prefix digest and cursor slicing. Pure slicing is NOT access or 
 the actual job owner must retain and revalidate the original boundary and expected cursor.
 No reviewer commands/edits ran; primary verification is recorded in the source plan/log.
 This accepts neither a public job implementation nor integration/latency/default activation.
+
+
+## 2026-11-12 — D4228 original Review population collection dependency
+
+Separate read-only objective/source review finds no blocker in the bounded incremental collector.
+The shared preparation/finalization retain original boundary/context; the synchronous wrapper
+keeps adapter-major dispatch, while the private incremental handle groups original slots by
+original node and emits the same canonical plan order through the same existing population mint
+and source/factory readers. Actual slot/result/source input joins remain enforced.
+
+Captured pending/not-scheduled states are preserved. No partial population escapes. Cancellation,
+stale/dispatch/finalization failures and successful handoff retire the private handle; copied or
+forged handles/results refuse. The reviewer clears unchanged production bytes for full normal
+gates. Primary focused verification is110/four5.71s and clean workspace types/Svelte; reviewer
+performs no commands or edits. The37-node real-yield/group-size1/2/32 equality controls are source
+collection proof, not actual paged-job/deadline/capacity/API/UI or default-activation proof.
+Whole-job cost, longest indivisible unit and the other original Review source owners remain open.
+
+
+### D4250 — subsequent actual rich-Review adoption audit
+
+The same independent reviewer finds the public D4241 query wire narrower than the whole
+selected-Review delivery objective. Its normal ModuleQueryPacket[] cannot carry the existing
+rich ReviewMap, and queryModules intentionally skips review_map. The earlier finite buildability
+acceptance missed this adoption mismatch; it is not public rich-Review acceptance.
+
+Actual #compileStoryContext eagerly creates the older semantic prefix and full packet/Story;
+reviewMapProjection still collects relations/windows/opening history. Calling those per page,
+or unchanged after the deadline at finalization, would defeat staged source accounting. The new
+twelve-adapter population is not a valid substitute for the genuine old full packet's distinct
+subject/slot-result authority; §4.5 forbids that cast. D4250 owns the bounded existing-contract
+adoption correction, preserving the rich receipt and dedicated Review ceiling. Private metadata
+and cooperative source dependencies remain sound; public cutover/full-source adoption stay open.
+
+
+### D4250 — joint correction independently accepted, 2026-11-12
+
+Exact §1a and D4241 readback accepts the bounded rich transport/source-factoring/common-cancel
+amendment on buildability after two returns. First, remove the accidental global readiness gate: a
+complete progressive map preserves each existing action's readiness/access, including explicit
+source-owned Analyze independently of unrelated engine coverage. Second, preserve actual App
+Story/import→ensureBranch admission as a separate declared POST-controller step, using the same
+conditional access, coordinator windows/provider policy/outcome store and unchanged shared-work
+termination. It runs inside the absolute source-job cap; continuations/pure readers/Map cannot
+schedule new windows or recompile Story merely to enqueue. Collection-ready remains distinct
+from upstream engine-ready. No other wrapper/scope/branch/assistance:null blocker is found.
+
+This is independent contract acceptance only. No reviewer commands/edits/jobs ran. D4250 stays
+doing until actual rich delivery/source integration; D4228, costs/default activation, actual API/UI
+and whole1.0 remain open. The finite original collector dependency remains separately verified.

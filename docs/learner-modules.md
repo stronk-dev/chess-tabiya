@@ -22,7 +22,8 @@ Ordinary Sight/Nudge/Review, avoidance and bot adoption remain separate D4167 wo
 The current checkpoint and measured gates are in `planning/foundation-source-identity/plan.md`.
 The D3928 startup/content hold is now resolved: the grade-contract migration and original
 registry composition pass the complete content gate, and the real native Hint smoke starts
-successfully. Complete software/performance/build/governance gates also pass locally on10632884.
+successfully. Complete software/performance/build/governance gates pass locally for that baseline and the
+current Review collector checkpoint; the source plan records the exact results.
 Native Inspector journeys, broader qualification and release remain separate open obligations;
 this is neither parent/capability completion nor remote-CI clearance.
 
@@ -42,6 +43,17 @@ a narrowed boundary and validates the original storage boundary when planning. I
 and pure cursor slicing are not evidence or authorization: the paged job still owes ownership,
 expected-cursor/currentness checks, total deadline, cancellation, final merge and public UI delivery
 under D4228. The existing per-node query is not reported as whole-game paging.
+
+The existing twelve-adapter recorded Review population also has a private cooperative collector.
+Begin validates/captures the original full branch and source inputs without dispatch; each advance
+collects one original position and its incoming-edge slots. Finish requires all subjects and hands
+the same original slot/result objects to the existing population owner in canonical adapter order.
+Pending upstream analysis remains pending. Interim progress contains only counts/node identity,
+never partial evidence; cancellation and stale/source/finalization failures retire the handle.
+Current synchronous consumers retain their complete dispatch. The enclosing authenticated job,
+capacity/idle timer/absolute deadline, other grade/objective/ledger/window sources and actual
+Review service/API/client/UI integration remain D4228 obligations. This collector is not the
+complete Review source inventory, a public paged job or an activation/latency proof.
 
 The eleven learner modules (`rfc/learner-modules.md`, registered by `rfc/module-registration.md`)
 are compiled at runtime import. A module is a declaration, not a detector: it names which sealed

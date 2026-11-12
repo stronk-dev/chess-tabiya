@@ -14,6 +14,7 @@ import type { DerivedEvidence, RecordedReviewObjectives } from "./evidence-facto
 import { orderedReviewEvidence } from "./internal/review-moment-assembly.js";
 import { assertRecordedPositionInvocation, assertRecordedReviewResultInvocation, invokeEvidenceValueRoute, readReviewPointInvocation, readReviewPointResultInvocation, readRecordedHumanDivergenceInvocation, readRecordedRulePivotalInvocation, readEndgamePopulationInvocation, readShapeFiringInvocation, readReviewTransitionResultInvocation, readReviewMemberInputs, readLocalReadingInvocation, type EvidenceValueRouteResults } from "./internal/evidence-value-routes.js";
 import { readRecordedReviewBoundary, type RecordedReviewBoundary } from "./recorded-review-boundary.js";
+import { planModuleReviewPrefix } from "./module-review-prefix.js";
 import { createRecordedPivotalSource, recordedPivotalData, type RecordedPivotalSource, type PivotalKind, type PivotalMarker, type RecordedHumanDivergenceMarker } from "./pivotal.js";
 import {
   PRESENTATION_SOURCE_REASONS,
@@ -959,8 +960,15 @@ export function collectRecordedReviewObjectives(boundary: RecordedReviewBoundary
   return Object.freeze({ boundary, items });
 }
 
-/** The accepted complete 12-adapter source image, internal and captured-only. No moment/title/API. */
-export function collectRecordedReviewSourcePopulation(input: Readonly<{ boundary: RecordedReviewBoundary; context: ReviewSourceContext }>): RecordedReviewSourcePopulation {
+interface RecordedReviewCollectionWork {
+  readonly boundary: RecordedReviewBoundary;
+  readonly execution: RecordedPointExecution;
+  readonly plan: readonly ReviewSourcePlanSlot[];
+  readonly results: Map<ReviewSourcePlanSlot, RecordedSourceResult>;
+}
+
+/** Capture original inputs and dispatch metadata only. No adapter is executed here. */
+function prepareRecordedReviewCollection(input: Readonly<{ boundary: RecordedReviewBoundary; context: ReviewSourceContext }>): RecordedReviewCollectionWork {
   if (!closedSource(input, ["boundary", "context"])) throw new TypeError("Recorded Review collection requires exactly {boundary,context}");
   const boundary = input.boundary, image = readRecordedReviewBoundary(boundary), path = Object.freeze(image.path.map(entry => entry.node));
   const points = capturePointContext(input.context, path);
@@ -979,14 +987,96 @@ export function collectRecordedReviewSourcePopulation(input: Readonly<{ boundary
   SOURCE_EXECUTIONS.add(execution);
   const adapters = sourceAdapters(RECORDED_REVIEW_SOURCE_ADAPTER_IDS), plan = sourcePlanSlots(path.map(node => node.id), adapters, 1);
   for (const slot of plan) RECORDED_SLOTS.set(slot, Object.freeze({ boundary, adapter: ADAPTER_BY_ID.get(slot.adapterId)! }));
-  const results = new Map<ReviewSourcePlanSlot, RecordedSourceResult>();
-  for (const slot of plan) results.set(slot, executeRecordedSourceSlot(slot, execution));
+  return { boundary, execution, plan, results: new Map() };
+}
+
+/** Reuse the same original result/slot objects, in the existing adapter-major canonical order. */
+function finishRecordedReviewCollection(work: RecordedReviewCollectionWork): RecordedReviewSourcePopulation {
+  const { boundary, execution, plan, results } = work, image = readRecordedReviewBoundary(boundary);
+  if (results.size !== plan.length || plan.some(slot => !results.has(slot))) throw new TypeError("Recorded Review source collection is incomplete");
   const lastLevelPopulation = retainRecordedLastLevelPopulation(boundary, execution, plan, results);
-  const data = Object.freeze({ boundary: image, shapes, plan, results: Object.freeze([...results.values()]), lastLevelPopulation });
+  const data = Object.freeze({ boundary: image, shapes: execution.context.shapes, plan,
+    results: Object.freeze(plan.map(slot => results.get(slot)!)), lastLevelPopulation });
   const population = Object.freeze({}) as RecordedReviewSourcePopulation;
   RECORDED_REVIEW_POPULATIONS.set(population, Object.freeze({ boundary, execution, data }));
   readRecordedReviewSourcePopulation(population);
   return population;
+}
+
+/** The accepted complete 12-adapter source image, internal and captured-only. No moment/title/API. */
+export function collectRecordedReviewSourcePopulation(input: Readonly<{ boundary: RecordedReviewBoundary; context: ReviewSourceContext }>): RecordedReviewSourcePopulation {
+  const work = prepareRecordedReviewCollection(input);
+  // Existing synchronous callers retain their exact execution order and complete source image.
+  for (const slot of work.plan) work.results.set(slot, executeRecordedSourceSlot(slot, work.execution));
+  return finishRecordedReviewCollection(work);
+}
+
+declare const recordedReviewCollectionBrand: unique symbol;
+/** Package-private work handle. It is neither a partial population nor evidence authority. */
+export interface RecordedReviewSourceCollection { readonly [recordedReviewCollectionBrand]: true }
+interface RecordedReviewCollectionState {
+  readonly work: RecordedReviewCollectionWork;
+  readonly subjects: readonly string[];
+  readonly slotsByNode: ReadonlyMap<string, readonly ReviewSourcePlanSlot[]>;
+  completed: number;
+}
+const REVIEW_COLLECTIONS = new WeakMap<object, RecordedReviewCollectionState>();
+
+/** Full original branch only. Ownership/capacity/deadline/yields belong to the enclosing job. */
+export function beginRecordedReviewSourceCollection(input: Readonly<{ boundary: RecordedReviewBoundary; context: ReviewSourceContext }>): RecordedReviewSourceCollection {
+  if (!closedSource(input, ["boundary", "context"])) throw new TypeError("Recorded Review collection requires exactly {boundary,context}");
+  const prefix = planModuleReviewPrefix(input.boundary), work = prepareRecordedReviewCollection(input);
+  const slotsByNode = new Map<string, ReviewSourcePlanSlot[]>();
+  for (const slot of work.plan) {
+    const slots = slotsByNode.get(slot.nodeId) ?? [];
+    slots.push(slot); slotsByNode.set(slot.nodeId, slots);
+  }
+  const handle = Object.freeze({}) as RecordedReviewSourceCollection;
+  REVIEW_COLLECTIONS.set(handle, { work, subjects: Object.freeze(prefix.subjects.map(subject => subject.nodeId)), slotsByNode, completed: 0 });
+  return handle;
+}
+
+function reviewCollectionState(handle: RecordedReviewSourceCollection): RecordedReviewCollectionState {
+  const state = typeof handle === "object" && handle !== null ? REVIEW_COLLECTIONS.get(handle) : undefined;
+  if (state === undefined) throw new TypeError("Recorded Review source collection is unknown or retired");
+  return state;
+}
+
+/** One original position plus its incoming-edge slots. No reduction, presentation or JSON seal. */
+export function advanceRecordedReviewSourceCollection(handle: RecordedReviewSourceCollection): Readonly<{
+  nodeId: string; completedSubjects: number; totalSubjects: number; complete: boolean;
+}> {
+  const state = reviewCollectionState(handle), { work } = state;
+  if (state.completed === state.subjects.length) throw new TypeError("Recorded Review source collection has no remaining subject");
+  try {
+    readRecordedReviewBoundary(work.boundary);
+    const nodeId = state.subjects[state.completed]!;
+    for (const slot of state.slotsByNode.get(nodeId)!) {
+      readRecordedReviewBoundary(work.boundary);
+      work.results.set(slot, executeRecordedSourceSlot(slot, work.execution));
+    }
+    readRecordedReviewBoundary(work.boundary);
+    state.completed++;
+    return Object.freeze({ nodeId, completedSubjects: state.completed, totalSubjects: state.subjects.length,
+      complete: state.completed === state.subjects.length });
+  } catch (error) {
+    // A failed partial collection cannot be resumed or mistaken for a complete population.
+    REVIEW_COLLECTIONS.delete(handle);
+    throw error;
+  }
+}
+
+/** Only the complete original population enters the existing source owner/factory readers. */
+export function finishRecordedReviewSourceCollection(handle: RecordedReviewSourceCollection): RecordedReviewSourcePopulation {
+  const state = reviewCollectionState(handle);
+  if (state.completed !== state.subjects.length) throw new TypeError("Recorded Review source collection is incomplete");
+  try { return finishRecordedReviewCollection(state.work); }
+  finally { REVIEW_COLLECTIONS.delete(handle); }
+}
+
+/** Release this handle's partial originals. Other actual source owners keep their own lifetime. */
+export function cancelRecordedReviewSourceCollection(handle: RecordedReviewSourceCollection): boolean {
+  return typeof handle === "object" && handle !== null && REVIEW_COLLECTIONS.delete(handle);
 }
 
 /** Original complete population input join, not a second collection or a displayed-value check. */

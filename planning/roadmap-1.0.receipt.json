@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:a0d741c2879e08cc1f8efc662688e0da1c79dbf8dfbc576af48d54cd21b22a17",
+    "roadmap": "sha256:2b3385bc6167098a79033570b9c91e08ef34e09f381008fd704e3997922cb20b",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:00d15494034efaf19f9d2f39124d408ed70e1a38895ac940b92a3afd71426802",
+    "workState": "sha256:2f7c809003be9a2aa4850e40a1e68d9e5a445afb97a335ef0b17c369cfe4677f",
     "rfcRegister": "sha256:49e46c03e8cf65e0983bcbd7a00a465007dbd3b6aeaa05915b5988fcd462b071",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -31,7 +31,7 @@
     "workState": {
       "untriaged": 0,
       "todo": 634,
-      "doing": 176,
+      "doing": 177,
       "blocked": 1061,
       "done": 1964,
       "refused": 163
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "D4241 is independently accepted and metadata-only whole-prefix planning is verified164/four with clean types. Implement the bounded owned Review job, actual source collection/final merge/strict receiver/UI next; pure slicing is not public paging or authorization. D4224/D4225 still gate activation/cost/memory; D3791 native Inspector, D4246 import attribution and remaining1.0 work stay open.",
+      "nextAction": "D4241 prefix planning is committed51e69170. D4228 original12-source cooperative collection passes independent readback,110/four focused checks and complete normal gates:20621/all587 software,7performance,340/all44 content, types/build/governance. D4250 rich transport/source-factoring/common-cancel amendment is independently accepted; actual rich delivery stays doing. Next stage original grade/fullpacket/PhaseArc/windows/opening owners and implement the bounded owned job/strict rich API/selected UI. No private helper substitutes for actual rich Review. D4224/D4225 activation/cost/memory, D3791 native Inspector, D4246 import attribution and full1.0 remain open.",
       "latestCheckpoint": {
-        "at": "2026-11-11",
-        "summary": "Committed10632884 passes all actual normal local CI commands:20588software/all585852.82s+7performance/four65.36s/types/Svelte0errors0warnings/build/governance; complete content340/all44/no skips260.57s,92-document clearance audit zero errors and104 exact requirements. Canonical1928/1928 and24/89 qualified remain current without regeneration. D3928 exact grade metadata and D4247 real source-composition repairs remain verified; real-Stockfish44-cell smoke passes without D7/p95/browser/memory clearance. D4248 reconciles the stale Hint header. No push, remote-green, graduation, parent or release closure. Fresh D4242 construction8 memory baseline at3da82490 preserves32roots/all13 family counts at capacities1/4/64; capacity64 retains32 receipt objects at888.36MiB post-GC and releases all32 at317.45MiB. Independent review accepts exact compact data/observer controls, without Hint, exclusive-attribution, peak/appliance or budget proof. Actual Hint ownership remains next. D4242 selected-Hint ownership study now closes with genuine typed-mock/full9-candidate source: while CLOSED Hint/cache/detached911Bresponse/providers stay live, source receipt/packet collect after close at1 and stay cached at64 until joint closed-instance/cache release. Exact-data/method review, tooltypes/9instrument and9Make-runtime checks pass. No source/default change, multi-Hint/exclusive/peak/appliance/leak proof or whole-product transition.",
+        "at": "2026-11-12",
+        "summary": "D4241 whole-prefix planning is committed51e69170. D4228 original12-source cooperative collection preserves genuine slots/results and complete canonical outputs; independent source readback and110/four focused controls pass. Complete normal gates pass20621software/all5871002.09s,7performance/four61.37s,340content/all44/no skips235.14s, types/Svelte0errors0warnings, actual server/web builds and governance. Canonical1928/1928 and24/89 remain unchanged; regenerated metadata changes only11operation/63predicate implementation digests plus exact helper dependency membership. D4250 joint rich-Review transport/source-factoring/common-cancel amendment is independently accepted; actual rich delivery stays doing. No private helper substitutes for original grade/fullpacket/PhaseArc/windows/opening staging, bounded job ownership/clock/capacity or selected API/UI proof. D4224/D4225 cost/default/memory and all broader1.0 obligations remain open; no milestone transition, push or remote-CI claim.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -651,7 +651,13 @@
           "apps/server/src/evidence-at-runtime.test.ts",
           "planning/foundation-source-identity/outcome-memory-construction8-2026-11-11.json",
           "planning/foundation-source-identity/hint-source-retention-2026-11-11.json",
-          "tools/d4175-outcome-delivery/README.md"
+          "tools/d4175-outcome-delivery/README.md",
+          "rfc/module-registration.md",
+          "rfc/review-map.md",
+          "packages/runtime/src/module-review-prefix.ts",
+          "packages/runtime/src/module-review-prefix.test.ts",
+          "packages/runtime/src/review-evidence.ts",
+          "packages/runtime/src/recorded-review-source-collection.test.ts"
         ],
         "anchors": [
           {
@@ -1423,6 +1429,26 @@
             "kind": "work_state",
             "id": "D4242",
             "digest": "sha256:d43572035acaca91f162a8d17edca1ca330d5b7c455a42f59fd0a96c2ad56a95"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4241",
+            "digest": "sha256:ae248049cd92494548f3474de5d5f38b451744eef9f9f3457e6ee1ae2cca9f35"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4250",
+            "digest": "sha256:d9ffd41d03807ccdcbf21a7c17e5e1baeb4ee99876f786953dbf79760a637058"
+          },
+          {
+            "kind": "rfc",
+            "id": "module-registration.md",
+            "digest": "sha256:4afa147260f3a12684ea7ab993da09f61d37884d5a31345aca2103564e2ff565"
+          },
+          {
+            "kind": "rfc",
+            "id": "review-map.md",
+            "digest": "sha256:36cfe2cdbf10b96ff4745c200b0f7c48ce65d00f314e5770b0c51aabfcc35b93"
           }
         ]
       },
@@ -1443,10 +1469,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "D4241 is independently accepted and metadata-only whole-prefix planning is verified164/four with clean types. Implement the bounded owned Review job, actual source collection/final merge/strict receiver/UI next; pure slicing is not public paging or authorization. D4224/D4225 still gate activation/cost/memory; D3791 native Inspector, D4246 import attribution and remaining1.0 work stay open.",
+      "nextAction": "D4241 prefix planning is committed51e69170. D4228 original12-source cooperative collection passes independent readback,110/four focused checks and complete normal gates:20621/all587 software,7performance,340/all44 content, types/build/governance. D4250 rich transport/source-factoring/common-cancel amendment is independently accepted; actual rich delivery stays doing. Next stage original grade/fullpacket/PhaseArc/windows/opening owners and implement the bounded owned job/strict rich API/selected UI. No private helper substitutes for actual rich Review. D4224/D4225 activation/cost/memory, D3791 native Inspector, D4246 import attribution and full1.0 remain open.",
       "latestCheckpoint": {
-        "at": "2026-11-11",
-        "summary": "Committed10632884 passes all actual normal local CI commands:20588software/all585852.82s+7performance/four65.36s/types/Svelte0errors0warnings/build/governance; complete content340/all44/no skips260.57s,92-document clearance audit zero errors and104 exact requirements. Canonical1928/1928 and24/89 qualified remain current without regeneration. D3928 exact grade metadata and D4247 real source-composition repairs remain verified; real-Stockfish44-cell smoke passes without D7/p95/browser/memory clearance. D4248 reconciles the stale Hint header. No push, remote-green, graduation, parent or release closure. Fresh D4242 construction8 memory baseline at3da82490 preserves32roots/all13 family counts at capacities1/4/64; capacity64 retains32 receipt objects at888.36MiB post-GC and releases all32 at317.45MiB. Independent review accepts exact compact data/observer controls, without Hint, exclusive-attribution, peak/appliance or budget proof. Actual Hint ownership remains next. D4242 selected-Hint ownership study now closes with genuine typed-mock/full9-candidate source: while CLOSED Hint/cache/detached911Bresponse/providers stay live, source receipt/packet collect after close at1 and stay cached at64 until joint closed-instance/cache release. Exact-data/method review, tooltypes/9instrument and9Make-runtime checks pass. No source/default change, multi-Hint/exclusive/peak/appliance/leak proof or whole-product transition.",
+        "at": "2026-11-12",
+        "summary": "D4241 whole-prefix planning is committed51e69170. D4228 original12-source cooperative collection preserves genuine slots/results and complete canonical outputs; independent source readback and110/four focused controls pass. Complete normal gates pass20621software/all5871002.09s,7performance/four61.37s,340content/all44/no skips235.14s, types/Svelte0errors0warnings, actual server/web builds and governance. Canonical1928/1928 and24/89 remain unchanged; regenerated metadata changes only11operation/63predicate implementation digests plus exact helper dependency membership. D4250 joint rich-Review transport/source-factoring/common-cancel amendment is independently accepted; actual rich delivery stays doing. No private helper substitutes for original grade/fullpacket/PhaseArc/windows/opening staging, bounded job ownership/clock/capacity or selected API/UI proof. D4224/D4225 cost/default/memory and all broader1.0 obligations remain open; no milestone transition, push or remote-CI claim.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2074,7 +2100,10 @@
           "apps/server/src/evidence-at-runtime.test.ts",
           "planning/foundation-source-identity/outcome-memory-construction8-2026-11-11.json",
           "planning/foundation-source-identity/hint-source-retention-2026-11-11.json",
-          "tools/d4175-outcome-delivery/README.md"
+          "tools/d4175-outcome-delivery/README.md",
+          "packages/runtime/src/module-review-prefix.ts",
+          "packages/runtime/src/module-review-prefix.test.ts",
+          "packages/runtime/src/recorded-review-source-collection.test.ts"
         ],
         "anchors": [
           {
@@ -3201,6 +3230,16 @@
             "kind": "work_state",
             "id": "D4242",
             "digest": "sha256:d43572035acaca91f162a8d17edca1ca330d5b7c455a42f59fd0a96c2ad56a95"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4241",
+            "digest": "sha256:ae248049cd92494548f3474de5d5f38b451744eef9f9f3457e6ee1ae2cca9f35"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4250",
+            "digest": "sha256:d9ffd41d03807ccdcbf21a7c17e5e1baeb4ee99876f786953dbf79760a637058"
           }
         ]
       },

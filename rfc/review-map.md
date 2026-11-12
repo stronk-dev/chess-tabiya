@@ -106,6 +106,117 @@ The two touchpoints with play are already specified elsewhere and are not amende
 timeline seat mark, and the terminal handoff at composition state 14 (*"verdict card + review
 handoff"*, `play-composition.md:522`).
 
+### §1a — D4250 rich Review job delivery (independently accepted, 2026-11-12)
+
+**Independently accepted on buildability, 2026-11-12.** Decision and repaired readiness/
+analysis-admission returns: `planning/learner-modules/compiler2-independent-review-2026-11-02.md`.
+Public implementation/activation remain owed. Module-registration§2.5.2's D4241
+pages describe ordinary Review-timing modules/query output, not this complete Review Map.
+`queryModules` deliberately skips `review_map`; its normal eight-fact presentation packets
+cannot replace the rich selected Review response. This amendment preserves the existing surface,
+permissions, sources, complete move rows, grades/accuracy/graph, source absence, actions and
+zero-to-three moments. It adds no preset, pedagogy or evidence authority.
+
+**One private job owner, two explicit delivery scopes.** Keep ordinary modules/query output
+as its normal packets. Rich Review uses the same bounded job lifecycle/metadata contract,
+but its final result is the existing complete `RunService.review` response (`ReviewMap`, parsed
+by the existing `assertReviewMapResponse`). The job pins delivery scope `modules | rich_review`;
+a handle issued in one scope cannot continue in the other. Do not add a completed-result cache,
+fetch the old whole Review first, duplicate source work across endpoints or cast a twelve-adapter
+recorded population into the different genuine full packet authority.
+
+Replace the prelaunch selected Review GET flow with authenticated `POST /runs/:runId/review`.
+Its closed request is `{branchId?, nodeId?, page:{limit,jobId?,prefixDigest?,cursor?}}`, using the
+D4241 first/continuation, full selected branch, focus/default tip and actual event-sequence rules.
+All current callers migrate together; there is no unbudgeted old GET fallback. The closed reply is:
+
+```ts
+{
+  protocol: "review.job_page@1";
+  runId: string;
+  decision: ModuleDecisionStamp;
+  subjectNodeId: string;
+  job: ReviewJobMetadata; // exact D4241 metadata, including resolved branch and source coverage
+  map: ReviewMap | null;  // existing complete rich response, never ModuleQueryPacket[]
+}
+```
+
+`map` is non-null iff job state is complete. Strict-parse the outer wrapper and every metadata
+field, then invoke the existing rich-map parser on the unchanged complete final object. Run,
+resolved branch, original decision and subject/focus must correlate with the requested owned
+job; a rich map from another snapshot cannot attach. Collection-complete still permits the
+existing ready:false/pendingEvidence state. Pending upstream analysis never becomes honest
+empty, a completed grade or quiet failure. Interim collection has no map/actions. After complete
+rich-map delivery, preserve each existing action's own source/access/readiness rule: explicit
+source-owned Analyze remains available where it is available today, independently of unrelated
+whole-game evaluation coverage. No new global analysis-ready gate is introduced.
+
+The original dedicated Review access path owns permission: preserve actual server-derived
+`#reviewGradeContext`/grade permission `assistance:null`, role, stored session/origin and read/
+disclosure checks. Null is an internal owned choice, not a caller override or an instruction to
+bypass help. No assistance/configuration/role/session/evidence is accepted from this rich request;
+its job authority is the original server-derived Review access/configuration signature. Ordinary
+module jobs still require their untrusted requested assistance and effective compilation. Only
+changes relevant to the owning access path invalidate a job; unrelated active-Play preferences
+cannot grant or remove dedicated Review authority.
+
+Cancellation for either delivery scope uses the common authenticated
+`DELETE /runs/:runId/review/jobs/:jobId`, with the same closed source-free404 and
+`{jobId,state:"cancelled"}` semantics as D4241. This supersedes its earlier unimplemented
+`/modules/review-jobs/` spelling. Each UI request owns its controller/job;
+progress, cancel, retry, departure and late completion are bound to the exact view generation.
+Retry creates a new job under current authority, never renews the old five-second clock. The
+actual selected Review client consumes progress until its complete parsed rich map is present;
+it does not call the old GET alongside the job or show interim candidates as finished moments.
+
+**Preserve existing progressive analysis admission explicitly.** App currently observes an
+incomplete map, then calls `api.story`; that Story call invokes the bounded
+`ReviewEvidenceCoordinator.ensureBranch` admission as well as repeating full packet/Story work.
+The rich POST start replaces that scheduling hand-off through a separate declared admission
+step under the SAME original import/Story access and pending/availability conditions. It delegates
+only to the existing coordinator's `ensureBranch`/window ownership and outcome store, preserving
+all current provider policy, limits, refusal and retry rules. Do not call the eager Story
+collector merely to enqueue, or call the old GET/Story fallback beside the new job. No provider
+work is added to ordinary module jobs, pure source readers or Map projection. Continuations do
+not independently schedule new windows. Later actual Review refresh/start retains the existing
+progressive admission behavior. The POST controller's admission is distinct from the read-only
+collection/Map stages, and its time is inside the absolute source-job cap.
+
+Upstream engine jobs remain the coordinator's original durable work: collection-complete can
+honestly observe pending/not-yet-scheduled outputs and does not promise engine completion.
+Cancellation releases only this collection's owned subscriptions/references; it cannot cancel
+another subscriber's shared analysis or change the coordinator's existing cancellation policy.
+Actual UI controls must prove pending→progressive enrichment without duplicate Story collection.
+
+**Budget the real acquisition, then finish without hidden collection.** Start the shared absolute
+five-second clock BEFORE `#reviewGradeContext`/whole-prefix engine endpoint or historical-ledger
+capture. Factor the actual owners' acquisition into retained preparation/advance/finish; their
+existing complete constructors remain the only source issuers:
+
+1. Retain the real recorded grade context, normalized original modern deliveries and boundary.
+   Advance `reviewPopulation` through its actual twelve-source owner and resolve each original
+   move grade through `resolveMove` once. Keep measurements/objectives under their own owners.
+2. Retain/stage the separate full packet's actual `ReviewRecordedPrefixReceipt`, source plan and
+   `SOURCE_RESULTS`, then use existing `compileReviewEvidence`. Its eager recorded semantic path
+   must also be inside the budget; source staging cannot manufacture a shortened run/receipt.
+3. Prepare the actual PhaseArc/path, eleven-family windows, local edges/exposure, phase/setup
+   readings and opening history before finalization. Capture actual shape registry records and
+   revalidate them around yields, preserving their original projection and generation authority.
+4. Only after complete source coverage: build the genuine full packet, Story/rank/title and rich
+   Review Map once from retained originals. Finalization must not recollect sources or call the
+   old eager pipeline out of budget. This separates acquisition from assembly, not authorities.
+
+All sources, dependency slots and unknown/pending states stay in their actual owned invocation
+plan. Rich intermediate `candidates` name only genuine retained/admitted candidates, never raw
+input projections outside the module's acceptance; otherwise this progress list remains empty.
+The final exact-byte oracle covers the COMPLETE rich map (all move rows, reports, graph, coverage,
+source absence, actions and moments), in addition to D4241's ordinary packet oracle. Genuine
+single-pass/limits1,2,32, long/inherited/repeated positions, deadline through real capture/final
+collection, changed registry/grants, cancellation between pages, no-double-collection and actual
+strict API/selected UI journeys are mandatory. Internal acquisition factoring is authorized only
+while original source/consumer authority and complete outputs remain unchanged. Cost/default
+activation and full1.0 proof are not discharged by this acceptance or private collector tests.
+
 ### §2 — What renders: the four regions
 
 | Region | Contents | Source |
@@ -844,6 +955,11 @@ Proposed; id assigned at landing (head was **D1284** at drafting).
    an owner.
 
 ## Changelog
+
+- 2026-11-12: D4250 independently accepted after two repaired returns: retain individual Analyze
+  readiness and the actual bounded progressive-analysis admission without eager Story collection.
+  Ordinary module pages and complete rich Review use two explicit delivery scopes under one job
+  owner, preserving actual access and genuine sources. Public implementation/proof remains owed.
 
 - 2026-11-03 — D4004 bounded draft: actual Analyze source audit finds the retired Full1 call and
   three distinct original source paths; §7a specifies one new current source-topic derivation,

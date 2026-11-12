@@ -1407,6 +1407,12 @@ requests may create distinct jobs for an identical prefix without cancelling eac
 capacity refusal never replaces a different job. Preserve `module.query_page@1`: this fulfils
 its specified but unimplemented Review arm; other timing requests/replies remain byte-compatible.
 
+**Rich surface adoption remains a separate declared arm.** This accepted query-page shape ends
+in normal module packets; it does not transport the rich ReviewMap. Independently accepted D4250 / review-map§1a declares
+the missing rich-response/client adoption under the same private job owner and original dedicated
+Review authority. Actual implementation remains owed; ordinary query paging cannot discharge
+the selected rich-Review journey. Both scopes use its common cancel route.
+
 **Metadata-only plan.** Resolve the full selected branch through the existing storage-owned
 `RecordedReviewBoundary` before any collector. Enumerate its original path once, root through
 tip. One subject is one original path entry: the root position; otherwise the position and its
@@ -1449,7 +1455,7 @@ can be preempted halfway through. Deadline overrun is typed `budget_exhausted`, 
 partial coverage. An HTTP abort cancels only that owned job. Continuations never renew the cap.
 
 Explicit cancellation after an interim response uses authenticated
-`DELETE /runs/:runId/modules/review-jobs/:jobId`, with no request body. Require the same current
+`DELETE /runs/:runId/review/jobs/:jobId`, with no request body. Require the same current
 principal/session and run-read authority; a foreign, unknown or already retired handle returns
 the same source-free404. A matching job is atomically retired and aborts in-flight work before
 returning exactly `{jobId, state:"cancelled"}`. Cancel never needs a fake cursor or limit0, runs
@@ -1518,7 +1524,8 @@ normal packets; every terminal noncomplete state requires null cursor and `packe
 Elapsed/remaining values use the same absolute clock and remaining is clamped at zero.
 `candidates` is empty on final/terminal pages; source receipts retain honest upstream states.
 Collection-complete means all planned slots have been observed, not all upstream analysis ready:
-existing pending/not-ready Review controls and their disabled primary action remain truthful.
+existing pending/not-ready Review controls retain their individual current action/source rules;
+no new global ready gate disables explicit Analyze on a progressively analyzed complete map.
 Unauthorized/unknown-handle errors expose none of this metadata.
 
 **Finalization and proof.** After all original subjects, merge retained original evidence in
