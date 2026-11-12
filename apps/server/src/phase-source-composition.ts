@@ -379,6 +379,7 @@ interface PhaseArcCollectionState {
   readonly points: PhaseSourcePoint[];
   readonly changes: PhaseSourceChange[];
   path: RecordedSemanticPathResult | undefined;
+  busy: boolean;
 }
 const ARC_COLLECTIONS = new WeakMap<object, PhaseArcCollectionState>();
 
@@ -405,14 +406,20 @@ export function beginRecordedPhaseArcCollection(boundary: RecordedReviewBoundary
   const captured = capturePhaseDependencies(dependencies);
   readRecordedReviewBoundary(boundary);
   const handle = Object.freeze({}) as RecordedPhaseArcCollection;
-  ARC_COLLECTIONS.set(handle, { boundary, image, dependencies: captured, points: [], changes: [], path: undefined });
+  ARC_COLLECTIONS.set(handle, { boundary, image, dependencies: captured, points: [], changes: [], path: undefined, busy: false });
   return handle;
 }
 
 function arcCollectionState(handle: RecordedPhaseArcCollection): PhaseArcCollectionState {
   const state = typeof handle === "object" && handle !== null ? ARC_COLLECTIONS.get(handle) : undefined;
   if (state === undefined) throw new TypeError("PhaseArc collection is unknown or retired");
+  if (state.busy) throw new TypeError("PhaseArc collection is already advancing or finishing");
   return state;
+}
+
+function assertArcCollectionCurrent(handle: RecordedPhaseArcCollection, state: PhaseArcCollectionState): void {
+  readRecordedReviewBoundary(state.boundary);
+  if (ARC_COLLECTIONS.get(handle) !== state) throw new TypeError("PhaseArc collection retired during source work");
 }
 
 /** Whole-path preparation is its own unit; later advances acquire one genuine point each. */
@@ -421,41 +428,47 @@ export function advanceRecordedPhaseArcCollection(handle: RecordedPhaseArcCollec
 }> {
   const state = arcCollectionState(handle), { image } = state, totalSubjects = image.path.length;
   if (state.path?.kind === "refused" || state.points.length === totalSubjects) throw new TypeError("PhaseArc collection has no remaining subject");
+  state.busy = true;
   try {
-    readRecordedReviewBoundary(state.boundary);
+    assertArcCollectionCurrent(handle, state);
     if (state.path === undefined) {
       state.path = recordedSemanticPath(image.run, image.request.branchId);
       if (state.path.branchId !== image.request.branchId) fail("PHASE_SOURCE_PATH_INVALID", "semantic collection belongs to another original branch");
       if (state.path.kind === "available" && state.path.pathNodeIds.join("\u0000") !== image.path.map(entry => entry.node.id).join("\u0000")) {
         fail("PHASE_SOURCE_PATH_INVALID", "semantic collection disagrees with the original recorded branch");
       }
-      readRecordedReviewBoundary(state.boundary);
+      assertArcCollectionCurrent(handle, state);
       return Object.freeze({ stage: "path", nodeId: null, completedSubjects: 0, totalSubjects, complete: state.path.kind === "refused" });
     }
     const nodeId = state.path.pathNodeIds[state.points.length]!;
-    const point = compilePhaseSourcePoint(invokeRunRecordPosition(image.run, nodeId) as RecordedPositionEvidence, state.dependencies);
+    const position = invokeRunRecordPosition(image.run, nodeId) as RecordedPositionEvidence;
+    assertArcCollectionCurrent(handle, state);
+    const point = compilePhaseSourcePoint(position, state.dependencies);
+    assertArcCollectionCurrent(handle, state);
     const previous = state.points.at(-1);
     if (previous !== undefined) {
       if (point.position.payload.ply !== previous.position.payload.ply + 1) fail("PHASE_SOURCE_PATH_INVALID", "the arc is not a contiguous ordered path");
       state.changes.push(...changesBetween(previous, point));
     }
-    readRecordedReviewBoundary(state.boundary);
+    assertArcCollectionCurrent(handle, state);
     state.points.push(point);
     return Object.freeze({ stage: "point", nodeId, completedSubjects: state.points.length, totalSubjects, complete: state.points.length === totalSubjects });
   } catch (error) { ARC_COLLECTIONS.delete(handle); throw error; }
+  finally { state.busy = false; }
 }
 
 /** Complete-only publication through the same original arc issuer, without source acquisition. */
 export function finishRecordedPhaseArcCollection(handle: RecordedPhaseArcCollection): PhaseArcResult {
   const state = arcCollectionState(handle), { image, path } = state;
   if (path === undefined || path.kind === "available" && state.points.length !== image.path.length) throw new TypeError("PhaseArc collection is incomplete");
+  state.busy = true;
   try {
-    readRecordedReviewBoundary(state.boundary);
+    assertArcCollectionCurrent(handle, state);
     const result: PhaseArcResult = path.kind === "refused" ? Object.freeze({ kind: "refused", path })
       : sealPhaseArc(image.run.id, image.request.branchId, path, state.points, state.changes);
-    readRecordedReviewBoundary(state.boundary);
+    assertArcCollectionCurrent(handle, state);
     return result;
-  } finally { ARC_COLLECTIONS.delete(handle); }
+  } finally { ARC_COLLECTIONS.delete(handle); state.busy = false; }
 }
 
 export function cancelRecordedPhaseArcCollection(handle: RecordedPhaseArcCollection): boolean {

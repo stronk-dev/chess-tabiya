@@ -76,9 +76,14 @@ The PhaseArc owner likewise has private `beginRecordedPhaseArcCollection` / adva
 cancel work over a genuine complete recorded boundary. Begin captures metadata and independent
 opening/snapshot/live inputs, retaining actual provider identities. The first advance collects
 the whole original semantic path only; subsequent advances collect one genuine phase point each.
-This gives the future job a deadline/yield boundary before the first point. Complete-only finish
+This gives the private job a deadline/yield boundary before the first point. Complete-only finish
 uses the same original arc issuer with no source acquisition; mutation, failure, cancel and handoff
 retire the private work. Whole-path computation remains indivisible, without a latency guarantee.
+The Arc owner checks its exact handle after source callbacks and the final live storage read.
+Cancellation cannot return progress or a result, and a busy owner rejects reentrant advancement
+or finish before another source can reuse its current index. Storage validation alone is not an
+owner-lifetime check. These guards preserve the original point order and complete Arc bytes;
+they do not adopt the staged semantic runtime or establish public paging.
 
 Review Map's remaining relation/opening sources likewise have private
 `beginReviewMapSourceCollection` / advance / finish / cancel work. Its initial window-scope step

@@ -21,15 +21,16 @@ const dependencies: PhaseSourceDependencies = { opening, recorded: compileRecord
 
 function fixture(initial: runtime.DrillRun, branchId = initial.activeCursor.branchId, throughNodeId?: string) {
   let run = initial;
+  let beforeRead: (() => void) | undefined;
   const path = runtime.branchPath(run, branchId);
   const mainline = runtime.branchPath(initial, initial.branches[0]!.id);
   const record = initial.sessionKind === "imported" ? { ...importRecord(initial, "*"),
     movetextDigest: `sha256:${evidenceDigest({ rootFen: mainline[0]!.fen, uci: mainline.slice(1).map(node => node.moveUci) })}` } : undefined;
-  const owner = createRecordedReviewBoundarySourceOwner({ loadRun: () => run,
+  const owner = createRecordedReviewBoundarySourceOwner({ loadRun: () => { beforeRead?.(); return run; },
     loadImportRecord: () => record });
   const boundary = owner.resolve({ runId: run.id, branchId, throughNodeId: throughNodeId ?? path.at(-1)!.id });
   const image = readRecordedReviewBoundary(boundary);
-  return { boundary, image, path, setRun: (value: runtime.DrillRun) => { run = value; } };
+  return { boundary, image, path, setRun: (value: runtime.DrillRun) => { run = value; }, duringRead: (hook: () => void) => { beforeRead = hook; } };
 }
 function drain(handle: RecordedPhaseArcCollection, count: number) {
   expect(advanceRecordedPhaseArcCollection(handle)).toEqual({ stage: "path", nodeId: null, completedSubjects: 0, totalSubjects: count, complete: false });
@@ -39,6 +40,89 @@ function drain(handle: RecordedPhaseArcCollection, count: number) {
 }
 
 describe("original PhaseArc cooperative source collection", () => {
+  it("refuses point progress after the original phase source cancels its own owner", () => {
+    const f = fixture(play(importedRun("phase-arc-source-cancel"), ["e2e4"]));
+    const handle = beginRecordedPhaseArcCollection(f.boundary, dependencies);
+    advanceRecordedPhaseArcCollection(handle); // Existing complete path step, before the point.
+    const original = runtime.phaseReadingEvidence;
+    let cancelled = false;
+    const source = vi.spyOn(runtime, "phaseReadingEvidence").mockImplementationOnce((...args) => {
+      const result = original(...args); cancelled = cancelRecordedPhaseArcCollection(handle); return result;
+    });
+    try {
+      let returned: ReturnType<typeof advanceRecordedPhaseArcCollection> | undefined, failure: unknown;
+      try { returned = advanceRecordedPhaseArcCollection(handle); } catch (error) { failure = error; }
+      expect(cancelled).toBe(true);
+      expect(returned).toBeUndefined(); expect(failure).toBeInstanceOf(TypeError);
+      expect(() => finishRecordedPhaseArcCollection(handle)).toThrow(/retired/);
+    } finally { source.mockRestore(); }
+  });
+
+  it("stops before point sources when the original position source cancels its owner", () => {
+    const f = fixture(importedRun("phase-arc-position-cancel")), handle = beginRecordedPhaseArcCollection(f.boundary, dependencies);
+    advanceRecordedPhaseArcCollection(handle);
+    const original = runtime.invokeRunRecordPosition;
+    let cancelled = false;
+    const position = vi.spyOn(runtime, "invokeRunRecordPosition").mockImplementationOnce((...args) => {
+      const result = original(...args); cancelled = cancelRecordedPhaseArcCollection(handle); return result;
+    });
+    const point = vi.spyOn(runtime, "phaseReadingEvidence");
+    try {
+      expect(() => advanceRecordedPhaseArcCollection(handle)).toThrow(/retired/);
+      expect(cancelled).toBe(true); expect(point).not.toHaveBeenCalled();
+      expect(cancelRecordedPhaseArcCollection(handle)).toBe(false);
+    } finally { position.mockRestore(); point.mockRestore(); }
+  });
+
+  it("refuses path progress after the original path source cancels its owner", () => {
+    const f = fixture(importedRun("phase-arc-path-cancel")), handle = beginRecordedPhaseArcCollection(f.boundary, dependencies);
+    const original = runtime.recordedSemanticPath;
+    let cancelled = false;
+    const collect = vi.spyOn(runtime, "recordedSemanticPath").mockImplementationOnce((...args) => {
+      const result = original(...args); cancelled = cancelRecordedPhaseArcCollection(handle); return result;
+    });
+    const position = vi.spyOn(runtime, "invokeRunRecordPosition");
+    try {
+      expect(() => advanceRecordedPhaseArcCollection(handle)).toThrow(/retired/);
+      expect(cancelled).toBe(true); expect(position).not.toHaveBeenCalled();
+      expect(cancelRecordedPhaseArcCollection(handle)).toBe(false);
+    } finally { collect.mockRestore(); position.mockRestore(); }
+  });
+
+  it("blocks reentrant acquisition before another source can reuse the current point", () => {
+    const f = fixture(importedRun("phase-arc-reentrant-point")), handle = beginRecordedPhaseArcCollection(f.boundary, dependencies);
+    advanceRecordedPhaseArcCollection(handle);
+    const original = runtime.phaseReadingEvidence;
+    let reentered = false;
+    const point = vi.spyOn(runtime, "phaseReadingEvidence").mockImplementationOnce((...args) => {
+      const result = original(...args); reentered = true;
+      expect(() => advanceRecordedPhaseArcCollection(handle)).toThrow(/already advancing/); return result;
+    });
+    try {
+      expect(advanceRecordedPhaseArcCollection(handle)).toMatchObject({ completedSubjects: 1, complete: true });
+      expect(reentered).toBe(true); expect(point).toHaveBeenCalledTimes(1);
+      expect(finishRecordedPhaseArcCollection(handle).kind).toBe("arc");
+    } finally { point.mockRestore(); }
+  });
+
+  it.each(["cancel", "reentrant"] as const)("checks the final live-read publication boundary: %s", fault => {
+    const f = fixture(importedRun("phase-arc-final-" + fault)), handle = beginRecordedPhaseArcCollection(f.boundary, dependencies);
+    advanceRecordedPhaseArcCollection(handle); advanceRecordedPhaseArcCollection(handle);
+    let reads = 0, exercised = false;
+    f.duringRead(() => {
+      if (++reads !== 2) return;
+      exercised = true;
+      if (fault === "cancel") expect(cancelRecordedPhaseArcCollection(handle)).toBe(true);
+      else expect(() => finishRecordedPhaseArcCollection(handle)).toThrow(/already advancing or finishing/);
+    });
+    const point = vi.spyOn(runtime, "invokeRunRecordPosition");
+    try {
+      if (fault === "cancel") expect(() => finishRecordedPhaseArcCollection(handle)).toThrow(/retired/);
+      else expect(finishRecordedPhaseArcCollection(handle).kind).toBe("arc");
+      expect(exercised).toBe(true); expect(point).not.toHaveBeenCalled();
+      expect(() => finishRecordedPhaseArcCollection(handle)).toThrow(/retired/);
+    } finally { point.mockRestore(); }
+  });
   it("keeps begin metadata-only and finish free of source reacquisition", () => {
     const f = fixture(play(importedRun("phase-arc-metadata"), ["e2e4", "e7e5"]));
     const collect = vi.spyOn(runtime, "recordedSemanticPath"), point = vi.spyOn(runtime, "invokeRunRecordPosition");

@@ -35747,7 +35747,7 @@
       "id": "D4260",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:230e76162349d120950630b4a1436599a458a929598752347af301c796e719d5",
+      "sourceDigest": "sha256:16ca7d73cd1743dac717255b1c273afc5a229b83ec615ee04c011b6d3d982607",
       "uxItems": [],
       "owner": "review-and-return",
       "since": "2026-11-12"
@@ -35822,6 +35822,15 @@
       "sourceDigest": "sha256:e8ef41d9ec86a93d3a9998c7c20ac87c85a4bea94923c3552aeeb3072eb8f5d9",
       "uxItems": [],
       "evidence": "planning/foundation-source-identity/plan.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4269",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:620561f74284149e7f71e55c6147d4c65d2a66302f3af4210a8234172ee96061",
+      "uxItems": [],
+      "evidence": "apps/server/src/phase-arc-collection.test.ts",
       "evidenceKind": "path"
     }
   ]

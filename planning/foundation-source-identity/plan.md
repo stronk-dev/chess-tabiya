@@ -4886,3 +4886,37 @@ No protected design sentence is falsified by this internal execution factoring.
 
 Normal verify-governance passes for the semantic runtime dependency;4017 rows retain zero
 untriaged. D4260/D4250/full1.0 stay open, with actual packet/PhaseArc adoption next.
+
+
+### 2026-11-12 — D4269 PhaseArc outer lifetime repair precedes semantic adoption
+
+The actual old collector first reproduces20pass/1fail: the genuine phase source returns its
+original reading, cancel succeeds, yet advance returns root point progress (completedSubjects1/
+total2). The control asserts cancellation before checking the returned value, so an unused hook
+cannot manufacture that reading. This is an internal owner failure, not an observed published
+UI leak. No semantic source adoption was mixed into its repair.
+
+The Arc owner now checks actual boundary currentness AND exact handle identity around original
+path, position, point and final publication. The position step is separated only to check before
+point sources; all original source order/outputs remain. Busy work refuses same-index reentry;
+errors/cancel/finish sever ownership without reinsertion. Real path/position/point cancellation,
+point reentry and final second-storage-read cancel/reentrant-finish controls pass; position
+cancellation prevents the following phase source. No deadline or source contract is widened.
+
+Normal make typecheck test-software-files build passes165 cases/four files120.27s and full
+Svelte0errors0warnings/server+web builds. Independent readback finds no blocker. The changed
+server module occurs in none of the canonical operation import closures, so no generated marker
+refresh or unchanged-primitive census is required for this repair. The previous full normal
+objective baseline and semantic runtime scoped proof remain documented as their own checkpoints.
+
+D4269 is closed. D4260/D4250/full1.0 remain open. Next actual PhaseArc adoption will retain a
+nested original semantic owner, preserve complete refusals and original Arc/Map bytes, remove the
+private service's eager global phase_path operation, and retain live inter-collector clock checks.
+The agreed early nested scope join is original input-object reference plus exact branch argument,
+not a new hash/currentness/permission mechanism; the immutable outer owner supplies live checks.
+Packet's separate eager semantic path remains a later consumer, followed by shapes/pivotal and
+literal plans/pages/cursors/receipts/sessions/strict API/UI. No protected intent is falsified by
+restoring the existing cancellation contract.
+
+D4269 checkpoint: normal `make verify-governance` completed successfully; all 4018 ledger
+rows are tracked, with zero untriaged. Commit this verified repair before beginning adoption.

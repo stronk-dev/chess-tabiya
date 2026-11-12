@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:63c18b84f23a3cbd37d64eb54e30c4565abc75c1df10e33ede527eec459bbafb",
+    "roadmap": "sha256:96a1eb546b5173ddf552293ac52d2a78d89b6e49fedbdf88250282e449b31618",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:167aa7b5e16fb767a72a56109e3117211a01fc5c443e6b41d8d1a4cfb68cc866",
+    "workState": "sha256:91606960821f67a73e1523927064b69a5de4644ad37dacc0ac4c0c4e7c2f0bec",
     "rfcRegister": "sha256:49e46c03e8cf65e0983bcbd7a00a465007dbd3b6aeaa05915b5988fcd462b071",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 634,
       "doing": 178,
       "blocked": 1061,
-      "done": 1981,
+      "done": 1982,
       "refused": 163
     },
     "workItems": {
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Adopt the verified original staged semantic runtime independently into actual PhaseArc and packet, retaining original refusals, current outer authority, completed-endpoint events and complete source identity without eager getter fallback. Then stage shapes/pivotal and complete literal invocation/page/cursor/receipt/session/strict API/UI delivery. Runtime source checks pass; the objective checkpoint has full normal gates, while current semantic adoption/public paging/native/default/full1.0 remain open.",
+      "nextAction": "With D4269 outer PhaseArc cancellation/reentry repaired, adopt the original staged semantic owner into actual PhaseArc and private Review subject order, preserving early original-input/branch membership and complete refusals. Then independently adopt packet without eager semantic getter fallback, stage shapes/pivotal and finish literal source/page/cursor/receipt/session/strict API/UI. Public paging/native/default/full1.0 remain open.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "Original semantic runtime now supports detached full-run metadata begin, exact current-edge preparation/eligible windows, retained completed-endpoint event objects, owned lifecycle metadata and complete original result at finish. Sync exact/eager order/refusals, canonical start-major13-row first-ID dedup/sort, full real value receipts/counters/digests and lazy source multiplicity remain. Final1802 authority/semantic/packet/Map/PhaseArc cases/six11.95s, full types/builds, canonical1928/1928 and independent review pass. All generated changes are74 implementation markers plus matching checksum; other values unchanged. Guard-removal control first fails165/1 for actual post-cancel edge mint, then restored green. Natural duplicate-ID winner has static-order proof, not a measured collision fixture. This is runtime-only: packet/PhaseArc adoption and hidden whole-prefix shapes/pivotal/public source accounting remain open. Full normal objective baseline8bc43532 (21627software/593,7perf,340content/44,92audit errors[],104 declarations) is retained as history, not new complete-suite/native/default/remote-CI/full1.0 clearance.",
+        "summary": "D4269 repairs a reproduced existing outer PhaseArc lifetime defect before semantic adoption: cancel=true yet root point progress returned (20pass/1fail). Exact current-boundary plus own-handle checks now bracket original path/position/point/final publication, and busy work refuses reentry. Original source order/Arc bytes/deadlines remain. Real source callbacks and final second-live-read controls pass; position cancellation blocks the next point source.165 cases/four files120.27s, full types/Svelte0errors0warnings, builds and independent review pass. Server module is in no canonical operation import closure, so semantic markers unchanged. This is an internal lifetime repair, not a published UI leak or semantic adoption. Runtime source98ad48de remains ready; actual PhaseArc/packet/shape/pivotal/public source accounting and full1.0 remain open. Previous full objective baseline is not promoted into a new complete-suite/native/default/remote-CI certificate.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1526,7 +1526,7 @@
           {
             "kind": "work_state",
             "id": "D4260",
-            "digest": "sha256:230e76162349d120950630b4a1436599a458a929598752347af301c796e719d5"
+            "digest": "sha256:16ca7d73cd1743dac717255b1c273afc5a229b83ec615ee04c011b6d3d982607"
           },
           {
             "kind": "work_state",
@@ -1567,6 +1567,11 @@
             "kind": "work_state",
             "id": "D4268",
             "digest": "sha256:e8ef41d9ec86a93d3a9998c7c20ac87c85a4bea94923c3552aeeb3072eb8f5d9"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4269",
+            "digest": "sha256:620561f74284149e7f71e55c6147d4c65d2a66302f3af4210a8234172ee96061"
           }
         ]
       },
@@ -1587,10 +1592,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Adopt the verified original staged semantic runtime independently into actual PhaseArc and packet, retaining original refusals, current outer authority, completed-endpoint events and complete source identity without eager getter fallback. Then stage shapes/pivotal and complete literal invocation/page/cursor/receipt/session/strict API/UI delivery. Runtime source checks pass; the objective checkpoint has full normal gates, while current semantic adoption/public paging/native/default/full1.0 remain open.",
+      "nextAction": "With D4269 outer PhaseArc cancellation/reentry repaired, adopt the original staged semantic owner into actual PhaseArc and private Review subject order, preserving early original-input/branch membership and complete refusals. Then independently adopt packet without eager semantic getter fallback, stage shapes/pivotal and finish literal source/page/cursor/receipt/session/strict API/UI. Public paging/native/default/full1.0 remain open.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "Original semantic runtime now supports detached full-run metadata begin, exact current-edge preparation/eligible windows, retained completed-endpoint event objects, owned lifecycle metadata and complete original result at finish. Sync exact/eager order/refusals, canonical start-major13-row first-ID dedup/sort, full real value receipts/counters/digests and lazy source multiplicity remain. Final1802 authority/semantic/packet/Map/PhaseArc cases/six11.95s, full types/builds, canonical1928/1928 and independent review pass. All generated changes are74 implementation markers plus matching checksum; other values unchanged. Guard-removal control first fails165/1 for actual post-cancel edge mint, then restored green. Natural duplicate-ID winner has static-order proof, not a measured collision fixture. This is runtime-only: packet/PhaseArc adoption and hidden whole-prefix shapes/pivotal/public source accounting remain open. Full normal objective baseline8bc43532 (21627software/593,7perf,340content/44,92audit errors[],104 declarations) is retained as history, not new complete-suite/native/default/remote-CI/full1.0 clearance.",
+        "summary": "D4269 repairs a reproduced existing outer PhaseArc lifetime defect before semantic adoption: cancel=true yet root point progress returned (20pass/1fail). Exact current-boundary plus own-handle checks now bracket original path/position/point/final publication, and busy work refuses reentry. Original source order/Arc bytes/deadlines remain. Real source callbacks and final second-live-read controls pass; position cancellation blocks the next point source.165 cases/four files120.27s, full types/Svelte0errors0warnings, builds and independent review pass. Server module is in no canonical operation import closure, so semantic markers unchanged. This is an internal lifetime repair, not a published UI leak or semantic adoption. Runtime source98ad48de remains ready; actual PhaseArc/packet/shape/pivotal/public source accounting and full1.0 remain open. Previous full objective baseline is not promoted into a new complete-suite/native/default/remote-CI certificate.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -3421,7 +3426,7 @@
           {
             "kind": "work_state",
             "id": "D4260",
-            "digest": "sha256:230e76162349d120950630b4a1436599a458a929598752347af301c796e719d5"
+            "digest": "sha256:16ca7d73cd1743dac717255b1c273afc5a229b83ec615ee04c011b6d3d982607"
           },
           {
             "kind": "work_state",
@@ -3462,6 +3467,11 @@
             "kind": "work_state",
             "id": "D4268",
             "digest": "sha256:e8ef41d9ec86a93d3a9998c7c20ac87c85a4bea94923c3552aeeb3072eb8f5d9"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4269",
+            "digest": "sha256:620561f74284149e7f71e55c6147d4c65d2a66302f3af4210a8234172ee96061"
           }
         ]
       },

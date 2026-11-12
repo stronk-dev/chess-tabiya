@@ -2,6 +2,12 @@
 
 ## Current continuation — 2026-11-12
 
+D4269 repairs the independently reproduced outer PhaseArc lifetime defect before semantic
+adoption: a cancelled source could still return point progress. Exact owner checks now bracket
+original path/position/point/final work, and busy owners refuse reentry.165 cases/four files
+120.27s, full types/builds and independent review pass. This server-only repair changes no
+semantic generated markers or source/Arc output. Actual PhaseArc/packet adoption remains next.
+
 The original semantic runtime compiler now has metadata-only full-run capture and exact current-
 endpoint advancement. Completed endpoint events remain original objects; finish restores canonical
 start-major window order before deduplication and returns the original complete result without
