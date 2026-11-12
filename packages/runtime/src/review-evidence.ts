@@ -214,6 +214,7 @@ export function createReviewPrefixAuthority(storage: ReviewStorageAuthority): (i
         if (semantic === undefined) {
           assertReviewRecordedPrefixReceipt(receipt);
           const collected = recordedSemanticPath(run, body.branchId);
+          if (collected.branchId !== body.branchId) refuse("REVIEW_PREFIX_REFUSED", "recorded semantic path belongs to another branch");
           if (collected.kind === "available" && collected.pathNodeIds.join("\u0000") !== path.map(node => node.id).join("\u0000")) refuse("REVIEW_PREFIX_REFUSED", "recorded semantic path disagrees with the branch path");
           assertReviewRecordedPrefixReceipt(receipt);
           semantic = collected;

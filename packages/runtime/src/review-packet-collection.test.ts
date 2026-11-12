@@ -162,21 +162,18 @@ describe("genuine full Review packet cooperative collection", () => {
     const original = recordedComparisonFixture(), f = fixture(original.run, original.peer);
     const handle = beginReviewPacketCollection(f.subject(), f.context), collectOriginal = semantic.recordedSemanticPath;
     const collect = vi.spyOn(semantic, "recordedSemanticPath").mockImplementation(run => collectOriginal(run, original.main));
-    try { expect(() => advanceReviewPacketCollection(handle)).toThrow(/semantic path disagrees/); }
+    try { expect(() => advanceReviewPacketCollection(handle)).toThrow(/recorded semantic path belongs to another branch/); }
     finally { collect.mockRestore(); }
     expect(cancelReviewPacketCollection(handle)).toBe(false);
   });
 
-  it("memoizes a genuine refused semantic result without relabelling it as no witness", () => {
+  it("rejects a genuine refused semantic result from a different branch", () => {
     const f = fixture(play(importedRun("packet-semantic-refusal"), ["e2e4"]));
     const handle = beginReviewPacketCollection(f.subject(), f.context), collectOriginal = semantic.recordedSemanticPath;
     const collect = vi.spyOn(semantic, "recordedSemanticPath").mockImplementation(run => collectOriginal(run, "missing-original-branch"));
     try {
-      const packet = drain(handle, f.path.length);
-      const refused = packet.nodes.flatMap(node => node.families.semantic.sources)
-        .filter(source => source.adapterId.includes("defender_consequence"));
-      expect(refused).toHaveLength(f.path.length);
-      expect(refused.every(source => source.state.kind === "unavailable" && source.state.reason === "input_abstained")).toBe(true);
+      expect(() => advanceReviewPacketCollection(handle)).toThrow(/branch/);
+      expect(cancelReviewPacketCollection(handle)).toBe(false);
       expect(collect).toHaveBeenCalledTimes(1);
     } finally { collect.mockRestore(); }
   });

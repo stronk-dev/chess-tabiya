@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:92521618e70ed06104ecdd13ed82b62a02f641acbcc32c67e5efb3e7d58984e6",
+    "roadmap": "sha256:406700038b102dc296743218d8bf391b66a7b03e71e5a9b24ac01f969ececbe5",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:968b6db06638171889b53d072ea9339e3ab452ea014c0f9fd02c35d4b1a33dad",
+    "workState": "sha256:921716de436fa46da9d3c6c711f14477c6ada538f892203dcd2b1f4733251b35",
     "rfcRegister": "sha256:49e46c03e8cf65e0983bcbd7a00a465007dbd3b6aeaa05915b5988fcd462b071",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 634,
       "doing": 177,
       "blocked": 1061,
-      "done": 1968,
+      "done": 1969,
       "refused": 163
     },
     "workItems": {
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "D4250 full-packet and grade-owned collection are implemented and independently reviewed; complete normal software/build/content gates pass. Next stage original PhaseArc/window/opening/ledger sources and final assembly, then bounded job ownership/clock/capacity and strict rich Review API/selected UI. Existing ordinary queries are not rich Review. D4224/D4225 activation/cost/memory, D3791 native Inspector, D4246 import attribution and full1.0 remain open.",
+      "nextAction": "The original PhaseArc/D4255 dependency is verified. Next stage original windows/local edges/exposure, deepest-opening history and remaining grade/ledger inputs. Complete the bounded job owner/clock/capacity and strict rich Review API/selected UI from retained originals. D4250/D4228 and D4224/D4225 cost/default/memory remain open; private collection is not the learner journey.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "D4250 now stages the genuine original full packet and actual grade-owned population without a twelve-source cast or partial packet. D4251 captures the complete immutable original run; D4253 removes memoized semantic storage-read amplification while retaining currentness/access checks. Original UI fixtures are unchanged;81 focused UI/source/service cases and types pass. D4254 independently accepts isolation of all579 original edges and89 original Inspector topics into710 focused cases, preserving assertions/deadlines/cohorts; the count increase is parameterization, not added feature coverage. Canonical1928/1928 and24/89 qualification remain unchanged apart from11 operation/63 predicate implementation digests. Final normal software/build/content gates pass:21315software/all588903.94s,7performance/four63.08s,340content/all44272.89s with zero skips, types/Svelte0errors0warnings, server/web builds,92-document audit errors[] and104 exact capability declarations. Normal governance passes C1-C8/P1-P7/R1-R10. Public rich Review/job lifecycle/remaining source staging, D4224/D4225 cost/default/memory and broader1.0 remain open; no milestone transition or remote-CI claim.",
+        "summary": "D4250 adds original PhaseArc collection over a genuine complete boundary: separate path/point advances, captured original dependencies, complete-only shared arc issuer and actual storage checks. D4255 independently reproduces and repairs foreign refused-semantic-result adoption in sync/staged PhaseArc and full packet (pre-fix34pass/3fail). Final107/four affected source cases, actual Review/grade service114/two, workspace types/Svelte0errors0warnings, server/web builds and canonical1928/1928 pass. Normal governance passes C1-C8/P1-P7/R1-R10. Qualification24/89 and all non-implementation receipt values remain unchanged; only11 operation/63 predicate digests update. Full software/performance/content gates last pass at3f416821; no fresh whole-wave/push-readiness claim. Remaining original windows/local edges/exposure, deepest-opening history and grade/ledger acquisition precede actual owned job/clock/capacity and strict rich API/selected UI. D4250/D4228, D4224/D4225 resource/default proof and full1.0 remain open; no milestone transition.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -663,7 +663,9 @@
           "apps/server/src/recorded-grade-sources.ts",
           "apps/server/src/recorded-grade-sources.test.ts",
           "apps/server/src/service.ts",
-          "docs/review-evidence.md"
+          "docs/review-evidence.md",
+          "apps/server/src/phase-source-composition.ts",
+          "apps/server/src/phase-arc-collection.test.ts"
         ],
         "anchors": [
           {
@@ -1475,6 +1477,11 @@
             "kind": "work_state",
             "id": "D4254",
             "digest": "sha256:2ce514c7069a351009dd2230dbc7e96edc1288b552e8e6f2788b85d2148bb15d"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4255",
+            "digest": "sha256:5613fbce942b079b79b4e3acce64f45784b84ce00ec4c4dde874e6c5ee23e3a7"
           }
         ]
       },
@@ -1495,10 +1502,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "D4250 full-packet and grade-owned collection are implemented and independently reviewed; complete normal software/build/content gates pass. Next stage original PhaseArc/window/opening/ledger sources and final assembly, then bounded job ownership/clock/capacity and strict rich Review API/selected UI. Existing ordinary queries are not rich Review. D4224/D4225 activation/cost/memory, D3791 native Inspector, D4246 import attribution and full1.0 remain open.",
+      "nextAction": "The original PhaseArc/D4255 dependency is verified. Next stage original windows/local edges/exposure, deepest-opening history and remaining grade/ledger inputs. Complete the bounded job owner/clock/capacity and strict rich Review API/selected UI from retained originals. D4250/D4228 and D4224/D4225 cost/default/memory remain open; private collection is not the learner journey.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "D4250 now stages the genuine original full packet and actual grade-owned population without a twelve-source cast or partial packet. D4251 captures the complete immutable original run; D4253 removes memoized semantic storage-read amplification while retaining currentness/access checks. Original UI fixtures are unchanged;81 focused UI/source/service cases and types pass. D4254 independently accepts isolation of all579 original edges and89 original Inspector topics into710 focused cases, preserving assertions/deadlines/cohorts; the count increase is parameterization, not added feature coverage. Canonical1928/1928 and24/89 qualification remain unchanged apart from11 operation/63 predicate implementation digests. Final normal software/build/content gates pass:21315software/all588903.94s,7performance/four63.08s,340content/all44272.89s with zero skips, types/Svelte0errors0warnings, server/web builds,92-document audit errors[] and104 exact capability declarations. Normal governance passes C1-C8/P1-P7/R1-R10. Public rich Review/job lifecycle/remaining source staging, D4224/D4225 cost/default/memory and broader1.0 remain open; no milestone transition or remote-CI claim.",
+        "summary": "D4250 adds original PhaseArc collection over a genuine complete boundary: separate path/point advances, captured original dependencies, complete-only shared arc issuer and actual storage checks. D4255 independently reproduces and repairs foreign refused-semantic-result adoption in sync/staged PhaseArc and full packet (pre-fix34pass/3fail). Final107/four affected source cases, actual Review/grade service114/two, workspace types/Svelte0errors0warnings, server/web builds and canonical1928/1928 pass. Normal governance passes C1-C8/P1-P7/R1-R10. Qualification24/89 and all non-implementation receipt values remain unchanged; only11 operation/63 predicate digests update. Full software/performance/content gates last pass at3f416821; no fresh whole-wave/push-readiness claim. Remaining original windows/local edges/exposure, deepest-opening history and grade/ledger acquisition precede actual owned job/clock/capacity and strict rich API/selected UI. D4250/D4228, D4224/D4225 resource/default proof and full1.0 remain open; no milestone transition.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2131,7 +2138,9 @@
           "packages/runtime/src/module-review-prefix.test.ts",
           "packages/runtime/src/recorded-review-source-collection.test.ts",
           "packages/runtime/src/review-packet-collection.test.ts",
-          "apps/server/src/service.ts"
+          "apps/server/src/service.ts",
+          "apps/server/src/phase-source-composition.ts",
+          "apps/server/src/phase-arc-collection.test.ts"
         ],
         "anchors": [
           {
@@ -3288,6 +3297,11 @@
             "kind": "work_state",
             "id": "D4254",
             "digest": "sha256:2ce514c7069a351009dd2230dbc7e96edc1288b552e8e6f2788b85d2148bb15d"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4255",
+            "digest": "sha256:5613fbce942b079b79b4e3acce64f45784b84ce00ec4c4dde874e6c5ee23e3a7"
           }
         ]
       },

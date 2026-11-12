@@ -39,6 +39,7 @@ import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
 
 import { openingIdentityAt, type CurrentOpeningEndpoint, type OpeningCatalogueAvailability, type OpeningCatalogueMembership } from "./opening-catalogue.js";
+import { readRecordedReviewBoundary, type RecordedReviewBoundary } from "../../../packages/runtime/src/recorded-review-boundary.js";
 
 // ---------------------------------------------------------------------------------------------
 // Failures (§6): bugs or corrupt inputs, never rendered as "no evidence"
@@ -335,9 +336,26 @@ function sourceStates(point: PhaseSourcePoint): Readonly<Record<PhaseSourceChang
   };
 }
 
+function changesBetween(previous: PhaseSourcePoint, current: PhaseSourcePoint): readonly PhaseSourceChange[] {
+  const before = sourceStates(previous), after = sourceStates(current);
+  return (Object.keys(before) as PhaseSourceChangeKind[]).flatMap(source => before[source] === after[source] ? [] : [Object.freeze({
+    source, fromNodeId: previous.position.payload.nodeId, toNodeId: current.position.payload.nodeId,
+    fromPly: previous.position.payload.ply, toPly: current.position.payload.ply, before: before[source], after: after[source],
+  })]);
+}
+
+/** Shared original issuer; assembly neither acquires positions nor invokes a chess collector. */
+function sealPhaseArc(runId: string, branchId: string, path: PhaseArc["path"], points: readonly PhaseSourcePoint[], changes: readonly PhaseSourceChange[]): PhaseArcResult {
+  const arc = Object.freeze({ runId, branchId, path, points: Object.freeze([...points]), changes: Object.freeze([...changes]) });
+  assertRootKeys(arc, ARC_KEYS, "arc");
+  ARCS.add(arc);
+  return Object.freeze({ kind: "arc", arc });
+}
+
 /** The only arc constructor: run + branch, through the sole recorded-path operation. */
 export function compilePhaseArc(run: DrillRun, branchId: string, dependencies: PhaseSourceDependencies): PhaseArcResult {
   const path = recordedSemanticPath(run, branchId);
+  if (path.branchId !== branchId) fail("PHASE_SOURCE_PATH_INVALID", "semantic collection belongs to another original branch");
   if (path.kind === "refused") return Object.freeze({ kind: "refused", path });
   if (new Set(path.pathNodeIds).size !== path.pathNodeIds.length) fail("PHASE_SOURCE_PATH_INVALID", "the recorded path repeats a node id");
   const points = path.pathNodeIds.map((nodeId) => compilePhaseSourcePoint(invokeRunRecordPosition(run, nodeId) as RecordedPositionEvidence, dependencies));
@@ -346,17 +364,102 @@ export function compilePhaseArc(run: DrillRun, branchId: string, dependencies: P
   });
   const changes: PhaseSourceChange[] = [];
   for (let index = 1; index < points.length; index += 1) {
-    const before = sourceStates(points[index - 1]!);
-    const after = sourceStates(points[index]!);
-    for (const source of Object.keys(before) as PhaseSourceChangeKind[]) {
-      if (before[source] === after[source]) continue;
-      changes.push(Object.freeze({ source, fromNodeId: points[index - 1]!.position.payload.nodeId, toNodeId: points[index]!.position.payload.nodeId, fromPly: points[index - 1]!.position.payload.ply, toPly: points[index]!.position.payload.ply, before: before[source], after: after[source] }));
-    }
+    changes.push(...changesBetween(points[index - 1]!, points[index]!));
   }
-  const arc = Object.freeze({ runId: run.id, branchId, path, points: Object.freeze(points), changes: Object.freeze(changes) });
-  assertRootKeys(arc, ARC_KEYS, "arc");
-  ARCS.add(arc);
-  return Object.freeze({ kind: "arc", arc });
+  return sealPhaseArc(run.id, branchId, path, points, changes);
+}
+
+declare const recordedPhaseArcCollectionBrand: unique symbol;
+/** Private original-source work, not a PhaseArc, partial evidence or an access grant. */
+export interface RecordedPhaseArcCollection { readonly [recordedPhaseArcCollectionBrand]: true }
+interface PhaseArcCollectionState {
+  readonly boundary: RecordedReviewBoundary;
+  readonly image: ReturnType<typeof readRecordedReviewBoundary>;
+  readonly dependencies: PhaseSourceDependencies;
+  readonly points: PhaseSourcePoint[];
+  readonly changes: PhaseSourceChange[];
+  path: RecordedSemanticPathResult | undefined;
+}
+const ARC_COLLECTIONS = new WeakMap<object, PhaseArcCollectionState>();
+
+function capturePhaseDependencies(input: PhaseSourceDependencies): PhaseSourceDependencies {
+  const live = input.live === undefined ? undefined : new Map([...input.live].map(([id, exchange]) => {
+    const result = exchange.result;
+    // Local-domain results carry identity authority themselves. Success retains the exact sealed
+    // delivery; failure and request records contain scalar data and can be detached shallowly.
+    if (result.kind === "local_domain_result") assertProviderLocalDomainResult("syzygy.position@1", result);
+    if (result.kind === "success") assertProviderDelivery("syzygy.position@1", result.delivery);
+    return [id, Object.freeze({ request: Object.freeze({ ...exchange.request }),
+      result: result.kind === "local_domain_result" ? result : Object.freeze({ ...result }) })] as const;
+  }));
+  return Object.freeze({ opening: Object.freeze({ ...input.opening }), recorded: Object.freeze({ ...input.recorded }),
+    ...(live === undefined ? {} : { live }) });
+}
+
+/** D4250: metadata and captured original inputs only; the job owns access, clock and capacity. */
+export function beginRecordedPhaseArcCollection(boundary: RecordedReviewBoundary, dependencies: PhaseSourceDependencies): RecordedPhaseArcCollection {
+  const image = readRecordedReviewBoundary(boundary);
+  if (image.path.length !== image.originalPath.length || image.request.throughNodeId !== image.originalPath.at(-1)!.node.id) {
+    throw new TypeError("PhaseArc collection requires the complete original recorded branch");
+  }
+  const captured = capturePhaseDependencies(dependencies);
+  readRecordedReviewBoundary(boundary);
+  const handle = Object.freeze({}) as RecordedPhaseArcCollection;
+  ARC_COLLECTIONS.set(handle, { boundary, image, dependencies: captured, points: [], changes: [], path: undefined });
+  return handle;
+}
+
+function arcCollectionState(handle: RecordedPhaseArcCollection): PhaseArcCollectionState {
+  const state = typeof handle === "object" && handle !== null ? ARC_COLLECTIONS.get(handle) : undefined;
+  if (state === undefined) throw new TypeError("PhaseArc collection is unknown or retired");
+  return state;
+}
+
+/** Whole-path preparation is its own unit; later advances acquire one genuine point each. */
+export function advanceRecordedPhaseArcCollection(handle: RecordedPhaseArcCollection): Readonly<{
+  stage: "path" | "point"; nodeId: string | null; completedSubjects: number; totalSubjects: number; complete: boolean;
+}> {
+  const state = arcCollectionState(handle), { image } = state, totalSubjects = image.path.length;
+  if (state.path?.kind === "refused" || state.points.length === totalSubjects) throw new TypeError("PhaseArc collection has no remaining subject");
+  try {
+    readRecordedReviewBoundary(state.boundary);
+    if (state.path === undefined) {
+      state.path = recordedSemanticPath(image.run, image.request.branchId);
+      if (state.path.branchId !== image.request.branchId) fail("PHASE_SOURCE_PATH_INVALID", "semantic collection belongs to another original branch");
+      if (state.path.kind === "available" && state.path.pathNodeIds.join("\u0000") !== image.path.map(entry => entry.node.id).join("\u0000")) {
+        fail("PHASE_SOURCE_PATH_INVALID", "semantic collection disagrees with the original recorded branch");
+      }
+      readRecordedReviewBoundary(state.boundary);
+      return Object.freeze({ stage: "path", nodeId: null, completedSubjects: 0, totalSubjects, complete: state.path.kind === "refused" });
+    }
+    const nodeId = state.path.pathNodeIds[state.points.length]!;
+    const point = compilePhaseSourcePoint(invokeRunRecordPosition(image.run, nodeId) as RecordedPositionEvidence, state.dependencies);
+    const previous = state.points.at(-1);
+    if (previous !== undefined) {
+      if (point.position.payload.ply !== previous.position.payload.ply + 1) fail("PHASE_SOURCE_PATH_INVALID", "the arc is not a contiguous ordered path");
+      state.changes.push(...changesBetween(previous, point));
+    }
+    readRecordedReviewBoundary(state.boundary);
+    state.points.push(point);
+    return Object.freeze({ stage: "point", nodeId, completedSubjects: state.points.length, totalSubjects, complete: state.points.length === totalSubjects });
+  } catch (error) { ARC_COLLECTIONS.delete(handle); throw error; }
+}
+
+/** Complete-only publication through the same original arc issuer, without source acquisition. */
+export function finishRecordedPhaseArcCollection(handle: RecordedPhaseArcCollection): PhaseArcResult {
+  const state = arcCollectionState(handle), { image, path } = state;
+  if (path === undefined || path.kind === "available" && state.points.length !== image.path.length) throw new TypeError("PhaseArc collection is incomplete");
+  try {
+    readRecordedReviewBoundary(state.boundary);
+    const result: PhaseArcResult = path.kind === "refused" ? Object.freeze({ kind: "refused", path })
+      : sealPhaseArc(image.run.id, image.request.branchId, path, state.points, state.changes);
+    readRecordedReviewBoundary(state.boundary);
+    return result;
+  } finally { ARC_COLLECTIONS.delete(handle); }
+}
+
+export function cancelRecordedPhaseArcCollection(handle: RecordedPhaseArcCollection): boolean {
+  return typeof handle === "object" && handle !== null && ARC_COLLECTIONS.delete(handle);
 }
 
 export function assertPhaseArc(value: unknown): asserts value is PhaseArc {

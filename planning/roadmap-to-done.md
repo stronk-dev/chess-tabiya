@@ -2,13 +2,22 @@
 
 ## Current continuation — 2026-11-12
 
+D4250's next verified dependency stages original PhaseArc sources: a separate whole-path advance,
+then one genuine point per step, followed by complete-only assembly through the original issuer.
+D4255 closes the independently found foreign-refusal gap in synchronous/staged PhaseArc and the
+full packet. Affected107/four source cases, actual Review/grade service114/two, types/build and
+canonical1928/1928 pass. The24/89 qualification outcomes are unchanged. This focused checkpoint
+does not claim a fresh complete software/performance/content run; that proof below is from
+committed3f416821. Original windows/local edges/exposure, deepest-opening history, remaining
+grade/ledger acquisition and the actual bounded job/strict rich API/selected UI remain next.
+
 D4250 now stages the genuine original full Review packet and actual grade-owned source population;
 complete outputs preserve their original authorities and cannot publish partial evidence. D4251
 captures the immutable original game, and D4253 repairs repeated storage reads without dropping
 currentness/access checks. Independent review accepts these finite dependencies. D4254 isolates
 the same579 edge inputs and89 Inspector topics into individual correctness cases with unchanged
 assertions/deadlines; the increased count is parameterization, not new chess coverage.
-Final normal software/build/content gates pass:21315 software/all588,7 performance/four,
+Committed3f416821 passes normal software/build/content gates:21315 software/all588,7 performance/four,
 340 content/all44 with zero skips, clean types/Svelte, server/web builds,92-document audit errors[]
 and104 capability declarations. Canonical1928/1928 and24/89 qualification remain unchanged.
 Next stage remaining PhaseArc/window/opening/ledger sources and final assembly, then bounded job

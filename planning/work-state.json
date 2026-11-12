@@ -35697,6 +35697,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/foundation-edge-source.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D4255",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5613fbce942b079b79b4e3acce64f45784b84ce00ec4c4dde874e6c5ee23e3a7",
+      "uxItems": [],
+      "evidence": "apps/server/src/phase-arc-collection.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

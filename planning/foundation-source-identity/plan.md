@@ -4041,3 +4041,33 @@ This is still preparation, not the bounded HTTP job. Next stage the actual remai
 window/opening/ledger/final assembly owners, then job ownership/deadline/idle capacity and strict
 rich API/selected UI. Actual one-run capture and whole-branch indivisible work still need cost
 proof. D4250/D4228 and broader D4224/D4225/qualification/release remain open.
+
+
+### 2026-11-12 — PhaseArc source staging and D4255 branch joins
+
+D4250 now prepares the original PhaseArc from a genuine complete recorded boundary. Begin is
+metadata-only; one advance acquires the whole original semantic path, and later advances collect
+one genuine phase point each. Finish shares the original arc issuer and acquires no source.
+Opening/snapshot/live input wrappers are captured without copying genuine provider authority.
+Full inherited/mirrored and37-node real-yield equality, mutable input capture, all three live
+provider outcomes, storage mutation, incomplete/foreign handles and retirement remain covered.
+The whole-path operation is indivisible; job access/configuration/deadline/capacity stay unbuilt.
+
+Independent review returns a real source-join gap, now D4255: available node ids were checked but
+a foreign-branch refusal was accepted. The corrected pre-fix controls fail34pass/3fail across
+synchronous/staged PhaseArc and the full packet. Exact branch joins now precede both arms. The
+old false positive is replaced by a genuine foreign-refusal negative; same-branch refusal is a
+defensive mapping without a manufactured reachable fixture. Independent final readback accepts.
+Test development also corrected placeholder imported movetext digests, a continuation after a
+terminal repetition and a mutable expected wrapper; no source rule, assertion or deadline relaxes.
+
+Final affected107/four source cases pass3.55s, workspace types/Svelte0errors0warnings and both
+production builds pass. Existing actual Review/grade service114/two pass on the same production
+bytes; that combined run's only failures were the two new mutation-oracle alias assertions, fixed
+by capturing expected bytes before mutation and then rerunning all affected source cases. Normal
+canonical update passes1928/1928,24/89 qualified; structured comparison changes only11 operation
+and63 predicate implementation digests, no other values or source membership. Full software/
+performance/content gates last passed at3f416821; this is a focused dependency checkpoint, not a
+fresh whole-wave/push-readiness claim. Next stage original windows/local edges/exposure, deepest-
+opening history and remaining grade/ledger acquisition, then actual owned job and strict API/UI.
+D4250/D4228, D4224/D4225 resource/default proof and full1.0 stay open.

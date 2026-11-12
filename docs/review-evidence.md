@@ -49,7 +49,15 @@ normalization and owned grade context, hide the runtime handle and check live gr
 before and after each step and final publication. Cancel, failure and successful finish retire the
 private work. These methods do not expose HTTP jobs or grant access to another service's handle.
 
-The rich Review transport, bounded job/capacity/idle clock and final PhaseArc/window/opening
+The PhaseArc owner likewise has private `beginRecordedPhaseArcCollection` / advance / finish /
+cancel work over a genuine complete recorded boundary. Begin captures metadata and independent
+opening/snapshot/live inputs, retaining actual provider identities. The first advance collects
+the whole original semantic path only; subsequent advances collect one genuine phase point each.
+This gives the future job a deadline/yield boundary before the first point. Complete-only finish
+uses the same original arc issuer with no source acquisition; mutation, failure, cancel and handoff
+retire the private work. Whole-path computation remains indivisible, without a latency guarantee.
+
+The rich Review transport, bounded job/capacity/idle clock and final window/opening-history
 preparation remain D4250/D4228 work. Existing learner routes have not switched to the new job.
 The current verified checkpoint and its limits are in `planning/foundation-source-identity/plan.md`.
 
@@ -292,10 +300,11 @@ packet. `assertReviewEvidencePacket` is the trust boundary.
 Every subject-reading entry point and packet assertion rechecks the recorded game against
 current storage. A packet retained across a write cannot be compiled or presented as the
 current Review. Missing runs/import records, changed event heads, paths, learner sides or
-results are refused. This uses the existing recorded-prefix identity, not a new freshness
-system or cache: only issuing a new subject runs the semantic collectors. Rechecking one
-reads storage and compares its identity without minting another subject or replaying collectors.
-The PhaseArc compiler retains its independent recorded-path contract.
+results are refused. Issuance captures the immutable original game; the semantic path is acquired
+once at first actual source use. Rechecking reads storage without minting another subject or
+replaying collectors. Available and refused semantic results must both belong to the selected
+branch. The PhaseArc compiler retains its independent recorded-path contract and applies the
+same branch check before admitting either result arm.
 
 Review Map retains each admitted recorded event's complete registered component composition
 in its existing row receipt, alongside engine components. An event can own several components;

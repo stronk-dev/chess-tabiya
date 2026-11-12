@@ -42034,3 +42034,24 @@ D4224/D4225 cost/default/memory, native qualification and whole1.0 remain open. 
 
 Normal governance subsequently exits0: C1-C8/P1-P7/R1-R10 green; all4003 ledger rows remain
 tracked with zero untriaged. The verified dependency is committed before the next implementation wave.
+
+
+## 2026-11-12 — Stage original PhaseArc sources; reject foreign semantic refusals
+
+D4250 adds complete-boundary PhaseArc begin/path advance/point advance/finish/cancel work through
+the original point/arc constructors. It captures independent source inputs and preserves complete
+original output across inherited/mirrored branches and37-node real-yield controls. Final assembly
+recollects nothing. D4255 records the independent return: synchronous/staged PhaseArc and full
+packet accepted a genuine foreign-branch refusal. Actual pre-fix34pass/3fail demonstrates all
+three readers; exact branch joins now precede both result arms. Independent final readback accepts.
+
+Affected107/four source cases pass3.55s, actual Review/grade service114/two pass on the same
+production bytes, workspace types/Svelte0errors0warnings and server/web builds pass. Fixture/
+oracle mistakes were corrected under unchanged source/deadline rules. Canonical1928/1928 and
+24/89 qualification remain unchanged; generated metadata changes only11 operation/63 predicate
+implementation digests. Complete normal gates last passed at3f416821; no fresh whole-wave or
+remote-CI/push-readiness claim. Next stage windows/local edges/exposure, deepest-opening history
+and remaining original grade/ledger inputs, then bounded job ownership/clock/capacity and actual
+strict rich Review API/UI. D4250/D4228 and all broader resource/default/full1.0 obligations stay open.
+
+Normal governance also exits0: C1-C8/P1-P7/R1-R10 green; work-state remains zero untriaged.

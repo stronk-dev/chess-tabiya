@@ -11683,3 +11683,20 @@ types/Svelte0errors0warnings and server/web builds. The92-document audit has err
 capability declarations pass. Canonical1928/1928 and24/89 qualification remain unchanged apart
 from11 operation/63 predicate implementation digests. No public delivery, deadline/memory/default
 activation, whole milestone or remote-CI completion follows from this finite source checkpoint.
+
+
+## 2026-11-12 — D4250 PhaseArc staging; D4255 independent return and acceptance
+
+Independent source readback returns foreign refused-result adoption: both result arms carry
+branchId, but only available node ids were joined. Corrected genuine controls reproduce three
+failures (34pass/3fail) in synchronous/staged PhaseArc and the full-packet getter. Final readback
+accepts exact branchId validation before either arm in all three readers. The foreign refusal
+is a negative; same-branch defensive refusal has no invented reachable positive fixture.
+
+Path preparation now returns before any phase point. Later advances keep original contiguous
+points/source-local changes and the shared original arc issuer; finish recollects nothing.
+Input wrappers retain genuine opening/snapshot/provider identities, and boundary checks and
+retirement remain. The reviewer performs no commands/edits and finds no remaining finite blocker.
+Primary affected107/four source cases, actual Review/grade service114/two, types/build and
+canonical1928/1928 pass;24/89 qualification remains unchanged. Whole-job budget/resource, live
+permission/configuration revalidation and rich Review API/UI remain implementation obligations.
