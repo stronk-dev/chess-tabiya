@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:d99f1474a376ea9bd0ee6a9430afeb1b16db0a5e3ac7f71a49bdeee3654994b9",
+    "roadmap": "sha256:863a2a8a036883dac8e1291a3381153a3ee6cc13b560b2f37116efcb204dc9d8",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:2712a9a957381fedad6e1604d3f9fbbe66bbb973e20f5dbe13b74b5676e20727",
+    "workState": "sha256:e04f4a4c562ac2bfb6ca908c6560c734c17dc93c3dd6e18c189befafc6d7db56",
     "rfcRegister": "sha256:49e46c03e8cf65e0983bcbd7a00a465007dbd3b6aeaa05915b5988fcd462b071",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Continue D4260: original engine row/context acquisition and workflow-first permission; explicitly account original PhaseArc/full-packet whole-prefix source invocations and per-subject outputs in the literal job plan. Then implement actual public admission, real sessions, cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI. Preserve measured pending/stale/shared-analysis behavior and native D4224/D4225 gates.",
+      "nextAction": "Finish D4260 server composition using the stable workflow, original acquired endpoint positions, exact-node provider inputs and independently collected historical projections. Bound live provider observation to the acquired prefix and account original whole-prefix objective/PhaseArc/packet invocations and per-subject outputs. Then implement actual public admission/sessions, literal source plans/cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI. Preserve full Map/source identity, pending/shared-analysis behavior and native D4224/D4225 gates.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "D4260 dependency checkpoints now include stable workflow authorization/early original grades (c52995d4) and exact-node coordinator observation (d0808160), each tested/reviewed/committed. Runtime packet and recorded-population owners now capture provider state with each exact next subject through the original validator, preserving complete source/Story bytes and receipts.114/four focused cases and workspace types/Svelte0errors0warnings pass, including37-subject group1/2/32 runs in both modes and missing/future/accessor/override refusals before dispatch. Independent read-only review finds no blocker. Runtime input capture alone does not migrate server rich composition, finish whole-prefix invocation accounting or provide public pages/sessions/transport/UI. D4260/D4250 and native/default/full1.0 gates remain open; previous complete software/content certificates predate these dependencies.",
+        "summary": "Committed b7ba5971 passes full normal local software21579/all593 files999.38s,7 isolated performance checks/four68.86s,and340 real-content cases/all44 files240.84s. The92-document clearance audit has errors[] and104 documents declare exact derived capabilities. Types/Svelte0errors0warnings,builds,independent source reviews and canonical1928/1928 (24/89qualified,63population,8external) also pass. D4260 dependencies now include original node-scoped endpoints/attachments, stable workflow/early-grade source identity, exact-node provider observation, runtime per-subject input capture and original endpoint window populations. Actual rich server collection still completes the full grade context and observes all provider states first. Next compose original acquired-node population/independent ledger work under the stable workflow, preserve original position identity and live input checks bounded to acquired subjects,then account whole-prefix objective/PhaseArc/packet invocations and finish public source plans/pages/receipts/sessions/transport/UI. No capability/milestone,native/default or release gate closes;no remote-CI/push claim.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1526,7 +1526,7 @@
           {
             "kind": "work_state",
             "id": "D4260",
-            "digest": "sha256:01b8dcb680ad4d70554fc5b00999ff96f8a0c3f109a854cec51fd92346ea30a3"
+            "digest": "sha256:4c231be4c612bbcd3be9e4c1bc9142303b4e7424d69fcbf17ccdb07d64c5e151"
           },
           {
             "kind": "work_state",
@@ -1567,10 +1567,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Continue D4260: original engine row/context acquisition and workflow-first permission; explicitly account original PhaseArc/full-packet whole-prefix source invocations and per-subject outputs in the literal job plan. Then implement actual public admission, real sessions, cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI. Preserve measured pending/stale/shared-analysis behavior and native D4224/D4225 gates.",
+      "nextAction": "Finish D4260 server composition using the stable workflow, original acquired endpoint positions, exact-node provider inputs and independently collected historical projections. Bound live provider observation to the acquired prefix and account original whole-prefix objective/PhaseArc/packet invocations and per-subject outputs. Then implement actual public admission/sessions, literal source plans/cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI. Preserve full Map/source identity, pending/shared-analysis behavior and native D4224/D4225 gates.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "D4260 dependency checkpoints now include stable workflow authorization/early original grades (c52995d4) and exact-node coordinator observation (d0808160), each tested/reviewed/committed. Runtime packet and recorded-population owners now capture provider state with each exact next subject through the original validator, preserving complete source/Story bytes and receipts.114/four focused cases and workspace types/Svelte0errors0warnings pass, including37-subject group1/2/32 runs in both modes and missing/future/accessor/override refusals before dispatch. Independent read-only review finds no blocker. Runtime input capture alone does not migrate server rich composition, finish whole-prefix invocation accounting or provide public pages/sessions/transport/UI. D4260/D4250 and native/default/full1.0 gates remain open; previous complete software/content certificates predate these dependencies.",
+        "summary": "Committed b7ba5971 passes full normal local software21579/all593 files999.38s,7 isolated performance checks/four68.86s,and340 real-content cases/all44 files240.84s. The92-document clearance audit has errors[] and104 documents declare exact derived capabilities. Types/Svelte0errors0warnings,builds,independent source reviews and canonical1928/1928 (24/89qualified,63population,8external) also pass. D4260 dependencies now include original node-scoped endpoints/attachments, stable workflow/early-grade source identity, exact-node provider observation, runtime per-subject input capture and original endpoint window populations. Actual rich server collection still completes the full grade context and observes all provider states first. Next compose original acquired-node population/independent ledger work under the stable workflow, preserve original position identity and live input checks bounded to acquired subjects,then account whole-prefix objective/PhaseArc/packet invocations and finish public source plans/pages/receipts/sessions/transport/UI. No capability/milestone,native/default or release gate closes;no remote-CI/push claim.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -3401,7 +3401,7 @@
           {
             "kind": "work_state",
             "id": "D4260",
-            "digest": "sha256:01b8dcb680ad4d70554fc5b00999ff96f8a0c3f109a854cec51fd92346ea30a3"
+            "digest": "sha256:4c231be4c612bbcd3be9e4c1bc9142303b4e7424d69fcbf17ccdb07d64c5e151"
           },
           {
             "kind": "work_state",

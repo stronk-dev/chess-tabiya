@@ -2,78 +2,40 @@
 
 ## Current continuation — 2026-11-12
 
-The runtime packet and recorded-population collectors now support original provider capture
-with each exact next subject, without copying a caller's full engine map at begin.114 focused
-cases/four files pass, including complete source/Story/receipt parity, actual pending-input
-isolation and37-subject group1/2/32 runs in both modes. Missing/future/override inputs fail before
-dispatch. This is the runtime half of the handoff; rich server composition still uses full snapshots.
+Committed b7ba5971 passes the complete normal local software and real-content gates:
+21,579 software tests/all593 files999.38s, seven isolated performance checks/four files68.86s,
+and340 real-content tests/all44 files240.84s. The92-document clearance audit has zero errors
+and104 documents declare exactly their derived capabilities. Types/Svelte0errors0warnings,
+server/web builds and independent source reviews also pass. Canonical validation remains
+1928/1928, with24/89 qualified subjects,63 population receipts and8 external receipts. Its
+normal writer changed74 implementation markers; every other generated JSON value is unchanged.
+These are local results, not a remote-CI, native latency/default or release-clearance claim.
 
-D4260's coordinator can now observe one exact recorded node before durable parsing, reusing the
-original full/prefix state rules without scheduling.158 focused cases/three files and full types
-pass, including actual node-only source dispatch, inherited/same-FEN scope, terminal precedence
-and held retry. This input dependency is not yet used by rich composition; per-subject runtime
-input capture and workflow-first source ordering remain next.
+D4260 now has committed original-owner dependencies: runtime attachments and server endpoints
+acquire one actual node at a time; stable workflow permission and early original grades survive
+complete-context issuance without reissuing their source/pair/edge; the coordinator can observe
+one exact stored node without scheduling; and packet/recorded-population collectors can capture
+provider inputs with each exact next subject through their original validator. Complete sources
+still require every original subject. Rich Map windows retain their original eleven families,
+horizons, sharing and lazy operands. Cancellation/constructor-retirement, complete Map/Story/
+receipt parity and37-subject scheduling groups1/2/32 pass. These are dependency checkpoints.
 
-The next D4260 dependency separates current workflow permission from complete engine-context
-issuance. Already-acquired endpoint pairs can issue their original grade, retaining the same
-permission, source, pair and edge through completion; unacquired nodes still refuse and complete
-readers reject preparing handles.180 focused tests/four files and full types/Svelte0errors0warnings
-pass; independent source review finds no blocker. The selected rich collector has not yet been
-migrated to workflow-first ordering. No public paging, UI journey or1.0 capability closes here.
+**Next: actual D4260 server composition.** Rich collection still finishes the whole grade context
+and snapshots the whole branch's provider states before other sources. Join the stable workflow,
+original acquired endpoint rows and per-subject input collectors in one subject-ordered pass.
+Historical engine/tablebase reports remain independently collected even with modern or pending
+engine input, using each endpoint's original position. Keep live input checks bounded to the
+already-acquired prefix. Original objective, PhaseArc and packet semantic/shape/pivotal operations
+that acquire whole-prefix facts still need explicit original-invocation/per-subject-output accounting;
+moving a call earlier or labelling its progress nodeId:null does not prove a paging exemption.
 
-The fresh e7288095 full software/performance lane is green:21542 tests/all593 files855.08s,
-plus7 isolated performance checks/four62.98s. D4264 closes after repairing the two-execution test
-harness: only three oracle-plus-job cases use a local ten-second allowance; their production
-five-second job deadline is unchanged. Exact discovery retains593 files/eight serial owners,
-with no omitted cases, smaller fixtures, retries or global timeout change.
-
-D4260 now stages original runtime attachments, server endpoint selection and rich Map windows
-by actual endpoint, with original complete aggregates and nested work retired on terminal paths.
-Window begin validates the full original scope without factories; admitted endpoints retain all
-eleven families, horizons and source sharing. D4263's reproduced constructor-retirement gap is
-repaired before adoption/publication.347 focused tests, types, canonical1928/1928, builds and340
-real-content tests pass; the fresh full software/performance lane now passes after D4264.
-The rich collector still finishes the whole grade context before other sources; workflow-first
-ordering, full-branch engine observation and actual public page accounting remain open. The
-original PhaseArc/full-packet whole-prefix semantic-path acquisitions also need explicit placement
-in the literal job plan; nodeId:null progress proves no paging exemption. Registered windows
-count under their original endpoint subject, not each older operand
-FEN; retain shared source inputs and existing lazy matching semantics while staging those endpoints.
-These are dependency checkpoints, not a completed Review journey. See the latest source plan entry
-for verification.
-
-D4261's private coordinator/job research is now measured: complete pending Maps are honest;
-late durable deliveries stale old snapshots safely; cancel/completion preserve shared analysis;
-fresh collection matches full Map bytes without extra evaluation/PV requests. D4262's genuinely
-held second-attempt regression repairs read-only retry counts using the original store.220
-affected tests/five files and full types pass. Initial public admission/session/progress/retry
-journeys remain D4250; neither closeout completes that feature.
-
-D4250 now composes the complete original rich Review sources through its bounded RunService
-owner: grade context/endpoints, full packet, recorded population, independent historical reports/
-objectives, PhaseArc/path, Map windows/relations/opening and each original move grade. Final
-assembly shares the existing renderer without eager recollection. Advancement, serialization,
-final currentness/budget checks and retirement are atomic. Application composition supplies1
-and drains collections before shutdown; this is an engineering bound, not default certification.
-
-D4258 isolates repeated immutable provider parsing:3280.9ms/490 observations of4073ms job work.
-A collection-local memo retains original parsed deliveries while preserving original factories,
-mutable-input parsing, exact FEN and live observations. All35-position group1/2/32 complete Map
-oracles pass unchanged5s limits. D4259's actual final-result barrier reproduces a successful peer;
-one atomic unit now permits one correct complete Map/serializer. Independent readback accepts.
-Final215/six affected cases and full types/Svelte0errors0warnings pass. Canonical1928/1928,
-24qualified of89,63population/8external is fresh after74 implementation-marker-only generated
-updates; every other JSON value remains unchanged. The current e7288095/eb3d4d17 production-code checkpoint passes
-normal software/build/content lanes:21542software/all593 files855.08s,7 isolated performance/
-four62.98s,340content/all44 files225.20s,types/build. Canonical1928/1928 remains current; the
-92-document clearance audit has zero errors and104 capability declarations match. Nothing is pushed.
-
-The selected HTTP/UI path still uses synchronous reads. Next finish D4260 original engine-context,
-workflow-first and whole-prefix source accounting while preserving measured D4261/D4262 semantics;
-then actual session binding, literal source plan/cursors/receipts, strict ordinary/rich transport
-and selected progress/cancel/retry UI. D4250/D4228 and native D4224/D4225 cost/memory/default gates
-remain open; no whole-product milestone closes.
-[Implementation and verification](foundation-source-identity/plan.md).
+Then finish D4250 public admission/session binding, literal source plan/cursors/receipts, strict
+ordinary/rich transport and selected progress/cancel/retry UI. The selected HTTP/UI path still
+uses synchronous reads. Preserve the full rich Map and dedicated Review permission; collection
+completion can honestly retain pending upstream analysis, and Analyze keeps its own access rule.
+No ordinary twelve-adapter packet substitutes for the rich Map and no old GET fallback discharges
+migration. D4250/D4228, native D4224/D4225 and full1.0 capability/milestone exits remain open.
+[Implementation, verification and next joins](foundation-source-identity/plan.md).
 
 ## Current continuation — 2026-11-11
 

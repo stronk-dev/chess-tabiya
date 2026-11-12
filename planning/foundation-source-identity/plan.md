@@ -4572,3 +4572,39 @@ markers. Normal semantic-validation-update passes the same1928 cases (24/89 qual
 implementation/predicate-implementation markers; every other value is unchanged. Normal builds
 and verify-governance pass.4013 rows remain tracked with zero untriaged. The next full software
 run will test these committed source changes; no new full-suite or remote-CI success is claimed yet.
+
+
+### 2026-11-12 — b7ba5971 passes full normal local software and real-content gates
+
+Normal make verify-software exits0 on the unchanged committed source:21,579 software cases
+across all593 files999.38s, then seven isolated performance checks/four files68.86s. The same
+run includes canonical1928/1928 (24/89 qualified subjects,63 population receipts,8 external).
+The suite took longer than its previous baseline; a read-only process check confirmed a newly
+started worker actively using CPU. The same live run was retained, without restart, source
+mutation, assertion/timeout changes, omitted cases or retries.
+
+Normal make verify-content also exits0:340 cases/all44 files240.84s, the92-document clearance
+audit reports blocking354/resolved34/accepted48 with errors[], and104 installed documents declare
+exactly their derived capabilities. Existing workspace types/Svelte0errors0warnings, server/web
+builds, independent source reviews and staged hooks passed at this same production-code checkpoint.
+No push, remote-CI success, browser/native/default clearance or full1.0 completion is claimed.
+
+The current roadmap is consolidated around this actual proof rather than repeating older
+certificates as current. D4260/D4250 remain doing. The source audit fixes the next implementation
+seams: population work keeps the stable workflow and normalizes each acquired node's ORIGINAL
+modern delivery; ledger work uses that SAME original position for both independent historical
+projections and preserves admission/cache/currentness through promotion. No offline selected
+grade report substitutes for provider state, and modern/pending input never suppresses reports.
+Objectives have no endpoint dependency but their current factory acquires a whole-line event
+population, so its original invocation/per-subject outputs need honest accounting alongside
+PhaseArc and packet whole-prefix semantic/shape/pivotal work.
+
+For recurring provider currentness, use one existing prefix observer bounded to the last acquired
+node, with no observer call while the retained input map is empty. Do not scan every retained node
+with separate observeNode calls in every guard: that repeats storage/path/event scans per unit.
+The exact-node observer is for the newly acquired subject. Public source plans/cursors/receipts,
+authenticated sessions, strict ordinary/rich transport and selected progress/cancel/retry UI remain
+next after the genuine original-owner composition; no partial source becomes a complete context.
+
+Final normal verify-governance passes after this proof/roadmap consolidation.4013 rows retain
+zero untriaged; D4260/D4250 and full1.0 remain open.
