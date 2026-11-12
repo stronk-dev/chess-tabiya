@@ -1099,6 +1099,11 @@ export function collectRecordedReviewObjectives(boundary: RecordedReviewBoundary
   return Object.freeze({ boundary, items });
 }
 
+// Original objective source owner, kept below the package/public transport boundary.
+export { beginRecordedReviewObjectiveCollection, advanceRecordedReviewObjectiveCollection,
+  finishRecordedReviewObjectiveCollection, cancelRecordedReviewObjectiveCollection } from "./internal/evidence-value-routes.js";
+export type { RecordedReviewObjectiveCollection } from "./internal/evidence-value-routes.js";
+
 interface RecordedReviewCollectionWork {
   readonly boundary: RecordedReviewBoundary;
   readonly execution: RecordedPointExecution;

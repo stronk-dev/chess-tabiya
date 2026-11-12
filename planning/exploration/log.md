@@ -42598,3 +42598,34 @@ latency claim is added. D4260/D4250 and full1.0 remain open. Next: stage the ori
 source under its own factory, retain original eventOrdinal order and complete array proof, then
 wire it to the actual acquired-subject service loop in a separate verified checkpoint. The accepted
 whole-prefix semantic/shape/pivotal, literal source-plan/page/receipt/session/API/UI work remains.
+
+
+### 2026-11-12 — D4260 original objective runtime owner advances by actual subject
+
+The existing run.record.objective_transition@2 factory and cooperative owner share their original
+occurrence issuer and complete-array publisher/proof. Begin indexes only the full original boundary;
+advance mints only the next subject's original occurrences, including honest-empty nodes. Retention
+uses original global eventOrdinal, so later updates to earlier/inherited nodes and repeated equal
+payloads are neither reordered nor deduplicated. Finish emits the original complete invocation,
+including genuine[], without recollection; the old synchronous prefix scopes remain valid.
+
+Normal full types/Svelte0errors0warnings and1642 affected/canonical cases/five files11.39s pass.
+The normal profile writer passes742 selected cases; it changes no generated profile bytes. That
+selected writer is not misreported as the full authority suite: the subsequent1642-case command
+runs that file in full plus objective, recorded population, full Map and packet regressions.
+Independent read-only review finds no blocker after adding actual finish-time original-proof
+cancellation/storage/reentrant controls. All26 objective cases pass, including no-future mint,
+foreign/cancelled handles, advance-time failures, zero finish reminting,37-subject groups1/2/32
+and exact equal-FEN sibling exclusion. The initial repeating-knight long fixture correctly hit
+threefold terminal at node8; it was replaced with the existing legal36-ply Ruy line, without
+changing production draw/legality rules.
+
+This is a separate runtime dependency checkpoint, not service/public paging completion. The
+private rich job still calls whole-prefix objectives until its next integration commit. D4260/
+D4250/full1.0 remain open; original semantic/shape/pivotal owners and literal source plans/pages/
+receipts/sessions/strict transport/selected progress/cancel/retry UI remain. Canonical docs also
+remove their stale D3928-held and objective-not-implemented sentences against the existing closed
+D3928 and current source. No protected design sentence is falsified by this internal factoring.
+
+Normal make typecheck build verify-governance passes for this runtime checkpoint.4015 rows
+retain zero untriaged; D4260/D4250 and full1.0 stay open.

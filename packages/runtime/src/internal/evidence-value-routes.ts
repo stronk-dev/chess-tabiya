@@ -69,6 +69,10 @@ import {
   readRecordedOpeningPointResult,
   readRecordedReadingInvocation,
   assertRecordedReviewResultInvocation,
+  beginRecordedReviewObjectiveCollection,
+  advanceRecordedReviewObjectiveCollection,
+  finishRecordedReviewObjectiveCollection,
+  cancelRecordedReviewObjectiveCollection,
   readReviewPointInvocation,
   readRecordedAnalyzeLineInvocation,
   readReviewPointResultInvocation,
@@ -315,6 +319,9 @@ export function originalRecordedStyleValueInput(value: DeclaredEvidence<unknown>
 }
 
 export { readRecordedAnalyzeLineInvocation };
+export { beginRecordedReviewObjectiveCollection, advanceRecordedReviewObjectiveCollection,
+  finishRecordedReviewObjectiveCollection, cancelRecordedReviewObjectiveCollection };
+export type { RecordedReviewObjectiveCollection } from "../evidence-factories.js";
 export { readPhysicalSliderRaysInvocation, readMoverPieceRiskInvocation };
 export { readSubjectOutcomeInvocation, readSubjectOutcomePopulation };
 export { readAuthoredStructuralInput };

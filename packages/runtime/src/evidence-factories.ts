@@ -1859,20 +1859,106 @@ function recordedObjectiveOccurrences(image: ReturnType<typeof readRecordedRevie
     return node === undefined ? [] : [{ event: event as ObjectiveStateChangedEvent, eventOrdinal, node }];
   });
 }
+type RecordedObjectiveOccurrence = ReturnType<typeof recordedObjectiveOccurrences>[number];
+function recordedObjectiveItem(recordedReview: RecordedReviewBoundary, { event, eventOrdinal, node }: RecordedObjectiveOccurrence): RunEvidenceItem<RecordedReviewObjectiveTransition> {
+  const route = "run.record.objective_transition@2";
+  return Object.freeze({
+    evidence: mint(route, evidenceFactorySymbol(route), Object.freeze({ context: "review" as const, from: event.data.from, to: event.data.to }),
+      { recordedReview, eventOrdinal, event }), nodeId: node.id, plyOffset: node.ply,
+  });
+}
+/** Same complete original invocation for both synchronous and cooperative acquisition. */
+function completeRecordedObjectives(recordedReview: RecordedReviewBoundary, items: readonly RunEvidenceItem<RecordedReviewObjectiveTransition>[]) {
+  const complete = Object.freeze([...items]), route = "run.record.objective_transition@2";
+  publishRecordedReviewItems(route, recordedReview, complete);
+  assertRecordedReviewResultInvocation(complete, route, recordedReview);
+  return complete;
+}
 export const createRunRecordObjectiveTransitionV2Evidence = (() => {
   const route = "run.record.objective_transition@2", symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "source_receipt", arms: [{ recordedReview: value("a storage-owned recorded Review boundary", isRecordedReviewBoundary) }], result: "items" },
     ({ recordedReview }: { readonly recordedReview: RecordedReviewBoundary }): readonly RunEvidenceItem<RecordedReviewObjectiveTransition>[] => {
       const image = readRecordedReviewBoundary(recordedReview);
-      const items = Object.freeze(recordedObjectiveOccurrences(image).map(({ event, eventOrdinal, node }) => Object.freeze({
-        evidence: mint(route, symbol, Object.freeze({ context: "review" as const, from: event.data.from, to: event.data.to }),
-          { recordedReview, eventOrdinal, event }), nodeId: node.id, plyOffset: node.ply,
-      })));
-      publishRecordedReviewItems(route, recordedReview, items);
-      assertRecordedReviewResultInvocation(items, route, recordedReview);
-      return items;
+      return completeRecordedObjectives(recordedReview, recordedObjectiveOccurrences(image).map(original => recordedObjectiveItem(recordedReview, original)));
     });
 })();
+
+declare const recordedReviewObjectiveCollectionBrand: unique symbol;
+/** Internal work, never an unfinished result array or a permission grant. */
+export interface RecordedReviewObjectiveCollection { readonly [recordedReviewObjectiveCollectionBrand]: true }
+interface RecordedObjectiveWork {
+  readonly boundary: RecordedReviewBoundary;
+  readonly subjects: readonly string[];
+  readonly originals: readonly RecordedObjectiveOccurrence[];
+  readonly byNode: ReadonlyMap<string, readonly RecordedObjectiveOccurrence[]>;
+  readonly acquired: Map<number, RunEvidenceItem<RecordedReviewObjectiveTransition>>;
+  completed: number;
+  busy: boolean;
+}
+const RECORDED_OBJECTIVE_COLLECTIONS = new WeakMap<object, RecordedObjectiveWork>();
+function objectiveCollection(handle: RecordedReviewObjectiveCollection): RecordedObjectiveWork {
+  const work = handle !== null && typeof handle === "object" ? RECORDED_OBJECTIVE_COLLECTIONS.get(handle) : undefined;
+  if (work === undefined) throw new TypeError("Recorded objective collection is foreign or retired");
+  if (work.busy) throw new TypeError("Recorded objective collection is already advancing or finishing");
+  return work;
+}
+function assertObjectiveCollectionCurrent(handle: RecordedReviewObjectiveCollection, work: RecordedObjectiveWork): void {
+  readRecordedReviewBoundary(work.boundary);
+  if (RECORDED_OBJECTIVE_COLLECTIONS.get(handle) !== work) throw new TypeError("Recorded objective collection retired during acquisition");
+}
+/** Index the original full source only; no objective evidence is minted before its subject. */
+export function beginRecordedReviewObjectiveCollection(boundary: RecordedReviewBoundary): RecordedReviewObjectiveCollection {
+  const image = readRecordedReviewBoundary(boundary);
+  if (image.path.length !== image.originalPath.length) throw new TypeError("Recorded objective collection requires the complete original branch");
+  const originals = recordedObjectiveOccurrences(image), byNode = new Map<string, RecordedObjectiveOccurrence[]>();
+  for (const original of originals) {
+    const entries = byNode.get(original.node.id) ?? [];
+    entries.push(original); byNode.set(original.node.id, entries);
+  }
+  const handle = Object.freeze({}) as RecordedReviewObjectiveCollection;
+  RECORDED_OBJECTIVE_COLLECTIONS.set(handle, { boundary, subjects: image.path.map(entry => entry.node.id), originals, byNode,
+    acquired: new Map(), completed: 0, busy: false });
+  return handle;
+}
+export function advanceRecordedReviewObjectiveCollection(handle: RecordedReviewObjectiveCollection) {
+  const work = objectiveCollection(handle);
+  if (work.completed === work.subjects.length) throw new TypeError("Recorded objective collection has no remaining subject");
+  work.busy = true;
+  try {
+    assertObjectiveCollectionCurrent(handle, work);
+    const nodeId = work.subjects[work.completed]!;
+    for (const original of work.byNode.get(nodeId) ?? []) {
+      assertObjectiveCollectionCurrent(handle, work);
+      const item = recordedObjectiveItem(work.boundary, original);
+      assertObjectiveCollectionCurrent(handle, work);
+      work.acquired.set(original.eventOrdinal, item);
+    }
+    assertObjectiveCollectionCurrent(handle, work);
+    work.completed++;
+    return Object.freeze({ nodeId, completedSubjects: work.completed, totalSubjects: work.subjects.length,
+      complete: work.completed === work.subjects.length });
+  } catch (error) { RECORDED_OBJECTIVE_COLLECTIONS.delete(handle); throw error; }
+  finally { work.busy = false; }
+}
+export function finishRecordedReviewObjectiveCollection(handle: RecordedReviewObjectiveCollection): RecordedReviewObjectives {
+  const work = objectiveCollection(handle);
+  if (work.completed !== work.subjects.length) throw new TypeError("Recorded objective collection is incomplete");
+  work.busy = true;
+  try {
+    assertObjectiveCollectionCurrent(handle, work);
+    // Node-major execution must not reorder later updates to inherited or earlier nodes.
+    const items = completeRecordedObjectives(work.boundary, work.originals.map(original => {
+      const item = work.acquired.get(original.eventOrdinal);
+      if (item === undefined) throw new TypeError("Recorded objective collection lost an original occurrence");
+      return item;
+    }));
+    assertObjectiveCollectionCurrent(handle, work);
+    return Object.freeze({ boundary: work.boundary, items });
+  } finally { RECORDED_OBJECTIVE_COLLECTIONS.delete(handle); work.busy = false; }
+}
+export function cancelRecordedReviewObjectiveCollection(handle: RecordedReviewObjectiveCollection): boolean {
+  return handle !== null && typeof handle === "object" && RECORDED_OBJECTIVE_COLLECTIONS.delete(handle);
+}
 
 const RECORDED_REVIEW_RESULT_INVOCATIONS = new WeakMap<object, Readonly<{ route: string; boundary: RecordedReviewBoundary }>>();
 function publishRecordedReviewItems(route: string, boundary: RecordedReviewBoundary, items: readonly RunEvidenceItem<unknown>[]): readonly RunEvidenceItem<unknown>[] {

@@ -213,6 +213,16 @@ empty populations remain authenticated; copied, foreign and reordered arrays fai
 remain privately at ply0; Review move rows never retarget them. This repeats recorded assessments;
 it does not establish their chess truth or assess a new objective.
 
+The same original objective source also supports internal begin/advance/finish/cancel work.
+Begin indexes the complete boundary without minting evidence. Each advance acquires only the
+next original node's occurrences, including a real empty row. Finish restores original global
+event-ordinal order, preserving repeated equal transitions and later updates to earlier nodes,
+then uses the unchanged complete-array invocation proof without recollection. Copied handles,
+stale storage, cancellation and reentrant acquisition/publication refuse; no partial items leave
+the owner. The synchronous factory still accepts its original valid prefix scopes. This runtime
+dependency is not yet used by the private rich service job; service wiring and public paging
+remain D4260/D4250.
+
 The actual service checks current access/storage/disclosure/rated state and cancellation around
 collection and publication. Source-contract failures return typed unavailability. The production
 REST handler delivers its registered objective components through real cookie authentication;
@@ -318,8 +328,10 @@ findings are historical, not current integration-gate results. No user recording
 
 Capture/readback schedules no provider call and writes no run. The queued Stockfish-reference
 arm and full current-consumer source/receiver/native completion remain separate obligations.
-In particular, the single-line objective source remains incomplete. The92-pack requirement migration is held for D3928's per-release ruling, so focused
-source and mounted UI proofs are not a working-default-installation or release-readiness claim.
+Single-line objective evidence is implemented, while its staged service adoption and full
+current-consumer/native completion remain open. D3928's current pack-requirement migration is
+complete; focused source and mounted UI proofs still do not establish a working default
+installation or release readiness.
 
 ### Independent historical engine and tablebase reports
 

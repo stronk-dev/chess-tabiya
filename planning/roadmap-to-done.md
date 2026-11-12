@@ -2,6 +2,15 @@
 
 ## Current continuation — 2026-11-12
 
+The original objective source now supports metadata-only begin, next-subject advance and
+complete-only finish under its original factory. It acquires no future subject's evidence and
+restores original global eventOrdinal order, repeated transitions and exact complete-array proof
+at finish without recollection.1642 affected/canonical cases/five files pass11.39s; full types
+pass. Independent runtime review finds no blocker, including cancellation/storage changes during
+actual mint and original complete-array proof, reentrancy, inherited equal-FEN siblings and real
+37-subject scheduling groups1/2/32. This is a runtime dependency: the private service job still
+uses the whole-prefix objective call until the next integration checkpoint.
+
 The private rich Review collector now executes each acquired endpoint, provider input,
 packet/population, independent historical projections, phase/Map and grade in actual subject
 order. Stable workflow permission and source/cache identity survive complete-context promotion,
@@ -12,7 +21,7 @@ and now refuse without calling getters or dispatching evidence. Full Map/Story/r
 37-subject scheduling groups1/2/32, real pending historical reports, exact position/cache identity
 and constructor cancellation pass. These are private source-composition results.
 
-Committed c61f3842 passes fresh normal software21,592/all593 files895.44s and seven
+The earlier c61f3842 production baseline passed fresh normal software21,592/all593 files895.44s and seven
 isolated performance checks/four61.40s. D4266's obsolete local content-test timeout is repaired
 in c70e6ca8, with production unchanged. Fresh normal make verify-content now passes340/all44
 files374.48s, the92-document clearance audit with zero errors (354 blocking/34 resolved/48
@@ -20,8 +29,9 @@ accepted) and104 exact capability declarations. The full corpus/assertions, two-
 separately pinned64 five-second cases and all product budgets remain. D4266 is closed; this is
 local gate proof, not a remote-CI, native/default or whole-product completion claim.
 
-**Next: finish actual D4260 source/page accounting.** Original objective, PhaseArc and packet
-semantic/shape/pivotal operations still acquire whole-prefix facts. Preserve their original
+**Next: integrate the staged objective owner into the actual acquired-subject service loop, then
+finish D4260 source/page accounting.** PhaseArc and packet semantic/shape/pivotal operations
+still acquire whole-prefix facts. Preserve their original
 invocations and account their per-subject outputs before claiming the public32-subject bound;
 moving a call earlier or labelling its progress nodeId:null is no exemption. No source is narrowed
 or partial context cast as complete. The original eleven window families, horizons, sharing and
