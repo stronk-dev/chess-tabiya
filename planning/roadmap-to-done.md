@@ -6,8 +6,10 @@ D4260 now stages original runtime attachments and server endpoint selection by a
 with complete aggregates still complete-only and nested work retired on cancel/failure/finish.
 The rich collector still finishes the whole grade context before other sources; workflow-first
 ordering, full-branch engine observation/window preparation and public page accounting remain
-open. These are dependency checkpoints, not a completed Review journey. See the latest source
-plan entry for verification.
+open. Registered windows count under their original endpoint subject, not each older operand
+FEN; retain shared source inputs and existing lazy matching semantics while staging those endpoints.
+These are dependency checkpoints, not a completed Review journey. See the latest source plan entry
+for verification.
 
 D4261's private coordinator/job research is now measured: complete pending Maps are honest;
 late durable deliveries stale old snapshots safely; cancel/completion preserve shared analysis;
@@ -30,9 +32,10 @@ oracles pass unchanged5s limits. D4259's actual final-result barrier reproduces 
 one atomic unit now permits one correct complete Map/serializer. Independent readback accepts.
 Final215/six affected cases and full types/Svelte0errors0warnings pass. Canonical1928/1928,
 24qualified of89,63population/8external is fresh after74 implementation-marker-only generated
-updates; every other JSON value remains unchanged. Normal full gates now pass21471software/all593
-files819.38s,7 isolated performance/four61.32s,340content/all44 files235.83s,types/build;92-document
-clearance audit has zero errors and104 capability declarations match. Nothing is pushed.
+updates; every other JSON value remains unchanged. The current9011b36e code checkpoint passes normal full
+make verify-software/build/verify-content:21487software/all593 files811.43s,7 isolated performance/
+four61.29s,340content/all44 files231.32s,types/build. Canonical1928/1928 remains current; the
+92-document clearance audit has zero errors and104 capability declarations match. Nothing is pushed.
 
 The selected HTTP/UI path still uses synchronous reads. Next implement D4260 subject-ordered original attachment/endpoint acquisition for actual page
 accounting and preserve the measured D4261/D4262 admission/retry semantics;

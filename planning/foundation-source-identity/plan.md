@@ -4354,3 +4354,36 @@ native performance/default, learner capability or whole1.0 milestone closes.
 
 Independent final source/test review accepts the scoped D4261 measurement and D4262 repair.
 Normal roadmap-receipt/verify-governance passes;4011 rows remain tracked, zero untriaged.
+
+
+### 2026-11-12 — Full normal verification at9011b36e; D4260 next-source readback
+
+Normal make verify-software build verify-content exits0 against committed code, with no tracked
+changes during the run:21487 software tests/all593 files811.43s;7 isolated performance/four
+files61.29s;340 real-content tests/all44 files231.32s;workspace types/Svelte0errors0warnings and
+server/web builds. Canonical1928/1928 retains24/89 qualified,63 population and8 external receipts.
+The92-document clearance audit reports errors[] (354 blocking,34 resolved,48 accepted entries);
+104 capability declarations match their derived capabilities. No remote CI, push or native/default
+activation is inferred. D4261/D4262 remain the scoped closeouts recorded above.
+
+Independent next-source readback corrects an overly strict planning interpretation before code:
+D4241 explicitly anchors a registered window to its throughNodeId subject; earlier operand FENs
+are not extra pagination subjects. Windows may lazily acquire those genuine prerequisites at the
+current endpoint, retaining source-owned sharing and exact input receipts. Do not speculate extra
+quiet-window duty facts or invent own-edge scheduling requirements. What must stop is collecting
+future endpoint windows before their subjects are admitted. [V: rfc/module-registration.md D4241,
+metadata-only plan and literal source receipt grammar; recorded-sequence-window.ts window/value
+authority and recordedSequenceWindowInputs; independent source readback.]
+
+Next factor prepareRecordedSemanticBranchWindows into one full original validated scope plus
+per-endpoint complete windows sharing original edge/capture/check cells, including genuine empty
+populations. Preserve original synchronous order and all route/horizon predicates, omitted horizons
+and conditional per-window duty/exchange operands. Separate calls to the old whole preparer would
+lose sharing. This step alone will not close D4260: capturePointContext/captureReviewSourceContext
+copy all supplied on-path engine states/shape operands immediately, so a growing caller Map cannot
+provide deferred evidence. Original owner-controlled engine row acquisition and workflow-first
+permission must still precede public page/source-receipt/session/HTTP/UI integration. No new source
+authority, shortened run or partial-as-complete context is authorized by this readback.
+
+Final normal verify-governance exits0 after the current roadmap receipt update. All4011 ledger
+rows remain tracked with zero untriaged; D4260/D4250 and full1.0 remain open.
