@@ -976,7 +976,7 @@
         "nextAction": "Continue D4260: original engine row/context acquisition and workflow-first permission; explicitly account original PhaseArc/full-packet whole-prefix source invocations and per-subject outputs in the literal job plan. Then implement actual public admission, real sessions, cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI. Preserve measured pending/stale/shared-analysis behavior and native D4224/D4225 gates.",
         "latestCheckpoint": {
           "at": "2026-11-12",
-          "summary": "D4260 now separates workflow permission from full endpoint completion: early original grades retain exact source/value/pair/edge identity through promotion. c52995d4 passes180/four focused cases, types, builds, governance and independent review. The next coordinator dependency observes one exact stored node before durable parsing through the same full/prefix state rules;158/three focused cases and workspace types pass, including original source-dispatch scope, inherited/same-FEN distinction, terminal precedence and held retry with zero scheduling effects. Runtime collectors still copy full input maps; per-subject capture, workflow-first rich composition and engine/whole-prefix/public page/session/transport/UI accounting remain open. Earlier complete e7288095 software/performance and eb3d4d17 content/canonical results predate these new source changes. No capability or milestone closes.",
+          "summary": "D4260 dependency checkpoints now include stable workflow authorization/early original grades (c52995d4) and exact-node coordinator observation (d0808160), each tested/reviewed/committed. Runtime packet and recorded-population owners now capture provider state with each exact next subject through the original validator, preserving complete source/Story bytes and receipts.114/four focused cases and workspace types/Svelte0errors0warnings pass, including37-subject group1/2/32 runs in both modes and missing/future/accessor/override refusals before dispatch. Independent read-only review finds no blocker. Runtime input capture alone does not migrate server rich composition, finish whole-prefix invocation accounting or provide public pages/sessions/transport/UI. D4260/D4250 and native/default/full1.0 gates remain open; previous complete software/content certificates predate these dependencies.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2145,7 +2145,7 @@
             {
               "kind": "work_state",
               "id": "D4260",
-              "digest": "sha256:66f0608e582bdeb2f0efa6be91c14b0f87b77c1c0dd3e51ce93182cd8ca2528d"
+              "digest": "sha256:01b8dcb680ad4d70554fc5b00999ff96f8a0c3f109a854cec51fd92346ea30a3"
             },
             {
               "kind": "work_state",
@@ -2189,7 +2189,7 @@
         "nextAction": "Continue D4260: original engine row/context acquisition and workflow-first permission; explicitly account original PhaseArc/full-packet whole-prefix source invocations and per-subject outputs in the literal job plan. Then implement actual public admission, real sessions, cursors/receipts, strict ordinary/rich transport and selected progress/cancel/retry UI. Preserve measured pending/stale/shared-analysis behavior and native D4224/D4225 gates.",
         "latestCheckpoint": {
           "at": "2026-11-12",
-          "summary": "D4260 now separates workflow permission from full endpoint completion: early original grades retain exact source/value/pair/edge identity through promotion. c52995d4 passes180/four focused cases, types, builds, governance and independent review. The next coordinator dependency observes one exact stored node before durable parsing through the same full/prefix state rules;158/three focused cases and workspace types pass, including original source-dispatch scope, inherited/same-FEN distinction, terminal precedence and held retry with zero scheduling effects. Runtime collectors still copy full input maps; per-subject capture, workflow-first rich composition and engine/whole-prefix/public page/session/transport/UI accounting remain open. Earlier complete e7288095 software/performance and eb3d4d17 content/canonical results predate these new source changes. No capability or milestone closes.",
+          "summary": "D4260 dependency checkpoints now include stable workflow authorization/early original grades (c52995d4) and exact-node coordinator observation (d0808160), each tested/reviewed/committed. Runtime packet and recorded-population owners now capture provider state with each exact next subject through the original validator, preserving complete source/Story bytes and receipts.114/four focused cases and workspace types/Svelte0errors0warnings pass, including37-subject group1/2/32 runs in both modes and missing/future/accessor/override refusals before dispatch. Independent read-only review finds no blocker. Runtime input capture alone does not migrate server rich composition, finish whole-prefix invocation accounting or provide public pages/sessions/transport/UI. D4260/D4250 and native/default/full1.0 gates remain open; previous complete software/content certificates predate these dependencies.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -4020,7 +4020,7 @@
             {
               "kind": "work_state",
               "id": "D4260",
-              "digest": "sha256:66f0608e582bdeb2f0efa6be91c14b0f87b77c1c0dd3e51ce93182cd8ca2528d"
+              "digest": "sha256:01b8dcb680ad4d70554fc5b00999ff96f8a0c3f109a854cec51fd92346ea30a3"
             },
             {
               "kind": "work_state",

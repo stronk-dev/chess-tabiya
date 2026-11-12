@@ -281,6 +281,14 @@ before durable parsing. It uses the same observer as full/prefix reads, preservi
 terminal-domain, provider-off, settled, pending/retrying and unscheduled states. It neither
 observes other prefix subjects nor starts discovery, attempts, evaluation or line requests.
 
+Cooperative packet and recorded-population collectors may begin with only their shape inputs.
+In this mode every advance requires `{nodeId,state}` for the exact next subject; explicit null
+means an actually absent provider input. The original capture validator copies that state into
+the execution's private map before its original adapters run. Missing, undefined, future,
+accessor or extra inputs fail; a full input snapshot cannot be overridden. Both modes retain
+the original complete source ordering, receipts and final compilers. This does not change their
+whole-prefix semantic work or migrate the server's rich collector on its own.
+
 Compare's separately issued engine-point source has the same lifetime guarantee through its
 own service context. Role downgrade/revocation refuses direct trajectory-factory reads even
 when no point is recorded; it does not inherit Review's broader viewer roles.

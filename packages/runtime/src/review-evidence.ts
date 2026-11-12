@@ -271,6 +271,13 @@ export interface ReviewSourceContext {
   readonly engine: ReadonlyMap<string, ReviewProviderNodeState>;
   readonly shapes: readonly ShapeTriggerSource[];
 }
+/** Internal cooperative callers may acquire provider inputs with each original subject. */
+export type ReviewCollectionContext = ReviewSourceContext | Readonly<Pick<ReviewSourceContext, "shapes">>;
+export interface ReviewSubjectEngineInput {
+  readonly nodeId: string;
+  /** Explicit null preserves an actually absent original input; omission is not acquisition. */
+  readonly state: ReviewProviderNodeState | null;
+}
 
 interface Slot {
   readonly invocationId: string;
@@ -728,20 +735,21 @@ export interface ReviewPacketCollection { readonly [reviewPacketCollectionBrand]
 interface ReviewPacketCollectionState {
   readonly work: ReviewPacketCollectionWork;
   readonly slotsByNode: ReadonlyMap<string, readonly ReviewSourcePlanSlot[]>;
+  readonly perSubject: boolean;
   completed: number;
 }
 const PACKET_COLLECTIONS = new WeakMap<object, ReviewPacketCollectionState>();
 
 /** Metadata and captured inputs only. Job authority/deadline/capacity stay with the service. */
-export function beginReviewPacketCollection(subject: ReviewRecordedPrefixReceipt, context: ReviewSourceContext): ReviewPacketCollection {
-  const work = prepareReviewPacketCollection(subject, context, { windowNodes: 1 });
+export function beginReviewPacketCollection(subject: ReviewRecordedPrefixReceipt, context: ReviewCollectionContext): ReviewPacketCollection {
+  const inputs = collectionInputs(context), work = prepareReviewPacketCollection(subject, inputs.context, { windowNodes: 1 });
   const slotsByNode = new Map<string, ReviewSourcePlanSlot[]>();
   for (const slot of work.plan) {
     const slots = slotsByNode.get(slot.nodeId) ?? [];
     slots.push(slot); slotsByNode.set(slot.nodeId, slots);
   }
   const handle = Object.freeze({}) as ReviewPacketCollection;
-  PACKET_COLLECTIONS.set(handle, { work, slotsByNode, completed: 0 });
+  PACKET_COLLECTIONS.set(handle, { work, slotsByNode, perSubject: inputs.perSubject, completed: 0 });
   return handle;
 }
 
@@ -752,7 +760,7 @@ function packetCollectionState(handle: ReviewPacketCollection): ReviewPacketColl
 }
 
 /** Executes only the next original node's planned invocations. It returns no evidence or packet. */
-export function advanceReviewPacketCollection(handle: ReviewPacketCollection): Readonly<{
+export function advanceReviewPacketCollection(handle: ReviewPacketCollection, input?: ReviewSubjectEngineInput): Readonly<{
   nodeId: string; completedSubjects: number; totalSubjects: number; complete: boolean;
 }> {
   const state = packetCollectionState(handle), { work } = state, ids = work.subject.pathNodeIds;
@@ -760,6 +768,7 @@ export function advanceReviewPacketCollection(handle: ReviewPacketCollection): R
   try {
     assertReviewRecordedPrefixReceipt(work.subject);
     const nodeId = ids[state.completed]!;
+    acquireCollectionSubject(work.execution, nodeId, state.perSubject, input);
     for (const slot of state.slotsByNode.get(nodeId)!) executeReviewPacketSlot(work, slot);
     assertReviewRecordedPrefixReceipt(work.subject);
     state.completed++;
@@ -853,6 +862,26 @@ function captureReviewSourceContext(input: ReviewSourceContext, path: readonly N
   }
   evidenceDigest(input.shapes);
   return Object.freeze({ engine: points.engine, shapes: deepFreeze(structuredClone(input.shapes)) });
+}
+
+function collectionInputs(input: ReviewCollectionContext): { readonly context: ReviewSourceContext; readonly perSubject: boolean } {
+  if (closedSource(input, ["engine", "shapes"]) && "engine" in input && input.engine instanceof Map) {
+    return { context: { engine: input.engine, shapes: input.shapes }, perSubject: false };
+  }
+  if (!closedSource(input, ["shapes"])) throw new TypeError("Review collection requires its exact captured or per-subject inputs");
+  return { context: { engine: new Map<string, ReviewProviderNodeState>(), shapes: input.shapes }, perSubject: true };
+}
+
+/** Only the original collection writes its private captured map, before this node's adapters. */
+function acquireCollectionSubject(execution: SourceExecution, nodeId: string, perSubject: boolean, input: ReviewSubjectEngineInput | undefined): void {
+  if (!perSubject) {
+    if (input !== undefined) throw new TypeError("Review collection cannot replace previously captured inputs");
+    return;
+  }
+  if (!closedSource(input, ["nodeId", "state"]) || input.nodeId !== nodeId) throw new TypeError("Review collection requires the exact next subject input");
+  const node = execution.byId.get(nodeId)!;
+  const captured = capturePointContext({ engine: input.state === null ? new Map() : new Map([[nodeId, input.state]]), shapes: [] }, [node]);
+  if (captured.engine.has(nodeId)) Map.prototype.set.call(execution.context.engine, nodeId, captured.engine.get(nodeId)!);
 }
 
 
@@ -1116,21 +1145,23 @@ interface RecordedReviewCollectionState {
   readonly work: RecordedReviewCollectionWork;
   readonly subjects: readonly string[];
   readonly slotsByNode: ReadonlyMap<string, readonly ReviewSourcePlanSlot[]>;
+  readonly perSubject: boolean;
   completed: number;
 }
 const REVIEW_COLLECTIONS = new WeakMap<object, RecordedReviewCollectionState>();
 
 /** Full original branch only. Ownership/capacity/deadline/yields belong to the enclosing job. */
-export function beginRecordedReviewSourceCollection(input: Readonly<{ boundary: RecordedReviewBoundary; context: ReviewSourceContext }>): RecordedReviewSourceCollection {
+export function beginRecordedReviewSourceCollection(input: Readonly<{ boundary: RecordedReviewBoundary; context: ReviewCollectionContext }>): RecordedReviewSourceCollection {
   if (!closedSource(input, ["boundary", "context"])) throw new TypeError("Recorded Review collection requires exactly {boundary,context}");
-  const prefix = planModuleReviewPrefix(input.boundary), work = prepareRecordedReviewCollection(input);
+  const prefix = planModuleReviewPrefix(input.boundary), inputs = collectionInputs(input.context);
+  const work = prepareRecordedReviewCollection({ boundary: input.boundary, context: inputs.context });
   const slotsByNode = new Map<string, ReviewSourcePlanSlot[]>();
   for (const slot of work.plan) {
     const slots = slotsByNode.get(slot.nodeId) ?? [];
     slots.push(slot); slotsByNode.set(slot.nodeId, slots);
   }
   const handle = Object.freeze({}) as RecordedReviewSourceCollection;
-  REVIEW_COLLECTIONS.set(handle, { work, subjects: Object.freeze(prefix.subjects.map(subject => subject.nodeId)), slotsByNode, completed: 0 });
+  REVIEW_COLLECTIONS.set(handle, { work, subjects: Object.freeze(prefix.subjects.map(subject => subject.nodeId)), slotsByNode, perSubject: inputs.perSubject, completed: 0 });
   return handle;
 }
 
@@ -1141,7 +1172,7 @@ function reviewCollectionState(handle: RecordedReviewSourceCollection): Recorded
 }
 
 /** One original position plus its incoming-edge slots. No reduction, presentation or JSON seal. */
-export function advanceRecordedReviewSourceCollection(handle: RecordedReviewSourceCollection): Readonly<{
+export function advanceRecordedReviewSourceCollection(handle: RecordedReviewSourceCollection, input?: ReviewSubjectEngineInput): Readonly<{
   nodeId: string; completedSubjects: number; totalSubjects: number; complete: boolean;
 }> {
   const state = reviewCollectionState(handle), { work } = state;
@@ -1149,6 +1180,7 @@ export function advanceRecordedReviewSourceCollection(handle: RecordedReviewSour
   try {
     readRecordedReviewBoundary(work.boundary);
     const nodeId = state.subjects[state.completed]!;
+    acquireCollectionSubject(work.execution, nodeId, state.perSubject, input);
     for (const slot of state.slotsByNode.get(nodeId)!) {
       readRecordedReviewBoundary(work.boundary);
       work.results.set(slot, executeRecordedSourceSlot(slot, work.execution));

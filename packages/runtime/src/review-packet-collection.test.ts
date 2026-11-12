@@ -16,6 +16,7 @@ import type { ShapeTriggerSource } from "./shape-firing.js";
 import { evaluationDelivery, importedRun, importRecord, play, REVIEW_AT } from "./testing/review-evidence-fixture.js";
 import { recordedComparisonFixture } from "./testing/recorded-comparison-fixture.js";
 import type { DrillRun } from "./types.js";
+import { evidenceValueReceipt } from "./evidence-contract.js";
 
 function fixture(initial: DrillRun, branchId = initial.activeCursor.branchId) {
   let run = initial;
@@ -37,6 +38,50 @@ function drain(handle: ReviewPacketCollection, count: number) {
 }
 
 describe("genuine full Review packet cooperative collection", () => {
+  it.each(["white", "black"] as const)("acquires %s provider inputs by subject without changing complete packet/Story receipts", side => {
+    const f = fixture(play(importedRun(`packet-subject-inputs-${side}`, side), ["e2e4", "e7e5", "g1f3", "b8c6"]));
+    f.deliver(0, "cp 20"); f.deliver(1, "cp -150");
+    f.engine.set(f.path[2]!.id, { kind: "pending", jobCount: 2, retrying: 1 });
+    f.engine.set(f.path[3]!.id, { kind: "unavailable", reason: "provider_failed" });
+    f.shapes.push({ id: "original-square", trigger: { kind: "pieceOnSquare", square: "e4", piece: { color: "white", role: "pawn" } } });
+    const expected = compileReviewPacketForSubject(f.subject(), f.context);
+    const dispatch = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    try {
+      const handle = beginReviewPacketCollection(f.subject(), { shapes: f.shapes });
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(() => finishReviewPacketCollection(handle)).toThrow(/incomplete/);
+      for (const [index, node] of f.path.entries()) {
+        expect(advanceReviewPacketCollection(handle, { nodeId: node.id, state: f.engine.get(node.id) ?? null }))
+          .toEqual({ nodeId: node.id, completedSubjects: index + 1, totalSubjects: f.path.length, complete: index + 1 === f.path.length });
+        if (index + 1 !== f.path.length) expect(() => finishReviewPacketCollection(handle)).toThrow(/incomplete/);
+      }
+      const actual = finishReviewPacketCollection(handle);
+      expect(JSON.stringify(actual)).toBe(JSON.stringify(expected));
+      expect(JSON.stringify(reviewStoryMoments(actual))).toBe(JSON.stringify(reviewStoryMoments(expected)));
+      expect(actual.nodes.flatMap(node => node.items.map(evidenceValueReceipt)))
+        .toEqual(expected.nodes.flatMap(node => node.items.map(evidenceValueReceipt)));
+      expect(() => advanceReviewPacketCollection(handle, { nodeId: f.path[0]!.id, state: null })).toThrow(/retired/);
+    } finally { dispatch.mockRestore(); }
+  });
+
+  it.each(["omitted", "future", "undefined", "extra", "accessor", "override"] as const)("refuses %s subject input before any adapter execution", fault => {
+    const f = fixture(play(importedRun(`packet-invalid-subject-${fault}`), ["e2e4"]));
+    const handle = beginReviewPacketCollection(f.subject(), fault === "override" ? f.context : { shapes: [] });
+    const getter = vi.fn(() => null), dispatch = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    try {
+      let input: unknown = { nodeId: f.path[0]!.id, state: null };
+      if (fault === "omitted") input = undefined;
+      else if (fault === "future") input = { nodeId: f.path[1]!.id, state: null };
+      else if (fault === "undefined") input = { nodeId: f.path[0]!.id, state: undefined };
+      else if (fault === "extra") input = { nodeId: f.path[0]!.id, state: null, extra: true };
+      else if (fault === "accessor") input = Object.defineProperty({ nodeId: f.path[0]!.id }, "state", { enumerable: true, get: getter });
+      expect(() => advanceReviewPacketCollection(handle, input as never)).toThrow();
+      expect(getter).not.toHaveBeenCalled(); expect(dispatch).not.toHaveBeenCalled();
+      expect(() => finishReviewPacketCollection(handle)).toThrow(/retired/);
+      expect(cancelReviewPacketCollection(handle)).toBe(false);
+    } finally { dispatch.mockRestore(); }
+  });
+
   it("D4253 cached semantic reads do not multiply complete storage checks by family and node", () => {
     const reads = (moves: readonly string[]) => {
       const run = play(importedRun("packet-semantic-read-cost"), moves), loadRun = vi.fn(() => run);
@@ -116,7 +161,7 @@ describe("genuine full Review packet cooperative collection", () => {
     expect(packet.nodes.map(node => node.nodeId)).toEqual(f.path.map(node => node.id));
   });
 
-  it.each([1, 2, 32])("retains complete over32-subject packet bytes across real yields at page size %s", async limit => {
+  it.each([1, 2, 32].flatMap(limit => ([false, true] as const).map(perSubject => ({ limit, perSubject }))))("retains complete over32-subject packet bytes across real yields: %j", async ({ limit, perSubject }) => {
     const moves = ["g1f3", "g8f6", "f3g1", "f6g8",
       "e2e4", "e7e5", "g1f3", "b8c6", "f1b5", "a7a6", "b5a4", "g8f6",
       "e1g1", "f8e7", "f1e1", "b7b5", "a4b3", "d7d6", "c2c3", "e8g8",
@@ -124,10 +169,10 @@ describe("genuine full Review packet cooperative collection", () => {
       "d2f1", "f8e8", "f1g3", "g7g6", "a2a4", "b5b4", "c3b4", "c5b4"];
     const f = fixture(play(importedRun(`packet-long-${limit}`), moves));
     const expected = compileReviewPacketForSubject(f.subject(), f.context);
-    const handle = beginReviewPacketCollection(f.subject(), f.context), seen: string[] = [];
+    const handle = beginReviewPacketCollection(f.subject(), perSubject ? { shapes: f.shapes } : f.context), seen: string[] = [];
     for (let start = 0; start < f.path.length; start += limit) {
       for (let index = start; index < Math.min(start + limit, f.path.length); index++) {
-        seen.push(advanceReviewPacketCollection(handle).nodeId);
+        seen.push(advanceReviewPacketCollection(handle, perSubject ? { nodeId: f.path[index]!.id, state: f.engine.get(f.path[index]!.id) ?? null } : undefined).nodeId);
         await new Promise<void>(resolve => setTimeout(resolve, 0));
       }
       if (seen.length < f.path.length) expect(() => finishReviewPacketCollection(handle)).toThrow(/incomplete/);

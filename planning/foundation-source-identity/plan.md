@@ -4545,3 +4545,30 @@ D4250 remain doing; native/default/full1.0 gates and prior whole-prefix accounti
 Independent read-only review finds no blocker. Normal verify-governance and server/web builds
 pass;4013 tracked rows retain zero untriaged. This source change has not had a full software/
 content rerun, and no remote-CI or native/default clearance is claimed.
+
+
+### 2026-11-12 — D4260 runtime captures provider input with each actual subject
+
+Original cooperative packet and recorded-population owners may begin with exact shapes-only
+inputs, then require an exact nodeId/state envelope before the next subject's original adapters.
+The same capturePointContext validates/copies each coordinator state, preserving genuine delivery
+identity; explicit null records actual absence. Unreached subjects have no implicit provider state.
+Original full-snapshot and synchronous paths remain, and only complete original aggregate sources
+reach their existing final compilers. Whole-prefix semantic/path operations remain unchanged.
+
+114 focused tests/four files and workspace types/Svelte0errors0warnings pass. Tests compare full
+packet/Story bytes, original result plans and every emitted evidence receipt, preserve copied
+pending state after caller mutation, and exercise37-subject real-yield groups1/2/32 in both modes.
+Missing, undefined, future, accessor, extra and full-snapshot override inputs refuse before source
+dispatch and retire their work. Independent read-only review finds no production blocker.
+
+Server integration remains next: stable workflow authorization, original acquired-node joins,
+per-node provider observation, independent ledger/currentness and complete-source publication.
+No public page/session/UI, whole-prefix accounting, native/default or1.0 completion is inferred.
+
+The normal canonical check passed1928/1928 but correctly refused the old generated implementation
+markers. Normal semantic-validation-update passes the same1928 cases (24/89 qualified subjects,
+63 population receipts,8 external). Comparing the entire generated JSON finds exactly74 changed
+implementation/predicate-implementation markers; every other value is unchanged. Normal builds
+and verify-governance pass.4013 rows remain tracked with zero untriaged. The next full software
+run will test these committed source changes; no new full-suite or remote-CI success is claimed yet.

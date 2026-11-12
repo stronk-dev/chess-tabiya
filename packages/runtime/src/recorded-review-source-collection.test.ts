@@ -9,6 +9,7 @@ import {
   advanceRecordedReviewSourceCollection, beginRecordedReviewSourceCollection,
   cancelRecordedReviewSourceCollection, collectRecordedReviewSourcePopulation,
   finishRecordedReviewSourceCollection, readRecordedReviewSourcePopulation,
+  assertRecordedReviewSourcePopulationInputs,
   type RecordedReviewSourceCollection, type ReviewProviderNodeState,
 } from "./review-evidence.js";
 import { rewind } from "./runtime.js";
@@ -16,6 +17,7 @@ import type { ShapeTriggerSource } from "./shape-firing.js";
 import { evaluationDelivery, importedRun, play, REVIEW_AT } from "./testing/review-evidence-fixture.js";
 import { recordedComparisonFixture } from "./testing/recorded-comparison-fixture.js";
 import type { DrillRun } from "./types.js";
+import { evidenceValueReceipt } from "./evidence-contract.js";
 
 function fixture(initial: DrillRun, branchId = initial.activeCursor.branchId) {
   let run = initial;
@@ -50,6 +52,53 @@ const image = (population: ReturnType<typeof collectRecordedReviewSourcePopulati
 };
 
 describe("cooperative original recorded Review source collection", () => {
+  it.each(["white", "black"] as const)("captures original %s provider rows with each subject and preserves all source receipts", side => {
+    const f = fixture(play(importedRun(`recorded-subject-inputs-${side}`, side), ["e2e4", "e7e5", "g1f3", "b8c6"]));
+    f.deliver(0, "cp 20"); f.deliver(1, "cp -150");
+    const pending = { kind: "pending" as const, jobCount: 2, retrying: 1 };
+    f.context.engine.set(f.path[2]!.id, pending);
+    f.context.engine.set(f.path[3]!.id, { kind: "not_yet_scheduled" });
+    f.context.shapes.push({ id: "original-square", trigger: { kind: "pieceOnSquare", square: "e4", piece: { color: "white", role: "pawn" } } });
+    const expected = collectRecordedReviewSourcePopulation({ boundary: f.boundary, context: f.context });
+    const dispatch = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    try {
+      const handle = beginRecordedReviewSourceCollection({ boundary: f.boundary, context: { shapes: f.context.shapes } });
+      expect(dispatch).not.toHaveBeenCalled();
+      for (const [index, node] of f.path.entries()) {
+        expect(advanceRecordedReviewSourceCollection(handle, { nodeId: node.id, state: f.context.engine.get(node.id) ?? null }))
+          .toEqual({ nodeId: node.id, completedSubjects: index + 1, totalSubjects: f.path.length, complete: index + 1 === f.path.length });
+        if (index + 1 !== f.path.length) expect(() => finishRecordedReviewSourceCollection(handle)).toThrow(/incomplete/);
+      }
+      const actual = finishRecordedReviewSourceCollection(handle);
+      expect(image(actual)).toEqual(image(expected));
+      const receipts = (value: typeof actual) => readRecordedReviewSourcePopulation(value).results.flatMap(result => result.items.map(evidenceValueReceipt));
+      expect(receipts(actual)).toEqual(receipts(expected));
+      assertRecordedReviewSourcePopulationInputs(actual, f.boundary, f.context);
+      pending.retrying = 9;
+      expect(() => assertRecordedReviewSourcePopulationInputs(actual, f.boundary, f.context)).toThrow(/captured provider input/);
+      expect(readRecordedReviewSourcePopulation(actual).results.filter(row => row.slot.adapterId === "review.source.eval_point@1").map(row => row.state.kind))
+        .toEqual(["available", "available", "pending", "not_yet_scheduled", "not_requested"]);
+    } finally { dispatch.mockRestore(); }
+  });
+
+  it.each(["omitted", "future", "undefined", "extra", "accessor", "override"] as const)("rejects %s input before recorded source dispatch", fault => {
+    const f = fixture(play(importedRun(`recorded-invalid-subject-${fault}`), ["e2e4"]));
+    const handle = beginRecordedReviewSourceCollection({ boundary: f.boundary, context: fault === "override" ? f.context : { shapes: [] } });
+    const getter = vi.fn(() => null), dispatch = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    try {
+      let input: unknown = { nodeId: f.path[0]!.id, state: null };
+      if (fault === "omitted") input = undefined;
+      else if (fault === "future") input = { nodeId: f.path[1]!.id, state: null };
+      else if (fault === "undefined") input = { nodeId: f.path[0]!.id, state: undefined };
+      else if (fault === "extra") input = { nodeId: f.path[0]!.id, state: null, extra: true };
+      else if (fault === "accessor") input = Object.defineProperty({ nodeId: f.path[0]!.id }, "state", { enumerable: true, get: getter });
+      expect(() => advanceRecordedReviewSourceCollection(handle, input as never)).toThrow();
+      expect(getter).not.toHaveBeenCalled(); expect(dispatch).not.toHaveBeenCalled();
+      expect(() => finishRecordedReviewSourceCollection(handle)).toThrow(/retired/);
+      expect(cancelRecordedReviewSourceCollection(handle)).toBe(false);
+    } finally { dispatch.mockRestore(); }
+  });
+
   it.each(["white", "black"] as const)("matches complete synchronous original outputs with real engine and pending sources: %s", side => {
     const run = play(importedRun(`review-collection-${side}`, side), ["e2e4", "e7e5", "g1f3", "b8c6"]), f = fixture(run);
     f.deliver(0, "cp 20"); f.deliver(1, "cp -30");
@@ -74,7 +123,7 @@ describe("cooperative original recorded Review source collection", () => {
     expect(image(drain(handle, f.path.length))).toEqual(image(expected));
   });
 
-  it.each([1, 2, 32])("keeps complete original source bytes across real scheduling gaps at page size %s", async limit => {
+  it.each([1, 2, 32].flatMap(limit => ([false, true] as const).map(perSubject => ({ limit, perSubject }))))("keeps complete original source bytes across real scheduling gaps: %j", async ({ limit, perSubject }) => {
     const moves = ["g1f3", "g8f6", "f3g1", "f6g8",
       "e2e4", "e7e5", "g1f3", "b8c6", "f1b5", "a7a6", "b5a4", "g8f6",
       "e1g1", "f8e7", "f1e1", "b7b5", "a4b3", "d7d6", "c2c3", "e8g8",
@@ -83,11 +132,11 @@ describe("cooperative original recorded Review source collection", () => {
     const f = fixture(play(importedRun(`review-source-pages-${limit}`), moves));
     f.context.shapes.push({ id: "original-knight-square", trigger: { kind: "pieceOnSquare", square: "f3", piece: { color: "white", role: "knight" } } });
     const expected = image(collectRecordedReviewSourcePopulation({ boundary: f.boundary, context: f.context }));
-    const handle = beginRecordedReviewSourceCollection({ boundary: f.boundary, context: f.context });
+    const handle = beginRecordedReviewSourceCollection({ boundary: f.boundary, context: perSubject ? { shapes: f.context.shapes } : f.context });
     const seen: string[] = [];
     for (let start = 0; start < f.path.length; start += limit) {
       for (let index = start; index < Math.min(start + limit, f.path.length); index++) {
-        seen.push(advanceRecordedReviewSourceCollection(handle).nodeId);
+        seen.push(advanceRecordedReviewSourceCollection(handle, perSubject ? { nodeId: f.path[index]!.id, state: f.context.engine.get(f.path[index]!.id) ?? null } : undefined).nodeId);
         await new Promise<void>(resolve => setTimeout(resolve, 0));
       }
       if (seen.length < f.path.length) expect(() => finishRecordedReviewSourceCollection(handle)).toThrow(/incomplete/);

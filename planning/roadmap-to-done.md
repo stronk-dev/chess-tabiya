@@ -2,6 +2,12 @@
 
 ## Current continuation — 2026-11-12
 
+The runtime packet and recorded-population collectors now support original provider capture
+with each exact next subject, without copying a caller's full engine map at begin.114 focused
+cases/four files pass, including complete source/Story/receipt parity, actual pending-input
+isolation and37-subject group1/2/32 runs in both modes. Missing/future/override inputs fail before
+dispatch. This is the runtime half of the handoff; rich server composition still uses full snapshots.
+
 D4260's coordinator can now observe one exact recorded node before durable parsing, reusing the
 original full/prefix state rules without scheduling.158 focused cases/three files and full types
 pass, including actual node-only source dispatch, inherited/same-FEN scope, terminal precedence
