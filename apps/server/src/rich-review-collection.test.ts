@@ -13,6 +13,8 @@ import { revealFeedback, rewind, fork, commitMove } from "../../../packages/runt
 import type { SQLiteRunStorage } from "./storage.js";
 import { ReviewJobOwner } from "./review-job-owner.js";
 import * as valueRoutes from "../../../packages/runtime/src/internal/evidence-value-routes.js";
+import * as evidenceContract from "../../../packages/runtime/src/evidence-contract.js";
+import { applyObjectiveEvidenceProposal } from "../../../packages/runtime/src/objective.js";
 
 const services: RunService[] = [], stores: SQLiteRunStorage[] = [];
 afterEach(() => { for (const service of services.splice(0)) service.closeReviewCollections(); for (const storage of stores.splice(0)) storage.close(); vi.restoreAllMocks(); vi.useRealTimers(); });
@@ -62,18 +64,21 @@ describe("complete original rich Review under its private lifetime", () => {
     ["white", true], ["black", true], ["white", false], ["black", false],
   ] as const)("retains every %s Map byte with modern=%s and no eager fallback", async (side, modern) => {
     const f = await fixture(side, modern), expected = JSON.stringify(await f.service.review(f.run.id, f.principal));
-    const eager = ["reviewSources", "reviewPopulation", "reviewMeasurements", "beginReviewPopulation", "beginReviewMeasurements", "resolveMove"] as const;
+    const eager = ["reviewSources", "reviewPopulation", "reviewMeasurements", "reviewObjectives", "beginReviewPopulation", "beginReviewMeasurements", "resolveMove"] as const;
     for (const method of eager) vi.spyOn(RecordedGradeSourceOwner.prototype, method).mockImplementation(() => { throw new Error("Unbudgeted eager Review fallback"); });
     vi.spyOn(phaseSources, "compilePhaseArc").mockImplementation(() => { throw new Error("Eager PhaseArc fallback"); });
     vi.spyOn(mapSources, "collectReviewRelations").mockImplementation(() => { throw new Error("Hidden relation recollection"); });
     vi.spyOn(mapSources, "collectReviewOpeningEvents").mockImplementation(() => { throw new Error("Hidden opening recollection"); });
     const packet = vi.spyOn(packetSources, "advanceReviewPacketCollection"), phase = vi.spyOn(phaseSources, "advanceRecordedPhaseArcCollection");
+    const objectives = vi.spyOn(RecordedGradeSourceOwner.prototype, "advanceReviewObjectives");
+    const population = vi.spyOn(RecordedGradeSourceOwner.prototype, "advanceReviewPopulation");
+    const ledger = vi.spyOn(RecordedGradeSourceOwner.prototype, "advanceReviewMeasurements");
     const relations = vi.spyOn(mapSources, "advanceReviewMapSourceCollection"), grade = vi.spyOn(RecordedGradeSourceOwner.prototype, "resolveCapturedMove");
-    const advanceGrade = f.service.advanceGradeRecordedContext.bind(f.service), admitted = new Set<string>();
+    const advanceGrade = f.service.advanceGradeRecordedContext.bind(f.service), admitted = new Set<string>(), captured: string[] = [];
     let nextSubject = 0;
-    vi.spyOn(f.service, "advanceGradeRecordedContext").mockImplementation(handle => {
+    const endpoint = vi.spyOn(f.service, "advanceGradeRecordedContext").mockImplementation(handle => {
       const node = f.run.nodes[nextSubject++]!; admitted.add(node.fen);
-      const progress = advanceGrade(handle); expect(progress.nodeId).toBe(node.id); return progress;
+      const progress = advanceGrade(handle); expect(progress.nodeId).toBe(node.id); captured.push(progress.nodeId); return progress;
     });
     const dispatch = valueRoutes.invokeEvidenceValueRoute;
     vi.spyOn(valueRoutes, "invokeEvidenceValueRoute").mockImplementation(((...args: Parameters<typeof dispatch>) => {
@@ -90,18 +95,19 @@ describe("complete original rich Review under its private lifetime", () => {
     expect(actual).toBe(expected);
     assertReviewMapResponse(JSON.parse(actual), { runId: f.run.id, branchId: job.branchId });
     expect(progress.filter(row => row.stage === "subject").map(row => row.nodeId)).toEqual(f.run.nodes.map(node => node.id));
-    expect(progress.filter(row => row.stage === "grade_capture").map(row => row.nodeId)).toEqual(f.run.nodes.map(node => node.id));
-    for (const [index, node] of f.run.nodes.entries()) {
-      const capture = progress.findIndex(row => row.stage === "grade_capture" && row.nodeId === node.id);
-      const finished = progress.findIndex(row => row.stage === "subject" && row.nodeId === node.id);
-      for (const stage of ["inputs", "packet", "population", "ledger", "relations"] as const) {
-        const position = progress.findIndex(row => row.stage === stage && row.nodeId === node.id);
-        expect(position).toBeGreaterThan(capture); expect(position).toBeLessThan(finished);
-      }
-      if (index + 1 < f.run.nodes.length) expect(finished).toBeLessThan(progress.findIndex(row => row.stage === "grade_capture" && row.nodeId === f.run.nodes[index + 1]!.id));
+    expect(captured).toEqual(f.run.nodes.map(node => node.id));
+    for (const [index] of f.run.nodes.entries()) {
+      const calls = [endpoint.mock.invocationCallOrder[index]!, objectives.mock.invocationCallOrder[index]!,
+        packet.mock.invocationCallOrder[index]!, population.mock.invocationCallOrder[index]!,
+        ledger.mock.invocationCallOrder[index * 2]!, ledger.mock.invocationCallOrder[index * 2 + 1]!,
+        phase.mock.invocationCallOrder[index + 1]!, relations.mock.invocationCallOrder[index + 1]!,
+        ...(index === 0 ? [] : [grade.mock.invocationCallOrder[index - 1]!])];
+      expect(calls).toEqual([...calls].sort((left, right) => left - right));
+      if (index + 1 < f.run.nodes.length) expect(calls.at(-1)).toBeLessThan(endpoint.mock.invocationCallOrder[index + 1]!);
     }
     expect(progress.findIndex(row => row.stage === "grade_complete")).toBeGreaterThan(progress.map(row => row.stage).lastIndexOf("subject"));
     expect(packet).toHaveBeenCalledTimes(3); expect(phase).toHaveBeenCalledTimes(4);
+    expect(objectives.mock.results.map(result => result.type === "return" ? result.value.nodeId : null)).toEqual(f.run.nodes.map(node => node.id));
     expect(relations).toHaveBeenCalledTimes(5); expect(grade).toHaveBeenCalledTimes(2);
     expect(collect).toHaveBeenCalledTimes(modern ? 6 : 9);
     // Every node retains its independent historical engine/tablebase calls. Offline grade
@@ -111,6 +117,41 @@ describe("complete original rich Review under its private lifetime", () => {
         [node.id, "recorded.engine.eval@1"], [node.id, "recorded.tablebase.result@1"]]));
     expect(JSON.stringify(f.storage.read(f.run.id)!.run)).toBe(before);
     await expect(f.service.advanceRichReviewCollection(job.lease, map => JSON.stringify(map))).rejects.toMatchObject({ reason: "not_found" });
+  });
+
+  it("acquires actual objective occurrences only after their subject and keeps the full original Map bytes", async () => {
+    const f = await fixture(), at = "2026-11-12T00:00:00.000Z";
+    let run = f.run;
+    for (const nodeId of [run.nodes[2]!.id, run.nodes[0]!.id, run.nodes[1]!.id, run.nodes[0]!.id]) {
+      const node = run.nodes.find(node => node.id === nodeId)!;
+      run = applyObjectiveEvidenceProposal(run, { nodeId, from: node.objectiveState,
+        to: node.objectiveState === "active" ? "preserved" : "active", evidenceRefs: ["recorded:test-witness"] }, at).run;
+    }
+    f.storage.save(run, f.lease);
+    const objectives = vi.spyOn(RecordedGradeSourceOwner.prototype, "reviewObjectives");
+    const expected = JSON.stringify(await f.service.review(run.id, f.principal));
+    const originalSource = objectives.mock.results.at(-1)!.value as ReturnType<RecordedGradeSourceOwner["reviewObjectives"]>;
+    const originalOccurrences = new Map(originalSource.items.map(item => [evidenceContract.evidenceValueReceipt(item.evidence).inputDigest, item.nodeId]));
+    objectives.mockImplementation(() => { throw new Error("Eager objective recollection"); });
+    const admitted = new Set<string>(), originalAdvance = f.service.advanceGradeRecordedContext.bind(f.service);
+    vi.spyOn(f.service, "advanceGradeRecordedContext").mockImplementation(handle => {
+      const step = originalAdvance(handle); admitted.add(step.nodeId); return step;
+    });
+    const original = evidenceContract.declareEvidence, minted: string[] = [];
+    const advance = vi.spyOn(RecordedGradeSourceOwner.prototype, "advanceReviewObjectives");
+    vi.spyOn(evidenceContract, "declareEvidence").mockImplementation((...args) => {
+      if (args[1].id === "run.record.objective_transition" && args[1].version === 2) {
+        const nodeId = originalOccurrences.get(args[3].inputDigest);
+        expect(nodeId).toBeDefined(); expect(admitted.has(nodeId!)).toBe(true);
+        expect(nodeId).toBe([...admitted].at(-1));
+        minted.push(nodeId!);
+      }
+      return original(...args);
+    });
+    const job = f.service.beginRichReviewCollection(run.id, f.access), progress: RichReviewProgress[] = [];
+    expect(await drain(f.service, job.lease, progress)).toBe(expected);
+    expect(minted).toEqual([run.nodes[0]!.id, run.nodes[0]!.id, run.nodes[1]!.id, run.nodes[2]!.id]);
+    expect(advance.mock.results.map(result => result.type === "return" ? result.value.nodeId : null)).toEqual(run.nodes.map(node => node.id));
   });
 
   // This case executes an independent full oracle AND a separately budgeted job. The local
@@ -168,6 +209,47 @@ describe("complete original rich Review under its private lifetime", () => {
     await expect(f.service.advanceRichReviewCollection(job.lease, map => JSON.stringify(map))).rejects.toMatchObject({ reason: "not_found" });
   });
 
+  it.each((["objectives", "phase"] as const).flatMap(boundary =>
+    (["session", "grant", "cancel", "deadline"] as const).map(fault => ({ boundary, fault }))))(
+    "stops the next collector at the live synchronous boundary: %j", async ({ boundary, fault }) => {
+      let now = 0;
+      const f = await fixture("white", true, () => now), reader = { learnerId: "unit-reader", handle: "unit-reader" };
+      const at = "2026-11-12T00:00:00.000Z";
+      f.storage.createLearner({ id: reader.learnerId, handle: reader.handle, passwordHash: "!", createdAt: at });
+      f.storage.grantRole(f.run.id, reader.learnerId, "spectator", f.lease, at);
+      const access = { ...f.access, principal: reader, assertCurrent: vi.fn() };
+      const job = f.service.beginRichReviewCollection(f.run.id, access);
+      let injected = false;
+      const mutate = () => {
+        if (injected) return; injected = true;
+        if (fault === "session") access.assertCurrent.mockImplementation(() => { throw new Error("Actual session revoked"); });
+        else if (fault === "grant") f.storage.revokeGrant(f.run.id, reader.learnerId, f.lease);
+        else if (fault === "cancel") f.service.cancelReviewCollection(f.run.id, access, job.jobId);
+        else now = 5_001;
+      };
+      if (boundary === "objectives") {
+        const original = RecordedGradeSourceOwner.prototype.advanceReviewObjectives;
+        vi.spyOn(RecordedGradeSourceOwner.prototype, "advanceReviewObjectives").mockImplementation(function(this: RecordedGradeSourceOwner, ...args) {
+          const result = original.apply(this, args); mutate(); return result;
+        });
+      } else {
+        const original = phaseSources.advanceRecordedPhaseArcCollection;
+        vi.spyOn(phaseSources, "advanceRecordedPhaseArcCollection").mockImplementation((...args) => {
+          const result = original(...args); if (result.nodeId !== null) mutate(); return result;
+        });
+      }
+      const packet = vi.spyOn(packetSources, "advanceReviewPacketCollection"), relations = vi.spyOn(mapSources, "advanceReviewMapSourceCollection");
+      const serialize = vi.fn((map: Awaited<ReturnType<RunService["review"]>>) => JSON.stringify(map));
+      const run = async () => { for (;;) await f.service.advanceRichReviewCollection(job.lease, serialize); };
+      await expect(run()).rejects.toMatchObject({ reason: fault === "deadline" ? "budget_exhausted" : fault === "cancel" ? "cancelled" : "stale" });
+      expect(injected).toBe(true); expect(serialize).not.toHaveBeenCalled();
+      if (boundary === "objectives") expect(packet).not.toHaveBeenCalled();
+      else expect(relations).toHaveBeenCalledTimes(1); // Only the earlier metadata/window preparation.
+      await expect(f.service.advanceRichReviewCollection(job.lease, serialize)).rejects.toMatchObject({ reason: "not_found" });
+      now = 0;
+      expect(() => f.service.beginRichReviewCollection(f.run.id, f.access)).not.toThrow();
+    });
+
   it("charges the real grade constructor to its original clock, cancels partial sources, and frees capacity", async () => {
     let now = 0; const f = await fixture("white", true, () => now);
     const begin = f.service.beginGradeRecordedContext.bind(f.service);
@@ -179,7 +261,7 @@ describe("complete original rich Review under its private lifetime", () => {
     now = 0; expect(() => f.service.beginRichReviewCollection(f.run.id, f.access)).not.toThrow();
   });
 
-  it.each(["packet", "population", "ledger"] as const)("cleans the original %s constructor's returned handle when cancellation happens inside it", async kind => {
+  it.each(["packet", "population", "ledger", "objectives"] as const)("cleans the original %s constructor's returned handle when cancellation happens inside it", async kind => {
     const f = await fixture();
     const job = f.service.beginRichReviewCollection(f.run.id, f.access);
     let captured = false, cancelRetained = () => true;
@@ -195,10 +277,16 @@ describe("complete original rich Review under its private lifetime", () => {
         const handle = begin.apply(this, args); captured = true; cancelRetained = () => this.cancelReviewPopulation(handle);
         f.service.cancelReviewCollection(f.run.id, f.access, job.jobId); return handle;
       });
-    } else {
+    } else if (kind === "ledger") {
       const begin = RecordedGradeSourceOwner.prototype.beginCapturedReviewMeasurements;
       vi.spyOn(RecordedGradeSourceOwner.prototype, "beginCapturedReviewMeasurements").mockImplementation(function(this: RecordedGradeSourceOwner, ...args) {
         const handle = begin.apply(this, args); captured = true; cancelRetained = () => this.cancelReviewMeasurements(handle);
+        f.service.cancelReviewCollection(f.run.id, f.access, job.jobId); return handle;
+      });
+    } else {
+      const begin = RecordedGradeSourceOwner.prototype.beginCapturedReviewObjectives;
+      vi.spyOn(RecordedGradeSourceOwner.prototype, "beginCapturedReviewObjectives").mockImplementation(function(this: RecordedGradeSourceOwner, ...args) {
+        const handle = begin.apply(this, args); captured = true; cancelRetained = () => this.cancelReviewObjectives(handle);
         f.service.cancelReviewCollection(f.run.id, f.access, job.jobId); return handle;
       });
     }

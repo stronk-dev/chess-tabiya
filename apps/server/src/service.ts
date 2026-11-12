@@ -208,7 +208,7 @@ import { compilePhaseArc, compileRecordedEvidenceSnapshot, beginRecordedPhaseArc
 import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import { InspectorContextError, InspectorRecordedContextOwner, type InspectorRecordedContext, type InspectorRecordedSelection } from "./inspector-recorded-context.js";
 import { RecordedComparisonContextError, RecordedComparisonPointOwner, type RecordedComparisonContext, type ComparisonSelection } from "./recorded-comparison-points.js";
-import { RecordedGradeContextError, RecordedGradeSourceOwner, type RecordedGradeContext, type GradeSelection, type GradeContextCapture, type ReviewPopulationCollection, type ReviewMeasurementCollection } from "./recorded-grade-sources.js";
+import { RecordedGradeContextError, RecordedGradeSourceOwner, type RecordedGradeContext, type GradeSelection, type GradeContextCapture, type ReviewPopulationCollection, type ReviewMeasurementCollection, type ReviewObjectiveCollection } from "./recorded-grade-sources.js";
 import type { ReviewSourceContext, ReviewSubjectEngineInput } from "../../../packages/runtime/src/review-evidence.js";
 import { RecordedFoundationSourceOwner } from "./recorded-foundation-sources.js";
 import type { FoundationRecordedPrefix, FoundationRecordedDecision } from "../../../packages/runtime/src/recorded-foundation-source.js";
@@ -648,9 +648,9 @@ export interface RichReviewAccess {
   readonly assertCurrent: () => void;
 }
 export interface RichReviewProgress {
-  readonly stage: "grade_begin" | "grade_capture" | "grade_complete" | "inputs" | "packet_begin" | "population_begin" | "ledger_begin"
-    | "phase_begin" | "map_begin" | "objectives" | "phase_path" | "windows" | "packet" | "population" | "ledger" | "phase"
-    | "relations" | "grade" | "subject" | "opening" | "sources_complete";
+  readonly stage: "grade_begin" | "grade_complete" | "inputs" | "packet_begin" | "population_begin" | "ledger_begin"
+    | "phase_begin" | "map_begin" | "objectives_begin" | "phase_path" | "windows"
+    | "subject" | "opening" | "sources_complete";
   readonly nodeId: string | null;
   readonly completedSubjects: number;
   readonly totalSubjects: number;
@@ -1459,28 +1459,33 @@ export class RunService {
     const mapWork = beginReviewMapSourceCollection(boundary, this.#openingCatalogue);
     this.#retainRichReview(work, control, () => { cancelReviewMapSourceCollection(mapWork); });
     yield progress("map_begin");
-    const recordedObjectives = this.#gradeSources.capturedReviewObjectives(capture);
-    yield progress("objectives");
+    const objectiveWork = this.#gradeSources.beginCapturedReviewObjectives(capture);
+    this.#retainRichReview(work, control, () => { this.#gradeSources.cancelReviewObjectives(objectiveWork); });
+    yield progress("objectives_begin");
     const phasePath = advanceRecordedPhaseArcCollection(phaseWork);
     yield progress("phase_path");
     advanceReviewMapSourceCollection(mapWork);
     yield progress("windows");
     const recordedGrades = new Map<string, RecordedGradeSource>();
     for (const [index, entry] of plan.subjects.entries()) {
+      // One fixed local subject per unit, with a live deadline/source/permission checkpoint
+      // between collectors. Adjacent synchronous calls share that boundary check; optional
+      // I/O never belongs in this unit. The job yields before acquiring the next subject.
       const nodeId = entry.nodeId;
       const endpoint = this.advanceGradeRecordedContext(capture);
       if (endpoint.nodeId !== nodeId || endpoint.complete !== (index + 1 === totalSubjects)) throw new TypeError("Review endpoint crossed its original subject plan");
-      yield progress("grade_capture", nodeId);
+      control.clock();
       const state = this.#reviewEngineNodeState(runId, branchId, nodeId, memo);
       engine.set(nodeId, state); providerThrough = nodeId; engineImage = canonicalizeJson([...engine]);
-      yield progress("inputs", nodeId);
-      advanceReviewPacketCollection(packetWork, { nodeId, state }); yield progress("packet", nodeId);
-      this.#gradeSources.advanceReviewPopulation(populationWork, { nodeId, state }); yield progress("population", nodeId);
-      this.#gradeSources.advanceReviewMeasurements(ledgerWork); yield progress("ledger", nodeId);
-      this.#gradeSources.advanceReviewMeasurements(ledgerWork); yield progress("ledger", nodeId);
-      if (!phasePath.complete) { advanceRecordedPhaseArcCollection(phaseWork); yield progress("phase", nodeId); }
-      advanceReviewMapSourceCollection(mapWork); yield progress("relations", nodeId);
-      if (index > 0) { recordedGrades.set(nodeId, this.#gradeSources.resolveCapturedMove(capture, { nodeId, signal })); yield progress("grade", nodeId); }
+      control.clock();
+      this.#gradeSources.advanceReviewObjectives(objectiveWork); control.clock();
+      advanceReviewPacketCollection(packetWork, { nodeId, state }); control.clock();
+      this.#gradeSources.advanceReviewPopulation(populationWork, { nodeId, state }); control.clock();
+      this.#gradeSources.advanceReviewMeasurements(ledgerWork); control.clock();
+      this.#gradeSources.advanceReviewMeasurements(ledgerWork); control.clock();
+      if (!phasePath.complete) { advanceRecordedPhaseArcCollection(phaseWork); control.clock(); }
+      advanceReviewMapSourceCollection(mapWork); control.clock();
+      if (index > 0) { recordedGrades.set(nodeId, this.#gradeSources.resolveCapturedMove(capture, { nodeId, signal })); control.clock(); }
       completedSubjects++; yield progress("subject", nodeId);
     }
     gradeContext = this.finishGradeRecordedContext(capture);
@@ -1491,6 +1496,7 @@ export class RunService {
     recordedMeasurements = this.#gradeSources.finishReviewMeasurements(ledgerWork); yield progress("sources_complete");
     const phaseArc = finishRecordedPhaseArcCollection(phaseWork); yield progress("sources_complete");
     const preparedSources = finishReviewMapSourceCollection(mapWork); yield progress("sources_complete");
+    const recordedObjectives = this.#gradeSources.finishReviewObjectives(objectiveWork); yield progress("sources_complete");
     return this.#assembleReviewMap(recordedReviewContext(retainedSelection, packet, sourceContext), principal, gradeContext, phaseArc,
       { recordedGrades, recordedSources, recordedMeasurements, recordedObjectives, preparedSources }, signal);
   }
@@ -3662,7 +3668,10 @@ export class RunService {
   resolveReviewMeasurementSource(context: RecordedGradeContext) { return this.#gradeSources.reviewMeasurements(context); }
   beginReviewMeasurementSource(context: RecordedGradeContext) { return this.#gradeSources.beginReviewMeasurements(context); }
   beginCapturedReviewMeasurementSource(handle: GradeContextCapture) { return this.#gradeSources.beginCapturedReviewMeasurements(handle); }
-  resolveCapturedReviewObjectives(handle: GradeContextCapture) { return this.#gradeSources.capturedReviewObjectives(handle); }
+  beginCapturedReviewObjectiveSource(handle: GradeContextCapture) { return this.#gradeSources.beginCapturedReviewObjectives(handle); }
+  advanceReviewObjectiveSource(handle: ReviewObjectiveCollection) { return this.#gradeSources.advanceReviewObjectives(handle); }
+  finishReviewObjectiveSource(handle: ReviewObjectiveCollection) { return this.#gradeSources.finishReviewObjectives(handle); }
+  cancelReviewObjectiveSource(handle: ReviewObjectiveCollection) { return this.#gradeSources.cancelReviewObjectives(handle); }
   advanceReviewMeasurementSource(handle: ReviewMeasurementCollection) { return this.#gradeSources.advanceReviewMeasurements(handle); }
   finishReviewMeasurementSource(handle: ReviewMeasurementCollection) { return this.#gradeSources.finishReviewMeasurements(handle); }
   cancelReviewMeasurementSource(handle: ReviewMeasurementCollection) { return this.#gradeSources.cancelReviewMeasurements(handle); }

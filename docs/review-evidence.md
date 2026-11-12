@@ -219,9 +219,10 @@ next original node's occurrences, including a real empty row. Finish restores or
 event-ordinal order, preserving repeated equal transitions and later updates to earlier nodes,
 then uses the unchanged complete-array invocation proof without recollection. Copied handles,
 stale storage, cancellation and reentrant acquisition/publication refuse; no partial items leave
-the owner. The synchronous factory still accepts its original valid prefix scopes. This runtime
-dependency is not yet used by the private rich service job; service wiring and public paging
-remain D4260/D4250.
+the owner. The synchronous factory still accepts its original valid prefix scopes. The private rich
+service job uses this owner after each original endpoint is acquired. Its own wrapper checks
+the current workflow, acquired node and handle around acquisition/publication, retaining the same
+workflow through complete-context promotion. Public paging remains D4260/D4250.
 
 The actual service checks current access/storage/disclosure/rated state and cancellation around
 collection and publication. Source-contract failures return typed unavailability. The production
@@ -307,6 +308,17 @@ uses its acquired endpoint's original position for both historical projections; 
 attachment nor a pending engine request suppresses those reports. Promotion retains the same
 completed ledger source/cache. Provider live checks scan only the acquired prefix and do not
 observe future nodes or schedule analysis. Final Map assembly still uses complete original sources.
+
+The private job advances one fixed local subject per synchronous unit: endpoint, exact provider
+input, objectives, packet, recorded population, both independent historical slots, phase, Map
+relations and grade. The existing control.clock checks the live whole job and its absolute
+budget between collectors; an adjacent postcheck also serves as the next precheck without an
+async gap. Each source retains its own currentness checks. The job yields before the next
+subject; setup and complete issuers/final reduction stay separate. Optional provider I/O is not
+part of this synchronous bundle. It cannot preempt a synchronous call; overruns reject before
+another collector or any publication. This removes repeated async continuation checks while
+preserving all original source invocations and complete output. It does not complete public
+source/page accounting or default/native latency validation.
 
 Compare's separately issued engine-point source has the same lifetime guarantee through its
 own service context. Role downgrade/revocation refuses direct trajectory-factory reads even

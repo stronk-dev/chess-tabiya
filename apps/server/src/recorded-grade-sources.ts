@@ -14,7 +14,9 @@ import type { RecordedReviewBoundary } from "../../../packages/runtime/src/recor
 import { advanceRecordedReviewSourceCollection, beginRecordedReviewSourceCollection, cancelRecordedReviewSourceCollection,
   finishRecordedReviewSourceCollection, collectRecordedReviewObjectives, collectRecordedReviewSourcePopulation, captureReviewPointContext,
   readRecordedReviewSourcePopulation, type RecordedReviewSourceCollection, type ReviewSourceContext, type ReviewSubjectEngineInput,
-  type ReviewProviderNodeState } from "../../../packages/runtime/src/review-evidence.js";
+  type ReviewProviderNodeState, beginRecordedReviewObjectiveCollection, advanceRecordedReviewObjectiveCollection,
+  finishRecordedReviewObjectiveCollection, cancelRecordedReviewObjectiveCollection,
+  type RecordedReviewObjectiveCollection } from "../../../packages/runtime/src/review-evidence.js";
 import type { DrillRun } from "../../../packages/runtime/src/types.js";
 import { RecordedEngineEndpointOwner, type RecordedEngineEndpoints, type RecordedEngineEndpointCapture } from "./recorded-engine-endpoints.js";
 import type { RunService } from "./service.js";
@@ -44,6 +46,8 @@ declare const reviewPopulationCollectionBrand: unique symbol;
 export interface ReviewPopulationCollection { readonly [reviewPopulationCollectionBrand]: true }
 declare const reviewMeasurementCollectionBrand: unique symbol;
 export interface ReviewMeasurementCollection { readonly [reviewMeasurementCollectionBrand]: true }
+declare const reviewObjectiveCollectionBrand: unique symbol;
+export interface ReviewObjectiveCollection { readonly [reviewObjectiveCollectionBrand]: true }
 interface Owned {
   readonly boundary: RecordedReviewBoundary;
   readonly permission: RecordedGradePermission;
@@ -116,6 +120,8 @@ export class RecordedGradeSourceOwner {
   readonly #measurementCollections = new WeakMap<object, MeasurementWork>();
   readonly #reviewCollections = new WeakMap<object, { readonly workflow: Workflow; readonly collection: RecordedReviewSourceCollection;
     readonly perSubject: boolean; completed: number; complete: boolean }>();
+  readonly #objectiveCollections = new WeakMap<object, { readonly workflow: Workflow; readonly collection: RecordedReviewObjectiveCollection;
+    completed: number; complete: boolean; busy: boolean }>();
   constructor(storage: RunStorage, registry: PackRegistry | undefined, coordinator: ReviewEvidenceCoordinator | undefined) {
     this.#registry = registry;
     this.#boundaries = createRecordedReviewBoundarySourceOwner({ loadRun: id => storage.read(id)?.run, loadImportRecord: id => {
@@ -408,8 +414,60 @@ export class RecordedGradeSourceOwner {
     this.read(context); return this.#objectives(this.#contexts.get(context)!.workflow);
   }
 
-  capturedReviewObjectives(handle: GradeContextCapture): RecordedReviewObjectives {
-    return this.#objectives(this.#contextCapture(handle).workflow);
+  beginCapturedReviewObjectives(handle: GradeContextCapture): ReviewObjectiveCollection {
+    const { workflow } = this.#contextCapture(handle); this.#readWorkflow(workflow);
+    if (workflow.selection.timing !== "review") return refuse("objective population requires its own Review workflow");
+    const collection = beginRecordedReviewObjectiveCollection(workflow.boundary);
+    try {
+      this.#readWorkflow(workflow);
+      const handle = Object.freeze({}) as ReviewObjectiveCollection;
+      this.#objectiveCollections.set(handle, { workflow, collection, completed: 0, complete: false, busy: false });
+      return handle;
+    } catch (error) { cancelRecordedReviewObjectiveCollection(collection); throw error; }
+  }
+
+  #objectiveCollection(handle: ReviewObjectiveCollection) {
+    const state = handle !== null && typeof handle === "object" ? this.#objectiveCollections.get(handle) : undefined;
+    if (state === undefined) return refuse("objective work is foreign or retired");
+    if (state.busy) return refuse("objective work is already advancing or finishing");
+    return state;
+  }
+
+  advanceReviewObjectives(handle: ReviewObjectiveCollection) {
+    const state = this.#objectiveCollection(handle);
+    if (state.complete) return refuse("objective work has no remaining subject");
+    state.busy = true;
+    try {
+      this.#readWorkflow(state.workflow);
+      const nodeId = readRecordedReviewBoundary(state.workflow.boundary).path[state.completed]!.node.id;
+      this.#acquiredRow(state.workflow, nodeId); // Original selection only; never acquire/remint it here.
+      const progress = advanceRecordedReviewObjectiveCollection(state.collection);
+      this.#readWorkflow(state.workflow);
+      if (this.#objectiveCollections.get(handle) !== state) return refuse("objective work retired during acquisition");
+      if (progress.nodeId !== nodeId || progress.completedSubjects !== state.completed + 1) return refuse("objective work crossed its original subject");
+      state.completed = progress.completedSubjects; state.complete = progress.complete;
+      return progress;
+    } catch (error) { this.cancelReviewObjectives(handle); throw error; }
+    finally { state.busy = false; }
+  }
+
+  finishReviewObjectives(handle: ReviewObjectiveCollection): RecordedReviewObjectives {
+    const state = this.#objectiveCollection(handle);
+    if (!state.complete) return refuse("objective work is incomplete");
+    state.busy = true;
+    try {
+      this.#readWorkflow(state.workflow);
+      const result = finishRecordedReviewObjectiveCollection(state.collection);
+      this.#readWorkflow(state.workflow);
+      if (this.#objectiveCollections.get(handle) !== state) return refuse("objective work retired during publication");
+      return result;
+    } finally { this.cancelReviewObjectives(handle); state.busy = false; }
+  }
+
+  cancelReviewObjectives(handle: ReviewObjectiveCollection): boolean {
+    const state = handle !== null && typeof handle === "object" ? this.#objectiveCollections.get(handle) : undefined;
+    if (state === undefined) return false;
+    this.#objectiveCollections.delete(handle); cancelRecordedReviewObjectiveCollection(state.collection); return true;
   }
 
   #objectives(workflow: Workflow): RecordedReviewObjectives {

@@ -14,6 +14,8 @@ import { RecordedGradeSourceOwner } from "./recorded-grade-sources.js";
 import { attachDelivery, evaluationDelivery } from "../../../packages/runtime/src/testing/review-evidence-fixture.js";
 import * as attachments from "../../../packages/runtime/src/internal/recorded-engine-attachments.js";
 import { RecordedEngineEndpointOwner } from "./recorded-engine-endpoints.js";
+import * as evidenceContract from "../../../packages/runtime/src/evidence-contract.js";
+import { applyObjectiveEvidenceProposal } from "../../../packages/runtime/src/objective.js";
 
 const stores: SQLiteRunStorage[] = [];
 afterEach(() => { for (const storage of stores.splice(0)) storage.close(); });
@@ -28,7 +30,90 @@ function fixture(black = false, input: Pick<NonNullable<Parameters<typeof record
   const resolve = () => service.resolveGradeRecordedContext(run.id, principal, null, query, controller.signal);
   return { ...original, run, storage, service, principal, lease, controller, query, resolve };
 }
+
+function objectiveFixture(black = false, asReader = false) {
+  const f = fixture(black), at = "2026-11-12T00:00:00.000Z";
+  let run = f.run;
+  for (const nodeId of [f.child.id, run.nodes[0]!.id, run.nodes[0]!.id]) {
+    const node = run.nodes.find(node => node.id === nodeId)!;
+    run = applyObjectiveEvidenceProposal(run, { nodeId, from: node.objectiveState,
+      to: node.objectiveState === "active" ? "preserved" : "active", evidenceRefs: ["recorded:test-witness"] }, at).run;
+  }
+  f.storage.save(run, f.lease);
+  let principal = f.principal;
+  if (asReader) {
+    principal = { learnerId: "objective-reader", handle: "objective-reader" };
+    f.storage.createLearner({ id: principal.learnerId, handle: principal.handle, passwordHash: "!", createdAt: at });
+    f.storage.grantRole(run.id, principal.learnerId, "spectator", f.lease, at);
+  }
+  const query = { ...f.query, decisionDigest: moduleDecisionStamp(run).digest };
+  const capture = f.service.beginGradeRecordedContext(run.id, principal, null, query, f.controller.signal);
+  return { ...f, principal, run, query, capture };
+}
 describe("sole service-owned recorded grade issuer", () => {
+  it.each([false, true])("keeps the original %s-side objective proof through workflow promotion without recollection", black => {
+    const f = objectiveFixture(black), boundary = f.service.readGradePreparation(f.capture).boundary;
+    const expected = reviewSources.collectRecordedReviewObjectives(boundary);
+    const work = f.service.beginCapturedReviewObjectiveSource(f.capture), mint = vi.spyOn(evidenceContract, "declareEvidence");
+    try {
+      expect(() => f.service.finishReviewObjectiveSource(work)).toThrow(/incomplete/);
+      for (const [index, node] of f.run.nodes.entries()) {
+        f.service.advanceGradeRecordedContext(f.capture);
+        expect(f.service.advanceReviewObjectiveSource(work)).toEqual({ nodeId: node.id,
+          completedSubjects: index + 1, totalSubjects: f.run.nodes.length, complete: index + 1 === f.run.nodes.length });
+      }
+      const context = f.service.finishGradeRecordedContext(f.capture);
+      mint.mockClear();
+      const actual = f.service.finishReviewObjectiveSource(work);
+      expect(actual.boundary).toBe(boundary); expect(actual.items).toEqual(expected.items);
+      expect(actual.items.map(item => evidenceContract.evidenceValueReceipt(item.evidence)))
+        .toEqual(expected.items.map(item => evidenceContract.evidenceValueReceipt(item.evidence)));
+      expect(mint).not.toHaveBeenCalled();
+      expect(f.service.readGradeRecordedContext(context).boundary).toBe(boundary);
+      expect(f.service.cancelReviewObjectiveSource(work)).toBe(false);
+    } finally { mint.mockRestore(); }
+  });
+
+  it("refuses objective acquisition before its actual endpoint and retires foreign/cancelled work", () => {
+    const f = objectiveFixture(), work = f.service.beginCapturedReviewObjectiveSource(f.capture);
+    const mint = vi.spyOn(evidenceContract, "declareEvidence");
+    try {
+      expect(() => f.service.advanceReviewObjectiveSource({ ...work })).toThrow(/foreign/);
+      expect(() => f.service.advanceReviewObjectiveSource(work)).toThrow(/not been acquired/);
+      expect(mint).not.toHaveBeenCalled();
+      expect(f.service.cancelReviewObjectiveSource(work)).toBe(false);
+      expect(() => f.service.finishReviewObjectiveSource(work)).toThrow(/retired/);
+    } finally { mint.mockRestore(); f.service.cancelGradeRecordedContext(f.capture); }
+  });
+
+  it.each(["cancel", "grant", "storage", "reentrant"] as const)("rechecks the actual workflow when objective minting triggers %s", fault => {
+    const f = objectiveFixture(false, fault === "grant"), work = f.service.beginCapturedReviewObjectiveSource(f.capture);
+    f.service.advanceGradeRecordedContext(f.capture);
+    const original = evidenceContract.declareEvidence;
+    let mutated = false;
+    const mint = vi.spyOn(evidenceContract, "declareEvidence").mockImplementation((...args) => {
+      if (args[1].id === "run.record.objective_transition" && !mutated) {
+        mutated = true;
+        if (fault === "cancel") f.controller.abort();
+        else if (fault === "grant") f.storage.revokeGrant(f.run.id, f.principal.learnerId, f.lease);
+        else if (fault === "storage") f.storage.save(commitMove(f.run, "e7e5", { at: "2026-11-12T00:00:00.000Z" }).run, f.lease);
+        else expect(() => f.service.advanceReviewObjectiveSource(work)).toThrow(/already advancing/);
+      }
+      return original(...args);
+    });
+    try {
+      if (fault === "reentrant") expect(f.service.advanceReviewObjectiveSource(work).complete).toBe(false);
+      else {
+        if (fault === "grant") {
+          expect(() => f.service.advanceReviewObjectiveSource(work)).toThrow(expect.objectContaining({ code: "RUN_NOT_FOUND" }));
+          expect(f.storage.runRole(f.run.id, f.principal.learnerId)).toBeUndefined();
+        } else expect(() => f.service.advanceReviewObjectiveSource(work)).toThrow();
+        expect(() => f.service.finishReviewObjectiveSource(work)).toThrow(/retired/);
+        expect(f.service.cancelReviewObjectiveSource(work)).toBe(false);
+      }
+    } finally { mint.mockRestore(); f.service.cancelReviewObjectiveSource(work); f.service.cancelGradeRecordedContext(f.capture); }
+  });
+
   it.each(["kind", "delivery"] as const)("rejects a provider %s accessor before normalizing an acquired modern row", property => {
     const f = fixture(), prepare = f.service.beginGradeRecordedContext(f.run.id, f.principal, null, f.query, f.controller.signal);
     const population = f.service.beginCapturedReviewSourcePopulation(prepare, { shapes: [] });

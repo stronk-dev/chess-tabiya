@@ -4738,3 +4738,47 @@ D3928 and current source. No protected design sentence is falsified by this inte
 
 Normal make typecheck build verify-governance passes for this runtime checkpoint.4015 rows
 retain zero untriaged; D4260/D4250 and full1.0 stay open.
+
+
+### 2026-11-12 — D4260 objective service adoption and D4267 bounded-unit repair
+
+The private rich job now begins the original objective owner under its current Workflow, advances
+only after each actual endpoint, and finishes its unchanged complete source after context promotion.
+Current permission, acquired-node and own-handle checks surround each step; nested cleanup covers
+late constructor returns. The unused eager preparing-objective method/facade is removed. Dedicated
+Review permission and synchronous complete Review outputs remain unchanged.
+
+Actual draft runs exposed D4267:5011.74ms at sources_complete; objective+packet-only grouping
+still failed5022.24ms at subject33; a later group32 failed5021.96ms at subject34. Passing intermediate
+runs were not treated as headroom. A temporary actual-unit diagnostic observed368 units/4502.12ms
+in group1,1395.84ms inside collect callbacks and3106.28ms of outer guards/yields/scheduling.
+The remainder is an aggregate, not a pure guard-cost estimate.
+
+The repair uses one fixed local current-subject unit, retaining original endpoint/provider/
+objective/packet/population/two-ledger/phase/relation/grade order and every source-owned check.
+Existing control.clock runs at each adjacent source boundary: the same live postcheck serves the
+next synchronous precheck, with no await/user callback gap. Real yields remain between subjects;
+setup, complete issuers and final reduction stay separate. No optional I/O, future subject,
+changed deadline, skipped source, retry or weaker fixture is introduced. Independent contract
+and final source review accept this within review-map§1a/module-registration§2.5.2.
+
+Bounded diagnostic group1 now has54 units/2251.43ms; largest subject unit85.75ms, largest overall
+unit402.54ms. These are wall times including guards/yields/scheduling, not native heartbeat/p95
+or universal budget clearance. Internal clock checks moved guard time inside the collect callback,
+so before/after collectMs is not an invariant-work comparison. The temporary timing wrapper and
+/tmp writer/import are removed before the final uninstrumented normal run:1791 cases/nine files
+38.32s pass; full types/Svelte0errors0warnings pass. Original complete Map/Story/receipt equality,
+actual source invocation order/multiplicity, no-future evidence, real coordinator ownership and
+independent historical sources remain. Eight post-collector grant/session/cancel/expiry negatives
+prove the immediately following collector and serializer never run, all work retires and capacity
+is reusable. The spectator mutation is one-shot and requires actual RUN_NOT_FOUND plus grant
+absence; a second revoke cannot manufacture the tested failure.
+
+D4267 is closed as this finite integration repair. D4260/D4250/full1.0 remain open. Next original
+PhaseArc and packet semantic/shape/pivotal acquisition/accounting, literal source plans/cursors/
+receipts/sessions/strict transport and selected progress/cancel/retry UI. No new complete normal
+software/content, remote-CI, native/default or capability/milestone exit claim is made here.
+
+Normal make typecheck build verify-governance passes for the final uninstrumented service
+checkpoint.4016 ledger rows retain zero untriaged; D4267 is done, D4260/D4250/full1.0 remain open.
+Independent final readback confirms diagnostic removal and no false public/native completion claim.
