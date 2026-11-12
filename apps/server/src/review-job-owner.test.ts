@@ -193,6 +193,13 @@ describe("one bounded private Review job owner", () => {
     expect(f.dispose).toHaveBeenCalledTimes(1); expect(f.owner.size).toBe(0);
   });
 
+  it("charges the atomic completion decision to the same deadline before publication", async () => {
+    let now = 0; const f = simple(owner(1, () => now));
+    await expect(f.owner.unit(f.lease, () => "complete bytes", undefined, () => { now = 5_001; return true; }))
+      .rejects.toMatchObject({ reason: "budget_exhausted" });
+    expect(f.dispose).toHaveBeenCalledTimes(1); expect(f.owner.size).toBe(0);
+  });
+
   it("retires final serialization, failure and shutdown, even with retained tokens or broken cleanup", async () => {
     const f = simple();
     await expect(f.owner.finish(f.lease, value => JSON.stringify(value))).resolves.toBe('{"count":0}');

@@ -358,11 +358,12 @@ export class ReviewEvidenceCoordinator {
    * deliveries, active requests as pending, settled failures as unavailable, and every other node
    * `not_yet_scheduled` once the branch was ensured, else `not_requested`.
    */
-  observe(runId: string, branchId: string, throughNodeId?: string): { readonly states: ReadonlyMap<string, ReviewProviderNodeState> } {
+  observe(runId: string, branchId: string, throughNodeId?: string,
+    memo?: import("../../../packages/runtime/src/review-evidence.js").ReviewDurableEngineMemo): { readonly states: ReadonlyMap<string, ReviewProviderNodeState> } {
     const stored = this.#options.storage.read(runId);
     if (stored === undefined) throw new TypeError(`Review coordinator: unknown run ${runId}`);
     const path = observedReviewPath(stored.run, branchId, throughNodeId);
-    const durable = reviewDurableEngineStates(stored.run, path);
+    const durable = reviewDurableEngineStates(stored.run, path, memo);
     const tracker = this.#trackers.get(`${runId}\u0000${branchId}`);
     const states = new Map<string, ReviewProviderNodeState>();
     for (const node of path) {

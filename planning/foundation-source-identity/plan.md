@@ -4186,3 +4186,85 @@ metadata plan/cursors and source receipts into it, pin actual session/access aut
 explicit application maxJobs1/shutdown and implement both strict delivery scopes/selected UI.
 D4250/D4228 remain doing; native cost/memory/default gates D4224/D4225 remain. Full normal gates
 last passed3f416821; canonical source proof last passed84edd1ce. No public journey or milestone closes.
+
+
+### 2026-11-12 — D4260 source/accounting readback for the next author pass
+
+D4241 requires each page to cover at most its limit of original root/incoming-edge subjects;
+source acquisition must be counted, not just rendered progress. [V: rfc/module-registration.md
+§2.5.2, frozen-prefix clarification.] Current rich collection advances all original grade endpoint
+rows before its complete context can issue, then begins the subject-major remaining collectors.
+Its group1/2/32 tests are source-byte/yield oracles, not HTTP page accounting. [V:
+apps/server/src/service.ts, #richReviewSources; apps/server/src/recorded-grade-sources.ts,
+finishResolve/#issueContext; apps/server/src/rich-review-collection.test.ts.]
+
+The original grade fact issuer itself takes the current workflow permission, the two actual
+ordered node captures, their original edge, source origins and signal. It validates the same
+full original boundary, exact edge and consumer ceiling; it does not consume a population of
+all other selected endpoints. [V: packages/runtime/src/recorded-grade-source.ts,
+RecordedGradeCapture/validate; packages/runtime/src/internal/recorded-engine-node.ts.]
+
+Implementation direction: separate original workflow/boundary permission capture
+from explicit per-subject endpoint selection, retaining the same final grade issuer and full
+original run. This would allow actual row acquisition to follow the page without issuing a
+shortened run or a partial population disguised as complete. Independent source readback confirms
+review-map §1a already authorizes original-owner acquisition factoring with these unchanged
+meanings; no new pedagogy or generic authority amendment is required merely to stage it. The
+concrete implementation still requires independent source/identity review. The split must also
+stage original attachment acquisition: collectRecordedEngineAttachments currently parses modern
+deliveries and invokes original position/evaluation factories for every path node before endpoint
+selection. A node-specific original reader may admit only a completed node acquisition; existing
+aggregate handles/readers retain complete-only meaning. Audit other original per-node work in
+window preparation as well. [V: packages/runtime/src/internal/recorded-engine-attachments.ts;
+packages/runtime/src/internal/recorded-engine-node.ts; independent D4260 readback.]
+Do not silently reinterpret the32-subject acquisition cap as only an output marker cap.
+D4260 remains open. D4261 separately requires the actual coordinator/job scheduling experiment;
+no shipped failure or changed provider policy is inferred from the asynchronous source seam.
+
+
+### 2026-11-12 — Compose the complete original rich Review sources under one owner
+
+RunService's private collection now stages actual grade context/endpoint preparation, original
+full-packet and recorded population, independent historical reports/objectives, PhaseArc/path,
+Map windows/relations/opening and each original move grade. Every advance runs one original unit
+under the fixed owner clock and a real yield. Complete original constructors remain the only
+issuers. Final assembly shares the previous Map renderer, takes prepared relations/opening and
+serializes once without eager source fallback. Actual application construction supplies maxJobs1
+and drains collections before shutdown. Selected HTTP routes still use the existing synchronous
+flow: this is not the public protocol, session binding or UI migration.
+
+D4258 attribution isolates repeated durable provider parsing:490 observations cost3280.9ms of
+4073.0ms of job work;1131 grade reads cost135.1ms. One nominal job-local parse memo retains only
+original parsed deliveries for exact deeply immutable persisted objects. It does not freeze
+borrowed data; mutable/equal-clone/replaced inputs reparse. Each observation still invokes the
+original evidence route, checks node FEN and performs live coordinator/storage/role/source reads.
+Ordinary calls remain unchanged. Complete35-position group1/2/32 oracles pass unchanged5s limits.
+
+D4259's real final-unit barrier reproduces a successful competing peer under the separate
+unit→finish handoff. Advancement, actual serialization, final yield/currentness/budget checks
+and complete retirement now share one busy-held owner unit. The same barrier preserves exactly
+one complete original Map and one serializer. A completion-decision overrun also refuses.
+
+Final focused215/six cases pass16.69s; workspace types/Svelte0errors0warnings pass. Whole Map JSON
+matches both colours with/without modern evaluations, inherited nodes and distinct same-FEN
+occurrences; partial/foreign/service-crossed handles, real session/grant/storage/registry changes,
+constructor-time cancellation and preparation overrun refuse. Absent modern evaluations correctly
+require three independent grading endpoint reads in addition to six historical-report reads;
+no source population is removed. A wrong fixture fork signature was corrected. Independent
+read-only source/test review accepts this finite composition and the two repairs.
+
+Canonical check first passes1928/1928 with24/89 qualified,63 population/8 external receipts, then
+stops for stale generated outputs. Normal regeneration preserves every other JSON value; only74
+implementation/predicate-implementation markers change, plus the paired generated TS output.
+The full normal gates are being rerun. D4260/D4261 preserve the remaining public page/admission
+questions. Actual session binding, ordinary/rich strict transport, selected UI, D4224/D4225 native
+cost/memory/defaults and whole1.0 remain open; no milestone closes.
+
+D4262 records a further source-backed readback for that coordinator experiment: observe always
+reports pending.retrying0, whereas ensureBranch consults the same active reservation's prior
+retryable outcome. The original attempt store retains its terminal while the next owner runs.
+Reproduce a genuinely held second attempt before fixing this; no runtime failure is inferred
+from source comparison alone. [V: apps/server/src/review-evidence.ts, observe/ensureBranch/#owner.]
+
+
+Full local checkpoint verification: Normal full make verify-software/build/verify-content exits0:21471software/all593 files819.38s;7 isolated performance/four61.32s;340content/all44 files235.83s;workspace types/Svelte0errors0warnings and server/web builds;92-document clearance audit errors[] and104 exact capability declarations. Canonical1928/1928/24of89/63population/8external is current. No remote-CI or push-readiness claim.

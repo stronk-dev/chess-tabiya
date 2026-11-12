@@ -2,13 +2,13 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:08132b05535996819db5a5bfb75695119c7307a22587f99d8d2f2feb49e93507",
+    "roadmap": "sha256:938370cacce93f2f6e566856b89b8d7a8091bc63f94f71d0ec171513d73eaee7",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:997b00d1068edb397bbb20520b834ceb73083c4e42ddafad4df8e8f14476a81e",
+    "workState": "sha256:b3225796ea01e91b1a600a562c210ee4cde2d47c2b45469a13ab4fb023fa1912",
     "rfcRegister": "sha256:49e46c03e8cf65e0983bcbd7a00a465007dbd3b6aeaa05915b5988fcd462b071",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
-    "application": "sha256:7600ab54572b8e91519cee41aa264479e952993ea1f0b5a4438e5ebff9b36993",
+    "application": "sha256:fc3ff0df28b6d3796e457361f8c99efeda08854bb4ae16468de994c133d80c2d",
     "rest": "sha256:c09af34df2ab4ba1ec5640d9d327e00cea6dab95e292323adc148da5863a92b0"
   },
   "summary": {
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 634,
+      "todo": 637,
       "doing": 177,
       "blocked": 1061,
-      "done": 1971,
+      "done": 1973,
       "refused": 163
     },
     "workItems": {
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Compose the committed original Review source preparations into the verified private lifecycle owner with actual session/access binding, full subject plan/cursors and literal invocation receipts. Install explicit application maxJobs1/shutdown and strict ordinary/rich job transport, then selected Review progress/cancel/retry UI. D4250/D4228 and D4224/D4225 resources/defaults remain open.",
+      "nextAction": "Implement D4260 subject-ordered original attachment/endpoint acquisition under the accepted workflow/grade issuer, auditing all original per-node preparation against the page cap. Measure D4261 coordinator admission and D4262 retry observation. Then bind actual sessions and deliver literal plan/cursors/source receipts, strict ordinary/rich Review transport and selected progress/cancel/retry UI. D4250/D4228 and native D4224/D4225 cost/memory/default work remain open.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "D4250 now has a private bounded ReviewJobOwner for modules/rich scopes, reserving capacity and starting the absolute5000ms clock before original preparation. Real idle expiry, live checks around actual units/yields/final serialization, cancellation/shutdown/ref cleanup and no completed graph cache are implemented. Optional operations enforce500ms/remaining whole milliseconds with actual abort races and absolute pre/post checks; late ignored-abort and synchronous results refuse. D4257 is reproduced33pass/2fail and fixed: preparation returned after prior retirement is disposed exactly once. Independent code/test review accepts this finite lifecycle dependency. Final36 lifecycle controls and96/three affected owner/grade/ledger cases pass4.34s; types/Svelte0errors0warnings/server+web builds pass. Genuine SQLite/RunService tests cover original ledger serialization, grade preparation overrun and real grant revocation. The owner is not yet installed in application/service transport: full source orchestration, real session binding, cursors/receipts, strict delivery scopes and selected UI remain. Full normal gates last pass3f416821; canonical last passes84edd1ce. D4250/D4228 and D4224/D4225 cost/memory/default/full1.0 remain open; no milestone completion.",
+        "summary": "D4250 now composes complete original rich Review sources through the bounded RunService owner: grade context/endpoints, full packet, recorded population, independent historical reports/objectives, PhaseArc/path, Map windows/relations/opening and original move grades. Shared final renderer receives retained originals without eager fallback; final advancement/serialization/currentness/retirement are atomic. Application supplies maxJobs1 and drains on shutdown. D4258 measures3280.9ms/490 repeated provider observations of4073ms job work, then fixes pure parsing with a nominal collection-local immutable-input memo preserving original factories/live checks. D4259 actual final-unit barrier reproduces a successful peer and now permits only one correct full Map/serializer. Independent source/test readback accepts this finite composition. Final215/six affected source/lifecycle cases and full types/Svelte0errors0warnings pass. Canonical1928/1928/24of89/63population/8external is fresh after74 implementation-marker-only updates; every other generated JSON value is unchanged. Normal full make verify-software/build/verify-content exits0:21471software/all593 files819.38s;7 isolated performance/four61.32s;340content/all44 files235.83s;workspace types/Svelte0errors0warnings and server/web builds;92-document clearance audit errors[] and104 exact capability declarations. Canonical1928/1928/24of89/63population/8external is current. No remote-CI or push-readiness claim. Public routes remain synchronous: D4260 page accounting, D4261 admission/D4262 retry observation experiments, actual session binding, literal plan/cursor/receipts and strict transport/selected UI remain open. No native/default/full1.0 or milestone completion claim.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -673,7 +673,11 @@
           "apps/server/src/recorded-engine-endpoints.test.ts",
           "apps/server/src/recorded-review-ledger.test.ts",
           "apps/server/src/review-job-owner.ts",
-          "apps/server/src/review-job-owner.test.ts"
+          "apps/server/src/review-job-owner.test.ts",
+          "apps/server/src/rich-review-collection.test.ts",
+          "apps/server/src/application.ts",
+          "apps/server/src/review-evidence.ts",
+          "packages/runtime/src/review-durable-engine-memo.test.ts"
         ],
         "anchors": [
           {
@@ -1454,7 +1458,7 @@
           {
             "kind": "work_state",
             "id": "D4250",
-            "digest": "sha256:4a3562ea8c072cd7da5a927121619135cebf8a48fccb7e51dca27b6f9caf6c47"
+            "digest": "sha256:e96fb184aee4ce328e7f375da56f40540f290394adf85bad8324426b657bc991"
           },
           {
             "kind": "rfc",
@@ -1500,6 +1504,31 @@
             "kind": "work_state",
             "id": "D4257",
             "digest": "sha256:f6288ed32dcd6f1bf629f627633aa5d1927784914628f0b4cd59bec374cb6a82"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4258",
+            "digest": "sha256:7458e4e736c7a59182eb29bd29e4622469942418396e7f82b735e31642ce4a29"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4259",
+            "digest": "sha256:289e2692cff5c966f443fe4ba5962da65b6269ad4926a0c786097e74b28757be"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4260",
+            "digest": "sha256:5596ff54a3640eb3746c4a475d544cf9fd103d596a83ff7729f959ccf7e58248"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4261",
+            "digest": "sha256:b6102fa13b56a0dde50c7f7aee3d566fe6f01bda51a833757a63212693d18758"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4262",
+            "digest": "sha256:fd77b3b8c46da7eea1bad052e3852414596dc9424160285e2ea96a03412546c1"
           }
         ]
       },
@@ -1520,10 +1549,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Compose the committed original Review source preparations into the verified private lifecycle owner with actual session/access binding, full subject plan/cursors and literal invocation receipts. Install explicit application maxJobs1/shutdown and strict ordinary/rich job transport, then selected Review progress/cancel/retry UI. D4250/D4228 and D4224/D4225 resources/defaults remain open.",
+      "nextAction": "Implement D4260 subject-ordered original attachment/endpoint acquisition under the accepted workflow/grade issuer, auditing all original per-node preparation against the page cap. Measure D4261 coordinator admission and D4262 retry observation. Then bind actual sessions and deliver literal plan/cursors/source receipts, strict ordinary/rich Review transport and selected progress/cancel/retry UI. D4250/D4228 and native D4224/D4225 cost/memory/default work remain open.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "D4250 now has a private bounded ReviewJobOwner for modules/rich scopes, reserving capacity and starting the absolute5000ms clock before original preparation. Real idle expiry, live checks around actual units/yields/final serialization, cancellation/shutdown/ref cleanup and no completed graph cache are implemented. Optional operations enforce500ms/remaining whole milliseconds with actual abort races and absolute pre/post checks; late ignored-abort and synchronous results refuse. D4257 is reproduced33pass/2fail and fixed: preparation returned after prior retirement is disposed exactly once. Independent code/test review accepts this finite lifecycle dependency. Final36 lifecycle controls and96/three affected owner/grade/ledger cases pass4.34s; types/Svelte0errors0warnings/server+web builds pass. Genuine SQLite/RunService tests cover original ledger serialization, grade preparation overrun and real grant revocation. The owner is not yet installed in application/service transport: full source orchestration, real session binding, cursors/receipts, strict delivery scopes and selected UI remain. Full normal gates last pass3f416821; canonical last passes84edd1ce. D4250/D4228 and D4224/D4225 cost/memory/default/full1.0 remain open; no milestone completion.",
+        "summary": "D4250 now composes complete original rich Review sources through the bounded RunService owner: grade context/endpoints, full packet, recorded population, independent historical reports/objectives, PhaseArc/path, Map windows/relations/opening and original move grades. Shared final renderer receives retained originals without eager fallback; final advancement/serialization/currentness/retirement are atomic. Application supplies maxJobs1 and drains on shutdown. D4258 measures3280.9ms/490 repeated provider observations of4073ms job work, then fixes pure parsing with a nominal collection-local immutable-input memo preserving original factories/live checks. D4259 actual final-unit barrier reproduces a successful peer and now permits only one correct full Map/serializer. Independent source/test readback accepts this finite composition. Final215/six affected source/lifecycle cases and full types/Svelte0errors0warnings pass. Canonical1928/1928/24of89/63population/8external is fresh after74 implementation-marker-only updates; every other generated JSON value is unchanged. Normal full make verify-software/build/verify-content exits0:21471software/all593 files819.38s;7 isolated performance/four61.32s;340content/all44 files235.83s;workspace types/Svelte0errors0warnings and server/web builds;92-document clearance audit errors[] and104 exact capability declarations. Canonical1928/1928/24of89/63population/8external is current. No remote-CI or push-readiness claim. Public routes remain synchronous: D4260 page accounting, D4261 admission/D4262 retry observation experiments, actual session binding, literal plan/cursor/receipts and strict transport/selected UI remain open. No native/default/full1.0 or milestone completion claim.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2163,7 +2192,10 @@
           "packages/runtime/src/review-map-sources.test.ts",
           "packages/runtime/src/review-map.ts",
           "apps/server/src/review-job-owner.ts",
-          "apps/server/src/review-job-owner.test.ts"
+          "apps/server/src/review-job-owner.test.ts",
+          "apps/server/src/rich-review-collection.test.ts",
+          "apps/server/src/application.ts",
+          "packages/runtime/src/review-durable-engine-memo.test.ts"
         ],
         "anchors": [
           {
@@ -3299,7 +3331,7 @@
           {
             "kind": "work_state",
             "id": "D4250",
-            "digest": "sha256:4a3562ea8c072cd7da5a927121619135cebf8a48fccb7e51dca27b6f9caf6c47"
+            "digest": "sha256:e96fb184aee4ce328e7f375da56f40540f290394adf85bad8324426b657bc991"
           },
           {
             "kind": "work_state",
@@ -3335,6 +3367,31 @@
             "kind": "work_state",
             "id": "D4257",
             "digest": "sha256:f6288ed32dcd6f1bf629f627633aa5d1927784914628f0b4cd59bec374cb6a82"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4258",
+            "digest": "sha256:7458e4e736c7a59182eb29bd29e4622469942418396e7f82b735e31642ce4a29"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4259",
+            "digest": "sha256:289e2692cff5c966f443fe4ba5962da65b6269ad4926a0c786097e74b28757be"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4260",
+            "digest": "sha256:5596ff54a3640eb3746c4a475d544cf9fd103d596a83ff7729f959ccf7e58248"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4261",
+            "digest": "sha256:b6102fa13b56a0dde50c7f7aee3d566fe6f01bda51a833757a63212693d18758"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4262",
+            "digest": "sha256:fd77b3b8c46da7eea1bad052e3852414596dc9424160285e2ea96a03412546c1"
           }
         ]
       },

@@ -170,6 +170,11 @@ export class RecordedGradeSourceOwner {
     } catch (error) { this.cancelResolve(handle); throw error; }
   }
 
+  assertCaptureCurrent(handle: GradeContextCapture): void {
+    const work = this.#contextCapture(handle);
+    this.#readContextCapture(work); this.#endpoints.assertCaptureCurrent(work.endpoints);
+  }
+
   finishResolve(handle: GradeContextCapture): RecordedGradeContext {
     const work = this.#contextCapture(handle);
     if (!work.complete) return refuse("context capture is incomplete");
@@ -393,6 +398,8 @@ export class RecordedGradeSourceOwner {
     if (work === undefined) return refuse("Review ledger collection is foreign or retired");
     return work;
   }
+
+  assertReviewMeasurementsCurrent(handle: ReviewMeasurementCollection): void { this.#measurementWork(handle).checkCurrent(); }
 
   /** One original projection at one original position, so the job can check each source cap. */
   advanceReviewMeasurements(handle: ReviewMeasurementCollection): Readonly<{

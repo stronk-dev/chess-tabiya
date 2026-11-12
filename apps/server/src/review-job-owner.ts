@@ -100,8 +100,8 @@ export class ReviewJobOwner {
 
   /** Exactly one actual indivisible source/assembly unit, with a real yield between units. */
   async unit<T, R>(lease: ReviewJobLease<T>, collect: (work: T, control: ReviewJobControl) => R | Promise<R>,
-    signal?: AbortSignal): Promise<R> {
-    return this.#run(lease, collect, signal, false);
+    signal?: AbortSignal, complete?: (result: R) => boolean): Promise<R> {
+    return this.#run(lease, collect, signal, complete ?? false);
   }
 
   /** The callback includes final presentation serialization. No completed source graph is cached. */
@@ -195,7 +195,7 @@ export class ReviewJobOwner {
     try { work?.dispose(); } catch { /* terminal cleanup must not throw from an idle timer */ }
   }
   async #run<T, R>(lease: ReviewJobLease<T>, collect: (work: T, control: ReviewJobControl) => R | Promise<R>,
-    signal: AbortSignal | undefined, final: boolean): Promise<R> {
+    signal: AbortSignal | undefined, final: boolean | ((result: R) => boolean)): Promise<R> {
     const entry = this.#entry(lease);
     if (entry.busy) throw new ReviewJobError("busy");
     entry.busy = true;
@@ -216,7 +216,9 @@ export class ReviewJobOwner {
       this.#check(entry);
       await yieldTurn();
       this.#check(entry);
-      if (final) this.#retire(entry, "complete");
+      const complete = typeof final === "function" ? final(result) : final;
+      this.#check(entry);
+      if (complete) this.#retire(entry, "complete");
       return result;
     } catch (error) {
       this.#retire(entry, "source_failed");

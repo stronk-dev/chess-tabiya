@@ -203,7 +203,8 @@ import { preflightRecordedClockConsumer, consumeRecordedClockEvidence } from "..
 import { parseRecordedClockView, type RecordedClockView } from "../../../packages/runtime/src/recorded-clock-view.js";
 import { digestRunEventHead } from "../../../packages/runtime/src/run-subject.js";
 import { serializePresentedEvidence } from "../../../packages/runtime/src/presentation-contract.js";
-import { compilePhaseArc, compileRecordedEvidenceSnapshot, type PhaseSourceDependencies } from "./phase-source-composition.js";
+import { compilePhaseArc, compileRecordedEvidenceSnapshot, beginRecordedPhaseArcCollection, advanceRecordedPhaseArcCollection,
+  finishRecordedPhaseArcCollection, cancelRecordedPhaseArcCollection, type PhaseSourceDependencies, type PhaseArcResult } from "./phase-source-composition.js";
 import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import { InspectorContextError, InspectorRecordedContextOwner, type InspectorRecordedContext, type InspectorRecordedSelection } from "./inspector-recorded-context.js";
 import { RecordedComparisonContextError, RecordedComparisonPointOwner, type RecordedComparisonContext, type ComparisonSelection } from "./recorded-comparison-points.js";
@@ -212,6 +213,15 @@ import type { ReviewSourceContext } from "../../../packages/runtime/src/review-e
 import { RecordedFoundationSourceOwner } from "./recorded-foundation-sources.js";
 import type { FoundationRecordedPrefix, FoundationRecordedDecision } from "../../../packages/runtime/src/recorded-foundation-source.js";
 import type { RecordedGradeSource } from "../../../packages/runtime/src/recorded-grade-source.js";
+import { beginReviewPacketCollection, advanceReviewPacketCollection, finishReviewPacketCollection, cancelReviewPacketCollection,
+  createReviewDurableEngineMemo, type ReviewDurableEngineMemo, type ReviewEvidencePacket, type RecordedReviewSourcePopulation } from "../../../packages/runtime/src/review-evidence.js";
+import { beginReviewMapSourceCollection, advanceReviewMapSourceCollection, finishReviewMapSourceCollection,
+  cancelReviewMapSourceCollection, type PreparedReviewMapSources } from "../../../packages/runtime/src/review-map-sources.js";
+import { planModuleReviewPrefix, type ModuleReviewPrefixPlan } from "../../../packages/runtime/src/module-review-prefix.js";
+import { canonicalRunBytes, readRecordedReviewBoundary } from "../../../packages/runtime/src/recorded-review-boundary.js";
+import { ReviewJobOwner, type ReviewJobLease, type ReviewJobControl, type ReviewJobClock } from "./review-job-owner.js";
+import { readRecordedReviewLedgerSource, type RecordedReviewLedgerSource } from "../../../packages/runtime/src/recorded-review-ledger.js";
+import type { RecordedReviewObjectives } from "../../../packages/runtime/src/evidence-factories.js";
 import { postcommitSubjectBranch } from "../../../packages/runtime/src/postcommit-nudge.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "../../../packages/runtime/src/evidence-catalog.js";
 import type { RecordedComparisonSource } from "../../../packages/runtime/src/recorded-comparison.js";
@@ -607,6 +617,53 @@ type PreparedModuleShapeSources = Readonly<{
   shapeAt: NonNullable<ModuleSourceContext["shapeAt"]>;
 }>;
 
+interface ReviewSelection {
+  readonly run: DrillRun;
+  readonly role: RunRole;
+  readonly branchId: string;
+  readonly record: ImportedGameRecord | undefined;
+}
+
+function recordedReviewContext(selection: ReviewSelection, packet: ReviewEvidencePacket, sourceContext: ReviewSourceContext) {
+  const { run, role, branchId, record } = selection;
+  const projection = reviewStoryMoments(packet);
+  const progress = packet.completion.progress;
+  const pass = Object.freeze(progress.kind === "settled" ? { ready: true, pending: 0 } : { ready: false, pending: progress.pendingNodeCount + progress.notYetScheduledNodeCount });
+  const outcome = packet.subject.outcome;
+  return {
+    run, role, branchId, record, pass, projection, packet, sourceContext,
+    source: record===undefined?Object.freeze({kind:"native" as const}):Object.freeze({ kind: record.sourceKind, ...(record.sourceUrl === null ? {} : { url: record.sourceUrl }), headers: record.headers, result: record.result, importedAt: record.importedAt }),
+    // The same branch-bound authority supplies Story and the visible Review result. The
+    // archive's original result tag remains source metadata, not an alternate retry's result.
+    outcome: Object.freeze(outcome.kind === "unfinished" ? { kind: "unfinished" as const }
+      : { kind: outcome.kind, result: outcome.result }),
+  };
+
+}
+
+export interface RichReviewAccess {
+  readonly principal: Principal;
+  readonly sessionId: string;
+  /** Actual authenticated session owner; not caller-supplied wire authority. */
+  readonly assertCurrent: () => void;
+}
+export interface RichReviewProgress {
+  readonly stage: "grade_begin" | "grade_capture" | "grade_complete" | "inputs" | "packet_begin" | "population_begin" | "ledger_begin"
+    | "phase_begin" | "map_begin" | "objectives" | "phase_path" | "windows" | "packet" | "population" | "ledger" | "phase"
+    | "relations" | "grade" | "subject" | "opening" | "sources_complete";
+  readonly nodeId: string | null;
+  readonly completedSubjects: number;
+  readonly totalSubjects: number;
+}
+interface RichReviewWork {
+  iterator: Generator<RichReviewProgress, Awaited<ReturnType<RunService["review"]>>, void> | undefined;
+  readonly checks: Set<() => void>;
+  readonly cleanups: Set<() => void>;
+  disposed: boolean;
+  plan: ModuleReviewPrefixPlan | undefined;
+}
+export type RichReviewCollection = ReviewJobLease<RichReviewWork>;
+
 export class RunService {
   readonly #storage: RunStorage;
   readonly #evidenceQueue: EvidenceJobQueue | undefined;
@@ -645,6 +702,7 @@ export class RunService {
   });
   readonly #comparisonPoints: RecordedComparisonPointOwner;
   readonly #gradeSources: RecordedGradeSourceOwner;
+  readonly #reviewJobs: ReviewJobOwner;
   readonly #foundationSources: RecordedFoundationSourceOwner;
   readonly #inspectorLedgerSources: InspectorLedgerSourceOwner;
   readonly #inspectorStorySources: InspectorStorySourceOwner;
@@ -688,6 +746,8 @@ export class RunService {
       readonly tablebaseSource?: TablebaseSource;
       /** rfc/review-evidence-compiler.md §4.1: the one application-lifetime Review coordinator. */
       readonly reviewEvidence?: ReviewEvidenceCoordinator;
+      /** Accepted Review job bound;1 is an engineering bound, not memory/default certification. */
+      readonly reviewJobs?: Readonly<{ maxJobs: number; now?: () => number }>;
       /** rfc/bot-policy.md §4.1: the shared-exchange provider half of the opponent-ply operation. */
       readonly botOpponent?: BotOpponentAcquirer;
       /** rfc/bot-policy.md §4.3: the exchange-derived provider availability profiles join. */
@@ -697,6 +757,7 @@ export class RunService {
     } = {},
   ) {
     this.#storage = storage;
+    this.#reviewJobs = new ReviewJobOwner(options.reviewJobs ?? { maxJobs: 1 });
     this.#reviewEvidence = options.reviewEvidence;
     this.#botOpponent = options.botOpponent;
     this.#botAvailability = options.botAvailability;
@@ -1280,13 +1341,167 @@ export class RunService {
     // selected run/branch; the arc invokes the sole recorded-path operation itself, and Review's
     // evidence panel consumes that same retained path. The server-private arc is never serialized.
     const phaseArc = compilePhaseArc(context.run, context.branchId, this.#phaseSourceDependencies(context.run));
-    const semanticPath = phaseArc.kind === "arc" ? phaseArc.arc.path : phaseArc.path;
     const recordedGrades = this.#gradeSources.reviewSources(gradeContext);
     const recordedSources = this.#gradeSources.reviewPopulation(gradeContext, context.sourceContext);
     const recordedMeasurements = this.#gradeSources.reviewMeasurements(gradeContext);
     const recordedObjectives = this.#gradeSources.reviewObjectives(gradeContext);
+    return this.#assembleReviewMap(context, principal, gradeContext, phaseArc,
+      { recordedGrades, recordedSources, recordedMeasurements, recordedObjectives }, signal);
+    } catch (error) {
+      if (error instanceof RecordedGradeContextError) throw new ServerError(error.reason === "permission_withheld" ? "ASSISTANCE_WITHHELD" : "EVIDENCE_UNAVAILABLE", error.message);
+      if (error instanceof EvidenceBindingExecutionError || error instanceof EvidenceExecutionError) throw new ServerError("EVIDENCE_UNAVAILABLE", "Review execution contract is unavailable");
+      throw error;
+    }
+  }
+
+  /** Server-private source job. Public transport/session parsing is a separate accepted step. */
+  beginRichReviewCollection(runId: string, access: RichReviewAccess, branchId?: string, nodeId?: string) {
+    access.assertCurrent();
+    const principal = Object.freeze({ ...access.principal }), selection = this.#storySelection(runId, principal, branchId);
+    const path = branchPath(selection.run, selection.branchId), focus = nodeId ?? path.at(-1)!.id;
+    if (!path.some(node => node.id === focus)) throw new ServerError("INVALID_REQUEST", "Review focus is outside its recorded branch");
+    const identity = Object.freeze({ principalId: principal.learnerId, sessionId: access.sessionId, runId, scope: "rich_review" as const,
+      selectionKey: canonicalizeJson({ branchId: selection.branchId, nodeId: focus, decision: moduleDecisionStamp(selection.run), role: selection.role, assistance: null }) });
+    const lease = this.#reviewJobs.start(identity, control => {
+      const original = canonicalRunBytes(selection.run), record = canonicalizeJson(selection.record ?? null);
+      const checks = new Set<() => void>([() => {
+        access.assertCurrent();
+        const current = this.#storySelection(runId, principal, selection.branchId);
+        if (canonicalRunBytes(current.run) !== original || current.role !== selection.role || canonicalizeJson(current.record ?? null) !== record) {
+          throw new TypeError("Review's original stored selection or permission changed");
+        }
+      }]);
+      const work: RichReviewWork = { iterator: undefined, checks, cleanups: new Set(), disposed: false, plan: undefined };
+      work.iterator = this.#richReviewSources(selection, principal, control, work);
+      return { value: work, checkCurrent: () => { for (const check of work.checks) check(); }, dispose: () => {
+        work.disposed = true; work.iterator = undefined; work.plan = undefined;
+        for (const cleanup of work.cleanups) { try { cleanup(); } catch { /* drain every original owner */ } }
+        work.cleanups.clear(); work.checks.clear();
+      } };
+    });
+    return Object.freeze({ lease, jobId: this.#reviewJobs.clock(lease).jobId, branchId: selection.branchId, subjectNodeId: focus,
+      decision: moduleDecisionStamp(selection.run) });
+  }
+
+  async advanceRichReviewCollection<R extends string | Response>(lease: RichReviewCollection,
+    serialize: (map: Awaited<ReturnType<RunService["review"]>>, clock: ReviewJobClock) => R, signal?: AbortSignal): Promise<
+      Readonly<{ kind: "progress"; progress: RichReviewProgress }> | Readonly<{ kind: "complete"; value: R }>> {
+    const step = await this.#reviewJobs.unit(lease, (work, control) => {
+      const next = work.iterator!.next();
+      return next.done ? { done: true as const, value: serialize(next.value, control.clock()) }
+        : { done: false as const, value: next.value };
+    }, signal, result => result.done);
+    if (!step.done) return Object.freeze({ kind: "progress", progress: step.value });
+    return Object.freeze({ kind: "complete", value: step.value });
+  }
+
+  cancelReviewCollection(runId: string, access: RichReviewAccess, jobId: string) {
+    access.assertCurrent(); requireRead(this.#storage, runId, access.principal);
+    return this.#reviewJobs.cancel({ principalId: access.principal.learnerId, sessionId: access.sessionId, runId }, jobId);
+  }
+
+  closeReviewCollections(): void { this.#reviewJobs.close(); }
+
+  #retainRichReview(work: RichReviewWork, control: ReviewJobControl, cleanup: () => void): void {
+    // Cancellation can happen inside an original constructor before its handle is returned.
+    if (work.disposed) { cleanup(); control.signal.throwIfAborted(); throw new TypeError("Review collection retired during preparation"); }
+    work.cleanups.add(cleanup);
+  }
+
+  *#richReviewSources(selection: ReviewSelection, principal: Principal, control: ReviewJobControl, work: RichReviewWork): Generator<
+    RichReviewProgress, Awaited<ReturnType<RunService["review"]>>, void> {
+    const { branchId } = selection, runId = selection.run.id, signal = control.signal;
+    const totalSubjects = branchPath(selection.run, branchId).length;
+    let completedSubjects = 0;
+    const progress = (stage: RichReviewProgress["stage"], nodeId: string | null = null): RichReviewProgress =>
+      Object.freeze({ stage, nodeId, completedSubjects, totalSubjects });
+    const capture = this.beginGradeRecordedContext(runId, principal, null, { branchId,
+      throughNodeId: branchPath(selection.run, branchId).at(-1)!.id, decisionDigest: moduleDecisionStamp(selection.run).digest, timing: "review" }, signal);
+    this.#retainRichReview(work, control, () => { this.cancelGradeRecordedContext(capture); });
+    let gradeContext: RecordedGradeContext | undefined;
+    work.checks.add(() => { if (gradeContext === undefined) this.#gradeSources.assertCaptureCurrent(capture); else this.#gradeSources.read(gradeContext); });
+    yield progress("grade_begin");
+    let captured = false;
+    while (!captured) {
+      const step = this.advanceGradeRecordedContext(capture); captured = step.complete;
+      yield progress("grade_capture", step.nodeId);
+    }
+    gradeContext = this.finishGradeRecordedContext(capture);
+    const owned = this.#gradeSources.read(gradeContext), boundary = owned.boundary;
+    yield progress("grade_complete");
+
+    const plan = planModuleReviewPrefix(boundary); work.plan = plan;
+    // Use the original complete immutable boundary image after original grade preparation.
+    const retainedSelection: ReviewSelection = { ...selection, run: readRecordedReviewBoundary(boundary).run };
+    const memo = createReviewDurableEngineMemo();
+    const engine = this.#reviewEngineStates(runId, branchId, false, undefined, memo).states;
+    const engineImage = canonicalizeJson([...engine]);
+    const shapes = this.#shapes?.list().map(summary => this.#shapes!.required(summary.id)) ?? [];
+    const pack = this.#registeredPack(retainedSelection.run);
+    work.checks.add(() => {
+      if (canonicalizeJson([...this.#reviewEngineStates(runId, branchId, false, undefined, memo).states]) !== engineImage
+        || this.#registeredPack(retainedSelection.run) !== pack) throw new TypeError("Review source inputs changed");
+      const actual = this.#shapes?.list() ?? [];
+      if (actual.length !== shapes.length || actual.some((summary, index) => this.#shapes!.required(summary.id) !== shapes[index])) throw new TypeError("Review shape registry changed");
+    });
+    const sourceContext: ReviewSourceContext = { engine, shapes: shapes.map(({ document }) => ({ id: document.id, trigger: document.trigger })) };
+    yield progress("inputs");
+    const subject = createReviewPrefixAuthority({ loadRun: id => this.#storage.read(id)?.run, loadImportRecord: id => {
+      const record = this.#storage.importedGame?.(id); return record === undefined ? undefined
+        : { runId: record.runId, result: record.result, movetextDigest: record.movetextDigest };
+    } })({ runId, branchId });
+    const packetWork = beginReviewPacketCollection(subject, sourceContext);
+    this.#retainRichReview(work, control, () => { cancelReviewPacketCollection(packetWork); });
+    yield progress("packet_begin");
+    const populationWork = this.#gradeSources.beginReviewPopulation(gradeContext, sourceContext);
+    this.#retainRichReview(work, control, () => { this.#gradeSources.cancelReviewPopulation(populationWork); });
+    yield progress("population_begin");
+    const ledgerWork = this.#gradeSources.beginReviewMeasurements(gradeContext);
+    this.#retainRichReview(work, control, () => { this.#gradeSources.cancelReviewMeasurements(ledgerWork); });
+    let recordedMeasurements: RecordedReviewLedgerSource | undefined;
+    work.checks.add(() => { if (recordedMeasurements === undefined) this.#gradeSources.assertReviewMeasurementsCurrent(ledgerWork); else readRecordedReviewLedgerSource(recordedMeasurements); });
+    yield progress("ledger_begin");
+    const phaseWork = beginRecordedPhaseArcCollection(boundary, this.#phaseSourceDependencies(retainedSelection.run));
+    this.#retainRichReview(work, control, () => { cancelRecordedPhaseArcCollection(phaseWork); });
+    yield progress("phase_begin");
+    const mapWork = beginReviewMapSourceCollection(boundary, this.#openingCatalogue);
+    this.#retainRichReview(work, control, () => { cancelReviewMapSourceCollection(mapWork); });
+    yield progress("map_begin");
+    const recordedObjectives = this.#gradeSources.reviewObjectives(gradeContext);
+    yield progress("objectives");
+    const phasePath = advanceRecordedPhaseArcCollection(phaseWork);
+    yield progress("phase_path");
+    advanceReviewMapSourceCollection(mapWork);
+    yield progress("windows");
+    const recordedGrades = new Map<string, RecordedGradeSource>();
+    for (const [index, entry] of plan.subjects.entries()) {
+      const nodeId = entry.nodeId;
+      advanceReviewPacketCollection(packetWork); yield progress("packet", nodeId);
+      this.#gradeSources.advanceReviewPopulation(populationWork); yield progress("population", nodeId);
+      this.#gradeSources.advanceReviewMeasurements(ledgerWork); yield progress("ledger", nodeId);
+      this.#gradeSources.advanceReviewMeasurements(ledgerWork); yield progress("ledger", nodeId);
+      if (!phasePath.complete) { advanceRecordedPhaseArcCollection(phaseWork); yield progress("phase", nodeId); }
+      advanceReviewMapSourceCollection(mapWork); yield progress("relations", nodeId);
+      if (index > 0) { recordedGrades.set(nodeId, this.#gradeSources.resolveMove(gradeContext, { nodeId, signal })); yield progress("grade", nodeId); }
+      completedSubjects++; yield progress("subject", nodeId);
+    }
+    advanceReviewMapSourceCollection(mapWork); yield progress("opening");
+    const packet = finishReviewPacketCollection(packetWork); yield progress("sources_complete");
+    const recordedSources = this.#gradeSources.finishReviewPopulation(populationWork); yield progress("sources_complete");
+    recordedMeasurements = this.#gradeSources.finishReviewMeasurements(ledgerWork); yield progress("sources_complete");
+    const phaseArc = finishRecordedPhaseArcCollection(phaseWork); yield progress("sources_complete");
+    const preparedSources = finishReviewMapSourceCollection(mapWork); yield progress("sources_complete");
+    return this.#assembleReviewMap(recordedReviewContext(retainedSelection, packet, sourceContext), principal, gradeContext, phaseArc,
+      { recordedGrades, recordedSources, recordedMeasurements, recordedObjectives, preparedSources }, signal);
+  }
+
+  #assembleReviewMap(context: ReturnType<typeof recordedReviewContext>, principal: Principal,
+    gradeContext: RecordedGradeContext, phaseArc: PhaseArcResult,
+    sources: Readonly<{ recordedGrades: ReadonlyMap<string, RecordedGradeSource>; recordedSources: RecordedReviewSourcePopulation;
+      recordedMeasurements: RecordedReviewLedgerSource; recordedObjectives: RecordedReviewObjectives; preparedSources?: PreparedReviewMapSources }>, signal: AbortSignal) {
+    const runId = context.run.id, semanticPath = phaseArc.kind === "arc" ? phaseArc.arc.path : phaseArc.path;
     const projection = reviewMapProjection({ run: context.run, branchId: context.branchId, story: context.projection, context: context.record === undefined ? "review" : "imported_analysis", semanticPath, side: context.run.start.side, viewer: this.#moduleViewer(runId, principal, context.run, context.role), packet: context.packet,
-      recordedGrades, recordedSources, recordedMeasurements, recordedObjectives,
+      ...sources,
       ...(this.#openingCatalogue === undefined ? {} : { opening: this.#openingCatalogue }) });
     this.#gradeSources.read(gradeContext); signal.throwIfAborted();
     // The issued campaign origin, not the underlying pack session, owns the workflow ceiling.
@@ -1315,11 +1530,6 @@ export class RunService {
       semanticPath: Object.freeze(semanticPath.kind === "available" ? { kind: "available" as const, events: semanticPath.events.length } : { kind: "refused" as const, reason: semanticPath.reason }),
       ...projection,
     });
-    } catch (error) {
-      if (error instanceof RecordedGradeContextError) throw new ServerError(error.reason === "permission_withheld" ? "ASSISTANCE_WITHHELD" : "EVIDENCE_UNAVAILABLE", error.message);
-      if (error instanceof EvidenceBindingExecutionError || error instanceof EvidenceExecutionError) throw new ServerError("EVIDENCE_UNAVAILABLE", "Review execution contract is unavailable");
-      throw error;
-    }
   }
 
   #requireRecordedBranchDisclosure(runId: string, principal: Principal, run: DrillRun, branchId: string): void {
@@ -1369,18 +1579,7 @@ export class RunService {
       return { id: document.id, trigger: document.trigger };
     }) ?? [];
     const packet = compileReviewPacketForSubject(subject, { engine, shapes });
-    const projection = reviewStoryMoments(packet);
-    const progress = packet.completion.progress;
-    const pass = Object.freeze(progress.kind === "settled" ? { ready: true, pending: 0 } : { ready: false, pending: progress.pendingNodeCount + progress.notYetScheduledNodeCount });
-    const outcome = packet.subject.outcome;
-    return {
-      run, role, branchId, record, pass, projection, packet, sourceContext: { engine, shapes },
-      source: record===undefined?Object.freeze({kind:"native" as const}):Object.freeze({ kind: record.sourceKind, ...(record.sourceUrl === null ? {} : { url: record.sourceUrl }), headers: record.headers, result: record.result, importedAt: record.importedAt }),
-      // The same branch-bound authority supplies Story and the visible Review result. The
-      // archive's original result tag remains source metadata, not an alternate retry's result.
-      outcome: Object.freeze(outcome.kind === "unfinished" ? { kind: "unfinished" as const }
-        : { kind: outcome.kind, result: outcome.result }),
-    };
+    return recordedReviewContext(selection, packet, { engine, shapes });
   }
 
   share(runId:string,principal:Principal,branchId:string,at=new Date().toISOString()){
@@ -3140,15 +3339,15 @@ export class RunService {
    * surfaces) the coordinator is only observed. No coordinator means no analysis engine: every node
    * without a durable delivery is `provider_off`.
    */
-  #reviewEngineStates(runId: string, branchId: string, request: boolean, throughNodeId?: string): { readonly states: ReadonlyMap<string, ReviewProviderNodeState>; readonly requested: number } {
+  #reviewEngineStates(runId: string, branchId: string, request: boolean, throughNodeId?: string, memo?: ReviewDurableEngineMemo): { readonly states: ReadonlyMap<string, ReviewProviderNodeState>; readonly requested: number } {
     if (request && throughNodeId !== undefined) throw new TypeError("Bounded Review observation must not enqueue work");
     if (this.#reviewEvidence !== undefined) {
-      const result = request ? this.#reviewEvidence.ensureBranch(runId, branchId) : this.#reviewEvidence.observe(runId, branchId, throughNodeId);
+      const result = request ? this.#reviewEvidence.ensureBranch(runId, branchId) : this.#reviewEvidence.observe(runId, branchId, throughNodeId, memo);
       return Object.freeze({ states: result.states, requested: [...result.states.values()].filter((state) => state.kind === "pending").length });
     }
     const run = this.#required(runId).run;
     const path = observedReviewPath(run, branchId, throughNodeId);
-    const durable = reviewDurableEngineStates(run, path);
+    const durable = reviewDurableEngineStates(run, path, memo);
     const states = new Map<string, ReviewProviderNodeState>(path.map((node) => [node.id, durable.get(node.id)?.kind === "delivered" ? durable.get(node.id)! : exactLegalMoves(node.fen).length === 0 ? Object.freeze({ kind: "honest_empty" as const, reason: "outside_domain" as const }) : Object.freeze({ kind: "unavailable" as const, reason: "provider_off" as const })]));
     return Object.freeze({ states, requested: 0 });
   }

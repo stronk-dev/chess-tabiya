@@ -15,6 +15,7 @@ import { orderedReviewEvidence } from "./internal/review-moment-assembly.js";
 import { assertRecordedPositionInvocation, assertRecordedReviewResultInvocation, invokeEvidenceValueRoute, readReviewPointInvocation, readReviewPointResultInvocation, readRecordedHumanDivergenceInvocation, readRecordedRulePivotalInvocation, readEndgamePopulationInvocation, readShapeFiringInvocation, readReviewTransitionResultInvocation, readReviewMemberInputs, readLocalReadingInvocation, type EvidenceValueRouteResults } from "./internal/evidence-value-routes.js";
 import { readRecordedReviewBoundary, type RecordedReviewBoundary } from "./recorded-review-boundary.js";
 import { planModuleReviewPrefix } from "./module-review-prefix.js";
+import { deeplyImmutableJson } from "./internal/immutable-json.js";
 import { createRecordedPivotalSource, recordedPivotalData, type RecordedPivotalSource, type PivotalKind, type PivotalMarker, type RecordedHumanDivergenceMarker } from "./pivotal.js";
 import {
   PRESENTATION_SOURCE_REASONS,
@@ -1545,7 +1546,18 @@ export const REVIEW_PROVIDER_DELIVERY_KEY = "providerDelivery" as const;
  * Durable per-node engine states for one path: `delivered` (re-derived, sealed), legacy
  * (`legacy_provenance_missing`) or absent. A re-derived delivery always wins over a legacy row.
  */
-export function reviewDurableEngineStates(run: DrillRun, path: readonly Pick<Node, "id" | "fen">[]): ReadonlyMap<string, ReviewProviderNodeState> {
+declare const reviewDurableEngineMemoBrand: unique symbol;
+/** Pure parse reuse owned by one collection. Not evidence, access or a completed Map cache. */
+export interface ReviewDurableEngineMemo { readonly [reviewDurableEngineMemoBrand]: true }
+const DURABLE_ENGINE_MEMOS = new WeakMap<object, WeakMap<object, StockfishPositionEvaluation>>();
+export function createReviewDurableEngineMemo(): ReviewDurableEngineMemo {
+  const memo = Object.freeze({}) as ReviewDurableEngineMemo;
+  DURABLE_ENGINE_MEMOS.set(memo, new WeakMap()); return memo;
+}
+
+export function reviewDurableEngineStates(run: DrillRun, path: readonly Pick<Node, "id" | "fen">[], memo?: ReviewDurableEngineMemo): ReadonlyMap<string, ReviewProviderNodeState> {
+  const parsed = memo === undefined ? undefined : memo !== null && typeof memo === "object" ? DURABLE_ENGINE_MEMOS.get(memo) : undefined;
+  if (memo !== undefined && parsed === undefined) throw new TypeError("Durable engine memo is foreign");
   const onPath = new Map(path.map((node) => [node.id, node]));
   const states = new Map<string, ReviewProviderNodeState>();
   for (const event of run.events) {
@@ -1555,7 +1567,9 @@ export function reviewDurableEngineStates(run: DrillRun, path: readonly Pick<Nod
     const persisted = (event.data.payload.values as Readonly<Record<string, unknown>>)[REVIEW_PROVIDER_DELIVERY_KEY];
     if (persisted !== undefined) {
       try {
-        const delivery = parsePersistedProviderDelivery("stockfish.position_evaluation@1", persisted);
+        const immutable = parsed !== undefined && persisted !== null && typeof persisted === "object" && deeplyImmutableJson(persisted);
+        const delivery = (immutable ? parsed.get(persisted) : undefined) ?? parsePersistedProviderDelivery("stockfish.position_evaluation@1", persisted);
+        if (immutable) parsed.set(persisted, delivery);
         if (delivery.payload.fen === node.fen) {
           states.set(node.id, Object.freeze({ kind: "delivered" as const, delivery: invokeEvidenceValueRoute("live.stockfish.position_eval@1", { delivery }) as DeclaredEvidence<StockfishPositionEvaluation> }));
           continue;

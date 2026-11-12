@@ -2,25 +2,29 @@
 
 ## Current continuation — 2026-11-12
 
-Original complete Review source preparations are committed throughcefcbe46. D4250 now also has
-a private bounded job lifetime owner for ordinary-module/rich scopes. It starts its absolute5000ms
-clock and reserves capacity before preparation; real idle expiry, current checks around units/
-yields/final serialization, cancellation, shutdown and reference cleanup are implemented. Optional
-operations enforce500ms/remaining caps with abort races and explicit pre/post deadlines.
+D4250 now composes the complete original rich Review sources through its bounded RunService
+owner: grade context/endpoints, full packet, recorded population, independent historical reports/
+objectives, PhaseArc/path, Map windows/relations/opening and each original move grade. Final
+assembly shares the existing renderer without eager recollection. Advancement, serialization,
+final currentness/budget checks and retirement are atomic. Application composition supplies1
+and drains collections before shutdown; this is an engineering bound, not default certification.
 
-Independent review finds D4257: preparation returned after its entry retired was not disposed.
-Actual33pass/2fail reproduces both close/observed-expiry paths; retirement now disposes later
-returned work exactly once. Final36 lifecycle controls and96/three affected owner/grade/ledger
-cases pass4.34s. Workspace types/Svelte0errors0warnings and server/web builds pass. Real SQLite/
-RunService controls cover original ledger serialization, preparation overrun and actual revoked
-grants. Independent code/test readback accepts this finite lifecycle dependency.
+D4258 isolates repeated immutable provider parsing:3280.9ms/490 observations of4073ms job work.
+A collection-local memo retains original parsed deliveries while preserving original factories,
+mutable-input parsing, exact FEN and live observations. All35-position group1/2/32 complete Map
+oracles pass unchanged5s limits. D4259's actual final-result barrier reproduces a successful peer;
+one atomic unit now permits one correct complete Map/serializer. Independent readback accepts.
+Final215/six affected cases and full types/Svelte0errors0warnings pass. Canonical1928/1928,
+24qualified of89,63population/8external is fresh after74 implementation-marker-only generated
+updates; every other JSON value remains unchanged. Normal full gates now pass21471software/all593
+files819.38s,7 isolated performance/four61.32s,340content/all44 files235.83s,types/build;92-document
+clearance audit has zero errors and104 capability declarations match. Nothing is pushed.
 
-Next compose full original sources/subject plan/cursors/invocation receipts into the owner, bind
-actual session/access authority, install explicit application maxJobs1/shutdown and implement
-strict module/rich transport and selected Review progress/cancel/retry UI. The owner is not yet
-connected to learner routes; those still use synchronous reads. D4250/D4228 and native cost/memory/
-default gates D4224/D4225 remain open. Full normal gates last pass3f416821; canonical source proof
-last passes84edd1ce. No whole-product milestone closes.
+The selected HTTP/UI path still uses synchronous reads. Next implement D4260 subject-ordered original attachment/endpoint acquisition for actual page
+accounting, and measure D4261/D4262 original analysis admission/retry observation against cooperative snapshots;
+then actual session binding, literal source plan/cursors/receipts, strict ordinary/rich transport
+and selected progress/cancel/retry UI. D4250/D4228 and native D4224/D4225 cost/memory/default gates
+remain open; no whole-product milestone closes.
 [Implementation and verification](foundation-source-identity/plan.md).
 
 ## Current continuation — 2026-11-11

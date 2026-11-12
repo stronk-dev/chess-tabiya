@@ -118,6 +118,8 @@ export class RecordedEngineEndpointOwner {
     work.signal.throwIfAborted();
   }
 
+  assertCaptureCurrent(handle: RecordedEngineEndpointCapture): void { this.#captureCurrent(this.#captureWork(handle)); }
+
   advanceCapture(handle: RecordedEngineEndpointCapture): Readonly<{
     stage: "attachments" | "endpoint"; nodeId: string | null;
     completedSubjects: number; totalSubjects: number; complete: boolean;

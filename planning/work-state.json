@@ -35657,7 +35657,7 @@
       "id": "D4250",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4a3562ea8c072cd7da5a927121619135cebf8a48fccb7e51dca27b6f9caf6c47",
+      "sourceDigest": "sha256:e96fb184aee4ce328e7f375da56f40540f290394adf85bad8324426b657bc991",
       "uxItems": [],
       "owner": "review-and-return",
       "since": "2026-11-12"
@@ -35724,6 +35724,48 @@
       "uxItems": [],
       "evidence": "apps/server/src/review-job-owner.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D4258",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7458e4e736c7a59182eb29bd29e4622469942418396e7f82b735e31642ce4a29",
+      "uxItems": [],
+      "evidence": "apps/server/src/rich-review-collection.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4259",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:289e2692cff5c966f443fe4ba5962da65b6269ad4926a0c786097e74b28757be",
+      "uxItems": [],
+      "evidence": "apps/server/src/rich-review-collection.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4260",
+      "state": "todo",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:5596ff54a3640eb3746c4a475d544cf9fd103d596a83ff7729f959ccf7e58248",
+      "uxItems": [],
+      "owner": "review-and-return"
+    },
+    {
+      "id": "D4261",
+      "state": "todo",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:b6102fa13b56a0dde50c7f7aee3d566fe6f01bda51a833757a63212693d18758",
+      "uxItems": [],
+      "owner": "review-and-return"
+    },
+    {
+      "id": "D4262",
+      "state": "todo",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:fd77b3b8c46da7eea1bad052e3852414596dc9424160285e2ea96a03412546c1",
+      "uxItems": [],
+      "owner": "review-and-return"
     }
   ]
 }

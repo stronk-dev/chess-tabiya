@@ -11761,3 +11761,20 @@ source abort race and their own absolute pre/post deadline; ignored125/500ms res
 as complete. No remaining finite source/test blocker found; reviewer runs no tests or edits.
 Primary36 lifecycle controls/96 affected cases, types/build pass. Public integration, original plan/
 page/strict receiver/UI and native cost/default proof remain owed.
+
+
+## 2026-11-12 — D4250 source composition, D4258 and D4259 readback
+
+Independent review returns the final unit→finish race. The actual final-unit barrier fails on
+peer success; the repaired service now advances/serializes under one busy-held unit through final
+yield/currentness/budget checks and retirement. Only one correct complete Map/serializer survives.
+The same readback accepts collection-local pure parse reuse: exact deeply immutable persisted
+objects retain original parsed deliveries, while mutable/equal-clone/foreign handles exercise
+miss/refusal, exact FEN remains checked and each observation invokes its original factory.
+The coordinator still observes actual current states; no global completed-result cache exists.
+No remaining finite source/atomicity blocker found. Primary215/six source/lifetime cases and full
+types pass; reviewer runs no tests/edits. Public page/cursor accounting and actual coordinator
+admission are explicitly retained as D4260/D4261; no public journey or native/default proof.
+
+
+Full local checkpoint verification: Normal full make verify-software/build/verify-content exits0:21471software/all593 files819.38s;7 isolated performance/four61.32s;340content/all44 files235.83s;workspace types/Svelte0errors0warnings and server/web builds;92-document clearance audit errors[] and104 exact capability declarations. Canonical1928/1928/24of89/63population/8external is current. No remote-CI or push-readiness claim.

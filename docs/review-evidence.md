@@ -106,10 +106,25 @@ source graph. Optional operations receive at most500ms or the remaining whole mi
 cannot return expired results, including synchronous overruns and providers ignoring abort.
 Original source adapters still own their existing failure/absence mapping.
 
-This private owner is not yet connected to the selected Review routes. Source composition,
-literal invocation receipts/cursors, strict transport, application maxJobs1 composition and
-selected progress/cancel/retry UI remain open. Its deadline controls do not establish native
-latency, memory or safe default capacity.
+RunService now composes the original sources through this owner using private
+`beginRichReviewCollection` / `advanceRichReviewCollection` / `cancelReviewCollection` methods.
+Grade preparation, full packet, independent reports/objectives, recorded population, PhaseArc,
+relations/windows/opening and per-move grading remain with their original issuers. Final assembly
+shares the existing complete Map renderer and consumes prepared sources without recollection.
+Advancement, actual serialization, final currentness checks and retirement are one atomic unit.
+Preparation cancelled inside an original constructor immediately releases its returned handle.
+
+Current engine observations still run at every source boundary. A collection-local memo avoids
+reparsing identical deeply immutable persisted provider bytes; mutable or replaced bytes reparse,
+each observation invokes its original evidence route and exact node FEN checks remain. The memo
+is not a completed Map cache and is released with the collection. Application composition supplies
+maxJobs1 explicitly and drains collections before shutdown; this is an engineering bound.
+
+Selected HTTP routes have not migrated. Literal invocation receipts/cursors, actual session
+integration, both strict delivery scopes and selected progress/cancel/retry UI remain open.
+D4260 owns page accounting during original grade preparation; D4261 owns measuring initial
+analysis admission against cooperative snapshots. Grouped source tests prove complete Map bytes,
+not public paging or native latency, memory and safe default capacity.
 
 ## One engine source, five Review projections
 

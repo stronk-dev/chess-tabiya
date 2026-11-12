@@ -42144,3 +42144,33 @@ Commit this verified dependency before starting that integration. No milestone c
 
 Normal verify-governance/roadmap checks exit0. Work state tracks4006 rows with zero untriaged;
 D4257 closes with explicit test-path evidence while D4250 remains doing.
+
+
+## 2026-11-12 — Compose original rich Review sources; close D4258/D4259 locally
+
+RunService now advances complete original grade/packet/population/historical/objective/PhaseArc/
+relation/opening sources under the bounded owner and shares the existing full Map assembly.
+Application composition supplies1 and drains on shutdown; selected HTTP/UI migration remains open.
+D4258 attribution finds immutable provider bytes repeatedly parsed:3280.9ms/490 observations out
+of4073.0ms job work, versus135.1ms/1131 grade reads. A collection-local nominal memo preserves
+original parser/factory authority and mutable-input/live checks. Full35-position group1/2/32
+oracles now pass unchanged5s limits. D4259's actual final-unit barrier proves a peer can succeed
+between advancement and serialization. A single busy-held final unit now produces one complete
+original Map and exactly one serializer, with final source/budget/cancel checks intact.
+
+Independent source/test review accepts the finite composition/repairs. Primary215/six affected
+cases pass16.69s; workspace types/Svelte0errors0warnings pass. Mirrored modern/offline, inherited/
+same-FEN, actual authority/source changes, constructor cancellation and preparation overruns are
+covered. Offline grading legitimately adds three own source reads beside six historical reports;
+fixture count/signature errors were corrected without source/deadline weakening.
+Canonical1928/1928/24of89/63population/8external passes then detects stale generated output.
+Normal regeneration changes only74 implementation markers; every other JSON value is unchanged.
+Full normal verification is running. D4260/D4261 own public page/admission questions; actual
+session/protocol/UI and D4224/D4225/native/default/full1.0 remain open. No milestone closes.
+
+
+Full local checkpoint verification: Normal full make verify-software/build/verify-content exits0:21471software/all593 files819.38s;7 isolated performance/four61.32s;340content/all44 files235.83s;workspace types/Svelte0errors0warnings and server/web builds;92-document clearance audit errors[] and104 exact capability declarations. Canonical1928/1928/24of89/63population/8external is current. No remote-CI or push-readiness claim.
+
+Final normal verify-governance exits0;4011 ledger rows stay tracked with zero untriaged.
+D4260 subject-ordered source work and D4261/D4262 actual coordinator admission/retry observation
+remain assigned next; independent readback confirms existing D4250 factoring authorization.

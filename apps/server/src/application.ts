@@ -807,6 +807,7 @@ async function composeServices(
   });
   startupCleanups.push({ name: "review evidence", release: () => reviewEvidence.close() });
   const service = new RunService(storage, {
+    reviewJobs: { maxJobs: 1 },
     evidenceQueue,
     reviewEvidence,
     packRegistry: registry,
@@ -819,6 +820,7 @@ async function composeServices(
     botAvailability: () => botAvailability.snapshot(),
     openingCatalogue,
   });
+  startupCleanups.push({ name: "Review collections", release: () => service.closeReviewCollections() });
   const identity = new IdentityService(storage, {
     cookieSecure: options.deployment?.secureCookie ?? options.cookieSecure ?? true,
   });
@@ -1016,6 +1018,7 @@ async function composeServices(
     }),
     async close() {
       draining = true;
+      service.closeReviewCollections();
       await hints.close();
       providerHealth.shutdown();
       await new Promise<void>((resolveClose, reject) => {
