@@ -7,6 +7,13 @@ import { assertReviewMapResponse } from "../../web/src/lib/review-response.js";
 
 import { recordedReviewLedgerFixture } from "./recorded-review-ledger.test-support.js";
 import type { SQLiteRunStorage } from "./storage.js";
+import { RecordedEngineEndpointOwner } from "./recorded-engine-endpoints.js";
+import * as attachments from "../../../packages/runtime/src/internal/recorded-engine-attachments.js";
+import * as valueRoutes from "../../../packages/runtime/src/internal/evidence-value-routes.js";
+import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator } from "./review-evidence.js";
+import { composeProviderTraversalApplication } from "./provider-traversal.js";
+import { MockProviderEngineClient } from "./mock-provider-engine.js";
+import { RunService } from "./service.js";
 
 const AT = "2026-11-02T00:00:00.000Z";
 const stores: SQLiteRunStorage[] = [];
@@ -16,6 +23,118 @@ async function fixture(...input: Parameters<typeof recordedReviewLedgerFixture>)
 }
 
 describe("independent pinned Review ledger delivery", () => {
+  for (const side of ["white", "black"] as const) it.each([false, true])(`collects ${side}'s independent reports before context completion: modern=%s`, async modern => {
+    const f = await fixture(side, "mixed", modern);
+    const expected = JSON.stringify(readRecordedReviewLedgerSource(f.service.resolveReviewMeasurementSource(f.context)));
+    const prepare = f.service.beginGradeRecordedContext(f.run.id, f.principal, null, f.query, f.signal.signal);
+    const collect = vi.spyOn(f.registry, "collectRecordedMeasurements"), dispatch = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+    const captured = vi.spyOn(RecordedEngineEndpointOwner.prototype, "capturedNode");
+    const handle = f.service.beginCapturedReviewMeasurementSource(prepare);
+    expect(collect).not.toHaveBeenCalled(); expect(dispatch).not.toHaveBeenCalled();
+    for (const node of f.run.nodes) {
+      f.service.advanceGradeRecordedContext(prepare);
+      const before = collect.mock.calls.length;
+      for (const projection of ["recorded.engine.eval@1", "recorded.tablebase.result@1"] as const) {
+        const start = dispatch.mock.calls.length;
+        expect(f.service.advanceReviewMeasurementSource(handle)).toMatchObject({ nodeId: node.id, projection });
+        expect(dispatch.mock.calls.slice(start).some(([route]) => route === "run.record.position@1")).toBe(false);
+        const capture = captured.mock.results.at(-1)!.value;
+        const position = attachments.readRecordedEngineAttachmentNode(capture.attachments, node.id).row.position;
+        expect(collect.mock.calls.at(-1)![0].position).toBe(position);
+        expect(collect.mock.calls.at(-1)![0].projection).toBe(projection);
+      }
+      expect(collect.mock.calls.length - before).toBe(2);
+    }
+    const source = f.service.finishReviewMeasurementSource(handle), image = readRecordedReviewLedgerSource(source);
+    expect(JSON.stringify(image)).toBe(expected);
+    for (const row of image.rows) for (const slot of row.slots) expect(slot.data!.position).toBe(row.position);
+    const context = f.service.finishGradeRecordedContext(prepare), before = collect.mock.calls.length;
+    expect(f.service.resolveReviewMeasurementSource(context)).toBe(source);
+    expect(readRecordedReviewLedgerSource(source)).toBe(image); expect(collect).toHaveBeenCalledTimes(before);
+    expect(f.service.cancelGradeRecordedContext(prepare)).toBe(false);
+    f.signal.abort(); expect(() => readRecordedReviewLedgerSource(source)).toThrow();
+  });
+
+  it("refuses an unacquired ledger position without minting or collecting it", async () => {
+    const f = await fixture(), prepare = f.service.beginGradeRecordedContext(f.run.id, f.principal, null, f.query, f.signal.signal);
+    const handle = f.service.beginCapturedReviewMeasurementSource(prepare);
+    const collect = vi.spyOn(f.registry, "collectRecordedMeasurements"), dispatch = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+    expect(() => f.service.advanceReviewMeasurementSource(handle)).toThrow(/not been acquired/);
+    expect(collect).not.toHaveBeenCalled(); expect(dispatch).not.toHaveBeenCalled();
+    expect(f.service.cancelReviewMeasurementSource(handle)).toBe(false);
+    expect(f.service.cancelGradeRecordedContext(prepare)).toBe(true);
+  });
+
+  it("collects both historical projections beside an actual pending engine reservation", async () => {
+    const f = await fixture("white", "mixed", false);
+    let release!: (value: null) => void;
+    const identity = new Promise<null>(resolve => { release = resolve; });
+    const { scheduler } = composeProviderTraversalApplication({ engines: new MockProviderEngineClient(), tablebaseFetch: null, explorerFetch: null, explorerToken: null });
+    const get = vi.spyOn(scheduler, "get");
+    const coordinator = new ReviewEvidenceCoordinator({ storage: f.storage, scheduler, requestedEngine: () => identity,
+      attempts: new ReviewAttemptOutcomeStore({ maxTerminalAttemptOutcomes: 4, maxAttemptsPerRequest: 1 }),
+      windowNodes: 1, maxOutstandingPerRun: 1, maxTrackedRuns: 1, maxAttemptsPerRequest: 1, movetimeMs: 50, timeoutMs: 1000, linePlies: 4 });
+    const service = new RunService(f.storage, { packRegistry: f.registry, reviewEvidence: coordinator });
+    try {
+      coordinator.ensureBranch(f.run.id, f.query.branchId);
+      const prepare = service.beginGradeRecordedContext(f.run.id, f.principal, null, f.query, f.signal.signal);
+      const handle = service.beginCapturedReviewMeasurementSource(prepare), collect = vi.spyOn(f.registry, "collectRecordedMeasurements");
+      for (const [index] of f.run.nodes.entries()) {
+        service.advanceGradeRecordedContext(prepare);
+        const before = collect.mock.calls.length;
+        service.advanceReviewMeasurementSource(handle); service.advanceReviewMeasurementSource(handle);
+        expect(collect.mock.calls.length - before).toBe(2);
+        if (index === 1) {
+          const grade = service.resolveCapturedGradeMoveSource(prepare, { nodeId: f.run.nodes[1]!.id, signal: f.signal.signal });
+          expect(service.readGradeMoveSource(grade).state).toEqual({ kind: "unavailable", reason: "source_pending" });
+        }
+      }
+      const source = service.finishReviewMeasurementSource(handle), image = readRecordedReviewLedgerSource(source);
+      for (const row of image.rows) {
+        // The original raw population also retains the citable-only engine row's refusal.
+        expect(row.slots[0]!.data!.records).toHaveLength(3); expect(row.slots[1]!.data!.records).toHaveLength(1);
+        expect(row.slots[0]!.data!.records.map(record => record.invocation.result.kind)).toEqual(["available", "available", "unavailable"]);
+      }
+      const context = service.finishGradeRecordedContext(prepare);
+      expect(service.resolveReviewMeasurementSource(context)).toBe(source); expect(get).not.toHaveBeenCalled();
+      release(null); await coordinator.whenIdle();
+      expect(() => readRecordedReviewLedgerSource(source)).toThrow(/pending source changed/);
+    } finally { release(null); service.closeReviewCollections(); await coordinator.close(); }
+  });
+
+  it.each(["registry", "grant"] as const)("retires preparing ledger work after a real %s change during collection", async change => {
+    const f = await fixture(), reader = { learnerId: "preparing-ledger-reader", handle: "preparing-ledger-reader" };
+    f.storage.createLearner({ id: reader.learnerId, handle: reader.handle, passwordHash: "!", createdAt: AT });
+    f.storage.grantRole(f.run.id, reader.learnerId, "spectator", f.lease, AT);
+    const prepare = f.service.beginGradeRecordedContext(f.run.id, reader, null, f.query, f.signal.signal);
+    const handle = f.service.beginCapturedReviewMeasurementSource(prepare); f.service.advanceGradeRecordedContext(prepare);
+    const original = f.registry.collectRecordedMeasurements.bind(f.registry);
+    const collect = vi.spyOn(f.registry, "collectRecordedMeasurements").mockImplementation(input => {
+      const population = original(input);
+      if (change === "registry") vi.spyOn(f.registry, "resolveRecordedMeasurementSource").mockReturnValue({ kind: "unavailable", reason: "source_absent" });
+      else f.storage.revokeGrant(f.run.id, reader.learnerId, f.lease);
+      return population;
+    });
+    expect(() => f.service.advanceReviewMeasurementSource(handle)).toThrow();
+    expect(collect).toHaveBeenCalledTimes(1); expect(f.service.cancelReviewMeasurementSource(handle)).toBe(false);
+    expect(f.service.cancelGradeRecordedContext(prepare)).toBe(true);
+  });
+
+  it("keeps an early complete ledger source retired when endpoint promotion is cancelled", async () => {
+    const f = await fixture(), prepare = f.service.beginGradeRecordedContext(f.run.id, f.principal, null, f.query, f.signal.signal);
+    const handle = f.service.beginCapturedReviewMeasurementSource(prepare);
+    for (const _ of f.run.nodes) {
+      f.service.advanceGradeRecordedContext(prepare);
+      f.service.advanceReviewMeasurementSource(handle); f.service.advanceReviewMeasurementSource(handle);
+    }
+    const source = f.service.finishReviewMeasurementSource(handle), original = RecordedEngineEndpointOwner.prototype.finishCapture;
+    vi.spyOn(RecordedEngineEndpointOwner.prototype, "finishCapture").mockImplementation(function(this: RecordedEngineEndpointOwner, work) {
+      const value = original.call(this, work); f.service.cancelGradeRecordedContext(prepare); return value;
+    });
+    expect(() => f.service.finishGradeRecordedContext(prepare)).toThrow(/retired|promoted/);
+    expect(() => readRecordedReviewLedgerSource(source)).toThrow(/retired/);
+  });
+
   it.each(["white", "black"] as const)("stages %s's complete original reports one projection at a time without publishing partial work", async side => {
     const f = await fixture(side), original = readRecordedReviewLedgerSource(f.service.resolveReviewMeasurementSource(f.context));
     const collect = vi.spyOn(f.registry, "collectRecordedMeasurements");

@@ -2,32 +2,29 @@
 
 ## Current continuation — 2026-11-12
 
-Committed b7ba5971 passes the complete normal local software and real-content gates:
-21,579 software tests/all593 files999.38s, seven isolated performance checks/four files68.86s,
-and340 real-content tests/all44 files240.84s. The92-document clearance audit has zero errors
-and104 documents declare exactly their derived capabilities. Types/Svelte0errors0warnings,
-server/web builds and independent source reviews also pass. Canonical validation remains
-1928/1928, with24/89 qualified subjects,63 population receipts and8 external receipts. Its
-normal writer changed74 implementation markers; every other generated JSON value is unchanged.
-These are local results, not a remote-CI, native latency/default or release-clearance claim.
+The private rich Review collector now executes each acquired endpoint, provider input,
+packet/population, independent historical projections, phase/Map and grade in actual subject
+order. Stable workflow permission and source/cache identity survive complete-context promotion,
+which follows all subjects. Provider input checks are bounded to the acquired prefix.190 affected
+cases/six files and full types/Svelte0errors0warnings pass; independent review finds no remaining
+blocker after catching D4265's accessor-normalization bug. Both accessor controls first failed
+and now refuse without calling getters or dispatching evidence. Full Map/Story/receipt oracles,
+37-subject scheduling groups1/2/32, real pending historical reports, exact position/cache identity
+and constructor cancellation pass. These are private source-composition results.
 
-D4260 now has committed original-owner dependencies: runtime attachments and server endpoints
-acquire one actual node at a time; stable workflow permission and early original grades survive
-complete-context issuance without reissuing their source/pair/edge; the coordinator can observe
-one exact stored node without scheduling; and packet/recorded-population collectors can capture
-provider inputs with each exact next subject through their original validator. Complete sources
-still require every original subject. Rich Map windows retain their original eleven families,
-horizons, sharing and lazy operands. Cancellation/constructor-retirement, complete Map/Story/
-receipt parity and37-subject scheduling groups1/2/32 pass. These are dependency checkpoints.
+The latest whole normal local certificate remains committed b7ba5971, before this new source
+change:21,579 software cases/all593 files999.38s, seven isolated performance checks/four68.86s,
+and340 real-content cases/all44 files240.84s. Its92-document clearance audit has zero errors and
+104 documents declare exact capabilities. That previous certificate is not a full-suite result
+for the current integration. Current integration checks are recorded in the latest source-plan entry.
 
-**Next: actual D4260 server composition.** Rich collection still finishes the whole grade context
-and snapshots the whole branch's provider states before other sources. Join the stable workflow,
-original acquired endpoint rows and per-subject input collectors in one subject-ordered pass.
-Historical engine/tablebase reports remain independently collected even with modern or pending
-engine input, using each endpoint's original position. Keep live input checks bounded to the
-already-acquired prefix. Original objective, PhaseArc and packet semantic/shape/pivotal operations
-that acquire whole-prefix facts still need explicit original-invocation/per-subject-output accounting;
-moving a call earlier or labelling its progress nodeId:null does not prove a paging exemption.
+**Next: finish actual D4260 source/page accounting.** Original objective, PhaseArc and packet
+semantic/shape/pivotal operations still acquire whole-prefix facts. Preserve their original
+invocations and account their per-subject outputs before claiming the public32-subject bound;
+moving a call earlier or labelling its progress nodeId:null is no exemption. No source is narrowed
+or partial context cast as complete. The original eleven window families, horizons, sharing and
+lazy operands remain. Historical reports keep their independent source ownership and exact
+original endpoint positions even when modern or pending engine input exists.
 
 Then finish D4250 public admission/session binding, literal source plan/cursors/receipts, strict
 ordinary/rich transport and selected progress/cancel/retry UI. The selected HTTP/UI path still

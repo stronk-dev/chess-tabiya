@@ -825,7 +825,7 @@ function closedSource(value: unknown, keys: readonly string[]): value is Record<
     && keys.every(key => Object.hasOwn(value, key) && Object.hasOwn(Object.getOwnPropertyDescriptor(value, key)!, "value"));
 }
 export { closedSource as isClosedReviewSourceRecord };
-function capturePointContext(context: ReviewSourceContext, path: readonly Node[]): ReviewSourceContext {
+function capturePointContext(context: ReviewSourceContext, path: readonly Pick<Node, "id">[]): ReviewSourceContext {
   if (!closedSource(context, ["engine", "shapes"]) || !(context.engine instanceof Map) || !Array.isArray(context.shapes)) throw new TypeError("Recorded Review requires the closed server-owned source context");
   const captured = new Map<string, ReviewProviderNodeState>();
   for (const node of path) {
@@ -852,6 +852,9 @@ function capturePointContext(context: ReviewSourceContext, path: readonly Node[]
   // its population image nor execution, and no mutable caller map/state is retained.
   return Object.freeze({ engine: captured, shapes: Object.freeze([]) });
 }
+
+// Internal input capture for workflow normalization; not evidence or a permission grant.
+export { capturePointContext as captureReviewPointContext };
 
 /** Capture immutable original provider states/deliveries and registered shape operands once. */
 function captureReviewSourceContext(input: ReviewSourceContext, path: readonly Node[]): ReviewSourceContext {

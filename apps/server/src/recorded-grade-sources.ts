@@ -2,6 +2,7 @@
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { RECORDED_GRADE_SOURCE_AUTHORITY } from "../../../packages/runtime/src/recorded-grade-source-authority.js";
 import { readRecordedGradeSource, type RecordedGradePermission, type RecordedGradeSource } from "../../../packages/runtime/src/recorded-grade-source.js";
+import { readRecordedEngineAttachmentNode } from "../../../packages/runtime/src/internal/recorded-engine-attachments.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "../../../packages/runtime/src/evidence-catalog.js";
 import { compileEvidenceConsumerExecutionV2 } from "../../../packages/runtime/src/evidence-binding-execution.js";
 import { moduleDecisionStamp } from "../../../packages/runtime/src/module-decision.js";
@@ -11,8 +12,9 @@ import { parseFinalizedAssistanceV1 } from "../../../packages/runtime/src/assist
 import { canonicalRunBytes, createRecordedReviewBoundarySourceOwner, readRecordedReviewBoundary } from "../../../packages/runtime/src/recorded-review-boundary.js";
 import type { RecordedReviewBoundary } from "../../../packages/runtime/src/recorded-review-boundary.js";
 import { advanceRecordedReviewSourceCollection, beginRecordedReviewSourceCollection, cancelRecordedReviewSourceCollection,
-  finishRecordedReviewSourceCollection, collectRecordedReviewObjectives, collectRecordedReviewSourcePopulation,
-  readRecordedReviewSourcePopulation, type RecordedReviewSourceCollection, type ReviewSourceContext } from "../../../packages/runtime/src/review-evidence.js";
+  finishRecordedReviewSourceCollection, collectRecordedReviewObjectives, collectRecordedReviewSourcePopulation, captureReviewPointContext,
+  readRecordedReviewSourcePopulation, type RecordedReviewSourceCollection, type ReviewSourceContext, type ReviewSubjectEngineInput,
+  type ReviewProviderNodeState } from "../../../packages/runtime/src/review-evidence.js";
 import type { DrillRun } from "../../../packages/runtime/src/types.js";
 import { RecordedEngineEndpointOwner, type RecordedEngineEndpoints, type RecordedEngineEndpointCapture } from "./recorded-engine-endpoints.js";
 import type { RunService } from "./service.js";
@@ -75,9 +77,9 @@ interface ContextCaptureWork {
 }
 type MeasurementPosition = Parameters<typeof RECORDED_REVIEW_LEDGER_SOURCE_AUTHORITY.issue>[0]["rows"][number]["position"];
 interface MeasurementWork {
-  readonly context: RecordedGradeContext;
-  readonly owned: Owned;
-  readonly positions: readonly MeasurementPosition[];
+  readonly workflow: Workflow;
+  readonly subjects: readonly string[];
+  readonly positions: readonly MeasurementPosition[] | undefined;
   readonly admission: RecordedMeasurementAdmission;
   readonly checkCurrent: () => void;
   readonly rows: { position: MeasurementPosition; slots: ReviewLedgerCapture[] }[];
@@ -110,9 +112,10 @@ export class RecordedGradeSourceOwner {
   readonly #boundaries: ReturnType<typeof createRecordedReviewBoundarySourceOwner>;
   readonly #endpoints: RecordedEngineEndpointOwner;
   readonly #registry: PackRegistry | undefined;
-  readonly #reviewMeasurements = new WeakMap<RecordedGradeContext, RecordedReviewLedgerSource>();
+  readonly #reviewMeasurements = new WeakMap<Workflow, RecordedReviewLedgerSource>();
   readonly #measurementCollections = new WeakMap<object, MeasurementWork>();
-  readonly #reviewCollections = new WeakMap<object, { readonly context: RecordedGradeContext; readonly collection: RecordedReviewSourceCollection; complete: boolean }>();
+  readonly #reviewCollections = new WeakMap<object, { readonly workflow: Workflow; readonly collection: RecordedReviewSourceCollection;
+    readonly perSubject: boolean; completed: number; complete: boolean }>();
   constructor(storage: RunStorage, registry: PackRegistry | undefined, coordinator: ReviewEvidenceCoordinator | undefined) {
     this.#registry = registry;
     this.#boundaries = createRecordedReviewBoundarySourceOwner({ loadRun: id => storage.read(id)?.run, loadImportRecord: id => {
@@ -302,27 +305,54 @@ export class RecordedGradeSourceOwner {
     readRecordedReviewSourcePopulation(population); this.read(context); return population;
   }
 
+  #acquiredRow(workflow: Workflow, nodeId: string) {
+    const state = workflow.state;
+    if (state.kind === "retired" || state.kind === "preparing" && state.endpoints === undefined) return refuse("original selections have not been acquired");
+    const capture = state.kind === "complete" ? this.#endpoints.nodeCapture(state.endpoints, nodeId)
+      : this.#endpoints.capturedNode(state.endpoints!, nodeId);
+    return readRecordedEngineAttachmentNode(capture.attachments, nodeId).row;
+  }
+
+  #modernProvider(row: ReturnType<typeof readRecordedEngineAttachmentNode>["row"], state: ReviewProviderNodeState | undefined) {
+    const nodeId = row.position.payload.nodeId;
+    state = captureReviewPointContext({ engine: state === undefined ? new Map() : new Map([[nodeId, state]]), shapes: [] }, [{ id: nodeId }]).engine.get(nodeId);
+    const selected = row.selected;
+    if (selected !== null) {
+      if (state?.kind !== "delivered" || canonicalizeJson(state.delivery.payload) !== canonicalizeJson(selected.occurrence.evaluation.payload)) return refuse("Review source context changed its original modern attachment");
+      return Object.freeze({ kind: "delivered" as const, delivery: selected.occurrence.evaluation });
+    }
+    if (state?.kind === "delivered") return refuse("Review source context invented a recorded attachment");
+    return state;
+  }
+
   #reviewPopulationInput(context: RecordedGradeContext, input: ReviewSourceContext) {
     const owned = this.read(context);
     if (owned.selection.timing !== "review") return refuse("Review source population requires its own workflow");
     const image = this.#endpoints.read(owned.endpoints), engine = new Map(input.engine);
     for (const row of image.rows) {
-      const id = row.position.payload.nodeId, state = engine.get(id), selected = row.modern.selected;
-      if (selected !== null) {
-        if (state?.kind !== "delivered" || canonicalizeJson(state.delivery.payload) !== canonicalizeJson(selected.occurrence.evaluation.payload)) return refuse("Review source context changed its original modern attachment");
-        engine.set(id, Object.freeze({ kind: "delivered", delivery: selected.occurrence.evaluation }));
-      } else if (state?.kind === "delivered") return refuse("Review source context invented a recorded attachment");
+      const id = row.position.payload.nodeId, state = this.#modernProvider(row.modern, engine.get(id));
+      if (state !== undefined) engine.set(id, state);
     }
     return { boundary: owned.boundary, context: { engine, shapes: input.shapes } };
   }
 
   beginReviewPopulation(context: RecordedGradeContext, input: ReviewSourceContext): ReviewPopulationCollection {
     const prepared = this.#reviewPopulationInput(context, input);
-    const collection = beginRecordedReviewSourceCollection(prepared);
+    return this.#retainPopulation(this.#contexts.get(context)!.workflow, beginRecordedReviewSourceCollection(prepared), false);
+  }
+
+  beginCapturedReviewPopulation(handle: GradeContextCapture, input: Readonly<Pick<ReviewSourceContext, "shapes">>): ReviewPopulationCollection {
+    if (!exact(input, ["shapes"])) return refuse("Review preparation requires exact shape inputs");
+    const { workflow } = this.#contextCapture(handle); this.#readWorkflow(workflow);
+    if (workflow.selection.timing !== "review") return refuse("Review source population requires its own workflow");
+    return this.#retainPopulation(workflow, beginRecordedReviewSourceCollection({ boundary: workflow.boundary, context: input }), true);
+  }
+
+  #retainPopulation(workflow: Workflow, collection: RecordedReviewSourceCollection, perSubject: boolean) {
     try {
-      this.read(context);
+      this.#readWorkflow(workflow);
       const handle = Object.freeze({}) as ReviewPopulationCollection;
-      this.#reviewCollections.set(handle, { context, collection, complete: false });
+      this.#reviewCollections.set(handle, { workflow, collection, perSubject, completed: 0, complete: false });
       return handle;
     } catch (error) { cancelRecordedReviewSourceCollection(collection); throw error; }
   }
@@ -333,14 +363,22 @@ export class RecordedGradeSourceOwner {
     return state;
   }
 
-  advanceReviewPopulation(handle: ReviewPopulationCollection) {
+  advanceReviewPopulation(handle: ReviewPopulationCollection, input?: ReviewSubjectEngineInput) {
     const state = this.#reviewCollection(handle);
     if (state.complete) return refuse("Review population work has no remaining subject");
     try {
-      this.read(state.context);
-      const progress = advanceRecordedReviewSourceCollection(state.collection);
-      this.read(state.context);
-      state.complete = progress.complete;
+      this.#readWorkflow(state.workflow);
+      let acquired = input;
+      if (state.perSubject) {
+        const nodeId = readRecordedReviewBoundary(state.workflow.boundary).path[state.completed]!.node.id;
+        if (!exact(input, ["nodeId", "state"]) || input!.nodeId !== nodeId || input!.state === undefined) return refuse("Review population requires its exact next subject");
+        const row = this.#acquiredRow(state.workflow, nodeId);
+        acquired = { nodeId, state: this.#modernProvider(row, input!.state ?? undefined) ?? null };
+      }
+      const progress = advanceRecordedReviewSourceCollection(state.collection, acquired);
+      this.#readWorkflow(state.workflow);
+      if (this.#reviewCollections.get(handle) !== state) return refuse("Review population retired during acquisition");
+      state.completed = progress.completedSubjects; state.complete = progress.complete;
       return progress;
     } catch (error) { this.cancelReviewPopulation(handle); throw error; }
   }
@@ -349,9 +387,10 @@ export class RecordedGradeSourceOwner {
     const state = this.#reviewCollection(handle);
     if (!state.complete) return refuse("Review population work is incomplete");
     try {
-      this.read(state.context);
+      this.#readWorkflow(state.workflow);
       const population = finishRecordedReviewSourceCollection(state.collection);
-      readRecordedReviewSourcePopulation(population); this.read(state.context);
+      readRecordedReviewSourcePopulation(population); this.#readWorkflow(state.workflow);
+      if (this.#reviewCollections.get(handle) !== state) return refuse("Review population retired during publication");
       return population;
     } finally { this.cancelReviewPopulation(handle); }
   }
@@ -366,58 +405,62 @@ export class RecordedGradeSourceOwner {
 
   /** Single-line recorded facts, owned by this current Review workflow, not a fabricated Compare. */
   reviewObjectives(context: RecordedGradeContext): RecordedReviewObjectives {
-    const owned = this.read(context);
-    if (owned.selection.timing !== "review") return refuse("objective population requires its own Review workflow");
+    this.read(context); return this.#objectives(this.#contexts.get(context)!.workflow);
+  }
+
+  capturedReviewObjectives(handle: GradeContextCapture): RecordedReviewObjectives {
+    return this.#objectives(this.#contextCapture(handle).workflow);
+  }
+
+  #objectives(workflow: Workflow): RecordedReviewObjectives {
+    this.#readWorkflow(workflow);
+    if (workflow.selection.timing !== "review") return refuse("objective population requires its own Review workflow");
     const result = (() => {
-      try {
-        return collectRecordedReviewObjectives(owned.boundary);
-      } catch (error) {
+      try { return collectRecordedReviewObjectives(workflow.boundary); }
+      catch (error) {
         if (error instanceof TypeError) return refuse("objective population source contract is invalid");
         throw error;
       }
     })();
-    this.read(context);
-    return result;
+    this.#readWorkflow(workflow); return result;
   }
 
-  /** Review owns this acquisition independently of the fixed engine endpoint selection. A modern
-   * attachment or a pending provider job must not suppress the pinned historical reports. */
+  /** Historical reports remain independent of modern attachments and pending engine requests. */
   reviewMeasurements(context: RecordedGradeContext): RecordedReviewLedgerSource {
-    const owned = this.read(context);
+    const owned = this.read(context), workflow = this.#contexts.get(context)!.workflow;
     if (owned.selection.timing !== "review") return refuse("ledger population requires its own Review workflow");
-    const retained = this.#reviewMeasurements.get(context);
+    const retained = this.#reviewMeasurements.get(workflow);
     if (retained !== undefined) { readRecordedReviewLedgerSource(retained); return retained; }
-    const work = this.#measurementInput(context, owned);
-    // Original synchronous order and cache: no cooperative validation loop without a yield.
-    for (const position of work.positions) work.rows.push({ position,
+    const work = this.#measurementInput(workflow, this.#endpoints.read(owned.endpoints).rows.map(row => row.position));
+    // Original synchronous order: all original positions were captured by the complete owner.
+    for (const position of work.positions!) work.rows.push({ position,
       slots: REVIEW_LEDGER_REFS.map(projection => this.#measurementSlot(work, position, projection)) });
-    work.next = work.positions.length * REVIEW_LEDGER_REFS.length;
+    work.next = work.subjects.length * REVIEW_LEDGER_REFS.length;
     return this.#finishMeasurements(work);
   }
 
-  #measurementInput(context: RecordedGradeContext, owned: Owned): MeasurementWork {
-    if (owned.selection.timing !== "review") return refuse("ledger population requires its own Review workflow");
-    const image = this.#endpoints.read(owned.endpoints), registry = this.#registry;
+  #measurementInput(workflow: Workflow, positions?: readonly MeasurementPosition[]): MeasurementWork {
+    if (workflow.selection.timing !== "review") return refuse("ledger population requires its own Review workflow");
+    const image = readRecordedReviewBoundary(workflow.boundary), registry = this.#registry;
     const admit = (): RecordedMeasurementAdmission => {
-      if (registry === undefined || image.boundary.run.sessionKind !== "pack") return Object.freeze({ kind: "unavailable", reason: "source_absent" });
-      try { return registry.resolveRecordedMeasurementSource(image.boundary.run.packDigest!); }
+      if (registry === undefined || image.run.sessionKind !== "pack") return Object.freeze({ kind: "unavailable", reason: "source_absent" });
+      try { return registry.resolveRecordedMeasurementSource(image.run.packDigest!); }
       catch (error) { return Object.freeze({ kind: "failed", reason: error instanceof TypeError ? "source_contract_invalid" : "source_lookup_failed" }); }
     };
-    const admission = admit();
-    // A second explicit capture cannot reset this context's already observed source generation.
-    const retained = this.#reviewMeasurements.get(context);
+    const admission = admit(), retained = this.#reviewMeasurements.get(workflow);
     if (retained !== undefined) readRecordedReviewLedgerSource(retained);
     const checkCurrent = () => {
-      this.read(context);
+      this.#readWorkflow(workflow);
       const actual = admit();
       if (actual.kind !== admission.kind || (actual.kind === "available" && admission.kind === "available"
         ? actual.source !== admission.source : "reason" in actual && "reason" in admission && actual.reason !== admission.reason)) return refuse("Review ledger artifact admission changed");
     };
-    return { context, owned, positions: Object.freeze(image.rows.map(row => row.position)), admission, checkCurrent, rows: [], next: 0 };
+    return { workflow, subjects: Object.freeze(image.path.map(entry => entry.node.id)),
+      positions: positions === undefined ? undefined : Object.freeze([...positions]), admission, checkCurrent, rows: [], next: 0 };
   }
 
   #measurementSlot(work: MeasurementWork, position: MeasurementPosition, projection: typeof REVIEW_LEDGER_REFS[number]): ReviewLedgerCapture {
-    work.owned.signal.throwIfAborted();
+    work.workflow.signal.throwIfAborted();
     if (work.admission.kind !== "available") return { projection, source: work.admission };
     try {
       const population = this.#registry!.collectRecordedMeasurements({ source: work.admission.source, position, projection });
@@ -428,16 +471,26 @@ export class RecordedGradeSourceOwner {
     }
   }
 
-  #finishMeasurements(work: MeasurementWork): RecordedReviewLedgerSource {
-    if (work.next !== work.positions.length * REVIEW_LEDGER_REFS.length) return refuse("Review ledger collection is incomplete");
-    const source = RECORDED_REVIEW_LEDGER_SOURCE_AUTHORITY.issue({ boundary: work.owned.boundary, permission: work.owned.permission,
-      signal: work.owned.signal, rows: work.rows }, work.checkCurrent);
-    this.#reviewMeasurements.set(work.context, source); return source;
+  #finishMeasurements(work: MeasurementWork, assertOwned: () => void = () => {}): RecordedReviewLedgerSource {
+    if (work.next !== work.subjects.length * REVIEW_LEDGER_REFS.length) return refuse("Review ledger collection is incomplete");
+    const source = RECORDED_REVIEW_LEDGER_SOURCE_AUTHORITY.issue({ boundary: work.workflow.boundary, permission: work.workflow.permission,
+      signal: work.workflow.signal, rows: work.rows }, work.checkCurrent);
+    assertOwned(); this.#reviewMeasurements.set(work.workflow, source); return source;
   }
 
-  /** Capture only original context/position/source-admission metadata. No measurement factories. */
+  /** Complete callers retain their original position image and synchronous ordering. */
   beginReviewMeasurements(context: RecordedGradeContext): ReviewMeasurementCollection {
-    const work = this.#measurementInput(context, this.read(context));
+    const owned = this.read(context), workflow = this.#contexts.get(context)!.workflow;
+    return this.#retainMeasurements(this.#measurementInput(workflow, this.#endpoints.read(owned.endpoints).rows.map(row => row.position)));
+  }
+
+  /** Metadata/admission only; each position comes from its original acquired endpoint later. */
+  beginCapturedReviewMeasurements(handle: GradeContextCapture): ReviewMeasurementCollection {
+    const { workflow } = this.#contextCapture(handle); this.#readWorkflow(workflow);
+    return this.#retainMeasurements(this.#measurementInput(workflow));
+  }
+
+  #retainMeasurements(work: MeasurementWork) {
     work.checkCurrent();
     const handle = Object.freeze({}) as ReviewMeasurementCollection;
     this.#measurementCollections.set(handle, work); return handle;
@@ -456,23 +509,26 @@ export class RecordedGradeSourceOwner {
     nodeId: string; projection: typeof REVIEW_LEDGER_REFS[number]; completedSubjects: number; totalSubjects: number; complete: boolean;
   }> {
     const work = this.#measurementWork(handle), width = REVIEW_LEDGER_REFS.length;
-    if (work.next === work.positions.length * width) return refuse("Review ledger collection has no remaining source");
+    if (work.next === work.subjects.length * width) return refuse("Review ledger collection has no remaining source");
     try {
       work.checkCurrent();
-      const index = Math.floor(work.next / width), projection = REVIEW_LEDGER_REFS[work.next % width]!, position = work.positions[index]!;
+      const index = Math.floor(work.next / width), projection = REVIEW_LEDGER_REFS[work.next % width]!, position = work.rows[index]?.position ?? work.positions?.[index] ?? this.#acquiredRow(work.workflow, work.subjects[index]!).position;
       const slot = this.#measurementSlot(work, position, projection);
       if (work.next % width === 0) work.rows.push({ position, slots: [] });
       work.rows[index]!.slots.push(slot); work.next++;
       work.checkCurrent();
+      if (this.#measurementCollections.get(handle) !== work) return refuse("Review ledger retired during acquisition");
       return Object.freeze({ nodeId: position.payload.nodeId, projection, completedSubjects: Math.floor(work.next / width),
-        totalSubjects: work.positions.length, complete: work.next === work.positions.length * width });
+        totalSubjects: work.subjects.length, complete: work.next === work.subjects.length * width });
     } catch (error) { this.#measurementCollections.delete(handle); throw error; }
   }
 
   finishReviewMeasurements(handle: ReviewMeasurementCollection): RecordedReviewLedgerSource {
     const work = this.#measurementWork(handle);
-    if (work.next !== work.positions.length * REVIEW_LEDGER_REFS.length) return refuse("Review ledger collection is incomplete");
-    try { return this.#finishMeasurements(work); }
+    if (work.next !== work.subjects.length * REVIEW_LEDGER_REFS.length) return refuse("Review ledger collection is incomplete");
+    try { return this.#finishMeasurements(work, () => {
+      if (this.#measurementCollections.get(handle) !== work) return refuse("Review ledger retired during publication");
+    }); }
     finally { this.#measurementCollections.delete(handle); }
   }
 

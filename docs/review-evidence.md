@@ -62,12 +62,13 @@ uncollected. Equal boundaries/FENs from separate captures cannot be mixed. Expan
 authority and evidence receipts remain identical to the complete-source path. Synchronous
 collection retains its original event-major order. The server endpoint owner uses this path,
 checks each retained row against the genuine complete aggregate before issuance, and retires
-the nested runtime work on cancellation, failure or completion. The rich collector still finishes
-the entire grade context before its other sources; actual public page accounting remains D4260.
+the nested runtime work on cancellation, failure or completion. The private rich collector now
+interleaves each acquired endpoint with its original consumers, promoting the complete grade
+context only after every subject. Actual public page accounting remains D4260.
 
 RunService also exposes internal begin/advance/finish/cancel methods for the existing recorded
 population through its actual grade source owner. They retain the original modern-attachment
-normalization and owned grade context, hide the runtime handle and check live grants/storage/signal
+normalization and owned workflow, hide the runtime handle and check live grants/storage/signal
 before and after each step and final publication. Cancel, failure and successful finish retire the
 private work. These methods do not expose HTTP jobs or grant access to another service's handle.
 
@@ -274,7 +275,7 @@ checks through completion; the complete context returns the same early grade sou
 and edge. Finishing retires only the advancement handle. Cancellation or changed access/storage
 still invalidates early grades. Unacquired nodes refuse rather than becoming missing evaluations,
 and complete-context readers continue to reject preparation handles. This is an internal D4260
-dependency; rich Review still finishes the full context before collecting its other sources.
+dependency used by the private rich collector's per-subject source ordering.
 
 The coordinator's internal `observeNode` selects one exact node on the actual recorded branch
 before durable parsing. It uses the same observer as full/prefix reads, preserving delivered,
@@ -286,8 +287,16 @@ In this mode every advance requires `{nodeId,state}` for the exact next subject;
 means an actually absent provider input. The original capture validator copies that state into
 the execution's private map before its original adapters run. Missing, undefined, future,
 accessor or extra inputs fail; a full input snapshot cannot be overridden. Both modes retain
-the original complete source ordering, receipts and final compilers. This does not change their
-whole-prefix semantic work or migrate the server's rich collector on its own.
+the original complete source ordering, receipts and final compilers. The private server collector
+uses this handoff, validating each raw provider state through the same original capture routine
+before modern-delivery normalization. Accessors cannot be converted into admitted plain states.
+The selected HTTP/UI flow and whole-prefix semantic accounting remain separate work.
+
+Historical reports have their own workflow-owned collection and admission checks. Each subject
+uses its acquired endpoint's original position for both historical projections; neither a modern
+attachment nor a pending engine request suppresses those reports. Promotion retains the same
+completed ledger source/cache. Provider live checks scan only the acquired prefix and do not
+observe future nodes or schedule analysis. Final Map assembly still uses complete original sources.
 
 Compare's separately issued engine-point source has the same lifetime guarantee through its
 own service context. Role downgrade/revocation refuses direct trajectory-factory reads even

@@ -29,6 +29,23 @@ function fixture(black = false, input: Pick<NonNullable<Parameters<typeof record
   return { ...original, run, storage, service, principal, lease, controller, query, resolve };
 }
 describe("sole service-owned recorded grade issuer", () => {
+  it.each(["kind", "delivery"] as const)("rejects a provider %s accessor before normalizing an acquired modern row", property => {
+    const f = fixture(), prepare = f.service.beginGradeRecordedContext(f.run.id, f.principal, null, f.query, f.controller.signal);
+    const population = f.service.beginCapturedReviewSourcePopulation(prepare, { shapes: [] });
+    f.service.advanceGradeRecordedContext(prepare);
+    const node = f.run.nodes[0]!, valid = reviewSources.reviewDurableEngineStates(f.run, [node]).get(node.id)!;
+    if (valid.kind !== "delivered") throw new Error("Expected the original recorded modern delivery");
+    const getter = vi.fn(() => property === "kind" ? "delivered" : valid.delivery);
+    const state = property === "kind" ? { delivery: valid.delivery } : { kind: "delivered" };
+    Object.defineProperty(state, property, { enumerable: true, get: getter });
+    const dispatch = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    try {
+      expect(() => f.service.advanceReviewSourcePopulation(population, { nodeId: node.id, state: state as never })).toThrow();
+      expect(getter).not.toHaveBeenCalled(); expect(dispatch).not.toHaveBeenCalled();
+      expect(f.service.cancelReviewSourcePopulation(population)).toBe(false);
+    } finally { dispatch.mockRestore(); f.service.cancelGradeRecordedContext(prepare); }
+  });
+
   it.each([false, true])("keeps an early %s-side grade and its receipt identical through full context completion", black => {
     const f = fixture(black);
     let run = commitMove(f.run, black ? "g1f3" : "e7e5", { at: "2026-11-12T00:00:00.000Z" }).run;

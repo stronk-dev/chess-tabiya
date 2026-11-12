@@ -35747,7 +35747,7 @@
       "id": "D4260",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:4c231be4c612bbcd3be9e4c1bc9142303b4e7424d69fcbf17ccdb07d64c5e151",
+      "sourceDigest": "sha256:a8c9b2fb2fc4da12ddcad9d5216f4d8e849cc8f8f71e581d77613b6dff52126a",
       "uxItems": [],
       "owner": "review-and-return",
       "since": "2026-11-12"
@@ -35786,6 +35786,15 @@
       "sourceDigest": "sha256:39d6c1e6ab732667094796ce4ec131cab1fbf8aaa0e15263049064f2b8ebc157",
       "uxItems": [],
       "evidence": "apps/server/src/rich-review-collection.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4265",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:55d6e92d6500989e2905e4459a27c740b939d51e94a092e32dcd94ebdb95463f",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-grade-sources.test.ts",
       "evidenceKind": "path"
     }
   ]

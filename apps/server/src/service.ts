@@ -209,7 +209,7 @@ import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import { InspectorContextError, InspectorRecordedContextOwner, type InspectorRecordedContext, type InspectorRecordedSelection } from "./inspector-recorded-context.js";
 import { RecordedComparisonContextError, RecordedComparisonPointOwner, type RecordedComparisonContext, type ComparisonSelection } from "./recorded-comparison-points.js";
 import { RecordedGradeContextError, RecordedGradeSourceOwner, type RecordedGradeContext, type GradeSelection, type GradeContextCapture, type ReviewPopulationCollection, type ReviewMeasurementCollection } from "./recorded-grade-sources.js";
-import type { ReviewSourceContext } from "../../../packages/runtime/src/review-evidence.js";
+import type { ReviewSourceContext, ReviewSubjectEngineInput } from "../../../packages/runtime/src/review-evidence.js";
 import { RecordedFoundationSourceOwner } from "./recorded-foundation-sources.js";
 import type { FoundationRecordedPrefix, FoundationRecordedDecision } from "../../../packages/runtime/src/recorded-foundation-source.js";
 import type { RecordedGradeSource } from "../../../packages/runtime/src/recorded-grade-source.js";
@@ -250,7 +250,7 @@ import type { RecordedSequenceRoute } from "../../../packages/runtime/src/record
 import type { InspectorDependentRequest } from "../../../packages/runtime/src/inspector-dependent-source.js";
 import type { InspectorLocalProjection } from "../../../packages/runtime/src/inspector-local-source.js";
 import { AssistanceExchangeError, compileAuthoritativeAssistance, finalizeAssistanceEffects, MODULE_SOURCE_AUTHORITY, parseRequestedAssistanceV1, type RequestedAssistanceV1, type ServerEvidenceAvailabilityReceipt } from "../../../packages/runtime/src/assistance-exchange.js";
-import { observedReviewPath, type ReviewEvidenceCoordinator } from "./review-evidence.js";
+import { observedReviewNode, observedReviewPath, type ReviewEvidenceCoordinator } from "./review-evidence.js";
 import { IMPORT_PGN_MAX_BYTES, resolveImportSource, type ImportSource } from "./import-source.js";
 import type { DeletionPreviewV1 } from "./account-data.js";
 
@@ -1420,26 +1420,18 @@ export class RunService {
     this.#retainRichReview(work, control, () => { this.cancelGradeRecordedContext(capture); });
     let gradeContext: RecordedGradeContext | undefined;
     work.checks.add(() => { if (gradeContext === undefined) this.#gradeSources.assertCaptureCurrent(capture); else this.#gradeSources.read(gradeContext); });
-    yield progress("grade_begin");
-    let captured = false;
-    while (!captured) {
-      const step = this.advanceGradeRecordedContext(capture); captured = step.complete;
-      yield progress("grade_capture", step.nodeId);
-    }
-    gradeContext = this.finishGradeRecordedContext(capture);
-    const owned = this.#gradeSources.read(gradeContext), boundary = owned.boundary;
-    yield progress("grade_complete");
-
+    const owned = this.readGradePreparation(capture), boundary = owned.boundary;
     const plan = planModuleReviewPrefix(boundary); work.plan = plan;
-    // Use the original complete immutable boundary image after original grade preparation.
     const retainedSelection: ReviewSelection = { ...selection, run: readRecordedReviewBoundary(boundary).run };
-    const memo = createReviewDurableEngineMemo();
-    const engine = this.#reviewEngineStates(runId, branchId, false, undefined, memo).states;
-    const engineImage = canonicalizeJson([...engine]);
+    yield progress("grade_begin");
+
+    const memo = createReviewDurableEngineMemo(), engine = new Map<string, ReviewProviderNodeState>();
+    let providerThrough: string | null = null, engineImage = canonicalizeJson([...engine]);
     const shapes = this.#shapes?.list().map(summary => this.#shapes!.required(summary.id)) ?? [];
     const pack = this.#registeredPack(retainedSelection.run);
     work.checks.add(() => {
-      if (canonicalizeJson([...this.#reviewEngineStates(runId, branchId, false, undefined, memo).states]) !== engineImage
+      // Observe the acquired prefix once, not every retained node with repeated whole-run scans.
+      if (providerThrough !== null && canonicalizeJson([...this.#reviewEngineStates(runId, branchId, false, providerThrough, memo).states]) !== engineImage
         || this.#registeredPack(retainedSelection.run) !== pack) throw new TypeError("Review source inputs changed");
       const actual = this.#shapes?.list() ?? [];
       if (actual.length !== shapes.length || actual.some((summary, index) => this.#shapes!.required(summary.id) !== shapes[index])) throw new TypeError("Review shape registry changed");
@@ -1450,13 +1442,13 @@ export class RunService {
       const record = this.#storage.importedGame?.(id); return record === undefined ? undefined
         : { runId: record.runId, result: record.result, movetextDigest: record.movetextDigest };
     } })({ runId, branchId });
-    const packetWork = beginReviewPacketCollection(subject, sourceContext);
+    const packetWork = beginReviewPacketCollection(subject, { shapes: sourceContext.shapes });
     this.#retainRichReview(work, control, () => { cancelReviewPacketCollection(packetWork); });
     yield progress("packet_begin");
-    const populationWork = this.#gradeSources.beginReviewPopulation(gradeContext, sourceContext);
+    const populationWork = this.#gradeSources.beginCapturedReviewPopulation(capture, { shapes: sourceContext.shapes });
     this.#retainRichReview(work, control, () => { this.#gradeSources.cancelReviewPopulation(populationWork); });
     yield progress("population_begin");
-    const ledgerWork = this.#gradeSources.beginReviewMeasurements(gradeContext);
+    const ledgerWork = this.#gradeSources.beginCapturedReviewMeasurements(capture);
     this.#retainRichReview(work, control, () => { this.#gradeSources.cancelReviewMeasurements(ledgerWork); });
     let recordedMeasurements: RecordedReviewLedgerSource | undefined;
     work.checks.add(() => { if (recordedMeasurements === undefined) this.#gradeSources.assertReviewMeasurementsCurrent(ledgerWork); else readRecordedReviewLedgerSource(recordedMeasurements); });
@@ -1467,7 +1459,7 @@ export class RunService {
     const mapWork = beginReviewMapSourceCollection(boundary, this.#openingCatalogue);
     this.#retainRichReview(work, control, () => { cancelReviewMapSourceCollection(mapWork); });
     yield progress("map_begin");
-    const recordedObjectives = this.#gradeSources.reviewObjectives(gradeContext);
+    const recordedObjectives = this.#gradeSources.capturedReviewObjectives(capture);
     yield progress("objectives");
     const phasePath = advanceRecordedPhaseArcCollection(phaseWork);
     yield progress("phase_path");
@@ -1476,15 +1468,23 @@ export class RunService {
     const recordedGrades = new Map<string, RecordedGradeSource>();
     for (const [index, entry] of plan.subjects.entries()) {
       const nodeId = entry.nodeId;
-      advanceReviewPacketCollection(packetWork); yield progress("packet", nodeId);
-      this.#gradeSources.advanceReviewPopulation(populationWork); yield progress("population", nodeId);
+      const endpoint = this.advanceGradeRecordedContext(capture);
+      if (endpoint.nodeId !== nodeId || endpoint.complete !== (index + 1 === totalSubjects)) throw new TypeError("Review endpoint crossed its original subject plan");
+      yield progress("grade_capture", nodeId);
+      const state = this.#reviewEngineNodeState(runId, branchId, nodeId, memo);
+      engine.set(nodeId, state); providerThrough = nodeId; engineImage = canonicalizeJson([...engine]);
+      yield progress("inputs", nodeId);
+      advanceReviewPacketCollection(packetWork, { nodeId, state }); yield progress("packet", nodeId);
+      this.#gradeSources.advanceReviewPopulation(populationWork, { nodeId, state }); yield progress("population", nodeId);
       this.#gradeSources.advanceReviewMeasurements(ledgerWork); yield progress("ledger", nodeId);
       this.#gradeSources.advanceReviewMeasurements(ledgerWork); yield progress("ledger", nodeId);
       if (!phasePath.complete) { advanceRecordedPhaseArcCollection(phaseWork); yield progress("phase", nodeId); }
       advanceReviewMapSourceCollection(mapWork); yield progress("relations", nodeId);
-      if (index > 0) { recordedGrades.set(nodeId, this.#gradeSources.resolveMove(gradeContext, { nodeId, signal })); yield progress("grade", nodeId); }
+      if (index > 0) { recordedGrades.set(nodeId, this.#gradeSources.resolveCapturedMove(capture, { nodeId, signal })); yield progress("grade", nodeId); }
       completedSubjects++; yield progress("subject", nodeId);
     }
+    gradeContext = this.finishGradeRecordedContext(capture);
+    yield progress("grade_complete");
     advanceReviewMapSourceCollection(mapWork); yield progress("opening");
     const packet = finishReviewPacketCollection(packetWork); yield progress("sources_complete");
     const recordedSources = this.#gradeSources.finishReviewPopulation(populationWork); yield progress("sources_complete");
@@ -3333,6 +3333,15 @@ export class RunService {
     return Object.freeze({ schedule, result });
   }
 
+  /** Observe only this acquired recorded subject, without scheduling engine work. */
+  #reviewEngineNodeState(runId: string, branchId: string, nodeId: string, memo: ReviewDurableEngineMemo): ReviewProviderNodeState {
+    if (this.#reviewEvidence !== undefined) return this.#reviewEvidence.observeNode(runId, branchId, nodeId, memo);
+    const run = this.#required(runId).run, node = observedReviewNode(run, branchId, nodeId);
+    const state = reviewDurableEngineStates(run, [node], memo).get(nodeId);
+    return state?.kind === "delivered" ? state : exactLegalMoves(node.fen).length === 0
+      ? Object.freeze({ kind: "honest_empty", reason: "outside_domain" }) : Object.freeze({ kind: "unavailable", reason: "provider_off" });
+  }
+
   /**
    * The per-node shared-engine states for one branch. With `request`, the Review coordinator's
    * single `ensureBranch` operation admits the next bounded window; without it (read-only review
@@ -3652,11 +3661,14 @@ export class RunService {
   readGradeMoveSource(source: RecordedGradeSource) { return this.#gradeSources.readSource(source); }
   resolveReviewMeasurementSource(context: RecordedGradeContext) { return this.#gradeSources.reviewMeasurements(context); }
   beginReviewMeasurementSource(context: RecordedGradeContext) { return this.#gradeSources.beginReviewMeasurements(context); }
+  beginCapturedReviewMeasurementSource(handle: GradeContextCapture) { return this.#gradeSources.beginCapturedReviewMeasurements(handle); }
+  resolveCapturedReviewObjectives(handle: GradeContextCapture) { return this.#gradeSources.capturedReviewObjectives(handle); }
   advanceReviewMeasurementSource(handle: ReviewMeasurementCollection) { return this.#gradeSources.advanceReviewMeasurements(handle); }
   finishReviewMeasurementSource(handle: ReviewMeasurementCollection) { return this.#gradeSources.finishReviewMeasurements(handle); }
   cancelReviewMeasurementSource(handle: ReviewMeasurementCollection) { return this.#gradeSources.cancelReviewMeasurements(handle); }
   beginReviewSourcePopulation(context: RecordedGradeContext, input: ReviewSourceContext) { return this.#gradeSources.beginReviewPopulation(context, input); }
-  advanceReviewSourcePopulation(handle: ReviewPopulationCollection) { return this.#gradeSources.advanceReviewPopulation(handle); }
+  beginCapturedReviewSourcePopulation(handle: GradeContextCapture, input: Readonly<Pick<ReviewSourceContext, "shapes">>) { return this.#gradeSources.beginCapturedReviewPopulation(handle, input); }
+  advanceReviewSourcePopulation(handle: ReviewPopulationCollection, input?: ReviewSubjectEngineInput) { return this.#gradeSources.advanceReviewPopulation(handle, input); }
   finishReviewSourcePopulation(handle: ReviewPopulationCollection) { return this.#gradeSources.finishReviewPopulation(handle); }
   cancelReviewSourcePopulation(handle: ReviewPopulationCollection) { return this.#gradeSources.cancelReviewPopulation(handle); }
 

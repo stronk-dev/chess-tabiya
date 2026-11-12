@@ -42499,3 +42499,48 @@ next after the genuine original-owner composition; no partial source becomes a c
 
 Final normal verify-governance passes after this proof/roadmap consolidation.4013 rows retain
 zero untriaged; D4260/D4250 and full1.0 remain open.
+
+
+### 2026-11-12 — D4260 private rich collector composes original sources in subject order
+
+The actual RunService job now begins source metadata under its stable current workflow, then
+acquires each original endpoint/provider input, packet/population, BOTH independent historical
+projections, phase/Map and early grade before advancing the next subject. The genuine complete
+grade context is promoted after all subjects. Final full Map assembly and complete source issuers
+remain unchanged. Synchronous callers retain their original source ordering and completed cache.
+
+Population normalization reuses the acquired node's original modern evaluation. Historical rows
+reuse its exact original position (including data.position identity), retain candidate refusals,
+and never substitute the grade selection's reports or suppress reports beside modern/pending
+input. Ledger admission/currentness and the same completed source/cache survive promotion.
+One prefix observer checks retained inputs through the last acquired node; it is skipped while
+empty. Newly admitted nodes use the exact-node observer. This avoids both future-node acquisition
+and repeated per-node whole-run scans in each guard.
+
+Independent review caught D4265 before commit: server normalization read provider getters before
+runtime closed-state validation and could convert them into admitted plain states. Both real
+kind/delivery controls first failed (the draft accepted them), then passed after normalization
+reused the ORIGINAL capturePointContext via an internal alias. No state vocabulary, evidence
+issuer or permission grant was copied. Final190 cases/six files29.64s and full types/Svelte
+0errors0warnings pass; review confirms no remaining bounded-slice blocker. Controls cover complete
+Map/Story/receipt equality,37-subject groups1/2/32, no future provider F1, modern/offline/pending
+historical independence, exact source/position/cache identity, grant/registry changes, early-source
+retirement and genuine constructor-time cancellation. The pending fixture's raw population
+correctly retains all three engine rows including the citable-only refusal, not only its two
+renderable records; that initial new assertion was corrected and the refusal is now explicit.
+An ES2023-only test convenience was replaced with the existing ES2022-compatible array methods;
+no compiler target or test deadline was changed.
+
+D4260/D4250 remain doing. Whole-prefix objectives, PhaseArc and packet semantic/shape/pivotal
+acquisitions still need original invocation/per-subject-output accounting; no nodeId:null marker
+or helper oracle discharges public paging. Actual public source plans/cursors/receipts, sessions,
+strict ordinary/rich transport and selected progress/cancel/retry UI remain next. The current source
+change postdates b7ba5971's full software/content proof, which is retained as a previous baseline.
+
+Normal canonical writer passes1928/1928 (24/89 qualified,63 population receipts,8 external).
+The entire generated JSON comparison finds only74 implementation/predicate implementation
+marker changes; every other value is unchanged. This is current canonical proof, not a new
+full software/content or native/default certificate. D4265 is done with its actual test path.
+
+Normal verify-governance and server/web builds pass for this integration checkpoint.4014 rows
+retain zero untriaged; D4265 is done, D4260/D4250/full1.0 remain open.
