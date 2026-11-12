@@ -39,14 +39,13 @@ describe("sole service-owned recorded grade issuer", () => {
       expect(collect).not.toHaveBeenCalled();
       expect(() => f.service.readGradeRecordedContext(work as never)).toThrow(/foreign/);
       expect(() => f.service.finishGradeRecordedContext(work)).toThrow(/incomplete/);
-      expect(f.service.advanceGradeRecordedContext(work)).toMatchObject({ stage: "attachments", completedSubjects: 0, complete: false });
       for (const [index, node] of f.run.nodes.entries()) expect(f.service.advanceGradeRecordedContext(work)).toEqual({
         stage: "endpoint", nodeId: node.id, completedSubjects: index + 1, totalSubjects: f.run.nodes.length, complete: index + 1 === f.run.nodes.length,
       });
       const context = f.service.finishGradeRecordedContext(work), value = f.service.resolveGradeMoveSource(context, { nodeId: f.child.id, signal: f.controller.signal });
       expect(JSON.stringify(invokeEvidenceValueRoute("derived.grade.move_quality@2", { recordedGrade: value }))).toBe(expected);
       expect(f.service.readGradeMoveSource(value).authority.permission.assistance).toBeNull();
-      expect(collect).toHaveBeenCalledTimes(1);
+      expect(collect).not.toHaveBeenCalled();
       expect(f.service.cancelGradeRecordedContext(work)).toBe(false);
     } finally { collect.mockRestore(); }
   });
@@ -66,8 +65,8 @@ describe("sole service-owned recorded grade issuer", () => {
       try { expect(() => f.service.finishGradeRecordedContext(handle)).toThrow(expect.objectContaining({ code: "RUN_NOT_FOUND" })); }
       finally { finish.mockRestore(); }
     } else {
-      const original = attachments.collectRecordedEngineAttachments;
-      const collect = vi.spyOn(attachments, "collectRecordedEngineAttachments").mockImplementation((...args) => {
+      const original = attachments.advanceRecordedEngineAttachmentCollection;
+      const collect = vi.spyOn(attachments, "advanceRecordedEngineAttachmentCollection").mockImplementation((...args) => {
         const result = original(...args); if (stage === "attachments") revoke(); return result;
       });
       try { if (stage === "before") revoke(); expect(() => f.service.advanceGradeRecordedContext(handle)).toThrow(expect.objectContaining({ code: "RUN_NOT_FOUND" })); }
@@ -121,7 +120,6 @@ describe("sole service-owned recorded grade issuer", () => {
     });
     const expected = JSON.stringify(image(baseline));
     const handle = f.service.beginGradeRecordedContext(run.id, f.principal, null, query, f.controller.signal);
-    f.service.advanceGradeRecordedContext(handle); await new Promise<void>(done => setTimeout(done, 0));
     const seen: string[] = [];
     for (let start = 0; start < run.nodes.length; start += limit) {
       for (let index = start; index < Math.min(start + limit, run.nodes.length); index++) {

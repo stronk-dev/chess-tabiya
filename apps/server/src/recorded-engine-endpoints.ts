@@ -1,6 +1,9 @@
 // Accepted move-quality-grades §2a: one fixed selection per original node, below grading and
 // current consumer access. No provider calls, synthetic grades or pair-dependent report search.
-import { collectRecordedEngineAttachments, collectRecordedEngineEdge, readRecordedEngineAttachments, type RecordedEngineAttachments } from "../../../packages/runtime/src/internal/recorded-engine-attachments.js";
+import { collectRecordedEngineAttachments, collectRecordedEngineEdge, readRecordedEngineAttachments, type RecordedEngineAttachments,
+  beginRecordedEngineAttachmentCollection, advanceRecordedEngineAttachmentCollection, finishRecordedEngineAttachmentCollection,
+  cancelRecordedEngineAttachmentCollection, recordedEngineAttachmentNode, readRecordedEngineAttachmentNode,
+  type RecordedEngineAttachmentCollection } from "../../../packages/runtime/src/internal/recorded-engine-attachments.js";
 import { readRecordedReviewBoundary, type RecordedReviewBoundary } from "../../../packages/runtime/src/recorded-review-boundary.js";
 import { recordedOfflineEngineEndpoint, recordedEngineRequestedBound as requestedBound, type RecordedEngineAvailable } from "../../../packages/runtime/src/internal/recorded-engine-endpoint-values.js";
 import { PackRegistry, RecordedMeasurementSourceError, type RecordedMeasurementAdmission, type RecordedMeasurementPopulation } from "./pack-registry.js";
@@ -59,8 +62,8 @@ interface CaptureWork {
   readonly boundary: RecordedReviewBoundary;
   readonly signal: AbortSignal;
   readonly image: SourceImage["boundary"];
+  readonly attachmentWork: RecordedEngineAttachmentCollection;
   attachments: RecordedEngineAttachments | undefined;
-  modern: ModernRows | undefined;
   admission: RecordedMeasurementAdmission | null;
   readonly populations: RecordedMeasurementPopulation[];
   readonly rows: Endpoint[];
@@ -81,13 +84,12 @@ export class RecordedEngineEndpointOwner {
       // No yield here: retain the original single-pass checks and selection order rather than
       // repeating cooperative guards over every prior row. Both paths share the same issuers.
       work.attachments = collectRecordedEngineAttachments({ boundary: work.boundary });
-      work.modern = readRecordedEngineAttachments(work.attachments);
-      for (const row of work.modern.rows) work.rows.push(this.#captureEndpoint(work, row));
+      for (const row of readRecordedEngineAttachments(work.attachments).rows) work.rows.push(this.#captureEndpoint(work, row));
       return this.finishCapture(handle);
     } catch (error) { this.cancelCapture(handle); throw error; }
   }
 
-  /** Metadata only; original modern attachment collection is its own first advance. */
+  /** Metadata only. Each advance acquires and selects exactly one original node. */
   beginCapture(input: Readonly<{ boundary: RecordedReviewBoundary; signal: AbortSignal }>): RecordedEngineEndpointCapture {
     if (input === null || typeof input !== "object" || Object.getPrototypeOf(input) !== Object.prototype
       || Reflect.ownKeys(input).length !== 2 || !["boundary", "signal"].every(key => {
@@ -98,7 +100,7 @@ export class RecordedEngineEndpointOwner {
     signal.throwIfAborted();
     const image = readRecordedReviewBoundary(boundary);
     const handle = Object.freeze({}) as RecordedEngineEndpointCapture;
-    this.#captures.set(handle, { boundary, signal, image, attachments: undefined, modern: undefined,
+    this.#captures.set(handle, { boundary, signal, image, attachmentWork: beginRecordedEngineAttachmentCollection({ boundary }), attachments: undefined,
       admission: null, populations: [], rows: [] });
     return handle;
   }
@@ -112,34 +114,37 @@ export class RecordedEngineEndpointOwner {
   #captureCurrent(work: CaptureWork): void {
     work.signal.throwIfAborted();
     if (readRecordedReviewBoundary(work.boundary) !== work.image) return invalid("Engine endpoint capture boundary changed");
-    if (work.attachments !== undefined) this.#checkCurrent({ boundary: work.boundary, signal: work.signal,
-      attachments: work.attachments, admission: work.admission, populations: work.populations,
-      image: { boundary: work.image, rows: work.rows } });
+    const complete = work.attachments === undefined ? undefined : readRecordedEngineAttachments(work.attachments);
+    for (const [index, row] of work.rows.entries()) {
+      const original = complete === undefined
+        ? readRecordedEngineAttachmentNode(recordedEngineAttachmentNode(work.attachmentWork, row.position.payload.nodeId), row.position.payload.nodeId).row
+        : complete.rows[index];
+      if (row.modern !== original) return invalid("Engine endpoint lost its original modern occurrence");
+    }
+    this.#checkDependencies(work.image, work.rows, work.admission, work.populations);
     work.signal.throwIfAborted();
   }
 
   assertCaptureCurrent(handle: RecordedEngineEndpointCapture): void { this.#captureCurrent(this.#captureWork(handle)); }
 
   advanceCapture(handle: RecordedEngineEndpointCapture): Readonly<{
-    stage: "attachments" | "endpoint"; nodeId: string | null;
+    stage: "endpoint"; nodeId: string;
     completedSubjects: number; totalSubjects: number; complete: boolean;
   }> {
     const work = this.#captureWork(handle), totalSubjects = work.image.path.length;
     if (work.rows.length === totalSubjects) return invalid("Engine endpoint capture has no remaining subject");
     try {
       this.#captureCurrent(work);
-      if (work.attachments === undefined) {
-        work.attachments = collectRecordedEngineAttachments({ boundary: work.boundary });
-        work.modern = readRecordedEngineAttachments(work.attachments);
-        this.#captureCurrent(work);
-        return Object.freeze({ stage: "attachments", nodeId: null, completedSubjects: 0, totalSubjects, complete: false });
-      }
-      const row = work.modern!.rows[work.rows.length]!;
+      const nodeId = work.image.path[work.rows.length]!.node.id;
+      const acquired = advanceRecordedEngineAttachmentCollection(work.attachmentWork);
+      if (acquired.nodeId !== nodeId || acquired.completedSubjects !== work.rows.length + 1
+        || acquired.totalSubjects !== totalSubjects || acquired.complete !== (work.rows.length + 1 === totalSubjects)) return invalid("Engine attachment acquisition crossed its original subject");
+      const row = readRecordedEngineAttachmentNode(recordedEngineAttachmentNode(work.attachmentWork, nodeId), nodeId).row;
       work.rows.push(this.#captureEndpoint(work, row));
       this.#captureCurrent(work);
       return Object.freeze({ stage: "endpoint", nodeId: row.position.payload.nodeId,
         completedSubjects: work.rows.length, totalSubjects, complete: work.rows.length === totalSubjects });
-    } catch (error) { this.#captures.delete(handle); throw error; }
+    } catch (error) { this.cancelCapture(handle); throw error; }
   }
 
   #captureEndpoint(work: CaptureWork, row: ModernRows["rows"][number]): Endpoint {
@@ -185,19 +190,25 @@ export class RecordedEngineEndpointOwner {
   /** Sole original endpoint-source issuer, after every original selection has been observed. */
   finishCapture(handle: RecordedEngineEndpointCapture): RecordedEngineEndpoints {
     const work = this.#captureWork(handle);
-    if (work.attachments === undefined || work.rows.length !== work.image.path.length) return invalid("Engine endpoint capture is incomplete");
+    if (work.rows.length !== work.image.path.length) return invalid("Engine endpoint capture is incomplete");
     try {
       this.#captureCurrent(work);
+      if (work.attachments === undefined) {
+        work.attachments = finishRecordedEngineAttachmentCollection(work.attachmentWork);
+        this.#captureCurrent(work);
+      }
       const source = Object.freeze({}) as RecordedEngineEndpoints;
       this.#sources.set(source, { boundary: work.boundary, signal: work.signal, attachments: work.attachments,
         admission: work.admission, populations: Object.freeze([...work.populations]),
         image: Object.freeze({ boundary: work.image, rows: Object.freeze([...work.rows]) }), pairs: new Map() });
       this.read(source); return source;
-    } finally { this.#captures.delete(handle); }
+    } finally { this.cancelCapture(handle); }
   }
 
   cancelCapture(handle: RecordedEngineEndpointCapture): boolean {
-    return typeof handle === "object" && handle !== null && this.#captures.delete(handle);
+    const work = typeof handle === "object" && handle !== null ? this.#captures.get(handle) : undefined;
+    if (work === undefined) return false;
+    this.#captures.delete(handle); cancelRecordedEngineAttachmentCollection(work.attachmentWork); return true;
   }
 
   read(source: RecordedEngineEndpoints): SourceImage {
@@ -212,15 +223,22 @@ export class RecordedEngineEndpointOwner {
     const modern = readRecordedEngineAttachments(owned.attachments);
     for (const [index, row] of owned.image.rows.entries()) {
       if (row.modern !== modern.rows[index]) return invalid("Engine endpoint lost its original modern occurrence");
-      if (row.modern.selected === null && (this.#pending(owned.image.boundary, row.position.payload.nodeId, row.position.payload.fen) ?? null) !== row.pending) return invalid("Engine endpoint pending source changed");
     }
-    if (owned.admission !== null) {
-      const current = this.#admit(owned.image.boundary.run.packDigest!);
-      if (current.kind !== owned.admission.kind || (current.kind === "available" && owned.admission.kind === "available"
-        ? current.source !== owned.admission.source : "reason" in current && "reason" in owned.admission && current.reason !== owned.admission.reason)) return invalid("Engine endpoint artifact source changed");
-    }
-    for (const population of owned.populations) this.registry!.readRecordedMeasurements(population);
+    this.#checkDependencies(owned.image.boundary, owned.image.rows, owned.admission, owned.populations);
     owned.signal.throwIfAborted();
+  }
+
+  #checkDependencies(image: SourceImage["boundary"], rows: readonly Endpoint[], admission: RecordedMeasurementAdmission | null,
+    populations: readonly RecordedMeasurementPopulation[]): void {
+    for (const row of rows) {
+      if (row.modern.selected === null && (this.#pending(image, row.position.payload.nodeId, row.position.payload.fen) ?? null) !== row.pending) return invalid("Engine endpoint pending source changed");
+    }
+    if (admission !== null) {
+      const current = this.#admit(image.run.packDigest!);
+      if (current.kind !== admission.kind || (current.kind === "available" && admission.kind === "available"
+        ? current.source !== admission.source : "reason" in current && "reason" in admission && current.reason !== admission.reason)) return invalid("Engine endpoint artifact source changed");
+    }
+    for (const population of populations) this.registry!.readRecordedMeasurements(population);
   }
 
   resolveRecordedEngineEndpoint(source: RecordedEngineEndpoints, nodeId: string): Endpoint {

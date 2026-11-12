@@ -13,6 +13,7 @@ import { MockProviderEngineClient } from "./mock-provider-engine.js";
 import { SQLiteRunStorage } from "./storage.js";
 import * as nodes from "../../../packages/runtime/src/internal/recorded-engine-node.js";
 import * as attachments from "../../../packages/runtime/src/internal/recorded-engine-attachments.js";
+import * as routes from "../../../packages/runtime/src/internal/evidence-value-routes.js";
 import { rewind } from "../../../packages/runtime/src/runtime.js";
 
 const at = "2026-11-01T19:00:00.000Z", lease = { writerId: "endpoint-writer", learnerId: "__legacy" };
@@ -82,18 +83,26 @@ describe("fixed original engine endpoints — registry, canonical stored boundar
     if (modern) { f.delivery(0, "cp 25"); f.delivery(2, "mate -3"); }
     const expected = JSON.stringify(f.owner.read(f.capture()));
     const collect = vi.spyOn(attachments, "collectRecordedEngineAttachments"), historical = vi.spyOn(f.registry, "collectRecordedMeasurements");
+    const dispatch = vi.spyOn(routes, "invokeEvidenceValueRoute");
     const handle = f.owner.beginCapture({ boundary: f.boundary(), signal: f.controller.signal });
     expect(collect).not.toHaveBeenCalled(); expect(historical).not.toHaveBeenCalled();
     expect(() => f.owner.read(handle as unknown as RecordedEngineEndpoints)).toThrow(/foreign/);
     expect(() => f.owner.finishCapture(handle)).toThrow(/incomplete/);
-    expect(f.owner.advanceCapture(handle)).toEqual({ stage: "attachments", nodeId: null, completedSubjects: 0, totalSubjects: 3, complete: false });
-    expect(collect).toHaveBeenCalledTimes(1); expect(historical).not.toHaveBeenCalled();
-    for (const [index, node] of f.path.entries()) expect(f.owner.advanceCapture(handle)).toEqual({
-      stage: "endpoint", nodeId: node.id, completedSubjects: index + 1, totalSubjects: 3, complete: index === 2,
-    });
-    const beforeFinish = historical.mock.calls.length, source = f.owner.finishCapture(handle);
+    expect(dispatch).not.toHaveBeenCalled();
+    for (const [index, node] of f.path.entries()) {
+      const before = dispatch.mock.calls.length, ledgerBefore = historical.mock.calls.length;
+      expect(f.owner.advanceCapture(handle)).toEqual({ stage: "endpoint", nodeId: node.id,
+        completedSubjects: index + 1, totalSubjects: 3, complete: index === 2 });
+      expect(dispatch.mock.calls.slice(before).filter(([route]) => route === "run.record.position@1")
+        .map(([, input]) => (input as { nodeId: string }).nodeId)).toEqual([node.id]);
+      expect(historical.mock.calls.slice(ledgerBefore).map(([input]) => input.position.payload.nodeId)).toEqual(modern && index !== 1 ? [] : [node.id]);
+      if (index !== 2) expect(() => f.owner.finishCapture(handle)).toThrow(/incomplete/);
+      await new Promise<void>(resolve => setImmediate(resolve));
+    }
+    const beforeFinish = historical.mock.calls.length, dispatchBeforeFinish = dispatch.mock.calls.length, source = f.owner.finishCapture(handle);
     expect(JSON.stringify(f.owner.read(source))).toBe(expected);
-    expect(collect).toHaveBeenCalledTimes(1); expect(historical).toHaveBeenCalledTimes(beforeFinish);
+    expect(collect).not.toHaveBeenCalled(); expect(historical).toHaveBeenCalledTimes(beforeFinish);
+    expect(dispatch).toHaveBeenCalledTimes(dispatchBeforeFinish);
     expect(beforeFinish).toBe(modern ? 1 : 3);
     expect(f.owner.cancelCapture(handle)).toBe(false);
     expect(() => f.owner.finishCapture(handle)).toThrow(/retired/);
@@ -109,6 +118,24 @@ describe("fixed original engine endpoints — registry, canonical stored boundar
     expect(() => f.owner.finishCapture(handle)).toThrow(/retired/);
   });
 
+  it.each(["cancel", "abort", "registry", "storage"] as const)("releases the actual unfinished attachment work on %s", async fault => {
+    const f = await fixture([{ node: 0 }, { node: 1 }, { node: 2 }]);
+    const begin = vi.spyOn(attachments, "beginRecordedEngineAttachmentCollection");
+    const handle = f.owner.beginCapture({ boundary: f.boundary(), signal: f.controller.signal });
+    const runtime = begin.mock.results[0]!.value;
+    f.owner.advanceCapture(handle);
+    if (fault === "cancel") expect(f.owner.cancelCapture(handle)).toBe(true);
+    else {
+      if (fault === "abort") f.controller.abort();
+      else if (fault === "storage") f.save(rewind(f.storage.read(f.run.id)!.run, f.path[0]!.id, at).run);
+      else vi.spyOn(f.registry, "resolveRecordedMeasurementSource").mockReturnValue({ kind: "unavailable", reason: "source_absent" });
+      expect(() => f.owner.advanceCapture(handle)).toThrow();
+    }
+    expect(attachments.cancelRecordedEngineAttachmentCollection(runtime)).toBe(false);
+    expect(() => attachments.advanceRecordedEngineAttachmentCollection(runtime)).toThrow(/retired/);
+    expect(f.owner.cancelCapture(handle)).toBe(false);
+  });
+
   it.each(["before", "attachments", "endpoint", "finish"] as const)("rechecks actual storage at the %s acquisition boundary", async stage => {
     const f = await fixture([{ node: 0 }, { node: 1 }]);
     const handle = f.owner.beginCapture({ boundary: f.boundary(), signal: f.controller.signal });
@@ -118,8 +145,8 @@ describe("fixed original engine endpoints — registry, canonical stored boundar
       mutate(); expect(() => f.owner.finishCapture(handle)).toThrow(/no longer/);
     } else {
       if (stage === "endpoint") f.owner.advanceCapture(handle);
-      const originalAttachments = attachments.collectRecordedEngineAttachments, originalHistorical = f.registry.collectRecordedMeasurements.bind(f.registry);
-      const capture = vi.spyOn(attachments, "collectRecordedEngineAttachments").mockImplementation((...args) => {
+      const originalAttachments = attachments.advanceRecordedEngineAttachmentCollection, originalHistorical = f.registry.collectRecordedMeasurements.bind(f.registry);
+      const capture = vi.spyOn(attachments, "advanceRecordedEngineAttachmentCollection").mockImplementation((...args) => {
         const result = originalAttachments(...args); if (stage === "attachments") mutate(); return result;
       });
       const historical = vi.spyOn(f.registry, "collectRecordedMeasurements").mockImplementation((...args) => {

@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:869b92de8a3b939d31351d80bb0fca32b019f31f973a1cc5eea16dac3e594bcc",
+    "roadmap": "sha256:79bf35406f9aa9a2e39610fb4834244e617acfe29e6ae87fb22dbd4023a00bef",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:9b6086d148f79555ae66c5e037bdd19d278d2328caf422611a4b87e98e1e1e93",
+    "workState": "sha256:c61e73b4592d41e8193191af90df8ae5ad9aa9be8149faa36398c509753e3ed1",
     "rfcRegister": "sha256:49e46c03e8cf65e0983bcbd7a00a465007dbd3b6aeaa05915b5988fcd462b071",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Integrate D4260 subject-ordered original attachments into the original server endpoint/workflow owner; audit all original per-node preparation against the page cap. Measure D4261 coordinator admission and D4262 retry observation. Then bind actual sessions and deliver literal plan/cursors/source receipts, strict ordinary/rich Review transport and selected progress/cancel/retry UI. D4250/D4228 and native D4224/D4225 remain open.",
+      "nextAction": "Separate original workflow-first permission from complete endpoint population; stage all actual original per-node acquisition, including rich engine observation and windows, against the page cap. Measure D4261 coordinator admission and D4262 retry observation. Then bind actual sessions and deliver literal plan/cursors/source receipts, strict ordinary/rich Review transport and selected progress/cancel/retry UI. D4250/D4228 and native D4224/D4225 remain open.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "D4260 dependency: original runtime attachments now acquire one actual original node per advance. Distinct completed-node sources feed the unchanged grade issuer; full aggregates remain complete-only and separate capture origins cannot mix. Both-colour tests preserve complete expanded authority, grade payloads and receipts before later nodes are acquired. Original synchronous event-major ordering remains. Independent source review accepts this prerequisite;245 affected tests/six files and workspace types/Svelte0errors0warnings pass. Canonical1928/1928 remains unchanged after74 implementation-marker-only generated updates. Server endpoint/workflow adoption, whole-window accounting and actual public page limits remain open. Prior c608d1df complete-source checkpoint passed full21471 software/593 files,7 isolated performance/four,340content/44,types/build/governance; that full suite has not been repeated for this smaller dependency. Bounded rich collection still preserves complete original sources, atomic final serialization, job-local immutable provider parsing and explicit maxJobs1/shutdown. Public routes remain synchronous; D4261/D4262, actual session binding, literal plan/cursor/receipts, strict transport/selected UI and native/default/full1.0 gates remain open. No capability or milestone closes.",
+        "summary": "D4260 endpoint dependency: original server endpoint selection now advances the genuine runtime attachment collection one actual original node at a time, with unchanged modern/pending/offline precedence and complete candidate normalization. Begin invokes no factories; finish issues only genuine complete aggregates after exact retained-row identity checks. Cancel/failure/finish retire nested runtime work. Synchronous original order remains.249 affected tests/six files16.29s,types/Svelte0errors0warnings and independent source review pass. Prior bd1353ab runtime dependency preserved full expanded grade authority/receipts with canonical1928/1928; prior c608d1df full21471software/593 files,7performance/four,340content/44,types/build/governance remains the latest full-suite baseline. The rich collector still completes whole grade context first; full-branch engine observation in prepare/live guards and whole-window preparation also need page accounting. Actual public pages, workflow-first permission, D4261/D4262, session binding, literal plans/cursors/receipts, strict transport/selected UI and native/default/full1.0 gates remain open. No capability or milestone closes.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1521,7 +1521,7 @@
           {
             "kind": "work_state",
             "id": "D4260",
-            "digest": "sha256:6ecae248c34c5a32a6fd728c1c708e6da6f25695811b2abd6e4f33df6debd298"
+            "digest": "sha256:a045050787d1c435ce5398ea91ff6b870da6bfbc9021b550253d66af10b607e9"
           },
           {
             "kind": "work_state",
@@ -1552,10 +1552,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Integrate D4260 subject-ordered original attachments into the original server endpoint/workflow owner; audit all original per-node preparation against the page cap. Measure D4261 coordinator admission and D4262 retry observation. Then bind actual sessions and deliver literal plan/cursors/source receipts, strict ordinary/rich Review transport and selected progress/cancel/retry UI. D4250/D4228 and native D4224/D4225 remain open.",
+      "nextAction": "Separate original workflow-first permission from complete endpoint population; stage all actual original per-node acquisition, including rich engine observation and windows, against the page cap. Measure D4261 coordinator admission and D4262 retry observation. Then bind actual sessions and deliver literal plan/cursors/source receipts, strict ordinary/rich Review transport and selected progress/cancel/retry UI. D4250/D4228 and native D4224/D4225 remain open.",
       "latestCheckpoint": {
         "at": "2026-11-12",
-        "summary": "D4260 dependency: original runtime attachments now acquire one actual original node per advance. Distinct completed-node sources feed the unchanged grade issuer; full aggregates remain complete-only and separate capture origins cannot mix. Both-colour tests preserve complete expanded authority, grade payloads and receipts before later nodes are acquired. Original synchronous event-major ordering remains. Independent source review accepts this prerequisite;245 affected tests/six files and workspace types/Svelte0errors0warnings pass. Canonical1928/1928 remains unchanged after74 implementation-marker-only generated updates. Server endpoint/workflow adoption, whole-window accounting and actual public page limits remain open. Prior c608d1df complete-source checkpoint passed full21471 software/593 files,7 isolated performance/four,340content/44,types/build/governance; that full suite has not been repeated for this smaller dependency. Bounded rich collection still preserves complete original sources, atomic final serialization, job-local immutable provider parsing and explicit maxJobs1/shutdown. Public routes remain synchronous; D4261/D4262, actual session binding, literal plan/cursor/receipts, strict transport/selected UI and native/default/full1.0 gates remain open. No capability or milestone closes.",
+        "summary": "D4260 endpoint dependency: original server endpoint selection now advances the genuine runtime attachment collection one actual original node at a time, with unchanged modern/pending/offline precedence and complete candidate normalization. Begin invokes no factories; finish issues only genuine complete aggregates after exact retained-row identity checks. Cancel/failure/finish retire nested runtime work. Synchronous original order remains.249 affected tests/six files16.29s,types/Svelte0errors0warnings and independent source review pass. Prior bd1353ab runtime dependency preserved full expanded grade authority/receipts with canonical1928/1928; prior c608d1df full21471software/593 files,7performance/four,340content/44,types/build/governance remains the latest full-suite baseline. The rich collector still completes whole grade context first; full-branch engine observation in prepare/live guards and whole-window preparation also need page accounting. Actual public pages, workflow-first permission, D4261/D4262, session binding, literal plans/cursors/receipts, strict transport/selected UI and native/default/full1.0 gates remain open. No capability or milestone closes.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -3384,7 +3384,7 @@
           {
             "kind": "work_state",
             "id": "D4260",
-            "digest": "sha256:6ecae248c34c5a32a6fd728c1c708e6da6f25695811b2abd6e4f33df6debd298"
+            "digest": "sha256:a045050787d1c435ce5398ea91ff6b870da6bfbc9021b550253d66af10b607e9"
           },
           {
             "kind": "work_state",

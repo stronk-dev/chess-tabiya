@@ -2,10 +2,12 @@
 
 ## Current continuation — 2026-11-12
 
-D4260's first dependency now stages original runtime attachments by actual node, with completed
-node sources admitted by the unchanged grade issuer and complete aggregates still complete-only.
-Endpoint/workflow integration and public page accounting remain open; this is a dependency
-checkpoint, not a completed Review journey. See the latest source-plan entry for verification.
+D4260 now stages original runtime attachments and server endpoint selection by actual node,
+with complete aggregates still complete-only and nested work retired on cancel/failure/finish.
+The rich collector still finishes the whole grade context before other sources; workflow-first
+ordering, full-branch engine observation/window preparation and public page accounting remain
+open. These are dependency checkpoints, not a completed Review journey. See the latest source
+plan entry for verification.
 
 D4250 now composes the complete original rich Review sources through its bounded RunService
 owner: grade context/endpoints, full packet, recorded population, independent historical reports/

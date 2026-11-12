@@ -45,9 +45,9 @@ Whole-branch collectors remain indivisible work, so this alone proves no five-se
 
 RunService's internal `beginGradeRecordedContext` / advance / finish / cancel methods now retain
 the actual workflow permission and complete original boundary before acquiring engine sources.
-The first advance captures original modern attachments as one indivisible unit; later advances
-select one original endpoint each, preserving modern→pending→pinned-ledger precedence and the
-complete candidate normalization. Only complete work issues the original grade context. Partial
+Each advance acquires the next original node's attachments and selects its endpoint, preserving
+modern→pending→pinned-ledger precedence and the complete candidate normalization. It does not
+collect later nodes first. Only complete work issues the original grade context. Partial
 handles cannot be read as contexts or engine sources. Live grants, disclosure, storage, pending
 requests, registry identity and cancellation still govern steps and publication; the final engine
 source must join the exact original context boundary. Existing synchronous callers share the
@@ -60,8 +60,10 @@ sources; those are distinct from the complete aggregate and carry no permission.
 grade issuer can consume two nodes from the same original capture while later nodes remain
 uncollected. Equal boundaries/FENs from separate captures cannot be mixed. Expanded grade
 authority and evidence receipts remain identical to the complete-source path. Synchronous
-collection retains its original event-major order. This dependency is not yet installed in
-the server endpoint/workflow collector; actual public page accounting remains D4260 work.
+collection retains its original event-major order. The server endpoint owner uses this path,
+checks each retained row against the genuine complete aggregate before issuance, and retires
+the nested runtime work on cancellation, failure or completion. The rich collector still finishes
+the entire grade context before its other sources; actual public page accounting remains D4260.
 
 RunService also exposes internal begin/advance/finish/cancel methods for the existing recorded
 population through its actual grade source owner. They retain the original modern-attachment

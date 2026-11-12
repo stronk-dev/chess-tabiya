@@ -42208,3 +42208,29 @@ Canonical validation passes1928/1928 with24/89 qualified,63 population and8 exte
 Normal regeneration changes only74 implementation markers; all other JSON values are unchanged.
 Normal verify-governance passes after updating the two roadmap anchors for D4260 doing.
 All4011 ledger rows remain tracked, zero untriaged. No push or remote-CI claim.
+
+
+## 2026-11-12 — D4260 server endpoint acquisition follows original subjects
+
+RecordedEngineEndpointOwner now advances the genuine runtime attachment collection by exactly
+one original node, checks its ordered subject metadata, then runs the same modern/pending/offline
+selection and complete candidate normalization. Begin performs no factories. Complete finish
+obtains the genuine complete runtime aggregate, verifies exact retained row identities and issues
+the original endpoint source without recollection. Cancel, failure and finish retire nested work.
+The synchronous path keeps original event-major acquisition and non-cooperative selection.
+
+Normal affected verification passes249 tests/six files16.29s and workspace types/Svelte0errors/
+0warnings. Controls cover genuine node/ledger factory boundaries, no finish dispatch, complete
+endpoint/grade/Map bytes, both colours, real storage/grant/pending/registry changes and nested
+handle cleanup. Long-line tests now count the first actual node instead of skipping the removed
+whole-attachment stage. Independent read-only source/test review finds no blocker.
+
+D4260 remains doing. The rich collector still completes the entire grade context before other
+sources. Its prepare/live guards also call whole-branch #reviewEngineStates → observe/durable
+factories; moving only endpoint selection cannot discharge page accounting. Workflow-first
+permission, that observation path, other window preparation and public pages/cursors/receipts
+remain next, alongside D4261/D4262. No milestone or learner journey closes.
+
+Normal roadmap-receipt/verify-governance and server/web builds pass for this endpoint checkpoint.
+All4011 ledger rows remain tracked with zero untriaged. Runtime semantic inputs are unchanged
+from bd1353ab; no full-suite, public journey or remote-CI completion is inferred.
